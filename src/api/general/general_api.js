@@ -41,3 +41,23 @@ export const redirectPath = (urlPath) => {
 	})
 	return p
 }
+
+// convert the browser language locale into a standard language code
+// we do this because we dont want 3 versions of en, en-CA, en-US for translation, just use en
+export const setLanguageFromLocale = (country_code) => {
+	const p = new Promise((res, rej) => {
+		const dictionary = {
+			'en': 'en',
+			'en-CA': 'en',
+			'en-US': 'en',
+			'zh': 'zh',
+			'zh-hk': 'zh',
+			'zh-cn': 'zh',
+			'zh-sg': 'zh',
+			'zh-tw': 'zh',
+			'ar': 'ar',
+		}
+		res(dictionary[country_code])
+	})
+	return p
+}

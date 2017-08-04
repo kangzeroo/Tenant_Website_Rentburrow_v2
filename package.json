@@ -43,6 +43,7 @@
     "aws-sdk": "2.80.0",
     "axios": "0.16.2",
     "bluebird": "3.5.0",
+    "browser-locale": "^1.0.2",
     "chart.js": "2.6.0",
     "express": "4.15.3",
     "firebase": "4.1.3",

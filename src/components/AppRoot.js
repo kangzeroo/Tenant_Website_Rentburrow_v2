@@ -16,13 +16,14 @@ import {
   Route,
   withRouter,
 } from 'react-router-dom'
+import locale from 'browser-locale'
 import { Helmet } from 'react-helmet';
 import Header from './Header'
 import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
-import { redirectPath } from '../api/general/general_api'
+import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
 import { saveTenantToRedux } from '../actions/auth/auth_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
@@ -30,7 +31,7 @@ import { changeAppLanguage } from '../actions/app/app_actions'
 class AppRoot extends Component {
 
 	componentWillMount() {
-    this.props.changeAppLanguage('en')
+    this.autoSetLanguage()
     initiateFacebook().then(() => {
       // autologin to facebook if possible
       return checkIfFacebookLoggedIn()
@@ -48,6 +49,14 @@ class AppRoot extends Component {
         this.props.history.push(path)
       })
     }
+  }
+
+  autoSetLanguage() {
+    const country_code = locale()
+    setLanguageFromLocale(country_code).then((language_code) => {
+      console.log(language_code)
+      this.props.changeAppLanguage(language_code)
+    })
   }
 
   // note that we have <StyleRoot>, which must be defined in order to use Radium
