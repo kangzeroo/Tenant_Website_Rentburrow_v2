@@ -57,7 +57,7 @@ export const setLanguageFromLocale = (country_code) => {
 			'zh-tw': 'zh',
 			'ar': 'ar',
 		}
-		res(dictionary[country_code])
+		res(dictionary[country_code ? country_code : 'en'])
 	})
 	return p
 }
