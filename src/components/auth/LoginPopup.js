@@ -10,14 +10,17 @@ import { withRouter } from 'react-router-dom'
 import {
   Button,
 } from 'semantic-ui-react'
-import { loginFacebook } from '../../api/auth/facebook_auth'
+import { loginFacebook, convertTokenIntoLongLived } from '../../api/auth/facebook_auth'
+import { saveTenantToRedux } from '../../actions/auth/auth_actions'
 
 
 class LoginPopup extends Component {
 
   loginWithFacebook() {
     loginFacebook().then((fbProfile) => {
-      console.log(fbProfile)
+      this.props.saveTenantToRedux(fbProfile)
+      this.props.toggleModal(false)
+      return convertTokenIntoLongLived(fbProfile.fbToken)
     })
   }
 
@@ -35,7 +38,8 @@ class LoginPopup extends Component {
 // defines the types of variables in this.props
 LoginPopup.propTypes = {
 	history: PropTypes.object.isRequired,
-
+  toggleModal: PropTypes.func.isRequired,
+  saveTenantToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -56,7 +60,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    saveTenantToRedux,
 	})(RadiumHOC)
 )
 

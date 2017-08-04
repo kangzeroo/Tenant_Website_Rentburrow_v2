@@ -1,29 +1,34 @@
 // import { FB } from 'fb'
-import { FB_APP_ID } from '../API_URLS'
+import axios from 'axios'
+import { FB_APP_ID, FB_PARSER_MICROSERVICE } from '../API_URLS'
 
 // initialization of facebook api in order to get the 'FB' global variable
 export const initiateFacebook = () => {
-  // initialize facebook
-	window.fbAsyncInit = () => {
-    FB.init({
-      appId: FB_APP_ID,
-      xfbml: true,
-      version: 'v2.10'
-    })
-    FB.AppEvents.logPageView()
-  }
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = '//connect.facebook.net/en_US/sdk.js';
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
+	const p = new Promise((res, rej) => {
+	  // initialize facebook
+		window.fbAsyncInit = () => {
+	    FB.init({
+	      appId: FB_APP_ID,
+	      xfbml: true,
+	      version: 'v2.10'
+	    })
+	    FB.AppEvents.logPageView()
+			res()
+	  }
+	  (function(d, s, id){
+	     var js, fjs = d.getElementsByTagName(s)[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement(s); js.id = id;
+	     js.src = '//connect.facebook.net/en_US/sdk.js';
+	     fjs.parentNode.insertBefore(js, fjs);
+	   }(document, 'script', 'facebook-jssdk'));
+	})
+	return p
 }
 
 // the auth flow of logging into facebook and saving details, sending long lived token to server and retreiving facebook profiles
 export const loginFacebook = () => {
-  return facebookLoginFlow()
+  return requestFacebookLogin()
     .then((fbToken) => {
       return grabFacebookProfile(fbToken)
     })
@@ -37,15 +42,35 @@ export const loginFacebook = () => {
 		// 		})
 }
 
-// log into facebook and get auth token
-const facebookLoginFlow = () => {
+// check if logged into facebook and get auth token
+export const checkIfFacebookLoggedIn = () => {
   const p = new Promise((res, rej) => {
-    FB.login((response) => {
+		FB.getLoginStatus((response) => {
+		  if (response.status === 'connected') {
+		    const fbToken = response.authResponse.accessToken
+				grabFacebookProfile(fbToken)
+			    .then((fbProfile) => {
+			      return grabFacebookImage(fbProfile)
+			    }).then((fbProfile) => {
+						res(fbProfile)
+					})
+		  } else {
+	    	rej()
+		  }
+		})
+  })
+  return p
+}
+
+// request facebook login
+const requestFacebookLogin = () => {
+	const p = new Promise((res, rej) => {
+		FB.login((response) => {
      	if (response.status === 'connected') {
   	    // get access token
-  	    const accessToken = response.authResponse.accessToken
-  	    localStorage.setItem('fbToken', accessToken)
-        res(accessToken)
+  	    const fbToken = response.authResponse.accessToken
+  	    localStorage.setItem('fbToken', fbToken)
+        res(fbToken)
   		} else if (response.status === 'not_authorized') {
 		    // The person is logged into Facebook, but not your app.
         rej(response.status)
@@ -55,8 +80,8 @@ const facebookLoginFlow = () => {
 		    rej('not logged in');
   		}
   	}, { scope: 'public_profile, email' })
-  })
-  return p
+	})
+	return p
 }
 
 // use auth token to get facebook profile
@@ -99,6 +124,22 @@ const grabFacebookImage = (profile) => {
 		      }
 		   }
 		)
+	})
+	return p
+}
+
+export const convertTokenIntoLongLived = (fbToken) => {
+	const p = new Promise((res, rej) => {
+		axios.post(`${FB_PARSER_MICROSERVICE}/longlivetoken`, { accessToken: fbToken })
+			.then((longToken) => {
+				// console.log(longToken)
+				localStorage.setItem('fbToken', longToken)
+				res()
+			})
+			.catch((err) => {
+				// console.log(err)
+				rej(err)
+			})
 	})
 	return p
 }

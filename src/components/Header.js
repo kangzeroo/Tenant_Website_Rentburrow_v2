@@ -15,8 +15,15 @@ import {
   Image,
   Button,
   Modal,
+  Dropdown,
 } from 'semantic-ui-react'
 import LoginPopup from './auth/LoginPopup'
+import i18n from '../i18n/translator'
+import { languageOptions } from '../i18n/language_options'
+import {
+  WELCOME_MESSAGE,
+} from '../i18n/phrases/Header_i18n'
+import { changeAppLanguage } from '../actions/app/app_actions'
 
 class Header extends Component {
 
@@ -47,7 +54,7 @@ class Header extends Component {
   renderLoginSuite() {
     return (
       <Modal.Content>
-        <LoginPopup />
+        <LoginPopup toggleModal={() => this.toggleModal()} />
       </Modal.Content>
     )
   }
@@ -55,14 +62,28 @@ class Header extends Component {
   render() {
     return (
         <div style={comStyles().header}>
-          <Link to='/'>
-            <div style={comStyles().leftLogo}>
+          <div style={comStyles().leftFloat}>
+            <Link to='/'>
               <img style={comStyles().logo} src={require('../../assets/images/logo.png')} alt='logo' />
-            </div>
-          </Link>
-          <Link to='/housing' style={comStyles().link}><h2>FIND HOUSING</h2></Link>
-          <Link to='/building' style={comStyles().link}><h2>BUILDING</h2></Link>
-          <Button onClick={() => this.toggleModal(true, 'login')} style={comStyles().login}>Login</Button>
+            </Link>
+          </div>
+          <div style={comStyles().righterFloat}>
+            <h3> { i18n(WELCOME_MESSAGE) } </h3>
+            <Dropdown placeholder='Change Language' onChange={(e, data) => this.props.changeAppLanguage(data.value)} selection options={languageOptions()} />
+          </div>
+          <div style={comStyles().rightFloat}>
+            {
+              this.props.authenticated
+              ?
+              <div>
+                <Image src={this.props.tenant_profile.picurl} />
+                { this.props.tenant_profile.name }
+              </div>
+              :
+              <Button onClick={() => this.toggleModal(true, 'login')} style={comStyles().login}>Login</Button>
+            }
+          </div>
+
 
           <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
             {
@@ -77,22 +98,29 @@ class Header extends Component {
 // defines the types of variables in this.props
 Header.propTypes = {
 	history: PropTypes.object.isRequired,
+  authenticated: PropTypes.bool,
+  tenant_profile: PropTypes.object,
+  changeAppLanguage: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 Header.defaultProps = {
+  authenticated: false,
+  tenant_profile: {},
 }
-
 
 const RadiumHOC = Radium(Header)
 
-function mapStateToProps(state){
+const mapReduxToProps = (redux) => {
   return {
+    tenant_profile: redux.auth.tenant_profile,
+    authenticated: redux.auth.authenticated,
   }
 }
 
 export default withRouter(
-  connect(mapStateToProps, {
+  connect(mapReduxToProps, {
+    changeAppLanguage,
   })(RadiumHOC)
 )
 
@@ -108,12 +136,28 @@ const comStyles = () => {
       zIndex: '1',
       display: 'flex',
       flexDirection: 'row',
+      position: 'relative',
+    },
+    leftFloat: {
+      float: 'left',
     },
     logo: {
       height: '6vh',
       width: 'auto',
       float: 'left',
       margin: '0.5vh auto'
+    },
+    rightFloat: {
+      position: 'absolute',
+      right: '0px',
+      top: '0px',
+    },
+    righterFloat: {
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'row',
+      width: '500px',
+      margin: '20px auto'
     },
     link: {
       margin: '10px',

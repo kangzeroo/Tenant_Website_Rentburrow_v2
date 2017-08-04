@@ -12,15 +12,16 @@ import {
   Image,
 } from 'semantic-ui-react'
 
+
 class BuildingCard extends Component {
 
-  selectBuilding(building) {
-    // this.props.history.push(`/buildings/${building.building_id}`)
+  selectThisBuilding(building) {
+    window.open(`https://localhost:8080/${building.building_id}`, '_blank')
   }
 
 	render() {
 		return (
-      <Card onClick={() => this.selectBuilding(this.props.building)} raised style={comStyles().hardCard}>
+      <Card onClick={() => this.selectThisBuilding(this.props.building)} raised style={comStyles().hardCard}>
         <Image src={this.props.building.thumbnail} />
         <Card.Content>
           <Card.Header>

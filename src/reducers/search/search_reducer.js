@@ -12,22 +12,22 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
+    case FOUND_BUILDINGS:
+      return {
+        ...state,
+        search_results: action.payload,
+      }
+    case CHANGE_CARD_STYLE:
+      return {
+        ...state,
+        card_style: action.payload,
+      }
+    case SELECT_PIN:
+      return {
+        ...state,
+        selected_pin: action.payload
+      }
 		default:
-      case FOUND_BUILDINGS:
-        return {
-          ...state,
-          search_results: action.payload,
-        }
-      case CHANGE_CARD_STYLE:
-        return {
-          ...state,
-          card_style: action.payload,
-        }
-      case SELECT_PIN:
-        return {
-          ...state,
-          selected_pin: action.payload
-        }
 			return {
 				...state
 			}

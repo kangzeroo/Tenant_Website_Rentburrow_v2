@@ -22,7 +22,6 @@ import {
 class HousingPage extends Component {
 
 	componentWillMount() {
-
 		getBuildingsInArea({
 			lat: 23,
 			long: 54,

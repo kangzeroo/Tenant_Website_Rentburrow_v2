@@ -16,27 +16,38 @@ import {
   Route,
   withRouter,
 } from 'react-router-dom'
+import { Helmet } from 'react-helmet';
 import Header from './Header'
 import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath } from '../api/general/general_api'
-import { initiateFacebook } from '../api/auth/facebook_auth'
+import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
+import { saveTenantToRedux } from '../actions/auth/auth_actions'
+import { changeAppLanguage } from '../actions/app/app_actions'
 
 class AppRoot extends Component {
 
 	componentWillMount() {
-    initiateFacebook()
+    this.props.changeAppLanguage('en')
+    initiateFacebook().then(() => {
+      // autologin to facebook if possible
+      return checkIfFacebookLoggedIn()
+    }).then((fbProfile) => {
+      this.props.saveTenantToRedux(fbProfile)
+    })
     // grab the url that was given
     const location = this.props.location.pathname
     // take the path in the url and go directly to that page and save to redux any actions necessary
-    redirectPath(location).then(({ path, actions }) => {
-      // path = '/sage-5'
-      // actions = [ { type, payload }, { type, payload } ]
-      this.props.dispatchActionsToRedux(actions)
-      this.props.history.push(path)
-    })
+    if (this.props.location.pathname !== '/') {
+      redirectPath(location).then(({ path, actions }) => {
+        // path = '/sage-5'
+        // actions = [ { type, payload }, { type, payload } ]
+        this.props.dispatchActionsToRedux(actions)
+        this.props.history.push(path)
+      })
+    }
   }
 
   // note that we have <StyleRoot>, which must be defined in order to use Radium
@@ -51,26 +62,46 @@ class AppRoot extends Component {
         }
       }
       >
+        <Helmet>
+          <html lang={ this.props.language }></html>
+        </Helmet>
         <StyleRoot>
           <div style={comStyles().main}>
+
+            <div id='language_tag' value={this.props.language} />
 
             <Header style={comStyles().header} />
 
             <div style={comStyles().content}>
 
-              <Route exact path='/' component={HousingPage} />
-
               <Switch>
-                <Route path='/community' component={CommunityPage} />
+
+                <Route exact path='/' component={HousingPage} />
+
+                <Switch>
+                  <Route path='/community' component={CommunityPage} />
+                </Switch>
+
+                <Switch>
+                  <Route path='/housing' component={HousingPage} />
+                </Switch>
+
+                <Switch>
+                  <Route path='/building' component={BuildingPage} />
+                </Switch>
+
               </Switch>
 
-              <Switch>
-                <Route path='/housing' component={HousingPage} />
-              </Switch>
-
-              <Switch>
-                <Route path='/building' component={BuildingPage} />
-              </Switch>
+              <Route
+                path='*'
+                component={
+                  this.props.selected_building
+                  ?
+                  BuildingPage
+                  :
+                  null
+                }
+              />
 
             </div>
 
@@ -86,22 +117,31 @@ AppRoot.propTypes = {
   location: PropTypes.object,
   history: PropTypes.object.isRequired,
   dispatchActionsToRedux: PropTypes.func.isRequired,
+  saveTenantToRedux: PropTypes.func.isRequired,
+  selected_building: PropTypes.object,
+  language: PropTypes.string.isRequired,
+  changeAppLanguage: PropTypes.func.isRequired,
 }
 
 AppRoot.defaultProps = {
   children: {},
   location: {},
+  selected_building: null,
 }
 
 const RadiumHOC = Radium(AppRoot)
 
-const mapStateToProps = (state) => {
+const mapReduxToProps = (redux) => {
 	return {
+    selected_building: redux.selection.selected_building,
+    language: redux.app.selected_language,
 	}
 }
 
-export default withRouter(connect(mapStateToProps, {
+export default withRouter(connect(mapReduxToProps, {
   dispatchActionsToRedux,
+  saveTenantToRedux,
+  changeAppLanguage,
 })(RadiumHOC))
 
 // =============================
