@@ -19,6 +19,7 @@ import {
 import locale from 'browser-locale'
 import { Helmet } from 'react-helmet';
 import Header from './Header'
+import Chat from './chat/ChatPopup/Chat'
 import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
@@ -113,6 +114,14 @@ class AppRoot extends Component {
               />
 
             </div>
+
+            {
+              this.props.selected_building
+              ?
+              <Chat style={comStyles().chat} />
+              :
+              null
+            }
 
           </div>
         </StyleRoot>

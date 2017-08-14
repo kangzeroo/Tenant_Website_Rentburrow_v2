@@ -10,7 +10,16 @@ export const saveBuildingsToRedux = (buildings) => {
   return (dispatch) => {
     dispatch({
       type: FOUND_BUILDINGS,
-      payload: buildings.map((building) => { return JSON.parse(building) }),
+      payload: buildings.map((building) => {
+        const x = JSON.parse(building)
+        return {
+          ...x,
+          gps_x: parseFloat(x.gps_x),
+          gps_y: parseFloat(x.gps_y),
+          max_price: parseFloat(x.max_price),
+          min_price: parseFloat(x.min_price),
+        }
+      }),
     })
   }
 }
