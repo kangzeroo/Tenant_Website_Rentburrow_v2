@@ -1,5 +1,6 @@
 import {
   SELECT_BUILDING,
+  SELECT_CORPORATION,
 } from '../action_types'
 
 export const selectBuilding = (building) => {
@@ -8,6 +9,15 @@ export const selectBuilding = (building) => {
     dispatch({
       type: SELECT_BUILDING,
       payload: building,
+    })
+  }
+}
+
+export const selectCorporation = (corp) => {
+  return (dispatch) => {
+    dispatch({
+      type: SELECT_CORPORATION,
+      payload: corp,
     })
   }
 }

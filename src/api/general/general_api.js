@@ -21,7 +21,7 @@ export const shortenAddress = (address) => {
 
 export const redirectPath = (urlPath) => {
 	const p = new Promise((res, rej) => {
-		searchForSpecificBuilding().then((building) => {
+		searchForSpecificBuilding(urlPath).then((building) => {
 			res({
 				// re-route to a different path if needed
 				path: urlPath,
@@ -56,6 +56,7 @@ export const setLanguageFromLocale = (country_code) => {
 			'zh-sg': 'zh',
 			'zh-tw': 'zh',
 			'ar': 'ar',
+			'kr': 'kr',
 		}
 		res(dictionary[country_code ? country_code : 'en'])
 	})

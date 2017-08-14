@@ -13,5 +13,9 @@ export const languageOptions = () => {
       text: 'Arabic',
       value: 'ar',
     },
+    {
+      text: 'Korean',
+      value: 'kr',
+    },
   ]
 }

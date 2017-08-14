@@ -1,8 +1,8 @@
 export default {
-  apiKey: 'AIzaSyBPYpSdcJIlEcH5NPk4_jMYRqZ1Sk1Z7wA',
-  authDomain: 'rentburrow-tenant.firebaseapp.com',
-  databaseURL: 'https://rentburrow-tenant.firebaseio.com',
-  projectId: 'rentburrow-tenant',
+  apiKey: 'AIzaSyDiHR9xODoEvnm5vyaUeTjwj2K6kJXJOxs',
+  authDomain: 'rentburrow-landlord.firebaseapp.com',
+  databaseURL: 'https://rentburrow-landlord.firebaseio.com',
+  projectId: 'rentburrow-landlord',
   storageBucket: '',
-  messagingSenderId: '1023003652722'
+  messagingSenderId: '639431353717'
 }
