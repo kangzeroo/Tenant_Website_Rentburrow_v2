@@ -105,7 +105,7 @@ class ChatsPanel extends Component {
             this.state.latest_threads.map((thread) => {
               return (
                 <Segment key={thread[0].message_id} onClick={() => this.props.selectChatThread(thread)} style={comStyles().segment}>
-                  { thread[0].tenant_name }
+                  { thread[0].corporation_id }
                 </Segment>
               )
             })

@@ -3,7 +3,7 @@ import {
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
-  tenant_profile: null,
+  tenant_profile: {},
   authenticated: false,
 }
 

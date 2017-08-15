@@ -24,16 +24,16 @@ class BuildingPage extends Component {
 			{
 				message_id: uuid.v4(),
 				sender_id: this.props.building.corporation_id,
-				receiver_id: 'ME',
-				tenant_id: 'ME',
-				tenant_name: 'ME',
+				receiver_id: this.props.tenant.id,
+				tenant_id: this.props.tenant.id,
+				tenant_name: this.props.tenant.name,
 				staff_id: '',
 				building_id: this.props.building.building_id,
 				building_thumbnail: this.props.building.thumbnail,
 				building_alias: this.props.building.building_name,
 				corporation_id: this.props.building.corporation_id,
 				corporation_name: this.props.building.corporation_name,
-				channel_id: `${this.props.building.corporation_id}_${'ME'}`,
+				channel_id: `${this.props.building.corporation_id}_${this.props.tenant.id}`,
 				contents: `Welcome to ${this.props.building.building_address}! Ask me any questions live!`,
 			}
 		])
@@ -68,11 +68,11 @@ BuildingPage.propTypes = {
 	selectBuilding: PropTypes.func.isRequired,
 	selectCorporation: PropTypes.func.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
+	tenant: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
 BuildingPage.defaultProps = {
-
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -82,6 +82,7 @@ const RadiumHOC = Radium(BuildingPage)
 const mapReduxToProps = (redux) => {
 	return {
 		building: redux.selection.selected_building,
+		tenant: redux.auth.tenant_profile,
 	}
 }
 
