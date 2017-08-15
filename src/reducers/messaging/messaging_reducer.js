@@ -23,7 +23,7 @@ const INITIAL_STATE = {
 			building_id: '4a71e950-c59c-40a3-a0de-df14dec6e52d',
 			building_thumbnail: 'https://rentburrow3-images.s3.amazonaws.com/bf0cd5e5-7c45-4b88-9f3f-c936bdaec2f2/4a71e950-c59c-40a3-a0de-df14dec6e52d/building_thumbnail/the-kelvin-apartments-exterior.jpg',
 			building_alias: '330 Spruce St',
-			corporation_id: 'bf0cd5e5-7c45-4b88-9f3f-c936bdaec2f2',
+			corporation_id: 'xd0d5e5-7c45-434k-9f3f-c936bda99899',
 			corporation_name: 'Domus Student Housing',
 			channel_id: 'bf0cd5e5-7c45-4b88-9f3f-c936bdaec2f2_xxxxxx-ggggggg-ddddddddd',
 			contents: 'Hi my name is Hailey, is there any space left available here? I have a group of 4 who are interested for Fall 2017.',

@@ -32,7 +32,7 @@ class ChatsDash extends Component {
           {
             this.props.current_thread.length > 0
             ?
-            <h2 style={comStyles().title}>{ this.props.current_thread[0].tenant_name }</h2>
+            <h2 style={comStyles().title}>{ this.props.current_thread[0].corporation_id }</h2>
             :
             <h2 style={comStyles().title}>Messages</h2>
           }
@@ -42,10 +42,12 @@ class ChatsDash extends Component {
           ?
 					<div style={comStyles().chat_interface}>
           	<ChatFeed current_thread={this.props.current_thread} style={comStyles().chat_feed} />
-						<ChatInput tenant={{
-							tenant_id: this.props.current_thread[0].tenant_id,
-							tenant_name: this.props.current_thread[0].tenant_name,
-						}} style={comStyles().chat_input} />
+						<ChatInput
+							corporation={{
+								corporation_id: this.props.current_thread[0].corporation_id,
+								corp_name: this.props.current_thread[0].corporation_id,
+							}}
+							style={comStyles().chat_input} />
 					</div>
           :
           <div style={comStyles().no_history}>

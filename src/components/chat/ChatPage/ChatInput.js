@@ -45,16 +45,16 @@ class ChatInput extends Component {
       // a channel_id is comprised of corporation_id + corporation_id + building_id
       const newMessage = {
         message_id: uuid.v4(),
-        sender_id: 'ME',
+        sender_id: this.props.tenant.id,
         receiver_id: this.props.corporation.corporation_id,
-        tenant_id: this.props.tenant.tenant_id,
-        tenant_name: this.props.tenant.tenant_name,
+        tenant_id: this.props.tenant.id,
+        tenant_name: this.props.tenant.name,
         // building_id: this.props.building_target.building_id,
         // building_thumbnail: this.props.building_target.thumbnail,
         // building_alias: this.props.building_target.address,
         corporation_id: this.props.corporation.corporation_id,
         corporation_name: this.props.corporation.corp_name,
-        channel_id: `${this.props.corporation.corporation_id}_${this.props.tenant.tenant_id}`,
+        channel_id: `${this.props.corporation.corporation_id}_${this.props.tenant.id}`,
         contents: this.state.inputText,
       }
       this.setState({
@@ -99,8 +99,8 @@ class ChatInput extends Component {
 
 ChatInput.propTypes = {
   sendChatMessage: PropTypes.func.isRequired,
-  corporation: PropTypes.object.isRequired,
-  tenant: PropTypes.object.isRequired,          // passed in
+  corporation: PropTypes.object.isRequired,     // passed in
+  tenant: PropTypes.object.isRequired,
 }
 
 ChatInput.defaultProps = {
@@ -111,7 +111,7 @@ const RadiumHOC = Radium(ChatInput)
 
 function mapStateToProps(state) {
 	return {
-    corporation: state.selection.selected_landlord,
+    tenant: state.auth.tenant_profile,
 	}
 }
 
