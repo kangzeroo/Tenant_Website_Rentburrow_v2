@@ -42,7 +42,7 @@ class AppRoot extends Component {
     // grab the url that was given
     const location = this.props.location.pathname
     // take the path in the url and go directly to that page and save to redux any actions necessary
-    if (this.props.location.pathname !== '/') {
+    if (location !== '/') {
       redirectPath(location).then(({ path, actions }) => {
         // path = '/sage-5'
         // actions = [ { type, payload }, { type, payload } ]
@@ -55,7 +55,6 @@ class AppRoot extends Component {
   autoSetLanguage() {
     const country_code = locale()
     setLanguageFromLocale(country_code).then((language_code) => {
-      console.log(language_code)
       this.props.changeAppLanguage(language_code)
     })
   }
