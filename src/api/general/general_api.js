@@ -2,6 +2,7 @@ import {
 	SELECT_BUILDING,
 } from '../../actions/action_types'
 import { searchForSpecificBuilding } from '../search/search_api'
+import PossibleRoutes from '../../components/PossibleRoutes'
 
 // to shorten a long street address by removing city and postal code
 export const shortenAddress = (address) => {
@@ -33,10 +34,18 @@ export const redirectPath = (urlPath) => {
 			})
 		}).catch((err) => {
 			console.log(err)
-			res({
-				path: '/',
-				actions: []
-			})
+			const partOfRoutes = checkIfPartOfRoutes(urlPath)
+			if (partOfRoutes) {
+				res({
+					path: partOfRoutes.path,
+					actions: partOfRoutes.actions
+				})
+			} else {
+				res({
+					path: '/',
+					actions: []
+				})
+			}
 		})
 	})
 	return p
@@ -61,4 +70,22 @@ export const setLanguageFromLocale = (country_code) => {
 		res(dictionary[country_code ? country_code : 'en'])
 	})
 	return p
+}
+
+// checks if the url path is part of the defined routes in AppRoot.js
+const checkIfPartOfRoutes = (urlPath) => {
+	let exists = false
+	PossibleRoutes.forEach((route) => {
+		if (route === urlPath) {
+			exists = true
+		}
+	})
+	if (exists) {
+		return {
+			path: urlPath,
+			actions: []
+		}
+	} else {
+		return false
+	}
 }

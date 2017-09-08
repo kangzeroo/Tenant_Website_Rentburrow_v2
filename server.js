@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const https = require('https')
 const fs = require('fs')
+const router = require('./router')
 
 const app = express()
 
@@ -10,16 +11,7 @@ app.use(
   express.static(path.resolve(__dirname, '/dist'))
 )
 
-// viewed at https://localhost:8080
-app.get('/bundle.js', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './dist/bundle.js'))
-})
-app.get('/firebase-messaging-sw.js', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './src/firebase-messaging-sw.js'))
-})
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './dist/index.html'))
-})
+router(app);
 
 const options = {
     key: fs.readFileSync('./credentials/server.key'),
