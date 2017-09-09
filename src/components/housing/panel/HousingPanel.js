@@ -17,6 +17,7 @@ import {
 	changeCardStyle,
 } from '../../../actions/search/search_actions'
 import BuildingCard from '../cards/BuildingCard'
+import BuildingRow from '../cards/BuildingRow'
 
 
 class HousingPanel extends Component {
@@ -31,12 +32,16 @@ class HousingPanel extends Component {
 				<BuildingCard
 					key={building.building_id}
 					building={building}
-					style={comStyles().listItem}
+					style={comStyles().gridItem}
 				/>
 			)
 		} else if (this.props.card_style === 'cover') {
 			return (
-				null
+				<BuildingRow
+					key={building.building_id}
+					building={building}
+					style={comStyles().rowItem}
+				/>
 			)
 		} else {
 			return null
@@ -108,8 +113,9 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '60vw',
-      maxWidth: '60vw',
+      minWidth: '800px',
+			width: '50vw',
+      maxWidth: '50vw',
       height: '100%',
 			backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
 			backgroundSize: 'cover',

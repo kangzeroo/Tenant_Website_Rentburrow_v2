@@ -112,7 +112,7 @@ class MapComponent extends Component {
 	        })
 	        marker.pin_id = n.building_id
           marker.infowindow = new google.maps.InfoWindow({
-            content: `<div>${n.building_address}</div>`
+            content: `<div>$${n.min_price}+</div>`
           })
 	      }
         // listen to marker click
@@ -120,6 +120,9 @@ class MapComponent extends Component {
           marker.infowindow.open(self.state.mapTarget, marker)
 					self.props.selectPinToRedux(marker.pin_id)
 					this.highlightPin(marker)
+					setTimeout(() => {
+						marker.infowindow.close()
+					}, 2000)
         })
 				// save the pins
 				if (marker) {
@@ -141,7 +144,13 @@ class MapComponent extends Component {
 			}
 		})
 		// recolor appropriate pins
-		self.paintPins()
+		if (self.props.selected_pin) {
+			self.highlightPin({
+				pin_id: self.props.selected_pin
+			})
+		} else {
+			self.paintPins()
+		}
 	}
 
 	// set the pin to a bouncing blue pin
@@ -234,7 +243,7 @@ const comStyles = () => {
 			height: '93vh'
 		},
 		mapTarget: {
-			width: '40vw',
+			width: '50vw',
 			height: '100%'
 		}
 	}

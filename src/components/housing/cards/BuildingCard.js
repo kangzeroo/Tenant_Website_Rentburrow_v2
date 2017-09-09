@@ -11,18 +11,26 @@ import {
   Card,
   Image,
 } from 'semantic-ui-react'
+import {
+  renderProcessedThumbnail,
+} from '../../../api/general/general_api'
+import SingularImageGallery from '../../image/SingularImageGallery'
+import { selectPinToRedux } from '../../../actions/search/search_actions'
 
 
 class BuildingCard extends Component {
 
   selectThisBuilding(building) {
-    window.open(`https://localhost:8080/${building.building_id}`, '_blank')
+    window.open(`${window.location.href}${building.building_id}`, '_blank')
   }
 
 	render() {
 		return (
-      <Card onClick={() => this.selectThisBuilding(this.props.building)} raised style={comStyles().hardCard}>
-        <Image src={this.props.building.thumbnail} />
+      <Card onClick={() => this.selectThisBuilding(this.props.building)} raised onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)} style={comStyles().hardCard}>
+        <Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />
+        {/*<SingularImageGallery
+          list_of_images={this.props.building.imgs}
+        />*/}
         <Card.Content>
           <Card.Header>
             { this.props.building.building_name }
@@ -40,6 +48,7 @@ class BuildingCard extends Component {
 BuildingCard.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
+  selectPinToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -59,6 +68,7 @@ function mapStateToProps(state) {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapStateToProps, {
+    selectPinToRedux,
 	})(RadiumHOC)
 )
 
@@ -68,10 +78,10 @@ export default withRouter(
 const comStyles = () => {
 	return {
     hardCard: {
-      minWidth: '300px',
-      maxWidth: '300px',
-      minHeight: '300px',
-      maxHeight: '300px',
+      minWidth: '350px',
+      maxWidth: '350px',
+      minHeight: '350px',
+      maxHeight: '350px',
       margin: '5px auto'
     }
 	}
