@@ -89,3 +89,24 @@ const checkIfPartOfRoutes = (urlPath) => {
 		return false
 	}
 }
+
+
+export const renderProcessedImage = (url) => {
+	if (url) {
+		const newurl = url.replace('rentburrow3-images.s3.amazonaws.com', 'rentburrow3-processed-images.s3.amazonaws.com')
+		const new_name = newurl.slice(0, newurl.lastIndexOf('/')) + '/hd' + newurl.slice(newurl.lastIndexOf('/'))
+		return new_name
+	} else {
+		return url
+	}
+}
+
+export const renderProcessedThumbnail = (url) => {
+	if (url) {
+		const newurl = url.replace('rentburrow3-images.s3.amazonaws.com', 'rentburrow3-processed-images.s3.amazonaws.com')
+		const new_name = newurl.slice(0, newurl.lastIndexOf('/')) + '/thumbnail' + newurl.slice(newurl.lastIndexOf('/'))
+		return new_name
+	} else {
+		return url
+	}
+}

@@ -87,7 +87,7 @@ const comStyles = () => {
 			width: '100%',
 		},
 		map: {
-			width: '40vw',
+			width: '50vw',
 		}
 	}
 }
