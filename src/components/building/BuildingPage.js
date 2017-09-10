@@ -11,14 +11,22 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
-import { searchForSpecificBuilding, getSpecificLandlord } from '../../api/search/search_api'
+import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
+import { URLToAlias, } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
 
 
 class BuildingPage extends Component {
+	constructor() {
+		super()
+		this.state = {
+			building: {}
+		}
+	}
 
 	componentWillMount() {
+		/*
 		console.log(this.props.building)
 		this.props.selectChatThread([
 			{
@@ -48,14 +56,24 @@ class BuildingPage extends Component {
 			getSpecificLandlord({ corporation_id: this.props.building.corporation_id }).then((corp) => {
 				this.props.selectCorporation(corp)
 			})
-		}
+		} */
+    let building_alias = URLToAlias(this.props.location.pathname)
+    if (building_alias[building_alias.length - 1] === '/') {
+      building_alias = building_alias.slice(0, -1)
+    }
+		searchForSpecificBuildingByAlias(building_alias)
+		.then((data) => {
+			this.setState({
+				building: data
+			})
+		})
 	}
 
 	render() {
 		return (
 			<div style={comStyles().container}>
 				BuildingPage
-				<h2>{ this.props.building.building_address }</h2>
+				<h2>{ this.state.building.building_address }</h2>
 			</div>
 		)
 	}
@@ -64,7 +82,7 @@ class BuildingPage extends Component {
 // defines the types of variables in this.props
 BuildingPage.propTypes = {
 	history: PropTypes.object.isRequired,
-	building: PropTypes.object.isRequired,
+	// building: PropTypes.object.isRequired,
 	selectBuilding: PropTypes.func.isRequired,
 	selectCorporation: PropTypes.func.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
@@ -81,7 +99,7 @@ const RadiumHOC = Radium(BuildingPage)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-		building: redux.selection.selected_building,
+		// building: redux.selection.selected_building,
 		tenant: redux.auth.tenant_profile,
 	}
 }
