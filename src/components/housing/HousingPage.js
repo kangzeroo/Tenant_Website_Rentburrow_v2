@@ -20,6 +20,7 @@ import {
 } from '../../actions/search/search_actions'
 import PopupPanel from './panel/PopupPanel'
 
+
 class HousingPage extends Component {
 
 	componentWillMount() {
@@ -48,7 +49,8 @@ class HousingPage extends Component {
 				<MapComponent
 					listOfResults={this.props.buildings}
 					selected_pin={this.props.selected_pin}
-					style={comStyles().map} />
+					style={comStyles().map}
+				/>
 			</div>
 		)
 	}
@@ -102,7 +104,7 @@ const comStyles = () => {
 			position: 'relative',
 		},
 		map: {
-			width: '50vw',
+			width: '100vw',
 		},
 		popupPanel: {
 			position: 'absolute',

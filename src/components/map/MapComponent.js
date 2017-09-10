@@ -69,12 +69,8 @@ class MapComponent extends Component {
 
 	mountGoogleMap() {
 		const self = this
-		let coords = {
-      lat: 43.473897,
-      lng: -80.531995
-    }
 		const mapOptions = {
-      center: coords,
+      center: self.getCoordsOfCurrentPin(self.props.listOfResults, this.props.selected_pin),
       zoom: 15
     }
 		const mapTarget = new google.maps.Map(document.getElementById('mapTarget'), mapOptions)
@@ -100,6 +96,24 @@ class MapComponent extends Component {
 			const center = mapTarget.getCenter()
 			const currentCenterCoords = [parseFloat(center.lng().toFixed(7)), parseFloat(center.lat().toFixed(7))]
 		})
+	}
+
+	getCoordsOfCurrentPin(buildings, selected_pin) {
+		let coords = {
+      lat: 43.473897,
+      lng: -80.531995
+    }
+		for (let m = 0; m < buildings.length; m++) {
+			// check if the pin is the one highlighted and set the color to blue and bouncing animation
+			if (selected_pin && buildings[m].building_id === selected_pin) {
+				console.log(buildings[m])
+				coords = {
+					lat: parseFloat(buildings[m].gps_x),
+					lng: parseFloat(buildings[m].gps_y),
+				}
+			}
+		}
+		return coords
 	}
 
 	// map the pins on every update
@@ -211,8 +225,8 @@ class MapComponent extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().mapContainer}>
-				<div id='mapTarget' style={comStyles().mapTarget} />
+			<div style={comStyles({}).mapContainer}>
+				<div id='mapTarget' style={comStyles({ CSS_mapWidth: this.props.CSS_mapWidth, CSS_mapHeight: this.props.CSS_mapHeight }).mapTarget} />
 			</div>
 		)
 	}
@@ -223,11 +237,15 @@ MapComponent.propTypes = {
 	selected_pin: PropTypes.string,				// passed in
   selectPinToRedux: PropTypes.func.isRequired,
 	selectPopupBuilding: PropTypes.func.isRequired,
+	CSS_mapWidth: PropTypes.string,			// passed in
+	CSS_mapHeight: PropTypes.string,		// passed in
 }
 
 // for all optional props, define a default value
 MapComponent.defaultProps = {
-  listOfResults: []
+  listOfResults: [],
+	CSS_mapWidth: '50vw',
+	CSS_mapHeight: '100%',
 }
 
 const RadiumHOC = Radium(MapComponent)
@@ -244,15 +262,15 @@ export default connect(mapStateToProps, {
 
 
 // =====================================
-const comStyles = () => {
+const comStyles = ({ CSS_mapWidth, CSS_mapHeight }) => {
 	return {
 		mapContainer: {
 			width: '100%',
-			height: '93vh'
+			height: '100%'
 		},
 		mapTarget: {
-			width: '50vw',
-			height: '100%'
+			width: CSS_mapWidth,
+			height: CSS_mapHeight,
 		}
 	}
 }
