@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Image,
   Icon,
+  Header,
 } from 'semantic-ui-react'
 import {
   shortenAddress,
@@ -66,7 +67,12 @@ class ImageGallery extends Component {
     /* return all_images.filter((imgObj) => {
       return imgObj.position === current_image_position
     })[0].image_url || this.state.all_photos[0].image_url */
-    return renderProcessedThumbnail(all_images[current_image_position].image_url)
+    return renderProcessedImage(all_images[current_image_position].image_url)
+  }
+
+  getCurrentCaption(current_image_position, all_images) {
+    console.log(all_images[current_image_position].caption)
+    return all_images[current_image_position].caption
   }
 
 	render() {
@@ -83,6 +89,13 @@ class ImageGallery extends Component {
         </div>
         <div onClick={(e) => this.cycleImage(e, 1)} style={comStyles().right}>
           <Icon name='chevron right' size='huge' inverted />
+        </div>
+        <div style={comStyles().caption} >
+          <Header
+            content={this.getCurrentCaption(this.state.current_image_position, this.state.all_images)}
+            inverted
+            textAlign='center'
+          />
         </div>
 			</div>
 		)
@@ -160,6 +173,16 @@ const comStyles = () => {
       alignItems: 'center',
       position: 'absolute',
       backgroundColor: 'rgba(0,0,0,0.1)',
+    },
+    caption: {
+      width: '100%',
+      height: '100px',
+      bottom: '0',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'absolute',
+      backgroundColor: 'rgba(0,0,0,0.3)'
     }
 	}
 }
