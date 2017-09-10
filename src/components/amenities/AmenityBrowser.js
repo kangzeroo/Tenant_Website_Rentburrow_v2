@@ -53,7 +53,7 @@ class AmenityBrowser extends Component {
           ?
           <div style={comStyles().imageGallery}>
             <SingularImageGallery
-              list_of_images={this.props.building.imgs}
+              list_of_images={this.state.current_amenity.image_urls}
             />
           </div>
           :

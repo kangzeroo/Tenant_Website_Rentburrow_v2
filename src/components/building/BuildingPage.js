@@ -31,6 +31,7 @@ import {
   xDeepBlue,
 } from '../../styles/base_colors'
 import AmenityBrowser from '../amenities/AmenityBrowser'
+import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 
 
 class BuildingPage extends Component {
@@ -160,6 +161,10 @@ class BuildingPage extends Component {
 						/>
 					</div>
 				</div>
+				{/*<BuildingPageFixedMenu
+					goToSection={(section) => console.log(`Going to the ${section} section!`)}
+					positionStyle={'relative'}
+				/>*/}
 				<div style={comStyles().content} >
 					<div style={comStyles().building_conatiner}>
 						<h1>{ this.state.building.building_alias }</h1>
