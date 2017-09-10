@@ -1,6 +1,6 @@
 // import { FB } from 'fb'
 import axios from 'axios'
-import { FB_APP_ID, FB_PARSER_MICROSERVICE } from '../API_URLS'
+import { FB_APP_ID, SEARCH_MICROSERVICE } from '../API_URLS'
 
 // initialization of facebook api in order to get the 'FB' global variable
 export const initiateFacebook = () => {
@@ -69,8 +69,7 @@ const requestFacebookLogin = () => {
      	if (response.status === 'connected') {
   	    // get access token
   	    const fbToken = response.authResponse.accessToken
-  	    localStorage.setItem('fbToken', fbToken)
-        res(fbToken)
+				res(fbToken)
   		} else if (response.status === 'not_authorized') {
 		    // The person is logged into Facebook, but not your app.
         rej(response.status)
@@ -91,11 +90,21 @@ const grabFacebookProfile = (fbToken) => {
       '/me',
 	    { access_token: fbToken },
       (profile) => {
+				console.log(profile)
 				if (profile.id) {
-					res({
-            ...profile,
-            fbToken: fbToken
-          })
+					convertTokenIntoLongLived(fbToken).then((longToken) => {
+						localStorage.setItem('fbToken', longToken)
+		        res({
+	            ...profile,
+	            fbToken: longToken
+	          })
+					}).catch((err) => {
+						localStorage.setItem('fbToken', fbToken)
+						res({
+	            ...profile,
+	            fbToken
+	          })
+					})
 				} else {
 					// console.log(profile)
 					rej(profile.error)
@@ -128,15 +137,16 @@ const grabFacebookImage = (profile) => {
 	return p
 }
 
-export const convertTokenIntoLongLived = (fbToken) => {
-	const p = new Promise((res, rej) => {
-		axios.post(`${FB_PARSER_MICROSERVICE}/longlivetoken`, { accessToken: fbToken })
-			.then((longToken) => {
-				// console.log(longToken)
-				localStorage.setItem('fbToken', longToken)
-				res()
+export const convertTokenIntoLongLived = (accessToken) => {
+	console.log('convertTokenIntoLongLived')
+	console.log(accessToken)
+	const p = new Promise((res, rej)=>{
+		axios.post(SEARCH_MICROSERVICE+'/longlivetoken', {accessToken})
+			.then((longToken)=>{
+				console.log(longToken)
+				res(longToken.data.longLiveToken)
 			})
-			.catch((err) => {
+			.catch((err)=>{
 				// console.log(err)
 				rej(err)
 			})
