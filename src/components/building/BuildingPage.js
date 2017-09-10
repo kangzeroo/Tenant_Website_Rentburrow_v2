@@ -25,6 +25,13 @@ import { getAmenitiesForSpecificBuilding,
 			 } from '../../api/building/building_api'
 import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
+import {
+  xMidBlue,
+  xLightBlue,
+  xDeepBlue,
+} from '../../styles/base_colors'
+import AmenityBrowser from '../amenities/AmenityBrowser'
+import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import AvailableSuites from './AvailableSuites'
 
 
@@ -155,6 +162,10 @@ class BuildingPage extends Component {
 						/>
 					</div>
 				</div>
+				{/*<BuildingPageFixedMenu
+					goToSection={(section) => console.log(`Going to the ${section} section!`)}
+					positionStyle={'relative'}
+				/>*/}
 				<div style={comStyles().content} >
 
 					<div style={comStyles().building_container} >
