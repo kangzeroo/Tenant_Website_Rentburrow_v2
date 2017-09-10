@@ -29,9 +29,13 @@ class MapComponent extends Component {
 		this.refreshPins.bind(this)
 
 
-		this.grey_map_pin = 'http://www.iconsdb.com/icons/preview/icon-sets/grey-wall/pin-8-xxl.png'
-		this.red_map_pin = 'https://www.google.com/intl/en_us/mapfiles/marker.png'
-		this.blue_map_pin = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+		// this.grey_map_pin = 'http://www.iconsdb.com/icons/preview/icon-sets/grey-wall/pin-8-xxl.png'
+		// this.red_map_pin = 'https://www.google.com/intl/en_us/mapfiles/marker.png'
+		// this.blue_map_pin = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+
+		this.grey_map_pin = require('../../../assets/icons/gray-dot.png')
+		this.red_map_pin = require('../../../assets/icons/red-dot.png')
+		this.blue_map_pin = require('../../../assets/icons/blue-dot.png')
 	}
 
 	componentWillMount() {
