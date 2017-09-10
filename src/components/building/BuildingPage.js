@@ -11,6 +11,8 @@ import { withRouter } from 'react-router-dom'
 import {
 	Image,
 	Modal,
+	Item,
+	Icon,
 	Header,
 	Button,
 } from 'semantic-ui-react'
@@ -22,6 +24,7 @@ import { getAmenitiesForSpecificBuilding,
 				 getImagesForSpecificBuilding,
 			 } from '../../api/building/building_api'
 import ImageGallery from '../image/ImageGallery'
+import MapComponent from '../map/MapComponent'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -30,6 +33,7 @@ class BuildingPage extends Component {
 			building: {},
 
 			images: [],
+			amenities: [],
 
 			toggle_modal: false,
       modal_name: '',
@@ -66,6 +70,9 @@ class BuildingPage extends Component {
 			})
 			return this.getImagesForBuilding()
 		})
+		.then(() => {
+			return this.getAmenitiesForBuilding()
+		})
 	}
 
 	getImagesForBuilding() {
@@ -74,6 +81,16 @@ class BuildingPage extends Component {
 		}).then((images) => {
 			this.setState({
 				images: images.map((s) => JSON.parse(s))
+			})
+		})
+	}
+
+	getAmenitiesForBuilding() {
+		getAmenitiesForSpecificBuilding({
+			building_id: this.state.building.building_id,
+		}).then((amenities) => {
+			this.setState({
+				amenities: amenities.map((s) => JSON.parse(s))
 			})
 		})
 	}
@@ -145,10 +162,32 @@ class BuildingPage extends Component {
 							dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
 							style={comStyles().textMarkup}
 						/>
+						<div style={comStyles().amenities}>Building Amenities</div>
+						<div>
+							{
+								this.state.amenities.map((am) => {
+									return (
+										<Item style={comStyles().amenity}>
+											<Icon name='checkmark' />
+											<Item.Content verticalAlign='middle'>
+												<Item.Header>
+													{ am.amenity_alias }
+												</Item.Header>
+											</Item.Content>
+										</Item>
+									)
+								})
+							}
+						</div>
 					</div>
 					<div style={comStyles().content_right} >
 					</div>
 				</div>
+				<MapComponent
+					listOfResults={[this.state.building]}
+					selected_pin={null}
+					style={comStyles().map}
+				/>
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
@@ -243,6 +282,23 @@ const comStyles = () => {
 			borderTop: 'grey solid thin',
 			margin: '10px 0px 10px 0px',
 			padding: '5px 0px 5px 0px',
+		},
+		amenities: {
+			fontSize: '2.5rem',
+			lineHeight: '2.5rem',
+			fontWeight: 'bold',
+			borderTop: 'grey solid thin',
+			margin: '10px 0px 10px 0px',
+			padding: '5px 0px 5px 0px',
+		},
+		amenity: {
+			fontSize: '1.5rem',
+			lineHeight: '1.5rem',
+			display: 'flex',
+			flexDirection: 'row',
+		},
+		map: {
+			width: '100vw',
 		},
 	}
 }
