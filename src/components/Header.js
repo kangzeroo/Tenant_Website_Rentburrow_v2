@@ -68,10 +68,11 @@ class Header extends Component {
               <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
             </Link>
           </div>
+          {/*
           <div style={comStyles().righterFloat}>
             <h3> { i18n(WELCOME_MESSAGE) } </h3>
             <Dropdown placeholder='Change Language' onChange={(e, data) => this.props.changeAppLanguage(data.value)} selection options={languageOptions()} />
-          </div>
+          </div>*/}
           <div style={comStyles().rightFloat}>
             {
               this.props.authenticated
