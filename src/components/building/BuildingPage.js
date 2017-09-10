@@ -9,14 +9,21 @@ import Rx from 'rxjs'
 import uuid from 'uuid'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Image,
 } from 'semantic-ui-react'
-import { searchForSpecificBuilding, getSpecificLandlord } from '../../api/search/search_api'
+import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
+import { URLToAlias, renderProcessedImage, } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
 import ImageGallery from '../image/ImageGallery'
 
 class BuildingPage extends Component {
+	constructor() {
+		super()
+		this.state = {
+			building: {}
+		}
+	}
 
 	componentWillMount() {
 		// this.props.selectChatThread([
@@ -47,17 +54,43 @@ class BuildingPage extends Component {
 			getSpecificLandlord({ corporation_id: this.props.building.corporation_id }).then((corp) => {
 				this.props.selectCorporation(corp)
 			})
+		} */
+    let building_alias = URLToAlias(this.props.location.pathname)
+    if (building_alias[building_alias.length - 1] === '/') {
+      building_alias = building_alias.slice(0, -1)
+    }
+		searchForSpecificBuildingByAlias(building_alias)
+		.then((data) => {
+			this.setState({
+				building: data
+			})
+		})
+	}
+
+	createMarkup(string) {
+		return {
+			__html: string,
 		}
 	}
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				{/*<ImageGallery
-					list_of_images={this.props.building}
-				/>*/}
-				BuildingPage
-				<h2>{ this.props.building.building_address }</h2>
+				<div style={comStyles().cover_photo} >
+					<Image
+						src={renderProcessedImage(this.state.building.cover_photo)}
+						fluid
+					/>
+				</div>
+				<div style={comStyles().building_conatiner}>
+					<h1>{ this.state.building.building_alias }</h1>
+					<h2>{ this.state.building.building_address }</h2>
+					<div style={comStyles().about}>About This Building</div>
+					<div
+						dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
+						style={comStyles().textMarkup}
+					/>
+				</div>
 			</div>
 		)
 	}
@@ -66,7 +99,7 @@ class BuildingPage extends Component {
 // defines the types of variables in this.props
 BuildingPage.propTypes = {
 	history: PropTypes.object.isRequired,
-	building: PropTypes.object.isRequired,
+	// building: PropTypes.object.isRequired,
 	selectBuilding: PropTypes.func.isRequired,
 	selectCorporation: PropTypes.func.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
@@ -83,7 +116,7 @@ const RadiumHOC = Radium(BuildingPage)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-		building: redux.selection.selected_building,
+		// building: redux.selection.selected_building,
 		tenant: redux.auth.tenant_profile,
 	}
 }
@@ -105,6 +138,18 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+		},
+		cover_photo: {
+			minHeight: '350px',
+			maxHeight: '350px',
+			minWidth: '100%',
+			maxWidth: '100%',
+			overflow: 'hidden',
+      position: 'relative',
+		},
+		textMarkup: {
+			fontSize: '1rem',
+			lineHeight: '2rem',
+		},
 	}
 }

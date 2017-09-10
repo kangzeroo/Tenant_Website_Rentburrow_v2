@@ -1,7 +1,7 @@
 import {
 	SELECT_BUILDING,
 } from '../../actions/action_types'
-import { searchForSpecificBuilding } from '../search/search_api'
+import { searchForSpecificBuilding, searchForSpecificBuildingByAlias } from '../search/search_api'
 import PossibleRoutes from '../../components/PossibleRoutes'
 
 // to shorten a long street address by removing city and postal code
@@ -22,7 +22,7 @@ export const shortenAddress = (address) => {
 
 export const redirectPath = (urlPath) => {
 	const p = new Promise((res, rej) => {
-		searchForSpecificBuilding(urlPath).then((building) => {
+		searchForSpecificBuildingByAlias(URLToAlias(urlPath)).then((building) => {
 			res({
 				// re-route to a different path if needed
 				path: urlPath,
@@ -109,4 +109,12 @@ export const renderProcessedThumbnail = (url) => {
 	} else {
 		return url
 	}
+}
+
+export const aliasToURL = (building_alias) => {
+	return building_alias.replace(/ /g, '-')
+}
+
+export const URLToAlias = (building_alias) => {
+	return building_alias.replace(/-/g, ' ')
 }
