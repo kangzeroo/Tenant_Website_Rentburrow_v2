@@ -17,6 +17,9 @@ export const AUTHENTICATE_TENANT = 'AUTHENTICATE_TENANT'
 
 // actions related to selections
 export const SELECT_BUILDING = 'SELECT_BUILDING'
+export const SEARCH_STRING = 'SEARCH_STRING'
+export const CHANGE_SEARCH_STYLE = 'CHANGE_SEARCH_STYLE'
+export const SELECT_POPUP_BUILDING = 'SELECT_POPUP_BUILDING'
 
 // Actions related to messaging
 export const SEND_MESSAGE = 'SEND_MESSAGE'

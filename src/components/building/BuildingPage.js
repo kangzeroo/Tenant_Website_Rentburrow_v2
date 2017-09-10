@@ -38,37 +38,23 @@ class BuildingPage extends Component {
 	}
 
 	componentWillMount() {
-		/*
-		console.log(this.props.building)
-		this.props.selectChatThread([
-			{
-				message_id: uuid.v4(),
-				sender_id: this.props.building.corporation_id,
-				receiver_id: this.props.tenant.id,
-				tenant_id: this.props.tenant.id,
-				tenant_name: this.props.tenant.name,
-				staff_id: '',
-				building_id: this.props.building.building_id,
-				building_thumbnail: this.props.building.thumbnail,
-				building_alias: this.props.building.building_name,
-				corporation_id: this.props.building.corporation_id,
-				corporation_name: this.props.building.corporation_name,
-				channel_id: `${this.props.building.corporation_id}_${this.props.tenant.id}`,
-				contents: `Welcome to ${this.props.building.building_address}! Ask me any questions live!`,
-			}
-		])
-		if (!this.props.building) {
-			searchForSpecificBuilding(this.props.building.building_id).then((building) => {
-				this.props.selectBuilding(building)
-				return getSpecificLandlord({ corporation_id: this.props.building.corporation_id })
-			}).then((corp) => {
-				this.props.selectCorporation(corp)
-			})
-		} else {
-			getSpecificLandlord({ corporation_id: this.props.building.corporation_id }).then((corp) => {
-				this.props.selectCorporation(corp)
-			})
-		} */
+		// this.props.selectChatThread([
+		// 	{
+		// 		message_id: uuid.v4(),
+		// 		sender_id: this.props.building.corporation_id,
+		// 		receiver_id: this.props.tenant.id,
+		// 		tenant_id: this.props.tenant.id,
+		// 		tenant_name: this.props.tenant.name,
+		// 		staff_id: '',
+		// 		building_id: this.props.building.building_id,
+		// 		building_thumbnail: this.props.building.thumbnail,
+		// 		building_alias: this.props.building.building_name,
+		// 		corporation_id: this.props.building.corporation_id,
+		// 		corporation_name: this.props.building.corporation_name,
+		// 		channel_id: `${this.props.building.corporation_id}_${this.props.tenant.id}`,
+		// 		contents: `Welcome to ${this.props.building.building_address}! Ask me any questions live!`,
+		// 	}
+		// ])
     let building_alias = URLToAlias(this.props.location.pathname)
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
