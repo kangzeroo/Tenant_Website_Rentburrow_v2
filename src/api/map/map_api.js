@@ -4,7 +4,7 @@ export const pinAlreadyPlaced = (pin, newPins) => {
 	// access marker coords in newPins with marker.position.lat() and marker.position.lng()
 	let exists = false
 	newPins.forEach((marker) => {
-		if (pin.gps_x.toFixed(7) === marker.position.lat().toFixed(7) && pin.gps_y.toFixed(7) === marker.position.lng().toFixed(7)) {
+		if (parseFloat(pin.gps_x).toFixed(7) === marker.position.lat().toFixed(7) && parseFloat(pin.gps_y).toFixed(7) === marker.position.lng().toFixed(7)) {
 			exists = true
 		}
 	})
@@ -16,7 +16,7 @@ export const pinAlreadyPlaced = (pin, newPins) => {
 export const checkWherePinExistsInArray = (pin, existingPins) => {
 	let where = -1
 	existingPins.forEach((x, i) => {
-		if (x.gps_x.toFixed(7) === pin.position.lat().toFixed(7) && x.gps_y.toFixed(7) === pin.position.lng().toFixed(7)) {
+		if (parseFloat(x.gps_x).toFixed(7) === pin.position.lat().toFixed(7) && parseFloat(x.gps_y).toFixed(7) === pin.position.lng().toFixed(7)) {
 			where = i
 		}
 	})
