@@ -45,48 +45,48 @@ const getGroupsForCity = ({ city, profile }) => {
 					active: true,
 					main: false
 				},
-				{
-					groupid: 1572498759686621,
-					groupname: 'Western University (UWO) - Off-Campus Housing',
-					city_name: 'London',
-					active: true,
-					main: true
-				},
-				{
-					groupid: 140018679520133,
-					groupname: 'McMaster Student Housing Postboard',
-					city_name: 'Hamilton',
-					active: true,
-					main: true
-				},
-				{
-					groupid: 370115193161790,
-					groupname: 'University of Toronto - Off-Campus Housing (St. George)',
-					city_name: 'Toronto',
-					active: true,
-					main: true
-				},
-				{
-					groupid: 542272205912816,
-					groupname: 'University of Toronto (UTSC) - Off-Campus Housing (Scarborough)',
-					city_name: 'Scarborough',
-					active: true,
-					main: true
-				},
-				{
-					groupid: 435084536664813,
-					groupname: 'University of Toronto (UTM) - Off-Campus Housing (Mississauga)',
-					city_name: 'Mississauga',
-					active: true,
-					main: true
-				}/*,
-				{
-					groupid: 524220117678841,
-					groupname: 'Carleton U/ uOttawa/ Algonquin C off-Campus Housing',
-					city_name: 'Ottawa',
-					active: true,
-					main: true
-				}*/
+				// {
+				// 	groupid: 1572498759686621,
+				// 	groupname: 'Western University (UWO) - Off-Campus Housing',
+				// 	city_name: 'London',
+				// 	active: true,
+				// 	main: true
+				// },
+				// {
+				// 	groupid: 140018679520133,
+				// 	groupname: 'McMaster Student Housing Postboard',
+				// 	city_name: 'Hamilton',
+				// 	active: true,
+				// 	main: true
+				// },
+				// {
+				// 	groupid: 370115193161790,
+				// 	groupname: 'University of Toronto - Off-Campus Housing (St. George)',
+				// 	city_name: 'Toronto',
+				// 	active: true,
+				// 	main: true
+				// },
+				// {
+				// 	groupid: 542272205912816,
+				// 	groupname: 'University of Toronto (UTSC) - Off-Campus Housing (Scarborough)',
+				// 	city_name: 'Scarborough',
+				// 	active: true,
+				// 	main: true
+				// },
+				// {
+				// 	groupid: 435084536664813,
+				// 	groupname: 'University of Toronto (UTM) - Off-Campus Housing (Mississauga)',
+				// 	city_name: 'Mississauga',
+				// 	active: true,
+				// 	main: true
+				// },
+				// {
+				// 	groupid: 524220117678841,
+				// 	groupname: 'Carleton U/ uOttawa/ Algonquin C off-Campus Housing',
+				// 	city_name: 'Ottawa',
+				// 	active: true,
+				// 	main: true
+				// }
 				// Closed Groups to be added
 				// https://www.facebook.com/groups/Queenshousing/
 			]
@@ -128,41 +128,47 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 }
 
 const getPostsFromGroups = ({ groupsTime, profile }) => {
-	console.log(groupsTime)
 	console.log('getPostsFromGroups')
-	const p = new Promise((res, rej) => {
-		const postsArray = []
-		let doneAsyncTicker = 0
+	const p = new Promise((resolve, rej) => {
 		const locallySavedAccessToken = localStorage.getItem('fbToken')
 		const access_token = profile.accessToken || locallySavedAccessToken
-		for (let g = 0; g < groupsTime.length; g++) {
-			FB.api(
-        `/${groupsTime[g].groupid}/feed?limit=100`,
-        { access_token: access_token },
-      	(response) => {
-          if (response && !response.error) {
-						console.log(response.data)
-		  			response.data.filter((post) => {
-							post.updated_time = new Date(post.updated_time).getTime() / 1000
-				  		return post.updated_time > groupsTime[g].lastPostTime
-				  	}).forEach((post) => {
-				  		postsArray.push({
-				  			...post,
-				  			city: groupsTime[g].city_name,
-				  			groupid: groupsTime[g].groupid
-				  		})
-				  	})
-          }
-          doneAsyncTicker++
-			  	if (doneAsyncTicker === groupsTime.length) {
-						res({
-							postsArray,
-							profile
-						})
-					}
-        }
-		  )
-		}
+		const promises = groupsTime.map((group) => {
+			const x = new Promise((res, rej) => {
+				FB.api(
+	        `/${group.groupid}/feed?limit=30`,
+	        { access_token: access_token },
+	      	(response) => {
+	          if (response && !response.error) {
+			  			const postsArray = response.data.filter((post) => {
+								const thisLatest = new Date(post.updated_time).getTime()
+					  		return thisLatest > group.lastPostTime
+					  	}).map((post) => {
+					  		return {
+					  			...post,
+									updated_time: new Date(post.updated_time).getTime() * 1000,
+					  			city: group.city_name,
+					  			groupid: group.groupid
+					  		}
+					  	})
+							res(postsArray)
+	          } else {
+							res([])
+						}
+	        }
+			  )
+			})
+			return x
+		})
+		Promise.all(promises).then((allPostsArray) => {
+			let allPosts = []
+			allPostsArray.forEach((postsArray) => {
+				allPosts = allPosts.concat(postsArray)
+			})
+			resolve({
+				postsArray: allPosts,
+				profile
+			})
+		})
 	})
 	return p
 }
