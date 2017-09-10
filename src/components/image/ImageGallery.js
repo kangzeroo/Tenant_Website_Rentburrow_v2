@@ -94,6 +94,7 @@ class ImageGallery extends Component {
           <Header
             content={this.getCurrentCaption(this.state.current_image_position, this.state.all_images)}
             inverted
+            size='medium'
             textAlign='center'
           />
         </div>
@@ -176,7 +177,7 @@ const comStyles = () => {
     },
     caption: {
       width: '100%',
-      height: '100px',
+      height: '50px',
       bottom: '0',
       flexDirection: 'column',
       justifyContent: 'center',
