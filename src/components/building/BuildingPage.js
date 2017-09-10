@@ -9,10 +9,10 @@ import Rx from 'rxjs'
 import uuid from 'uuid'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Image,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
-import { URLToAlias, } from '../../api/general/general_api'
+import { URLToAlias, renderProcessedImage, } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
 
@@ -69,11 +69,30 @@ class BuildingPage extends Component {
 		})
 	}
 
+	createMarkup(string) {
+		return {
+			__html: string,
+		}
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
-				BuildingPage
-				<h2>{ this.state.building.building_address }</h2>
+				<div style={comStyles().cover_photo} >
+					<Image
+						src={renderProcessedImage(this.state.building.cover_photo)}
+						fluid
+					/>
+				</div>
+				<div style={comStyles().building_conatiner}>
+					<h1>{ this.state.building.building_alias }</h1>
+					<h2>{ this.state.building.building_address }</h2>
+					<div style={comStyles().about}>About This Building</div>
+					<div
+						dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
+						style={comStyles().textMarkup}
+					/>
+				</div>
 			</div>
 		)
 	}
@@ -121,6 +140,18 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+		},
+		cover_photo: {
+			minHeight: '350px',
+			maxHeight: '350px',
+			minWidth: '100%',
+			maxWidth: '100%',
+			overflow: 'hidden',
+      position: 'relative',
+		},
+		textMarkup: {
+			fontSize: '1rem',
+			lineHeight: '2rem',
+		},
 	}
 }
