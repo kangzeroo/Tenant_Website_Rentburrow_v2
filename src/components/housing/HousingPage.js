@@ -18,6 +18,7 @@ import {
 import {
 	saveBuildingsToRedux,
 } from '../../actions/search/search_actions'
+import PopupPanel from './panel/PopupPanel'
 
 class HousingPage extends Component {
 
@@ -33,6 +34,16 @@ class HousingPage extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+				{
+					this.props.popup_building
+					?
+					<PopupPanel
+						building={this.props.popup_building}
+						style={comStyles().popupPanel}
+					/>
+					:
+					null
+				}
 				<HousingPanel />
 				<MapComponent
 					listOfResults={this.props.buildings}
@@ -49,12 +60,14 @@ HousingPage.propTypes = {
 	saveBuildingsToRedux: PropTypes.func.isRequired,
 	buildings: PropTypes.array,
 	selected_pin: PropTypes.string,
+	popup_building: PropTypes.object,
 }
 
 // for all optional props, define a default value
 HousingPage.defaultProps = {
 	buildings: [],
 	selected_pin: null,
+	popup_building: null,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -65,6 +78,7 @@ const mapReduxToProps = (redux) => {
 	return {
 		buildings: redux.search.search_results,
 		selected_pin: redux.search.selected_pin,
+		popup_building: redux.selection.popup_building,
 	}
 }
 
@@ -85,9 +99,15 @@ const comStyles = () => {
       flexDirection: 'row',
 			height: '93vh',
 			width: '100%',
+			position: 'relative',
 		},
 		map: {
 			width: '50vw',
+		},
+		popupPanel: {
+			position: 'absolute',
+			zIndex: 100,
+			left: 0,
 		}
 	}
 }

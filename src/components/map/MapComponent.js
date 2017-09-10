@@ -5,6 +5,7 @@ import Radium from 'radium'
 import Rx from 'rxjs'
 import { selectPinToRedux } from '../../actions/search/search_actions'
 import { pinAlreadyPlaced, checkWherePinExistsInArray, generateEventCard, generatePromoCard } from '../../api/map/map_api'
+import { selectPopupBuilding } from '../../actions/selection/selection_actions'
 
 class MapComponent extends Component {
 
@@ -119,6 +120,7 @@ class MapComponent extends Component {
         marker.addListener('click', (event) => {
           marker.infowindow.open(self.state.mapTarget, marker)
 					self.props.selectPinToRedux(marker.pin_id)
+					self.props.selectPopupBuilding(n)
 					this.highlightPin(marker)
 					setTimeout(() => {
 						marker.infowindow.close()
@@ -216,6 +218,7 @@ MapComponent.propTypes = {
   listOfResults: PropTypes.array,        // passed in
 	selected_pin: PropTypes.string,				// passed in
   selectPinToRedux: PropTypes.func.isRequired,
+	selectPopupBuilding: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -232,6 +235,7 @@ const mapStateToProps = (redux) => {
 
 export default connect(mapStateToProps, {
 	selectPinToRedux,
+	selectPopupBuilding,
 })(RadiumHOC)
 
 

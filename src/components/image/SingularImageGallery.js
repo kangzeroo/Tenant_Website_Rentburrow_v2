@@ -117,8 +117,10 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
-      minHeight: '500px',
-      maxHeight: '500px',
+      // minHeight: '500px',
+      // maxHeight: '500px',
+      minHeight: '100%',
+      maxHeight: '100%',
       overflow: 'hidden',
       position: 'relative',
       WebkitTapHighlightColor: 'rgba(0,0,0,0)'

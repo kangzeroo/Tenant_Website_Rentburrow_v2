@@ -16,6 +16,9 @@ import {
 } from '../../../api/general/general_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
+import {
+  shortenAddress,
+} from '../../../api/general/general_api'
 
 
 class BuildingCard extends Component {
@@ -27,16 +30,22 @@ class BuildingCard extends Component {
 	render() {
 		return (
       <Card onClick={() => this.selectThisBuilding(this.props.building)} raised onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)} style={comStyles().hardCard}>
-        <Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />
-        {/*<SingularImageGallery
-          list_of_images={this.props.building.imgs}
-        />*/}
-        <Card.Content>
-          <Card.Header>
-            { this.props.building.building_name }
+        {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
+        <div style={comStyles().imageGallery}>
+          <SingularImageGallery
+            list_of_images={this.props.building.imgs}
+          />
+        </div>
+        <Card.Content style={comStyles().info}>
+          <Card.Header style={comStyles().headerPrint}>
+            <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
+            <div style={comStyles().price}>Rooms From</div>
           </Card.Header>
-          <Card.Description>
-            { this.props.building.building_address }
+          <Card.Description style={comStyles().more_info}>
+            {/*<div style={comStyles().rooms}>5 rooms</div> &nbsp;
+            <div style={comStyles().baths}>2 baths</div>*/}
+            <div style={comStyles().rooms}>{this.props.building.building_address}</div>
+            <div style={comStyles().price}>${ this.props.building.min_price }</div>
           </Card.Description>
         </Card.Content>
       </Card>
@@ -83,6 +92,27 @@ const comStyles = () => {
       minHeight: '350px',
       maxHeight: '350px',
       margin: '5px auto'
-    }
+    },
+    info: {
+      backgroundColor: 'rgba(0,0,0,0)',
+      padding: '30px 10px 10px 10px',
+    },
+    imageGallery: {
+      height: '200px',
+    },
+    address: {
+      width: '60%',
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    price: {
+      width: '40%',
+      textAlign: 'right',
+    },
+    more_info: {
+      display: 'flex',
+      flexDirection: 'row',
+      padding: '30px 10px 10px 10px',
+    },
 	}
 }
