@@ -27,6 +27,7 @@ import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
 import AvailableSuites from './AvailableSuites'
 
+
 class BuildingPage extends Component {
 	constructor() {
 		super()
@@ -155,6 +156,7 @@ class BuildingPage extends Component {
 					</div>
 				</div>
 				<div style={comStyles().content} >
+
 					<div style={comStyles().building_container} >
 						<div style={comStyles().building_header} >
 							<h1>{ this.state.building.building_alias }</h1>
@@ -167,29 +169,10 @@ class BuildingPage extends Component {
 								style={comStyles().textMarkup}
 							/>
 						</div>
-						<div style={comStyles().amenities}>Building Amenities</div>
-						<div>
-							{
-								this.state.amenities.map((am) => {
-									return (
-										<Item style={comStyles().amenity}>
-											<Icon name='checkmark' />
-											<Item.Content verticalAlign='middle'>
-												<Item.Header>
-													{ am.amenity_alias }
-												</Item.Header>
-											</Item.Content>
-										</Item>
-									)
-								})
-							}
-						</div>
-
-						<div style={comStyles().available_suites} >
-							<AvailableSuites
-								building_id={this.state.building.building_id}
-							/>
-						</div>
+						<AmenityBrowser
+							amenities={this.state.amenities}
+							building={this.state.building}
+						/>
 					</div>
 					<div style={comStyles().content_right} >
 					</div>
