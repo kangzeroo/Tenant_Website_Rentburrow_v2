@@ -4,4 +4,5 @@ export default [
   '/community',
   '/housing',
   '/building',
+  '/sublet',
 ]

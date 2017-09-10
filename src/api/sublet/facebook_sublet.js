@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { FB_PARSER_MICROSERVICE } from '../API_URLS'
 
-export const extractAndSaveFacebookPostsToDB = (city, profile) => {
+export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
+	console.log('scrapeFacebookSublets')
 	getGroupsForCity({ city, profile })
 		.then(latestPostInServerPerGroup)
 		.then(getPostsFromGroups)
@@ -11,76 +12,161 @@ export const extractAndSaveFacebookPostsToDB = (city, profile) => {
 
 // user profile is not saved to TENANT_MICROSERVICE
 const getGroupsForCity = ({ city, profile }) => {
+	console.log('getGroupsForCity')
 	const p = new Promise((res, rej) => {
-		axios.post(`${FB_PARSER_MICROSERVICE}/city_groups`, city)
-			.then((response, err) => {
-				if (err) { rej(err) }
-				res({
-					groups: response.data,
-					profile
-				})
-			})
+		// axios.post(`${FB_PARSER_MICROSERVICE}/city_groups`, city)
+		// 	.then((response, err) => {
+		// 		if (err) { rej(err) }
+		// 		res({
+		// 			groups: response.data,
+		// 			profile
+		// 		})
+		// 	})
+		res({
+			profile,
+			groups: [
+				{
+					groupid: 1591404561120090,
+					groupname: 'RentBurrow Sublets',
+					city_name: 'Waterloo',
+					active: true,
+					main: true
+				},
+				{
+					groupid: 142679255268,
+					groupname: 'UW/WLU 4 Month Subletting',
+					city_name: 'Waterloo',
+					active: true,
+					main: false
+				},
+				{
+					groupid: 110354088989367,
+					groupname: 'Student Housing in Waterloo',
+					city_name: 'Waterloo',
+					active: true,
+					main: false
+				},
+				{
+					groupid: 198200603621455,
+					groupname: 'Housing',
+					city_name: 'Waterloo',
+					active: true,
+					main: false
+				},
+				{
+					groupid: 1572498759686621,
+					groupname: 'Western University (UWO) - Off-Campus Housing',
+					city_name: 'London',
+					active: true,
+					main: true
+				},
+				{
+					groupid: 140018679520133,
+					groupname: 'McMaster Student Housing Postboard',
+					city_name: 'Hamilton',
+					active: true,
+					main: true
+				},
+				{
+					groupid: 370115193161790,
+					groupname: 'University of Toronto - Off-Campus Housing (St. George)',
+					city_name: 'Toronto',
+					active: true,
+					main: true
+				},
+				{
+					groupid: 542272205912816,
+					groupname: 'University of Toronto (UTSC) - Off-Campus Housing (Scarborough)',
+					city_name: 'Scarborough',
+					active: true,
+					main: true
+				},
+				{
+					groupid: 435084536664813,
+					groupname: 'University of Toronto (UTM) - Off-Campus Housing (Mississauga)',
+					city_name: 'Mississauga',
+					active: true,
+					main: true
+				}/*,
+				{
+					groupid: 524220117678841,
+					groupname: 'Carleton U/ uOttawa/ Algonquin C off-Campus Housing',
+					city_name: 'Ottawa',
+					active: true,
+					main: true
+				}*/
+				// Closed Groups to be added
+				// https://www.facebook.com/groups/Queenshousing/
+			]
+		})
 	})
 	return p
 }
 
 const latestPostInServerPerGroup = ({ groups, profile }) => {
+	console.log('latestPostInServerPerGroup')
 	const p = new Promise((res, rej)=>{
 		const groupsWithLatestPostTime = []
 		for (let g = 0; g < groups.length; g++) {
-			axios.post(`${FB_PARSER_MICROSERVICE}/check_latest_sublet`, groups[g])
-				.then((data) => {
+			// axios.post(`${FB_PARSER_MICROSERVICE}/check_latest_sublet`, groups[g])
+			// 	.then((data) => {
 					let lastPostTime
-					if (data) {
-						lastPostTime = data.data
+					// if (data) {
+						// lastPostTime = data.data
+						lastPostTime = 0
 						groupsWithLatestPostTime.push({
               ...groups[g],
               lastPostTime
             })
-					}
+					// }
 					if (g === groups.length - 1) {
 						res({
 							groupsTime: groupsWithLatestPostTime,
 							profile
 						})
 					}
-				})
+			// 	})
 		}
 	})
 	return p
 }
 
 const getPostsFromGroups = ({ groupsTime, profile }) => {
+	console.log('getPostsFromGroups')
+	console.log(groupsTime)
+	console.log(profile)
 	const p = new Promise((res, rej) => {
 		const postsArray = []
 		let doneAsyncTicker = 0
 		const locallySavedAccessToken = localStorage.getItem('fbToken')
 		const access_token = profile.accessToken || locallySavedAccessToken
+		console.log(access_token)
 		for (let g = 0; g < groupsTime.length; g++) {
 			FB.api(
         `/${groupsTime[g].groupid}/feed?limit=100`,
         { access_token: access_token },
       	(response) => {
           if (response && !response.error) {
-			  			response.data.filter((post) => {
-					  		return post.updated_time > groupsTime[g].lastPostTime
-					  	}).forEach((post) => {
-					  		postsArray.push({
-					  			...post,
-					  			city: groupsTime[g].city_name,
-					  			groupid: groupsTime[g].groupid
-					  		})
-					  	})
+		  			response.data.filter((post) => {
+							post.updated_time = new Date(post.updated_time).getTime() / 1000
+				  		return post.updated_time > groupsTime[g].lastPostTime
+				  	}).forEach((post) => {
+				  		postsArray.push({
+				  			...post,
+				  			city: groupsTime[g].city_name,
+				  			groupid: groupsTime[g].groupid
+				  		})
+				  	})
           }
           doneAsyncTicker++
 			  	if (doneAsyncTicker === groupsTime.length) {
-							res({
-								postsArray,
-								profile
-							})
-						}
-	        }
-		    )
+						res({
+							postsArray,
+							profile
+						})
+					}
+        }
+		  )
 		}
 	})
 	return p
@@ -90,7 +176,12 @@ const filterNonSublets = ({ postsArray, profile }) => {
 	const p = new Promise((res, rej) => {
 		const filteredSublets = postsArray.filter((post, index) => {
 			if (post.message) {
-				return post.message.match(/\(?(\d+[a-fA-F]?)(\s|\,\s|\.\s)(\b[a-zA-Z]*\b)\s(\.|,|\()?([a-zA-Z]*\b)(\.|,|\:|\)|\n)?\s(?:[a-zA-Z]*\b)?(\.|\,|\s)?/ig)
+				// return post.message.match(/\(?(\d+[a-fA-F]?)(\s|\,\s|\.\s)(\b[a-zA-Z]*\b)\s(\.|,|\()?([a-zA-Z]*\b)(\.|,|\:|\)|\n)?\s(?:[a-zA-Z]*\b)?(\.|\,|\s)?/ig)
+				return !post.message.match(/(looking)+|(wanted)+/ig)
+			} else if (post.story) {
+				return !post.story.match(/(looking)+|(wanted)+/ig)
+			} else {
+				return false
 			}
 		})
 		res({
@@ -102,6 +193,7 @@ const filterNonSublets = ({ postsArray, profile }) => {
 }
 
 const sendToServer = ({ filteredSublets, profile }) => {
+	console.log(filteredSublets)
 	axios.post(`${FB_PARSER_MICROSERVICE}/new_sublets`, { newSublets: filteredSublets, profile })
 		.then((data) => {
 			// console.log(data);

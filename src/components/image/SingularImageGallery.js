@@ -51,7 +51,7 @@ class SingularImageGallery extends Component {
       this.setState({
         current_image_position: this.state.all_images.length - 1
       })
-    } else if (this.state.current_image_position + itr > this.state.all_images.length) {
+    } else if (this.state.current_image_position + itr > this.state.all_images.length -1) {
     // if we are at the last image and trying to go into more
       this.setState({
         current_image_position: 0
