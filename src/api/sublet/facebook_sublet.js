@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { FB_PARSER_MICROSERVICE } from '../API_URLS'
+import { SEARCH_MICROSERVICE } from '../API_URLS'
 
 export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
 	console.log('scrapeFacebookSublets')
@@ -14,14 +14,6 @@ export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
 const getGroupsForCity = ({ city, profile }) => {
 	console.log('getGroupsForCity')
 	const p = new Promise((res, rej) => {
-		// axios.post(`${FB_PARSER_MICROSERVICE}/city_groups`, city)
-		// 	.then((response, err) => {
-		// 		if (err) { rej(err) }
-		// 		res({
-		// 			groups: response.data,
-		// 			profile
-		// 		})
-		// 	})
 		res({
 			profile,
 			groups: [
@@ -108,7 +100,7 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 	const p = new Promise((res, rej)=>{
 		const groupsWithLatestPostTime = []
 		for (let g = 0; g < groups.length; g++) {
-			// axios.post(`${FB_PARSER_MICROSERVICE}/check_latest_sublet`, groups[g])
+			// axios.post(`${SEARCH_MICROSERVICE}/check_latest_sublet`, groups[g])
 			// 	.then((data) => {
 					let lastPostTime
 					// if (data) {
@@ -194,7 +186,7 @@ const filterNonSublets = ({ postsArray, profile }) => {
 
 const sendToServer = ({ filteredSublets, profile }) => {
 	console.log(filteredSublets)
-	axios.post(`${FB_PARSER_MICROSERVICE}/new_sublets`, { newSublets: filteredSublets, profile })
+	axios.post(`${SEARCH_MICROSERVICE}/new_sublets`, { newSublets: filteredSublets, profile })
 		.then((data) => {
 			// console.log(data);
 		}).catch((err) => {
