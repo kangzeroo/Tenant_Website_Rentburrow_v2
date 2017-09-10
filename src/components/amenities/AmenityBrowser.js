@@ -116,7 +116,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      height: '500px',
+      minHeight: '150px',
+      height: 'auto',
       overflow: 'scroll',
       backgroundColor: 'white',
       padding: '20px',
