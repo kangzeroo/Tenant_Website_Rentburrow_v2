@@ -127,7 +127,7 @@ const comStyles = () => {
 			maxHeight: '100%',
 			width: '100%',
 			overflowY: 'scroll',
-			padding: '20px',
+			padding: '10px',
 			justifyContent: 'flex-start',
 		},
 		icon: {

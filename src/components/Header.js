@@ -64,7 +64,7 @@ class Header extends Component {
         <div style={comStyles().header}>
           <div style={comStyles().leftFloat}>
             <Link to='/'>
-              <img style={comStyles().logo} src={require('../../assets/images/logo.png')} alt='logo' />
+              <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
             </Link>
           </div>
           <div style={comStyles().righterFloat}>
@@ -142,10 +142,10 @@ const comStyles = () => {
       float: 'left',
     },
     logo: {
-      height: '6vh',
+      height: '5vh',
       width: 'auto',
       float: 'left',
-      margin: '0.5vh auto'
+      margin: '1vh'
     },
     rightFloat: {
       position: 'absolute',

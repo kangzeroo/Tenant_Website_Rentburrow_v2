@@ -41,13 +41,12 @@ class BuildingCard extends Component {
         <Card.Content style={comStyles().info}>
           <Card.Header style={comStyles().headerPrint}>
             <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
-            <div style={comStyles().price}>Rooms From</div>
           </Card.Header>
+          <Card.Meta>
+            {this.props.building.building_address}
+          </Card.Meta>
           <Card.Description style={comStyles().more_info}>
-            {/*<div style={comStyles().rooms}>5 rooms</div> &nbsp;
-            <div style={comStyles().baths}>2 baths</div>*/}
-            <div style={comStyles().rooms}>{this.props.building.building_address}</div>
-            <div style={comStyles().price}>${ this.props.building.min_price }</div>
+            <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
           </Card.Description>
         </Card.Content>
       </Card>
@@ -89,15 +88,15 @@ export default withRouter(
 const comStyles = () => {
 	return {
     hardCard: {
-      minWidth: '350px',
-      maxWidth: '350px',
-      minHeight: '350px',
-      maxHeight: '350px',
-      margin: '5px auto'
+      minWidth: '360px',
+      maxWidth: '360px',
+      minHeight: '300px',
+      maxHeight: '300px',
+      margin: '5px auto',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
-      padding: '30px 10px 10px 10px',
+      // padding: '30px 10px 10px 10px',
     },
     imageGallery: {
       height: '200px',
@@ -109,12 +108,10 @@ const comStyles = () => {
     },
     price: {
       width: '40%',
-      textAlign: 'right',
     },
     more_info: {
       display: 'flex',
       flexDirection: 'row',
-      padding: '30px 10px 10px 10px',
     },
 	}
 }
