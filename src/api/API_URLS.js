@@ -3,7 +3,7 @@
 
 // LOCAL
 export const MESSAGING_MICROSERVICE = 'https://localhost:3001'
-export const FB_APP_ID = '1165229330221966'
+export const FB_APP_ID = '115765432474914'
 
 export const SEARCH_MICROSERVICE = 'https://localhost:3002'
 export const CORP_MICROSERVICE = 'https://localhost:3001'

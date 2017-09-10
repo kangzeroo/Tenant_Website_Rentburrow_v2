@@ -140,5 +140,8 @@ const comStyles = () => {
       width: '24%',
       cursor: 'pointer',
 		},
+    imageGallery: {
+      height: '450px',
+    }
 	}
 }

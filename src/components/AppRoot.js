@@ -28,6 +28,7 @@ import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
 import { saveTenantToRedux } from '../actions/auth/auth_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
+import { scrapeFacebookSublets } from '../api/sublet/facebook_sublet'
 
 class AppRoot extends Component {
 
@@ -38,6 +39,9 @@ class AppRoot extends Component {
       return checkIfFacebookLoggedIn()
     }).then((fbProfile) => {
       this.props.saveTenantToRedux(fbProfile)
+      if (location.indexOf('sublet') > -1) {
+        scrapeFacebookSublets(fbProfile)
+      }
     })
     // grab the url that was given
     const location = this.props.location.pathname
