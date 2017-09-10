@@ -14,6 +14,7 @@ import {
 	Item,
 	Icon,
 	Header,
+	Container,
 	Button,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
@@ -183,20 +184,26 @@ class BuildingPage extends Component {
 
 					<div style={comStyles().building_container} >
 						<div style={comStyles().building_header} >
-							<h1>{ this.state.building.building_alias }</h1>
-							<h2>{ this.state.building.building_address }</h2>
+							<Header
+								content={this.state.building.building_alias}
+								subheader={this.state.building.building_address}
+								textalign='left'
+								size='huge'
+							/>
+
+							<div style={comStyles().description} >
+								<div
+									dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
+									style={comStyles().textMarkup}
+								/>
+							</div>
 						</div>
-						<div style={comStyles().description} >
-							<div style={comStyles().about}>About This Building</div>
-							<div
-								dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
-								style={comStyles().textMarkup}
+						<div style={comStyles().amenities} >
+							<AmenityBrowser
+								amenities={this.state.amenities}
+								building={this.state.building}
 							/>
 						</div>
-						<AmenityBrowser
-							amenities={this.state.amenities}
-							building={this.state.building}
-						/>
 						<div style={comStyles().suites_table} >
 							<AvailableSuites
 								suites={this.state.suites}
@@ -319,17 +326,7 @@ const comStyles = () => {
 			padding: '5px 0px 5px 0px',
 		},
 		amenities: {
-			fontSize: '2.5rem',
-			lineHeight: '2.5rem',
-			fontWeight: 'bold',
-			margin: '10px 0px 10px 0px',
-			padding: '5px 0px 5px 0px',
-		},
-		amenity: {
-			fontSize: '1.5rem',
-			lineHeight: '1.5rem',
-			display: 'flex',
-			flexDirection: 'row',
+			margin: '10px 0px 10px 0px'
 		},
 		map: {
 			width: '100vw',
@@ -339,14 +336,15 @@ const comStyles = () => {
 			margin: '10px 0px 10px 0px',
 			display: 'flex',
 			flexDirection: 'column',
-			alignItems: 'center',
 			borderRadius: '2px',
+			padding: '10px',
 		},
 		description: {
 			backgroundColor: 'white',
 			margin: '10px 0px 10px 0px',
 			borderRadius: '2px',
-			padding: '5px',
+			padding: '10px',
+			borderTop: 'gray solid thin'
 		},
 		suites_table: {
 			backgroundColor: 'white',
