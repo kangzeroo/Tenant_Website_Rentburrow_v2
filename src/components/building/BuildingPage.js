@@ -30,6 +30,8 @@ import {
   xLightBlue,
   xDeepBlue,
 } from '../../styles/base_colors'
+import AmenityBrowser from '../amenities/AmenityBrowser'
+
 
 class BuildingPage extends Component {
 	constructor() {
@@ -167,23 +169,10 @@ class BuildingPage extends Component {
 							dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
 							style={comStyles().textMarkup}
 						/>
-						<div style={comStyles().amenities}>Building Amenities</div>
-						<div>
-							{
-								this.state.amenities.map((am) => {
-									return (
-										<Item style={comStyles().amenity}>
-											<Icon name='checkmark' />
-											<Item.Content verticalAlign='middle'>
-												<Item.Header>
-													{ am.amenity_alias }
-												</Item.Header>
-											</Item.Content>
-										</Item>
-									)
-								})
-							}
-						</div>
+						<AmenityBrowser
+							amenities={this.state.amenities}
+							building={this.state.building}
+						/>
 					</div>
 					<div style={comStyles().content_right} >
 					</div>
