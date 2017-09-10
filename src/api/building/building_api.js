@@ -43,3 +43,17 @@ export const getAmenitiesForSpecificBuilding = (obj) => {
   })
   return p
 }
+
+export const getAvailableSuites = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SEARCH_MICROSERVICE}/get_available_suites`, obj)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
