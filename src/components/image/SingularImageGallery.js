@@ -80,11 +80,14 @@ class SingularImageGallery extends Component {
           height='100%'
           style={comStyles().image}
         />
+        <div style={comStyles().imageContainer}>
+
+        </div>
         <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
-          <Icon name='chevron left' size='huge' inverted />
+          <Icon name='chevron left' size='big' inverted />
         </div>
         <div onClick={(e) => this.cycleImage(e, 1)} style={comStyles().right}>
-          <Icon name='chevron right' size='huge' inverted />
+          <Icon name='chevron right' size='big' inverted />
         </div>
 			</div>
 		)
@@ -128,6 +131,12 @@ const comStyles = () => {
     image: {
       minHeight: '100%',
     },
+    imageContainer: {
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0,0.05)',
+      position: 'absolute'
+    },
     left: {
       width: '15%',
       height: '100%',
@@ -137,7 +146,7 @@ const comStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      backgroundColor: 'rgba(0,0,0,0.1)',
+      backgroundColor: 'rgba(0,0,0,0)',
     },
     right: {
       width: '15%',
@@ -148,7 +157,7 @@ const comStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      backgroundColor: 'rgba(0,0,0,0.1)',
+      backgroundColor: 'rgba(0,0,0,0)',
     }
 	}
 }
