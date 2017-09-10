@@ -25,12 +25,7 @@ import { getAmenitiesForSpecificBuilding,
 			 } from '../../api/building/building_api'
 import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
-import {
-  xMidBlue,
-  xLightBlue,
-  xDeepBlue,
-} from '../../styles/base_colors'
-import AmenityBrowser from '../amenities/AmenityBrowser'
+import AvailableSuites from './AvailableSuites'
 
 
 class BuildingPage extends Component {
@@ -161,14 +156,19 @@ class BuildingPage extends Component {
 					</div>
 				</div>
 				<div style={comStyles().content} >
-					<div style={comStyles().building_conatiner}>
-						<h1>{ this.state.building.building_alias }</h1>
-						<h2>{ this.state.building.building_address }</h2>
-						<div style={comStyles().about}>About This Building</div>
-						<div
-							dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
-							style={comStyles().textMarkup}
-						/>
+
+					<div style={comStyles().building_container} >
+						<div style={comStyles().building_header} >
+							<h1>{ this.state.building.building_alias }</h1>
+							<h2>{ this.state.building.building_address }</h2>
+						</div>
+						<div style={comStyles().description} >
+							<div style={comStyles().about}>About This Building</div>
+							<div
+								dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
+								style={comStyles().textMarkup}
+							/>
+						</div>
 						<AmenityBrowser
 							amenities={this.state.amenities}
 							building={this.state.building}
@@ -240,7 +240,6 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
 		cover_photo: {
 			minHeight: '350px',
@@ -249,6 +248,7 @@ const comStyles = () => {
 			maxWidth: '100%',
 			overflow: 'hidden',
       position: 'relative',
+			background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
 		},
 		action_sticker: {
       position: 'absolute',
@@ -262,13 +262,15 @@ const comStyles = () => {
 		content: {
 			display: 'flex',
 			flexDirection: 'row',
+			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
-		building_conatiner: {
+		building_container: {
 			display: 'flex',
 			flexDirection: 'column',
+			justifyContent: 'space-between',
 			flex: '2',
 			margin: '20px 20px 20px 100px',
-			backgroundColor: 'white',
+			backgroundColor: 'rgba(153,204,255,0)',
 			padding: '10px'
 		},
 		content_right: {
@@ -284,7 +286,6 @@ const comStyles = () => {
 			fontSize: '2.5rem',
 			lineHeight: '2.5rem',
 			fontWeight: 'bold',
-			borderTop: 'grey solid thin',
 			margin: '10px 0px 10px 0px',
 			padding: '5px 0px 5px 0px',
 		},
@@ -292,7 +293,6 @@ const comStyles = () => {
 			fontSize: '2.5rem',
 			lineHeight: '2.5rem',
 			fontWeight: 'bold',
-			borderTop: 'grey solid thin',
 			margin: '10px 0px 10px 0px',
 			padding: '5px 0px 5px 0px',
 		},
@@ -304,6 +304,20 @@ const comStyles = () => {
 		},
 		map: {
 			width: '100vw',
+		},
+		building_header: {
+			backgroundColor: 'white',
+			margin: '10px 0px 10px 0px',
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'center',
+			borderRadius: '2px',
+		},
+		description: {
+			backgroundColor: 'white',
+			margin: '10px 0px 10px 0px',
+			borderRadius: '2px',
+			padding: '5px',
 		},
 	}
 }
