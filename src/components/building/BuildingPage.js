@@ -25,6 +25,11 @@ import { getAmenitiesForSpecificBuilding,
 			 } from '../../api/building/building_api'
 import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
+import {
+  xMidBlue,
+  xLightBlue,
+  xDeepBlue,
+} from '../../styles/base_colors'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -246,6 +251,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
 		cover_photo: {
 			minHeight: '350px',
@@ -266,13 +272,15 @@ const comStyles = () => {
     },
 		content: {
 			display: 'flex',
-			flexDirection: 'row'
+			flexDirection: 'row',
 		},
 		building_conatiner: {
 			display: 'flex',
 			flexDirection: 'column',
 			flex: '2',
-			margin: '20px 20px 20px 100px'
+			margin: '20px 20px 20px 100px',
+			backgroundColor: 'white',
+			padding: '10px'
 		},
 		content_right: {
 			display: 'flex',
