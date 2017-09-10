@@ -22,6 +22,7 @@ import { selectBuilding, selectCorporation } from '../../actions/selection/selec
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
 import { getAmenitiesForSpecificBuilding,
 				 getImagesForSpecificBuilding,
+				 getAvailableSuites,
 			 } from '../../api/building/building_api'
 import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
@@ -40,6 +41,7 @@ class BuildingPage extends Component {
 		super()
 		this.state = {
 			building: {},
+			suites: [],
 
 			images: [],
 			amenities: [],
@@ -80,7 +82,18 @@ class BuildingPage extends Component {
 			return this.getImagesForBuilding()
 		})
 		.then(() => {
+			console.log(this.state.building)
 			return this.getAmenitiesForBuilding()
+		})
+		.then(() => {
+			return getAvailableSuites({
+	      building_id: this.state.building.building_id,
+	    })
+		})
+		.then((data) => {
+			this.setState({
+				suites: data.map((s) => JSON.parse(s))
+			})
 		})
 	}
 
@@ -184,6 +197,11 @@ class BuildingPage extends Component {
 							amenities={this.state.amenities}
 							building={this.state.building}
 						/>
+						<div style={comStyles().suites_table} >
+							<AvailableSuites
+								suites={this.state.suites}
+							/>
+						</div>
 					</div>
 					<div style={comStyles().content_right} >
 					</div>
@@ -280,7 +298,7 @@ const comStyles = () => {
 			flexDirection: 'column',
 			justifyContent: 'space-between',
 			flex: '2',
-			margin: '20px 20px 20px 100px',
+			margin: '20px 20px 20px 50px',
 			backgroundColor: 'rgba(153,204,255,0)',
 			padding: '10px'
 		},
@@ -330,5 +348,11 @@ const comStyles = () => {
 			borderRadius: '2px',
 			padding: '5px',
 		},
+		suites_table: {
+			backgroundColor: 'white',
+			margin: '10px 0px 10px 0px',
+			borderRadius: '2px',
+			padding: '10px',
+		}
 	}
 }
