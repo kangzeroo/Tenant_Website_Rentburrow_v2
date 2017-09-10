@@ -97,48 +97,51 @@ const getGroupsForCity = ({ city, profile }) => {
 
 const latestPostInServerPerGroup = ({ groups, profile }) => {
 	console.log('latestPostInServerPerGroup')
-	const p = new Promise((res, rej)=>{
-		const groupsWithLatestPostTime = []
-		for (let g = 0; g < groups.length; g++) {
-			// axios.post(`${SEARCH_MICROSERVICE}/check_latest_sublet`, groups[g])
-			// 	.then((data) => {
-					let lastPostTime
-					// if (data) {
+	const p = new Promise((res, rej) => {
+		const promises = groups.map((group) => {
+			return axios.post(`${SEARCH_MICROSERVICE}/check_latest_sublet`, group)
+				.then((data) => {
+					if (data.data.length > 0) {
 						// lastPostTime = data.data
-						lastPostTime = 0
-						groupsWithLatestPostTime.push({
-              ...groups[g],
+						const lastPostTime = JSON.parse(data.data[0]).posted_date || 0
+						console.log(`${group.groupname}: ${lastPostTime}`)
+						return Promise.resolve({
+              ...group,
               lastPostTime
             })
-					// }
-					if (g === groups.length - 1) {
-						res({
-							groupsTime: groupsWithLatestPostTime,
-							profile
+					} else {
+						return Promise.resolve({
+							...group,
+						 lastPostTime: 0
 						})
 					}
-			// 	})
-		}
+				})
+		})
+		Promise.all(promises).then((groupsWithLatestPostTime) => {
+			res({
+				groupsTime: groupsWithLatestPostTime,
+				profile,
+			})
+		})
 	})
 	return p
 }
 
 const getPostsFromGroups = ({ groupsTime, profile }) => {
-	console.log('getPostsFromGroups')
 	console.log(groupsTime)
-	console.log(profile)
+	console.log('getPostsFromGroups')
 	const p = new Promise((res, rej) => {
 		const postsArray = []
 		let doneAsyncTicker = 0
 		const locallySavedAccessToken = localStorage.getItem('fbToken')
 		const access_token = profile.accessToken || locallySavedAccessToken
-		console.log(access_token)
 		for (let g = 0; g < groupsTime.length; g++) {
 			FB.api(
-        `/${groupsTime[g].groupid}/feed?limit=2`,
+        `/${groupsTime[g].groupid}/feed?limit=100`,
         { access_token: access_token },
       	(response) => {
           if (response && !response.error) {
+						console.log(response.data)
 		  			response.data.filter((post) => {
 							post.updated_time = new Date(post.updated_time).getTime() / 1000
 				  		return post.updated_time > groupsTime[g].lastPostTime
