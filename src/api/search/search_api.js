@@ -47,7 +47,6 @@ export const searchForSpecificBuildingByAlias = (urlPath) => {
     axios.post(`${SEARCH_MICROSERVICE}/get_specific_building_by_alias`, { building_alias: alias })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
-        console.log(data)
         res(JSON.parse(data.data[0]))
       })
       .catch((err) => {

@@ -183,11 +183,19 @@ class BuildingPage extends Component {
 					<div style={comStyles().content_right} >
 					</div>
 				</div>
-				<MapComponent
-					listOfResults={[this.state.building]}
-					selected_pin={null}
-					style={comStyles().map}
-				/>
+				{
+					this.state.building.building_id
+					?
+					<MapComponent
+						listOfResults={[this.state.building]}
+						selected_pin={this.state.building.building_id}
+						CSS_mapWidth='100vw'
+						CSS_mapHeight='40vh'
+						style={comStyles().map}
+					/>
+					:
+					null
+				}
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
