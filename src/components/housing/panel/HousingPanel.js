@@ -117,7 +117,7 @@ const comStyles = () => {
 			width: '50vw',
       maxWidth: '50vw',
       height: '100%',
-			backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
+			//backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
 			backgroundSize: 'cover',
 		},
 		scroll: {

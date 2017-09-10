@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import firebase from 'firebase'
 import {
   xMidBlue,
+  xLightBlue,
   xDeepBlue,
 } from '../styles/base_colors'
 import {
@@ -129,7 +130,7 @@ export default withRouter(
 const comStyles = () => {
   return {
     header: {
-      backgroundColor: xDeepBlue,
+      backgroundColor: xMidBlue,
       padding: '0px',
       height: '7vh',
       width: '100%',
