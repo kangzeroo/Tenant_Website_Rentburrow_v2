@@ -13,6 +13,7 @@ import {
 } from 'semantic-ui-react'
 import {
   renderProcessedThumbnail,
+  aliasToURL,
 } from '../../../api/general/general_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
@@ -21,7 +22,8 @@ import { selectPinToRedux } from '../../../actions/search/search_actions'
 class BuildingCard extends Component {
 
   selectThisBuilding(building) {
-    window.open(`${window.location.href}${building.building_id}`, '_blank')
+    console.log(`${window.location.href}${aliasToURL(building.building_alias)}`)
+    window.open(`${window.location.href}${aliasToURL(building.building_alias)}`, '_blank')
   }
 
 	render() {
