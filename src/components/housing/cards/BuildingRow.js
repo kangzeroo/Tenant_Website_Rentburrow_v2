@@ -33,9 +33,11 @@ class BuildingRow extends Component {
 	render() {
 		return (
       <div onClick={() => this.selectThisBuilding(this.props.building)} onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)} style={comStyles().hardCard}>
-        <SingularImageGallery
-          list_of_images={this.props.building.imgs}
-        />
+        <div style={comStyles().imageGallery}>
+          <SingularImageGallery
+            list_of_images={this.props.building.imgs}
+          />
+        </div>
         <Card.Content style={comStyles().info}>
           <Card.Header style={comStyles().headerPrint}>
             <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
@@ -96,6 +98,9 @@ const comStyles = () => {
       maxHeight: '650px',
       margin: '10px auto',
       backgroundColor: 'white',
+    },
+    imageGallery: {
+      height: '400px',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',

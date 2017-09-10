@@ -15,7 +15,7 @@ import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api
 import { URLToAlias, renderProcessedImage, } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
-
+import ImageGallery from '../image/ImageGallery'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -26,25 +26,23 @@ class BuildingPage extends Component {
 	}
 
 	componentWillMount() {
-		/*
-		console.log(this.props.building)
-		this.props.selectChatThread([
-			{
-				message_id: uuid.v4(),
-				sender_id: this.props.building.corporation_id,
-				receiver_id: this.props.tenant.id,
-				tenant_id: this.props.tenant.id,
-				tenant_name: this.props.tenant.name,
-				staff_id: '',
-				building_id: this.props.building.building_id,
-				building_thumbnail: this.props.building.thumbnail,
-				building_alias: this.props.building.building_name,
-				corporation_id: this.props.building.corporation_id,
-				corporation_name: this.props.building.corporation_name,
-				channel_id: `${this.props.building.corporation_id}_${this.props.tenant.id}`,
-				contents: `Welcome to ${this.props.building.building_address}! Ask me any questions live!`,
-			}
-		])
+		// this.props.selectChatThread([
+		// 	{
+		// 		message_id: uuid.v4(),
+		// 		sender_id: this.props.building.corporation_id,
+		// 		receiver_id: this.props.tenant.id,
+		// 		tenant_id: this.props.tenant.id,
+		// 		tenant_name: this.props.tenant.name,
+		// 		staff_id: '',
+		// 		building_id: this.props.building.building_id,
+		// 		building_thumbnail: this.props.building.thumbnail,
+		// 		building_alias: this.props.building.building_name,
+		// 		corporation_id: this.props.building.corporation_id,
+		// 		corporation_name: this.props.building.corporation_name,
+		// 		channel_id: `${this.props.building.corporation_id}_${this.props.tenant.id}`,
+		// 		contents: `Welcome to ${this.props.building.building_address}! Ask me any questions live!`,
+		// 	}
+		// ])
 		if (!this.props.building) {
 			searchForSpecificBuilding(this.props.building.building_id).then((building) => {
 				this.props.selectBuilding(building)
