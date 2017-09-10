@@ -135,7 +135,7 @@ const getPostsFromGroups = ({ groupsTime, profile }) => {
 		console.log(access_token)
 		for (let g = 0; g < groupsTime.length; g++) {
 			FB.api(
-        `/${groupsTime[g].groupid}/feed?limit=100`,
+        `/${groupsTime[g].groupid}/feed?limit=2`,
         { access_token: access_token },
       	(response) => {
           if (response && !response.error) {
