@@ -71,7 +71,6 @@ class ImageGallery extends Component {
   }
 
   getCurrentCaption(current_image_position, all_images) {
-    console.log(all_images[current_image_position].caption)
     return all_images[current_image_position].caption
   }
 
