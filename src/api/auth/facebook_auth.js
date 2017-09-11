@@ -90,7 +90,6 @@ const grabFacebookProfile = (fbToken) => {
       '/me',
 	    { access_token: fbToken },
       (profile) => {
-				console.log(profile)
 				if (profile.id) {
 					convertTokenIntoLongLived(fbToken).then((longToken) => {
 						localStorage.setItem('fbToken', longToken)
@@ -138,12 +137,9 @@ const grabFacebookImage = (profile) => {
 }
 
 export const convertTokenIntoLongLived = (accessToken) => {
-	console.log('convertTokenIntoLongLived')
-	console.log(accessToken)
 	const p = new Promise((res, rej)=>{
 		axios.post(SEARCH_MICROSERVICE+'/longlivetoken', {accessToken})
 			.then((longToken)=>{
-				console.log(longToken)
 				res(longToken.data.longLiveToken)
 			})
 			.catch((err)=>{

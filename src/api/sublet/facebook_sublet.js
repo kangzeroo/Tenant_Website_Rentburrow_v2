@@ -135,7 +135,7 @@ const getPostsFromGroups = ({ groupsTime, profile }) => {
 		const promises = groupsTime.map((group) => {
 			const x = new Promise((res, rej) => {
 				FB.api(
-	        `/${group.groupid}/feed?limit=30`,
+	        `/${group.groupid}/feed?limit=2`,
 	        { access_token: access_token },
 	      	(response) => {
 	          if (response && !response.error) {

@@ -106,7 +106,6 @@ class MapComponent extends Component {
 		for (let m = 0; m < buildings.length; m++) {
 			// check if the pin is the one highlighted and set the color to blue and bouncing animation
 			if (selected_pin && buildings[m].building_id === selected_pin) {
-				console.log(buildings[m])
 				coords = {
 					lat: parseFloat(buildings[m].gps_x),
 					lng: parseFloat(buildings[m].gps_y),
