@@ -13,7 +13,7 @@ import {
   Button,
 	Modal,
 } from 'semantic-ui-react'
-import SuiteRoomBrowser from '../suites/SuiteRoomBrowser'
+import HomeExplorer from '../suites/HomeExplorer'
 
 
 class AvailableSuites extends Component {
@@ -45,7 +45,7 @@ class AvailableSuites extends Component {
 					size='fullscreen'
 				>
 	        <Modal.Content>
-						<SuiteRoomBrowser
+						<HomeExplorer
 							building={this.props.building}
 							current_suite={context}
 							all_suites={this.props.suites}

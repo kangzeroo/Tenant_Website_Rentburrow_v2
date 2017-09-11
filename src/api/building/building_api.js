@@ -85,3 +85,17 @@ export const getRoomsForSuite = ({ building_id, suite_id }) => {
   })
   return p
 }
+
+export const getSuiteInfo = ({ building_id, suite_id }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SEARCH_MICROSERVICE}/get_suite_page`, { building_id, suite_id })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}

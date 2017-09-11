@@ -11,10 +11,16 @@ import {
   Dropdown,
   Button,
 } from 'semantic-ui-react'
-import { getAmenitiesForSpecificBuilding, getAmenitiesForSuite, getRoomsForSuite, } from '../../../api/building/building_api'
+import {
+  getAmenitiesForSpecificBuilding,
+  getAmenitiesForSuite,
+  getRoomsForSuite,
+  getSuiteInfo,
+  getImagesForSpecificBuilding,
+} from '../../../api/building/building_api'
 
 
-class SuiteRoomSidebar extends Component {
+class HomeExplorerSidebar extends Component {
 
   constructor() {
     super()
@@ -70,17 +76,32 @@ class SuiteRoomSidebar extends Component {
 
   loadBottomContextItems(title, value) {
     console.log('loadBottomContextItems')
+    let buildingImages = '[]'
+    // CASE WHERE WE WANT TO SEE BUILDING INFO
     if (title === 'Building') {
-      getAmenitiesForSpecificBuilding({
-        building_id: this.props.building.building_id,
-      }).then((data) => {
-        console.log(data)
+      // Step 1: Get images for this building
+      getImagesForSpecificBuilding({
+  			building_id: this.props.building.building_id,
+  		}).then((images) => {
+        // Step 2: Save those images to the bottomContext
+        buildingImages = JSON.stringify(images.map((s) => JSON.parse(s)))
+        this.props.changeBottomContext({
+          text: 'Description',
+          value: buildingImages
+        })
+        // Step 3a: Get amenities for this building
+        return getAmenitiesForSpecificBuilding({
+          building_id: this.props.building.building_id,
+        })
+  		})
+      .then((data) => {
+        // Step 3b: Save those amenities to the list of bottomContext options
         this.setState({
           menu_items: [
             {
               key: 'desc',
               text: 'Description',
-              value: this.props.building
+              value: JSON.parse(buildingImages)
             },
           ].concat(data.map((d) => {
             const x = JSON.parse(d)
@@ -93,11 +114,31 @@ class SuiteRoomSidebar extends Component {
         })
       })
     } else {
-      const suite = JSON.parse(value)
-      getRoomsForSuite({
-        building_id: this.props.building.building_id,
-        suite_id: suite.suite_id,
-      }).then((data) => {
+      // CASE WHERE WE WANT TO SEE SUITE INFO
+      // step 0: we have basic suite info
+      let suite = JSON.parse(value)
+      // step 1: get additional suite info from db
+      getSuiteInfo({
+  			building_id: this.props.building.building_id,
+  			suite_id: suite.suite_id,
+  		}).then((data) => {
+        // step 2: combine basic+additional suite info and save it to the bottomContext of parent (so that we can navigate around)
+        suite = {
+          ...suite,
+          ...JSON.parse(data),
+        }
+        this.props.changeBottomContext({
+          text: 'Description',
+          value: JSON.stringify(suite)
+        })
+        // FROM HERE ONWARDS WE ARE SIMPLY POPULATING THE bottomContext OPTIONS
+        // step 3a: get the rooms for this suite, also so that we can use it for navigation
+        return getRoomsForSuite({
+          building_id: this.props.building.building_id,
+          suite_id: suite.suite_id,
+        })
+  		}).then((data) => {
+        // step 3b: save those rooms to this.state so that we can use it for navigation. combine with some default nav options as well
         this.setState({
           menu_items: [
             {
@@ -119,6 +160,7 @@ class SuiteRoomSidebar extends Component {
             }
           }))
         })
+        // step 4: get amenities for this suite, so that we can also use it for navigation
         return getAmenitiesForSuite({
           building_id: this.props.building.building_id,
           suite_id: suite.suite_id,
@@ -158,7 +200,7 @@ class SuiteRoomSidebar extends Component {
 }
 
 // defines the types of variables in this.props
-SuiteRoomSidebar.propTypes = {
+HomeExplorerSidebar.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,        // passed in, for populating topContextOptions
   all_suites: PropTypes.array.isRequired,       // passed in, for populating bottomContextOptions
@@ -171,13 +213,13 @@ SuiteRoomSidebar.propTypes = {
 }
 
 // for all optional props, define a default value
-SuiteRoomSidebar.defaultProps = {
+HomeExplorerSidebar.defaultProps = {
   topContext: {},
   bottomContext: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SuiteRoomSidebar)
+const RadiumHOC = Radium(HomeExplorerSidebar)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

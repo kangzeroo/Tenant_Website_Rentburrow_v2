@@ -77,7 +77,13 @@ class SingularImageGallery extends Component {
     /* return all_images.filter((imgObj) => {
       return imgObj.position === current_image_position
     })[0].image_url || this.state.all_photos[0].image_url */
-    return renderProcessedThumbnail(all_images[current_image_position])
+    if (this.props.image_size === 'thumbnail') {
+      return renderProcessedThumbnail(all_images[current_image_position])
+    } else if (this.props.image_size === 'hd') {
+      return renderProcessedImage(all_images[current_image_position])
+    } else {
+      return all_images[current_image_position]
+    }
   }
 
 	render() {
@@ -106,12 +112,13 @@ class SingularImageGallery extends Component {
 // defines the types of variables in this.props
 SingularImageGallery.propTypes = {
   list_of_images: PropTypes.array,
-  // initial_image: PropTypes.string.isRequired,
+  image_size: PropTypes.string,       // passed in
 }
 
 // for all optional props, define a default value
 SingularImageGallery.defaultProps = {
   list_of_images: [],
+  image_size: 'thumbnail',            // 'thumbnail', 'hd'
 }
 
 // Wrap the prop in Radium to allow JS styling

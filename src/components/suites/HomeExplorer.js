@@ -10,18 +10,18 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
-import SuiteRoomCanvas from './navigation/SuiteRoomCanvas'
-import SuiteRoomSidebar from './navigation/SuiteRoomSidebar'
+import HomeExplorerCanvas from './navigation/HomeExplorerCanvas'
+import HomeExplorerSidebar from './navigation/HomeExplorerSidebar'
 import { selectTopContext, selectBottomContext } from '../../actions/selection/selection_actions'
 
 
-class SuiteRoomBrowser extends Component {
+class HomeExplorer extends Component {
 
   constructor() {
     super()
     this.state = {
-      topContextValue: '{}',        // 'building', 'unit A', 'unit B'
-      bottomContextValue: '{}',     // ['desc', 'outside', 'hallway', 'gym', ...otherAmenities], ['desc', 'kitchen', 'room 1', ...otherAmenities]  /* room 1 is not an amenity but in the same context level */
+      topContextValue: null,        // 'building', 'unit A', 'unit B'
+      bottomContextValue: null,     // ['desc', 'outside', 'hallway', 'gym', ...otherAmenities], ['desc', 'kitchen', 'room 1', ...otherAmenities]  /* room 1 is not an amenity but in the same context level */
     }
   }
 
@@ -50,7 +50,7 @@ class SuiteRoomBrowser extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<SuiteRoomSidebar
+				<HomeExplorerSidebar
           building={this.props.building}
           current_suite={this.props.current_suite}
           all_suites={this.props.all_suites}
@@ -59,17 +59,24 @@ class SuiteRoomBrowser extends Component {
           topContextValue={this.state.topContextValue}
           bottomContextValue={this.state.bottomContextValue}
         />
-        <SuiteRoomCanvas
-          topContextValue={this.state.topContextValue}
-          bottomContextValue={this.state.bottomContextValue}
-        />
+        {
+          this.state.bottomContextValue
+          ?
+          <HomeExplorerCanvas
+            building={this.props.building}
+            topContextValue={this.state.topContextValue}
+            bottomContextValue={this.state.bottomContextValue}
+          />
+          :
+          null
+        }
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-SuiteRoomBrowser.propTypes = {
+HomeExplorer.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,        // passed in
   current_suite: PropTypes.object.isRequired,   // passed in
@@ -79,11 +86,11 @@ SuiteRoomBrowser.propTypes = {
 }
 
 // for all optional props, define a default value
-SuiteRoomBrowser.defaultProps = {
+HomeExplorer.defaultProps = {
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SuiteRoomBrowser)
+const RadiumHOC = Radium(HomeExplorer)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
