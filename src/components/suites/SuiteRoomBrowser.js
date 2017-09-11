@@ -60,6 +60,8 @@ class SuiteRoomBrowser extends Component {
           bottomContextValue={this.state.bottomContextValue}
         />
         <SuiteRoomCanvas
+          topContextValue={this.state.topContextValue}
+          bottomContextValue={this.state.bottomContextValue}
         />
 			</div>
 		)

@@ -9,14 +9,22 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
   Dropdown,
+  Button,
 } from 'semantic-ui-react'
+import { getAmenitiesForSpecificBuilding, getAmenitiesForSuite, getRoomsForSuite, } from '../../../api/building/building_api'
 
 
 class SuiteRoomSidebar extends Component {
 
+  constructor() {
+    super()
+    this.state = {
+      menu_items: []
+    }
+  }
+
   componentWillMount() {
-    // console.log(this.props.building)
-    // console.log(this.props.all_suites)
+    this.loadBottomContextItems(this.props.topContextText, this.props.topContextValue)
   }
 
   generateTopContextOptions() {
@@ -32,11 +40,10 @@ class SuiteRoomSidebar extends Component {
         value: JSON.stringify(suite)
       }
     }))
-    console.log(x)
     return x
   }
 
-  generateBottomContextOptions() {
+  generateBottomContextOptions(topContextText) {
     /*
       options = [
         {
@@ -53,7 +60,86 @@ class SuiteRoomSidebar extends Component {
         },
       ]
     */
-    return []
+    return this.state.menu_items.map((item) => {
+      return (
+        <Button
+          key={item.key}
+          content={item.text}
+        />
+      )
+    })
+  }
+
+  loadSidebarItems(data) {
+    const title = JSON.parse(data.value).suite_alias || 'Building'
+    this.props.changeTopContext({
+      text: title,
+      value: data.value
+    })
+    this.loadBottomContextItems(title, data.value)
+  }
+
+  loadBottomContextItems(title, value) {
+    console.log('loadBottomContextItems')
+    if (title === 'Building') {
+      getAmenitiesForSpecificBuilding({
+        building_id: this.props.building.building_id,
+      }).then((data) => {
+        console.log(data)
+        this.setState({
+          menu_items: [
+            {
+              key: 'desc',
+              text: 'Description',
+              value: this.props.building
+            },
+          ].concat(data.map((d) => {
+            const x = JSON.parse(d)
+            return {
+              key: x.amenity_alias,
+              text: x.amenity_alias,
+              value: x,
+            }
+          }))
+        })
+      })
+    } else {
+      const suite = JSON.parse(value)
+      getRoomsForSuite({
+
+      }).then((data) => {
+        console.log(data)
+        this.setState({
+          menu_items: [
+            {
+              key: 'desc',
+              text: 'Description',
+              value: suite,
+            },
+            {
+              key: 'vr_tour',
+              text: 'Virtual Tour',
+              value: suite,
+            },
+          ].concat([])
+        })
+        return getAmenitiesForSuite({
+          building_id: this.props.building.building_id,
+          suite_id: suite.suite_id,
+        })
+      }).then((data) => {
+        this.setState({
+          menu_items: this.state.menu_items.concat(data.map((d) => {
+            const x = JSON.parse(d)
+            return {
+              key: x.amenity_alias,
+              text: x.amenity_alias,
+              value: x,
+            }
+          }))
+        })
+      })
+    }
   }
 
 	render() {
@@ -63,15 +149,13 @@ class SuiteRoomSidebar extends Component {
         <Dropdown
           text={ this.props.topContextText }
           value={ this.props.topContextValue }
-          onChange={(e, data) => {
-            console.log(data)
-            // this.props.changeTopContext({
-            //   text: data.text,
-            //   value: data.value
-            // })
-          }}
+          onChange={(e, data) => this.loadSidebarItems(data)}
           selection
-          options={this.generateTopContextOptions()} />
+          options={this.generateTopContextOptions()}
+        />
+        {
+          this.generateBottomContextOptions(this.props.topContextText)
+        }
 			</div>
 		)
 	}
