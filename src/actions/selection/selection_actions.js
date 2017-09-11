@@ -2,6 +2,8 @@ import {
   SELECT_BUILDING,
   SELECT_CORPORATION,
   SELECT_POPUP_BUILDING,
+  NAV_BOTTOM_CONTEXT,
+  NAV_TOP_CONTEXT,
 } from '../action_types'
 
 export const selectBuilding = (building) => {
@@ -29,6 +31,24 @@ export const selectCorporation = (corp) => {
     dispatch({
       type: SELECT_CORPORATION,
       payload: corp,
+    })
+  }
+}
+
+export const selectTopContext = (context) => {
+  return (dispatch) => {
+    dispatch({
+      type: NAV_TOP_CONTEXT,
+      payload: context,
+    })
+  }
+}
+
+export const selectBottomContext = (context) => {
+  return (dispatch) => {
+    dispatch({
+      type: NAV_BOTTOM_CONTEXT,
+      payload: context,
     })
   }
 }

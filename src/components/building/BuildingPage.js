@@ -34,7 +34,7 @@ import {
 } from '../../styles/base_colors'
 import AmenityBrowser from '../amenities/AmenityBrowser'
 import BuildingPageFixedMenu from './BuildingPageFixedMenu'
-import AvailableSuites from './AvailableSuites'
+import AvailableSuites from '../suites/AvailableSuites'
 
 
 class BuildingPage extends Component {
@@ -83,7 +83,6 @@ class BuildingPage extends Component {
 			return this.getImagesForBuilding()
 		})
 		.then(() => {
-			console.log(this.state.building)
 			return this.getAmenitiesForBuilding()
 		})
 		.then(() => {
@@ -187,7 +186,7 @@ class BuildingPage extends Component {
 							<Header
 								content={this.state.building.building_alias}
 								subheader={this.state.building.building_address}
-								textalign='left'
+								textAlign='left'
 								size='huge'
 							/>
 
@@ -206,6 +205,7 @@ class BuildingPage extends Component {
 						</div>
 						<div style={comStyles().suites_table} >
 							<AvailableSuites
+								building={this.state.building}
 								suites={this.state.suites}
 							/>
 						</div>

@@ -31,6 +31,15 @@ class SingularImageGallery extends Component {
     })
   }
 
+  componentWillUpdate(prevProps, prevState) {
+    if (prevProps.list_of_images !== this.props.list_of_images) {
+      this.setState({
+        all_images: prevProps.list_of_images,
+        current_image_position: 0,
+      })
+    }
+  }
+
   /*
   organizePhotos() {
     const all_photos = [this.props.initial_image].concat(this.props.list_of_images)

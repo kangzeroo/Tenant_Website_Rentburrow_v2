@@ -20,48 +20,32 @@ class AmenityBrowser extends Component {
   constructor() {
     super()
     this.state = {
-      current_amenity: '',
+      current_amenity: {},
     }
   }
 
-  componentDidUpdate() {
-    console.log(this.props.amenities)
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.amenities !== this.props.amenities) {
+      this.setState({
+        current_amenity: this.props.amenities[0]
+      })
+    }
   }
 
 	render() {
 		return (
 			<div style={comStyles().container}>
         <div style={comStyles().amenities}>
-          {
-            this.state.current_amenity
-            ?
-            <div>
-              <Button
-                onClick={() => this.setState({ current_amenity: null })}
-                content='Back'
-              />
-              { this.state.current_amenity.amenity_alias }
-            </div>
-            :
-            <div>
-              Building Amenities
-            </div>
-          }
+          Building Amenities
         </div>
-        {
-          this.state.current_amenity
-          ?
-          <div style={comStyles().imageGallery}>
-            <SingularImageGallery
-              list_of_images={this.state.current_amenity.image_urls}
-            />
-          </div>
-          :
+        <div style={comStyles().box}>
           <div style={comStyles().amenitiesGrid}>
             {
               this.props.amenities.map((am) => {
                 return (
-                  <Item onClick={() => this.setState({ current_amenity: am })} key={am.amenity_alias} style={comStyles().amenity}>
+                  <Item onClick={() => {
+                    this.setState({ current_amenity: am })
+                  }} key={am.amenity_alias} style={amenityStyles(this.state.current_amenity, am).amenity}>
                     <Icon name='checkmark' />
                     <Item.Content verticalAlign='middle'>
                       <Item.Header>
@@ -73,7 +57,12 @@ class AmenityBrowser extends Component {
               })
             }
           </div>
-        }
+          <div style={comStyles().imageGallery}>
+            <SingularImageGallery
+              list_of_images={this.state.current_amenity.image_urls}
+            />
+          </div>
+        </div>
 			</div>
 		)
 	}
@@ -133,7 +122,29 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap',
+      width: '50%',
     },
+    imageGallery: {
+      minHeight: '100%',
+      minWidth: '50%',
+    },
+    box: {
+      display: 'flex',
+      flexDirection: 'row'
+    }
+	}
+}
+
+const amenityStyles = (current_amenity, this_amenity) => {
+  let style = {
+    backgroundColor: 'rgba(0,0,0,0)'
+  }
+  if (current_amenity.amenity_alias === this_amenity.amenity_alias) {
+    style = {
+      backgroundColor: 'rgba(0,0,0,0.2)'
+    }
+  }
+  return {
 		amenity: {
 			fontSize: '1.0rem',
 			lineHeight: '1.0rem',
@@ -141,9 +152,7 @@ const comStyles = () => {
 			flexDirection: 'row',
       width: '24%',
       cursor: 'pointer',
+      ...style,
 		},
-    imageGallery: {
-      height: '450px',
-    }
-	}
+  }
 }

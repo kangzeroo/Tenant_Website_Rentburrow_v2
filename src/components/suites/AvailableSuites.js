@@ -11,18 +11,50 @@ import { withRouter } from 'react-router-dom'
 import {
 	Table,
   Button,
+	Modal,
 } from 'semantic-ui-react'
+import SuiteRoomBrowser from '../suites/SuiteRoomBrowser'
 
 
 class AvailableSuites extends Component {
 	constructor() {
 		super()
 		this.state = {
+			toggle_modal: false,
+      modal_name: '',
+      context: {},
     }
 	}
 
-	componentWillMount() {
-	}
+	toggleModal(bool, attr, context) {
+		this.setState({
+      toggle_modal: bool,
+      modal_name: attr,
+      context,
+    })
+  }
+
+	renderAppropriateModal(modal_name, context) {
+		if (modal_name === 'suite') {
+	    return (
+	      <Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='fullscreen'
+				>
+	        <Modal.Content>
+						<SuiteRoomBrowser
+							building={this.props.building}
+							current_suite={context}
+							all_suites={this.props.suites}
+						/>
+	        </Modal.Content>
+	      </Modal>
+	    )
+		}
+  }
 
 	render() {
 		return (
@@ -50,6 +82,7 @@ class AvailableSuites extends Component {
                     <Table.Cell>
                       <Button
                         basic
+												onClick={() => this.toggleModal(true, 'suite', suite)}
                         color='green'
                         content='View'
                       />
@@ -60,6 +93,9 @@ class AvailableSuites extends Component {
             }
           </Table.Body>
         </Table>
+				{
+          this.renderAppropriateModal(this.state.modal_name, this.state.context)
+        }
       </div>
     )
 	}
@@ -68,7 +104,8 @@ class AvailableSuites extends Component {
 // defines the types of variables in this.props
 AvailableSuites.propTypes = {
   history: PropTypes.object.isRequired,
-  suites: PropTypes.array.isRequired,
+  suites: PropTypes.array.isRequired,			// passed in
+	building: PropTypes.object.isRequired,	// passed in
 }
 
 // for all optional props, define a default value
