@@ -72,9 +72,9 @@ export const getAmenitiesForSuite = ({ building_id, suite_id }) => {
   return p
 }
 
-export const getRoomsForSuite = ({ x }) => {
+export const getRoomsForSuite = ({ building_id, suite_id }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/get_rooms_for_suite`, { x })
+    axios.post(`${SEARCH_MICROSERVICE}/get_all_rooms_for_suite`, { building_id, suite_id })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

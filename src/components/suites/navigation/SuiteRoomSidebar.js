@@ -44,27 +44,16 @@ class SuiteRoomSidebar extends Component {
   }
 
   generateBottomContextOptions(topContextText) {
-    /*
-      options = [
-        {
-          topContext: 'Building',
-          options: ['Desc', 'Outside', 'Hallways', 'Gym']
-        },
-        {
-          topContext: 'Unit A',
-          options: ['Desc', 'Kitchen', 'Room 1', 'Room 2']
-        },
-        {
-          topContext: 'Basement',
-          options: ['Desc', 'Kitchen', 'Room 1', 'Room 2']
-        },
-      ]
-    */
     return this.state.menu_items.map((item) => {
       return (
         <Button
           key={item.key}
+          onClick={() => this.props.changeBottomContext({
+            text: item.text,
+            value: JSON.stringify(item.value)
+          })}
           content={item.text}
+          style={bottomContextStyles(this.props.bottomContextText, item.text).item}
         />
       )
     })
@@ -106,9 +95,9 @@ class SuiteRoomSidebar extends Component {
     } else {
       const suite = JSON.parse(value)
       getRoomsForSuite({
-
+        building_id: this.props.building.building_id,
+        suite_id: suite.suite_id,
       }).then((data) => {
-        console.log(data)
         this.setState({
           menu_items: [
             {
@@ -121,7 +110,14 @@ class SuiteRoomSidebar extends Component {
               text: 'Virtual Tour',
               value: suite,
             },
-          ].concat([])
+          ].concat(data.map((d) => {
+            const x = JSON.parse(d)
+            return {
+              key: x.room_code,
+              text: x.room_alias ? `Room ${x.room_alias}` : `Room ${x.room_code}`,
+              value: x,
+            }
+          }))
         })
         return getAmenitiesForSuite({
           building_id: this.props.building.building_id,
@@ -214,4 +210,18 @@ const comStyles = () => {
       backgroundColor: 'rgba(0,0,0,0.1)'
 		}
 	}
+}
+
+const bottomContextStyles = (bottomContextText, thisItemText) => {
+  let styles = {
+    backgroundColor: 'white'
+  }
+  if (thisItemText === bottomContextText) {
+    styles.backgroundColor = 'red'
+  }
+  return {
+    item: {
+      ...styles
+    }
+  }
 }
