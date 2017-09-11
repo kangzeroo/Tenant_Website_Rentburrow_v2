@@ -14,10 +14,32 @@ import {
 
 class SuiteRoomCanvas extends Component {
 
+	renderAppropriateCanvas() {
+		if (this.props.topContextText === 'Building') {
+			if (this.props.bottomContextText === 'Description') {
+				return (<div>BUILDING DESCRIPTION</div>)
+			} else {
+				return (<div>BUILDING AMENITY</div>)
+			}
+		} else {
+			if (this.props.bottomContextText === 'Description') {
+				return (<div>SUITE DESCRIPTION</div>)
+			} else if (this.props.bottomContextText === 'Virtual Tour') {
+				return (<div>VIRTUAL TOUR</div>)
+			} else if (this.props.bottomContextText.toLowerCase().indexOf('room') > -1) {
+				return (<div>ROOM</div>)
+			} else {
+				return (<div>SUITE AMENITY</div>)
+			}
+		}
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
-				SuiteRoomCanvas
+				{
+					this.renderAppropriateCanvas()
+				}
 			</div>
 		)
 	}
