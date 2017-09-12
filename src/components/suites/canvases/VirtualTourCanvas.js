@@ -10,49 +10,51 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
-import SingularImageGallery from '../../image/SingularImageGallery'
-import AmenityBrowser from '../../amenities/AmenityBrowser'
 
 
-class AmenityProofs extends Component {
+class VirtualTourCanvas extends Component {
 
-  componentWillMount() {
-    console.log(this.props.bottomContextValue)
+  renderVirtualTour_iStaging(link) {
+    return (
+      <iframe width='100%' height='800' src={link} frameborder='0' allowfullscreen=''></iframe>
+    )
+  }
+
+	renderVirtualTour_Matterport(link) {
+    return (
+      <iframe width='1000' height='800' src={link} allowfullscreen></iframe>
+    )
   }
 
 	render() {
+    console.log(this.props.link)
 		return (
 			<div style={comStyles().container}>
-        <AmenityBrowser
-          amenities={this.props.bottomContextValue.map((am) => {
-            return am.value
-          })}
-          building={this.props.building}
-        />
-				{/*<SingularImageGallery
-					list_of_images={this.props.bottomContextValue.imgs || this.props.bottomContextValue.image_urls}
-					image_size='hd'
-				/>
-				<h2>{ this.props.bottomContextValue.amenity_alias }</h2>*/}
+				{
+          this.props.istaging_url
+          ?
+          this.renderVirtualTour_iStaging(this.props.istaging_url)
+          :
+          null
+        }
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-AmenityProofs.propTypes = {
+VirtualTourCanvas.propTypes = {
 	history: PropTypes.object.isRequired,
-	bottomContextValue: PropTypes.array,	             // passed in
-	building: PropTypes.object.isRequired,						// passed in
+  istaging_url: PropTypes.string,        // passed in
 }
 
 // for all optional props, define a default value
-AmenityProofs.defaultProps = {
-  bottomContextValue: {},
+VirtualTourCanvas.defaultProps = {
+
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(AmenityProofs)
+const RadiumHOC = Radium(VirtualTourCanvas)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

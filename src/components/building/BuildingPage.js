@@ -18,7 +18,7 @@ import {
 	Button,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
-import { URLToAlias, renderProcessedImage, } from '../../api/general/general_api'
+import { URLToAlias, renderProcessedImage, shortenAddress, } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
 import { getAmenitiesForSpecificBuilding,
@@ -35,6 +35,8 @@ import {
 import AmenityBrowser from '../amenities/AmenityBrowser'
 import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import AvailableSuites from '../suites/AvailableSuites'
+import MainAmenitiesBar from '../amenities/MainAmenitiesBar'
+import StepByStepCard from '../instructions/StepByStepCard'
 
 
 class BuildingPage extends Component {
@@ -117,7 +119,6 @@ class BuildingPage extends Component {
 		})
 	}
 
-
 	createMarkup(string) {
 		return {
 			__html: string,
@@ -174,6 +175,9 @@ class BuildingPage extends Component {
 							style={comStyles().viewPhoto}
 						/>
 					</div>
+					<div style={comStyles().title_address} >
+						{ shortenAddress(this.state.building.building_address) }
+					</div>
 				</div>
 				{/*<BuildingPageFixedMenu
 					goToSection={(section) => console.log(`Going to the ${section} section!`)}
@@ -181,15 +185,8 @@ class BuildingPage extends Component {
 				/>*/}
 				<div style={comStyles().content} >
 
-					<div style={comStyles().building_container} >
+					<div style={comStyles().content_left} >
 						<div style={comStyles().building_header} >
-							<Header
-								content={this.state.building.building_alias}
-								subheader={this.state.building.building_address}
-								textAlign='left'
-								size='huge'
-							/>
-
 							<div style={comStyles().description} >
 								<div
 									dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
@@ -198,7 +195,7 @@ class BuildingPage extends Component {
 							</div>
 						</div>
 						<div style={comStyles().amenities} >
-							<AmenityBrowser
+							<MainAmenitiesBar
 								amenities={this.state.amenities}
 								building={this.state.building}
 							/>
@@ -211,6 +208,7 @@ class BuildingPage extends Component {
 						</div>
 					</div>
 					<div style={comStyles().content_right} >
+						<StepByStepCard />
 					</div>
 				</div>
 				{
@@ -278,8 +276,8 @@ const comStyles = () => {
       flexDirection: 'column',
 		},
 		cover_photo: {
-			minHeight: '350px',
-			maxHeight: '350px',
+			minHeight: '600px',
+			maxHeight: '600px',
 			minWidth: '100%',
 			maxWidth: '100%',
 			overflow: 'hidden',
@@ -295,12 +293,27 @@ const comStyles = () => {
       fontSize: '3rem',
 			color: 'white'
     },
+		title_address: {
+			position: 'absolute',
+      bottom: '40px',
+      left: '0px',
+			height: '100px',
+      fontSize: '2.8rem',
+			fontWeight: 'bold',
+			color: 'white',
+			backgroundColor: 'rgba(0,0,0,0.6)',
+			padding: '30px',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'flex-start',
+		},
 		content: {
 			display: 'flex',
 			flexDirection: 'row',
 			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
-		building_container: {
+		content_left: {
 			display: 'flex',
 			flexDirection: 'column',
 			justifyContent: 'space-between',
@@ -312,7 +325,8 @@ const comStyles = () => {
 		content_right: {
 			display: 'flex',
 			flexDirection: 'column',
-			flex: '1'
+			flex: '1',
+			margin: '20px 50px 20px 20px',
 		},
 		textMarkup: {
 			fontSize: '1rem',
@@ -326,14 +340,14 @@ const comStyles = () => {
 			padding: '5px 0px 5px 0px',
 		},
 		amenities: {
-			margin: '10px 0px 10px 0px'
+			margin: '10px 0px 10px 0px',
+			backgroundColor: 'white',
 		},
 		map: {
 			width: '100vw',
 		},
 		building_header: {
 			backgroundColor: 'white',
-			margin: '10px 0px 10px 0px',
 			display: 'flex',
 			flexDirection: 'column',
 			borderRadius: '2px',

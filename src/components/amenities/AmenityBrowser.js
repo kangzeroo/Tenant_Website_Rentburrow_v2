@@ -24,8 +24,17 @@ class AmenityBrowser extends Component {
     }
   }
 
+  componentWillMount() {
+    if (this.props.amenities.length > 0) {
+      this.setState({
+        current_amenity: this.props.amenities[0]
+      }, () => console.log(this.state.current_amenity))
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.amenities !== this.props.amenities) {
+    console.log(this.props.amenities)
+    if (prevProps && (prevProps.amenities !== this.props.amenities)) {
       this.setState({
         current_amenity: this.props.amenities[0]
       })
@@ -36,7 +45,7 @@ class AmenityBrowser extends Component {
 		return (
 			<div style={comStyles().container}>
         <div style={comStyles().amenities}>
-          Building Amenities
+          Amenities
         </div>
         <div style={comStyles().box}>
           <div style={comStyles().amenitiesGrid}>
@@ -59,7 +68,7 @@ class AmenityBrowser extends Component {
           </div>
           <div style={comStyles().imageGallery}>
             <SingularImageGallery
-              list_of_images={this.state.current_amenity.image_urls}
+              list_of_images={this.state.current_amenity.image_urls || this.state.current_amenity.imgs}
             />
           </div>
         </div>
@@ -115,7 +124,7 @@ const comStyles = () => {
 			fontSize: '1.5rem',
 			lineHeight: '1.5rem',
 			fontWeight: 'bold',
-			margin: '10px 0px 10px 0px',
+			margin: '20px auto',
 			padding: '5px 0px 5px 0px',
 		},
     amenitiesGrid: {
@@ -123,6 +132,7 @@ const comStyles = () => {
       flexDirection: 'row',
       flexWrap: 'wrap',
       width: '50%',
+      padding: '40px',
     },
     imageGallery: {
       minHeight: '100%',

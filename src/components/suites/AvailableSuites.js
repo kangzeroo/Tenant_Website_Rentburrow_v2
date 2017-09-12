@@ -63,28 +63,30 @@ class AvailableSuites extends Component {
         <Table basic selectable>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Suite Num</Table.HeaderCell>
               <Table.HeaderCell>Suite Style</Table.HeaderCell>
-              <Table.HeaderCell>Available Rooms</Table.HeaderCell>
-              <Table.HeaderCell>Room Price</Table.HeaderCell>
+              <Table.HeaderCell>Rooms</Table.HeaderCell>
+              <Table.HeaderCell>Baths</Table.HeaderCell>
+              <Table.HeaderCell>Rooms starting at</Table.HeaderCell>
               <Table.HeaderCell />
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {
               this.props.suites.map((suite) => {
+								console.log(suite)
                 return (
                   <Table.Row key={suite.suite_code} >
-                    <Table.Cell>{suite.suite_code}</Table.Cell>
                     <Table.Cell>{suite.suite_alias}</Table.Cell>
-                    <Table.Cell>{suite.available}/{suite.total}</Table.Cell>
-                    <Table.Cell>${suite.min_price} - ${suite.max_price}</Table.Cell>
+                    <Table.Cell>{suite.total}</Table.Cell>
+                    <Table.Cell>{suite.total}</Table.Cell>
+                    <Table.Cell>${suite.min_price}</Table.Cell>
                     <Table.Cell>
                       <Button
                         basic
+												fluid
 												onClick={() => this.toggleModal(true, 'suite', suite)}
                         color='green'
-                        content='View'
+                        content='Explore'
                       />
                     </Table.Cell>
                   </Table.Row>
