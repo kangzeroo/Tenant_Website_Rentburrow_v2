@@ -86,7 +86,7 @@ class HomeExplorerSidebar extends Component {
         // Step 2: Save those images to the bottomContext
         buildingImages = JSON.stringify(images.map((s) => JSON.parse(s)))
         this.props.changeBottomContext({
-          text: 'Description',
+          text: 'Common Area',
           value: buildingImages
         })
         // Step 3a: Get amenities for this building
@@ -100,17 +100,18 @@ class HomeExplorerSidebar extends Component {
           menu_items: [
             {
               key: 'desc',
-              text: 'Description',
+              text: 'Common Area',
               value: JSON.parse(buildingImages)
             },
-          ].concat(data.map((d) => {
-            const x = JSON.parse(d)
-            return {
-              key: x.amenity_alias,
-              text: x.amenity_alias,
-              value: x,
+          ].concat([
+            {
+              key: 'am',
+              text: 'Amenities',
+              value: data.map((d) => {
+                return JSON.parse(d)
+              })
             }
-          }))
+          ])
         })
       })
     } else {
@@ -128,7 +129,7 @@ class HomeExplorerSidebar extends Component {
           ...JSON.parse(data),
         }
         this.props.changeBottomContext({
-          text: 'Description',
+          text: 'Virtual Tour',
           value: JSON.stringify(suite)
         })
         // FROM HERE ONWARDS WE ARE SIMPLY POPULATING THE bottomContext OPTIONS
@@ -142,13 +143,13 @@ class HomeExplorerSidebar extends Component {
         this.setState({
           menu_items: [
             {
-              key: 'desc',
-              text: 'Description',
+              key: 'vr_tour',
+              text: 'Virtual Tour',
               value: suite,
             },
             {
-              key: 'vr_tour',
-              text: 'Virtual Tour',
+              key: 'desc',
+              text: 'Common Area',
               value: suite,
             },
           ].concat(data.map((d) => {
@@ -167,14 +168,20 @@ class HomeExplorerSidebar extends Component {
         })
       }).then((data) => {
         this.setState({
-          menu_items: this.state.menu_items.concat(data.map((d) => {
-            const x = JSON.parse(d)
-            return {
-              key: x.amenity_alias,
-              text: x.amenity_alias,
-              value: x,
+          menu_items: this.state.menu_items.concat([
+            {
+              key: 'am',
+              text: 'Amenities',
+              value: data.map((d) => {
+                const x = JSON.parse(d)
+                return {
+                  key: x.amenity_alias,
+                  text: x.amenity_alias,
+                  value: x,
+                }
+              })
             }
-          }))
+         ])
         })
       })
     }
@@ -244,8 +251,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '20%',
-      minWidth: '300px',
+      width: '15%',
+      minWidth: '220px',
       height: '80vh',
       maxHeight: '80vh',
       overflowY: 'scroll',

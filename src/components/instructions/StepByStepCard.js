@@ -8,51 +8,47 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+  Card,
 } from 'semantic-ui-react'
-import SingularImageGallery from '../../image/SingularImageGallery'
-import AmenityBrowser from '../../amenities/AmenityBrowser'
 
 
-class AmenityProofs extends Component {
-
-  componentWillMount() {
-    console.log(this.props.bottomContextValue)
-  }
+class StepByStepCard extends Component {
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <AmenityBrowser
-          amenities={this.props.bottomContextValue.map((am) => {
-            return am.value
-          })}
-          building={this.props.building}
-        />
-				{/*<SingularImageGallery
-					list_of_images={this.props.bottomContextValue.imgs || this.props.bottomContextValue.image_urls}
-					image_size='hd'
-				/>
-				<h2>{ this.props.bottomContextValue.amenity_alias }</h2>*/}
+				<Card fluid raised>
+          <Card.Content>
+            1. Watch Virtual Tours
+          </Card.Content>
+          <Card.Content>
+            2. Share With Roomates
+            <i className='ion-ios-heart' style={comStyles().icon}></i>
+            <i className='ion-android-share-alt' style={comStyles().icon}></i>
+          </Card.Content>
+          <Card.Content>
+            3. Sign & Pay Online
+            <i className='ion-cash' style={comStyles().icon}></i>
+            <i className='ion-card' style={comStyles().icon}></i>
+          </Card.Content>
+        </Card>
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-AmenityProofs.propTypes = {
+StepByStepCard.propTypes = {
 	history: PropTypes.object.isRequired,
-	bottomContextValue: PropTypes.array,	             // passed in
-	building: PropTypes.object.isRequired,						// passed in
 }
 
 // for all optional props, define a default value
-AmenityProofs.defaultProps = {
-  bottomContextValue: {},
+StepByStepCard.defaultProps = {
+
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(AmenityProofs)
+const RadiumHOC = Radium(StepByStepCard)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -76,6 +72,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      width: '100%',
 		}
 	}
 }

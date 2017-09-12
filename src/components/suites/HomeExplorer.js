@@ -114,6 +114,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
+      height: '80vh',
 		}
 	}
 }
