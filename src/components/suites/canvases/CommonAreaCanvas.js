@@ -14,7 +14,7 @@ import { getSuiteInfo } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 
 
-class BuildingDescCanvas extends Component {
+class CommonAreaCanvas extends Component {
 
   componentWillMount() {
     console.log(JSON.parse(this.props.bottomContextValue))
@@ -52,19 +52,19 @@ class BuildingDescCanvas extends Component {
 }
 
 // defines the types of variables in this.props
-BuildingDescCanvas.propTypes = {
+CommonAreaCanvas.propTypes = {
 	history: PropTypes.object.isRequired,
 	bottomContextValue: PropTypes.string.isRequired,	// passed in
 	building: PropTypes.object.isRequired,						// passed in
 }
 
 // for all optional props, define a default value
-BuildingDescCanvas.defaultProps = {
+CommonAreaCanvas.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(BuildingDescCanvas)
+const RadiumHOC = Radium(CommonAreaCanvas)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

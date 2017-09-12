@@ -13,8 +13,9 @@ import {
 } from 'semantic-ui-react'
 import SuiteDescCanvas from '../canvases/SuiteDescCanvas'
 import AmenityProofs from '../canvases/AmenityProofs'
-import BuildingDescCanvas from '../canvases/BuildingDescCanvas'
+import CommonAreaCanvas from '../canvases/CommonAreaCanvas'
 import VirtualTourCanvas from '../canvases/VirtualTourCanvas'
+import RoomCanvas from '../canvases/RoomCanvas'
 
 
 class HomeExplorerCanvas extends Component {
@@ -25,7 +26,7 @@ class HomeExplorerCanvas extends Component {
 				console.log(JSON.parse(this.props.bottomContextValue))
 				if (JSON.parse(this.props.bottomContextValue).length && JSON.parse(this.props.bottomContextValue).length > 0) {
 	 				return (
-	 					<BuildingDescCanvas
+	 					<CommonAreaCanvas
 	 						building={this.props.building}
 	 						bottomContextValue={this.props.bottomContextValue ? this.props.bottomContextValue : null }
 	 					/>
@@ -70,7 +71,9 @@ class HomeExplorerCanvas extends Component {
 					/>
 				)
 			} else if (this.props.bottomContextValue && (this.props.bottomContextText.toLowerCase().indexOf('room') > -1 || this.props.bottomContextText.toLowerCase().indexOf('unit') > -1)) {
-				return (<div>ROOM</div>)
+				return (
+					<RoomCanvas />
+				)
 			} else {
 				return (
 					<AmenityProofs
