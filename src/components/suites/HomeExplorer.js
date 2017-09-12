@@ -48,6 +48,7 @@ class HomeExplorer extends Component {
   }
 
 	render() {
+    console.log(this.props.showVirtualTourFirst)
 		return (
 			<div style={comStyles().container}>
 				<HomeExplorerSidebar
@@ -58,6 +59,7 @@ class HomeExplorer extends Component {
           changeBottomContext={(bottom_context) => this.changeBottomContext(bottom_context)}
           topContextValue={this.state.topContextValue}
           bottomContextValue={this.state.bottomContextValue}
+          showVirtualTourFirst={this.props.showVirtualTourFirst}
         />
         {
           this.state.bottomContextValue
@@ -79,14 +81,18 @@ class HomeExplorer extends Component {
 HomeExplorer.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,        // passed in
-  current_suite: PropTypes.object.isRequired,   // passed in
-  all_suites: PropTypes.array.isRequired,       // passed in
+  current_suite: PropTypes.object,   // passed in
+  all_suites: PropTypes.array,       // passed in
   selectTopContext: PropTypes.func.isRequired,
   selectBottomContext: PropTypes.func.isRequired,
+  showVirtualTourFirst: PropTypes.bool,         // passed in
 }
 
 // for all optional props, define a default value
 HomeExplorer.defaultProps = {
+  showVirtualTourFirst: false,
+  current_suite: {},
+  all_suites: [],
 }
 
 // Wrap the prop in Radium to allow JS styling

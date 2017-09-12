@@ -8,7 +8,8 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Dimmer,
+	Loader,
 } from 'semantic-ui-react'
 import SuiteDescCanvas from '../canvases/SuiteDescCanvas'
 import AmenityProofs from '../canvases/AmenityProofs'
@@ -30,7 +31,11 @@ class HomeExplorerCanvas extends Component {
 	 					/>
 	 				)
 			  } else {
-				 	return null
+				 	return (
+						<Dimmer active>
+			        <Loader>Loading</Loader>
+			      </Dimmer>
+					)
 			  }
 			} else if (this.props.bottomContextValue) {
 				return (
@@ -74,6 +79,12 @@ class HomeExplorerCanvas extends Component {
 					/>
 				)
 			}
+		} else {
+			return (
+				<Dimmer active>
+	        <Loader>Loading</Loader>
+	      </Dimmer>
+			)
 		}
 	}
 

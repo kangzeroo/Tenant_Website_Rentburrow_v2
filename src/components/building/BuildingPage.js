@@ -37,6 +37,7 @@ import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import AvailableSuites from '../suites/AvailableSuites'
 import MainAmenitiesBar from '../amenities/MainAmenitiesBar'
 import StepByStepCard from '../instructions/StepByStepCard'
+import AllLandlords from '../landlord/AllLandlords'
 
 
 class BuildingPage extends Component {
@@ -179,11 +180,7 @@ class BuildingPage extends Component {
 						{ shortenAddress(this.state.building.building_address) }
 					</div>
 				</div>
-				{/*<BuildingPageFixedMenu
-					goToSection={(section) => console.log(`Going to the ${section} section!`)}
-					positionStyle={'relative'}
-				/>*/}
-				<div style={comStyles().content} >
+				<div style={comStyles().content_top} >
 
 					<div style={comStyles().content_left} >
 						<div style={comStyles().building_header} >
@@ -208,22 +205,29 @@ class BuildingPage extends Component {
 						</div>
 					</div>
 					<div style={comStyles().content_right} >
-						<StepByStepCard />
+						<StepByStepCard
+							building={this.state.building}
+							all_suites={this.state.suites}
+						/>
+						{
+							this.state.building.building_id
+							?
+							<div style={comStyles().map}>
+								<MapComponent
+									listOfResults={[this.state.building]}
+									selected_pin={this.state.building.building_id}
+									CSS_mapWidth='100%'
+									CSS_mapHeight='100%'
+								/>
+							</div>
+							:
+							null
+						}
 					</div>
 				</div>
-				{
-					this.state.building.building_id
-					?
-					<MapComponent
-						listOfResults={[this.state.building]}
-						selected_pin={this.state.building.building_id}
-						CSS_mapWidth='100vw'
-						CSS_mapHeight='40vh'
-						style={comStyles().map}
-					/>
-					:
-					null
-				}
+				{/*<div style={comStyles().content_bottom}>
+					<AllLandlords />
+				</div>*/}
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
@@ -308,10 +312,17 @@ const comStyles = () => {
 			alignItems: 'center',
 			justifyContent: 'flex-start',
 		},
-		content: {
+		content_top: {
 			display: 'flex',
 			flexDirection: 'row',
 			backgroundColor: 'rgba(153,204,255,0.2)',
+		},
+		content_bottom: {
+			display: 'flex',
+			flexDirection: 'row',
+			backgroundColor: 'rgba(153,204,255,0.2)',
+			height: '500px',
+			width: '100%',
 		},
 		content_left: {
 			display: 'flex',
@@ -344,7 +355,9 @@ const comStyles = () => {
 			backgroundColor: 'white',
 		},
 		map: {
-			width: '100vw',
+			margin: '30px 0px 0px 0px',
+			width: '100%',
+			height: '480px',
 		},
 		building_header: {
 			backgroundColor: 'white',

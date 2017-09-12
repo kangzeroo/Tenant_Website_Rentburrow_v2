@@ -8,55 +8,34 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-  Dimmer,
-  Loader,
+  Card,
 } from 'semantic-ui-react'
 
 
-class VirtualTourCanvas extends Component {
-
-  renderVirtualTour_iStaging(link) {
-    return (
-      <iframe width='100%' height='800' src={link} frameBorder='0' allowFullScreen=''></iframe>
-    )
-  }
-
-	renderVirtualTour_Matterport(link) {
-    return (
-      <iframe width='1000' height='800' src={link} allowFullScreen></iframe>
-    )
-  }
+class AllLandlords extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				{
-          this.props.istaging_url
-          ?
-          this.renderVirtualTour_iStaging(this.props.istaging_url)
-          :
-          <Dimmer active>
-  	        <Loader>Loading</Loader>
-  	      </Dimmer>
-        }
-			</div>
+			<Card style={comStyles().container}>
+				AllLandlords - This component should display all landlords/property managers. For example 30 Hickory St W has many suites managed by Domus and Atlas and small independent landlords.
+        This component should also display sublets scrapped from facebook.
+			</Card>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-VirtualTourCanvas.propTypes = {
+AllLandlords.propTypes = {
 	history: PropTypes.object.isRequired,
-  istaging_url: PropTypes.string,        // passed in
 }
 
 // for all optional props, define a default value
-VirtualTourCanvas.defaultProps = {
+AllLandlords.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(VirtualTourCanvas)
+const RadiumHOC = Radium(AllLandlords)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -80,6 +59,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      margin: '30px auto',
 		}
 	}
 }
