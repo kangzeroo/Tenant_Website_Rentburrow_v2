@@ -128,10 +128,17 @@ class HomeExplorerSidebar extends Component {
           ...suite,
           ...JSON.parse(data),
         }
-        this.props.changeBottomContext({
-          text: 'Virtual Tour',
-          value: JSON.stringify(suite)
-        })
+        if (this.props.showVirtualTourFirst) {
+          this.props.changeBottomContext({
+            text: 'Virtual Tour',
+            value: JSON.stringify(suite)
+          })
+        } else {
+          this.props.changeBottomContext({
+            text: 'Common Area',
+            value: JSON.stringify(suite)
+          })
+        }
         // FROM HERE ONWARDS WE ARE SIMPLY POPULATING THE bottomContext OPTIONS
         // step 3a: get the rooms for this suite, also so that we can use it for navigation
         return getRoomsForSuite({
@@ -217,12 +224,14 @@ HomeExplorerSidebar.propTypes = {
   bottomContextValue: PropTypes.string,        // passed in
   topContextText: PropTypes.string,
   bottomContextText: PropTypes.string,
+  showVirtualTourFirst: PropTypes.bool,         // passed in
 }
 
 // for all optional props, define a default value
 HomeExplorerSidebar.defaultProps = {
   topContext: {},
   bottomContext: {},
+  showVirtualTourFirst: false,
 }
 
 // Wrap the prop in Radium to allow JS styling

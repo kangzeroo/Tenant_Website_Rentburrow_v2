@@ -30,14 +30,16 @@ class BuildingDescCanvas extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<SingularImageGallery
-					list_of_images={
-						[this.props.building.thumbnail].concat(JSON.parse(this.props.bottomContextValue).map((img) => {
-              return img.image_url
-            })).concat([this.props.building.cover_photo])
-					}
-					image_size='hd'
-				/>
+        <div id='containImage' style={comStyles().containImage}>
+  				<SingularImageGallery
+  					list_of_images={
+  						[this.props.building.thumbnail].concat(JSON.parse(this.props.bottomContextValue).map((img) => {
+                return img.image_url
+              })).concat([this.props.building.cover_photo])
+  					}
+  					image_size='hd'
+  				/>
+        </div>
 				<h1>{ this.props.building.building_alias }</h1>
 				<h3>{ this.props.building.building_address }</h3>
 				<div
@@ -88,6 +90,9 @@ const comStyles = () => {
 			overflow: 'scroll',
 			maxHeight: '100%',
 		},
+    containImage: {
+      minHeight: '1000px',
+    },
 		bar: {
 			display: 'flex',
 			flexDirection: 'row',

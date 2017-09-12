@@ -92,7 +92,7 @@ class SingularImageGallery extends Component {
         <Image
           src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
           width='100%'
-          height='100%'
+          height='auto'
           style={comStyles().image}
         />
         <div style={comStyles().imageContainer}>
@@ -145,7 +145,7 @@ const comStyles = () => {
       WebkitTapHighlightColor: 'rgba(0,0,0,0)'
 		},
     image: {
-      minHeight: '100%',
+      height: 'auto',
     },
     imageContainer: {
       width: '100%',

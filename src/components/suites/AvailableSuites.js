@@ -79,7 +79,7 @@ class AvailableSuites extends Component {
                     <Table.Cell>{suite.suite_alias}</Table.Cell>
                     <Table.Cell>{suite.total}</Table.Cell>
                     <Table.Cell>{suite.total}</Table.Cell>
-                    <Table.Cell>${suite.min_price}</Table.Cell>
+                    <Table.Cell>${parseInt(suite.min_price)}</Table.Cell>
                     <Table.Cell>
                       <Button
                         basic

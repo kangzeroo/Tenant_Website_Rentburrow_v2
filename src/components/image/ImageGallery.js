@@ -80,7 +80,7 @@ class ImageGallery extends Component {
         <Image
           src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
           width='100%'
-          height='100%'
+          height='auto'
           style={comStyles().image}
         />
         <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
@@ -140,16 +140,12 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
-      minHeight: '500px',
-      maxHeight: '500px',
       overflow: 'hidden',
       position: 'relative',
       WebkitTapHighlightColor: 'rgba(0,0,0,0)'
 		},
     image: {
-      minHeight: '100%',
       minWidth: '100%',
-      maxHeight: '100%',
       maxWidth: '100%',
     },
     left: {
