@@ -72,7 +72,9 @@ class HomeExplorerCanvas extends Component {
 				)
 			} else if (this.props.bottomContextValue && (this.props.bottomContextText.toLowerCase().indexOf('room') > -1 || this.props.bottomContextText.toLowerCase().indexOf('unit') > -1)) {
 				return (
-					<RoomCanvas />
+					<RoomCanvas
+						bottomContextValue={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue) : null }
+					/>
 				)
 			} else {
 				return (
