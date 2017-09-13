@@ -63,7 +63,7 @@ class FilterBar extends Component {
         <div style={comStyles().searchbar}>
           <Button
             onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
-            content={this.state.show_search_panel ? 'CLOSE' : 'FILTER'}
+            content={this.state.show_search_panel ? 'CLOSE' : 'FILTERED LEASES'}
             icon={this.state.show_search_panel ? 'close' : 'filter'}
           />
           <h5>{ `Showing ${this.props.search_results.length} matching buildings` }</h5>
