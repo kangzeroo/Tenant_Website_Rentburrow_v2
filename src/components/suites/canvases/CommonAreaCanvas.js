@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 import { getSuiteInfo } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
+import ImageGallery from '../../image/ImageGallery'
 
 
 class CommonAreaCanvas extends Component {
@@ -32,13 +33,20 @@ class CommonAreaCanvas extends Component {
 		return (
 			<div style={comStyles().container}>
         <div id='containImage' style={comStyles().containImage}>
-  				<SingularImageGallery
+  				{/*<SingularImageGallery
   					list_of_images={
   						(this.props.suite ? [] : [this.props.building.thumbnail]).concat(JSON.parse(this.props.bottomContextValue).map((img) => {
                 return img.image_url
               })).concat([this.props.building.cover_photo])
   					}
   					image_size='hd'
+  				/>*/}
+          <ImageGallery
+  					list_of_images={
+  						[this.props.building.thumbnail].concat(JSON.parse(this.props.bottomContextValue).map((img) => {
+                return img.image_url
+              })).concat([this.props.building.cover_photo])
+  					}
   				/>
           <div style={comStyles().infoBanner}>
             {

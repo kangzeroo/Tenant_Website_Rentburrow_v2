@@ -89,14 +89,13 @@ class SingularImageGallery extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <Image
-          src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
-          width='100%'
-          height='auto'
-          style={comStyles().image}
-        />
         <div style={comStyles().imageContainer}>
-
+          <Image
+            src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
+            width='100%'
+            height='auto'
+            style={comStyles().image}
+          />
         </div>
         <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
           <Icon name='chevron left' size='big' inverted />
@@ -150,8 +149,7 @@ const comStyles = () => {
     imageContainer: {
       width: '100%',
       height: '100%',
-      backgroundColor: 'rgba(0,0,0,0.05)',
-      position: 'absolute'
+      backgroundColor: 'rgba(0,0,0,0.3)',
     },
     left: {
       width: '15%',
