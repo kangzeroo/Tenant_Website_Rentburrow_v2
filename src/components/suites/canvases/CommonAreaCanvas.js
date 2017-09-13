@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 import { getSuiteInfo } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
+import ImageGallery from '../../image/ImageGallery'
 
 
 class CommonAreaCanvas extends Component {
@@ -31,21 +32,30 @@ class CommonAreaCanvas extends Component {
 		return (
 			<div style={comStyles().container}>
         <div id='containImage' style={comStyles().containImage}>
-  				<SingularImageGallery
+  				{/*<SingularImageGallery
   					list_of_images={
   						[this.props.building.thumbnail].concat(JSON.parse(this.props.bottomContextValue).map((img) => {
                 return img.image_url
               })).concat([this.props.building.cover_photo])
   					}
   					image_size='hd'
+  				/>*/}
+          <ImageGallery
+  					list_of_images={
+  						[this.props.building.thumbnail].concat(JSON.parse(this.props.bottomContextValue).map((img) => {
+                return img.image_url
+              })).concat([this.props.building.cover_photo])
+  					}
   				/>
         </div>
-				<h1>{ this.props.building.building_alias }</h1>
-				<h3>{ this.props.building.building_address }</h3>
-				<div
-					dangerouslySetInnerHTML={this.createMarkup(this.props.building.building_desc)}
-					style={comStyles().textMarkup}
-				/>
+        {/*<div style={comStyles().details}>
+  				<h1>{ this.props.building.building_alias }</h1>
+  				<h3>{ this.props.building.building_address }</h3>
+  				<div
+  					dangerouslySetInnerHTML={this.createMarkup(this.props.building.building_desc)}
+  					style={comStyles().textMarkup}
+  				/>
+        </div>*/}
 			</div>
 		)
 	}
@@ -91,7 +101,10 @@ const comStyles = () => {
 			maxHeight: '100%',
 		},
     containImage: {
-      minHeight: '1000px',
+      height: 'auto',
+    },
+    details: {
+      width: '100%',
     },
 		bar: {
 			display: 'flex',
