@@ -19,6 +19,7 @@ class CommonAreaCanvas extends Component {
   componentWillMount() {
     console.log(JSON.parse(this.props.bottomContextValue))
     console.log(this.props.building)
+    console.log(JSON.parse(this.props.suite))
   }
 
 	createMarkup(string) {
@@ -33,17 +34,34 @@ class CommonAreaCanvas extends Component {
         <div id='containImage' style={comStyles().containImage}>
   				<SingularImageGallery
   					list_of_images={
-  						[this.props.building.thumbnail].concat(JSON.parse(this.props.bottomContextValue).map((img) => {
+  						(this.props.suite ? [] : [this.props.building.thumbnail]).concat(JSON.parse(this.props.bottomContextValue).map((img) => {
                 return img.image_url
               })).concat([this.props.building.cover_photo])
   					}
   					image_size='hd'
   				/>
+          <div style={comStyles().infoBanner}>
+            {
+              this.props.suite
+              ?
+  				    <h1>{ `${JSON.parse(this.props.suite).suite_alias} Unit` || `Unit ${JSON.parse(this.props.suite).suite_code}` }</h1>
+              :
+  				    <h1>{ this.props.building.building_alias }</h1>
+            }
+          </div>
+          <div style={comStyles().tipBanner}>
+            Scroll down for more info
+          </div>
         </div>
-				<h1>{ this.props.building.building_alias }</h1>
-				<h3>{ this.props.building.building_address }</h3>
+        {
+          this.props.suite
+          ?
+          null
+          :
+  				<h3>{ this.props.building.building_address }</h3>
+        }
 				<div
-					dangerouslySetInnerHTML={this.createMarkup(this.props.building.building_desc)}
+					dangerouslySetInnerHTML={this.createMarkup(this.props.suite ? JSON.parse(this.props.suite).suite_desc : this.props.building.building_desc)}
 					style={comStyles().textMarkup}
 				/>
 			</div>
@@ -56,11 +74,12 @@ CommonAreaCanvas.propTypes = {
 	history: PropTypes.object.isRequired,
 	bottomContextValue: PropTypes.string.isRequired,	// passed in
 	building: PropTypes.object.isRequired,						// passed in
+  suite: PropTypes.string,             // passed in, determines if <CommonAreaCanvas> refers to the building or a suites common areas. Will affect order of images displayed and desc displayed
 }
 
 // for all optional props, define a default value
 CommonAreaCanvas.defaultProps = {
-
+  suite: null,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -91,7 +110,26 @@ const comStyles = () => {
 			maxHeight: '100%',
 		},
     containImage: {
-      minHeight: '1000px',
+      height: 'auto',
+      position: 'relative',
+    },
+    infoBanner: {
+      position: 'absolute',
+      bottom: '50px',
+      left: '0px',
+      width: 'auto',
+      padding: '20px',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      color: 'white',
+    },
+    tipBanner: {
+      position: 'absolute',
+      bottom: '50px',
+      right: '0px',
+      width: 'auto',
+      padding: '20px',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      color: 'white',
     },
 		bar: {
 			display: 'flex',

@@ -47,10 +47,17 @@ class RoomCanvas extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<div style={comStyles().cover_photo} >
+				<div style={comStyles().contain_image} >
 					<SingularImageGallery
 						list_of_images={[this.state.room.thumbnail].concat(this.state.room.imgs)}
+  					image_size='hd'
 					/>
+          <div style={comStyles().infoBanner}>
+            <h1>{ this.state.room.room_alias || `Room ${this.state.room.room_code}` }</h1>
+          </div>
+          <div style={comStyles().tipBanner}>
+            Scroll down for more info
+          </div>
 				</div>
 				<div style={comStyles().content} >
 					<div style={comStyles().content_left} >
@@ -111,7 +118,27 @@ const comStyles = () => {
 			overflow: 'scroll',
 			maxHeight: '100%',
 		},
-    cover_photo: {
+    contain_image: {
+      height: 'auto',
+      position: 'relative',
+    },
+    infoBanner: {
+      position: 'absolute',
+      bottom: '50px',
+      left: '0px',
+      width: 'auto',
+      padding: '20px',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      color: 'white',
+    },
+    tipBanner: {
+      position: 'absolute',
+      bottom: '50px',
+      right: '0px',
+      width: 'auto',
+      padding: '20px',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      color: 'white',
     },
 	}
 }
