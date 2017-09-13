@@ -11,7 +11,6 @@ import {
 	Dimmer,
 	Loader,
 } from 'semantic-ui-react'
-import SuiteDescCanvas from '../canvases/SuiteDescCanvas'
 import AmenityProofs from '../canvases/AmenityProofs'
 import CommonAreaCanvas from '../canvases/CommonAreaCanvas'
 import VirtualTourCanvas from '../canvases/VirtualTourCanvas'
@@ -59,9 +58,14 @@ class HomeExplorerCanvas extends Component {
 		} else if (this.props.topContextValue) {
 			if (this.props.bottomContextText === 'Common Area' && this.props.bottomContextValue) {
 				return (
-					<SuiteDescCanvas
+					<CommonAreaCanvas
 						building={this.props.building}
-						bottomContextValue={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue) : null }
+						bottomContextValue={this.props.bottomContextValue ? JSON.stringify(JSON.parse(this.props.bottomContextValue).imgs.map((i) => {
+							return {
+								image_url: i
+							}
+						})) : null}
+						suite={this.props.bottomContextValue ? this.props.bottomContextValue : null}
 					/>
 				)
 			} else if (this.props.bottomContextText === 'Virtual Tour' && this.props.bottomContextValue) {
