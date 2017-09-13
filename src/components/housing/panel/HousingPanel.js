@@ -18,7 +18,7 @@ import {
 } from '../../../actions/search/search_actions'
 import BuildingCard from '../cards/BuildingCard'
 import BuildingRow from '../cards/BuildingRow'
-
+import FilterBar from '../../filter/FilterBar'
 
 class HousingPanel extends Component {
 
@@ -51,17 +51,14 @@ class HousingPanel extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-
-				<div style={comStyles().control_bar}>
-					{
+					{/*
 						generateIconStyles().map((option) => {
 							return (
 								<img key={option.id} onClick={() => this.props.changeCardStyle(option.id)} width='50' height='50' style={comStyles().icon} src={option.icon} />
 							)
 						})
-					}
-				</div>
-
+					*/}
+					<FilterBar />
 				<div style={comStyles().scroll}>
 					{
 						this.props.buildings.map((building) => {
