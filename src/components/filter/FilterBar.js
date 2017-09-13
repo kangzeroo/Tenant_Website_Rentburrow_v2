@@ -3,53 +3,34 @@
 
 import React, { Component } from 'react'
 import Radium from 'radium'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import { withRouter } from 'react-router-dom'
 import {
-  Image,
-  Icon,
-  Input,
-  Dropdown,
-  Checkbox,
-  Segment,
-  Header,
   Modal,
+  Dropdown,
+  Button,
+  Card,
 } from 'semantic-ui-react'
 import {
   shortenAddress,
   renderProcessedImage,
   renderProcessedThumbnail,
 } from '../../api/general/general_api'
+import FilterCard from './FilterCard'
+
 
 class FilterBar extends Component {
 
   constructor() {
     super()
     this.state = {
-      price: 300,
-      num_of_rooms: 0,
-
+      show_search_panel: false,
       toggle_modal: false,
       modal_name: '',
       context: {},
     }
-  }
-
-  componentWillMount() {
-    this.setState({
-    })
-  }
-
-  handlePrice(e) {
-    this.setState({
-      price: e.target.value
-    })
-  }
-
-  handleRoomNum(e) {
-    this.setState({
-      num_of_rooms: e.target.value
-    })
   }
 
   toggleModal(bool, attr, context) {
@@ -61,7 +42,7 @@ class FilterBar extends Component {
   }
 
 	renderAppropriateModal(modal_name, context) {
-		if (modal_name === 'type') {
+		if (modal_name === 'advanced') {
 	    return (
 	      <Modal
 					dimmer
@@ -71,24 +52,6 @@ class FilterBar extends Component {
           inverted
 					size='fullscreen'
 				>
-        <div style={comStyles().type_container}>
-          <Segment style={comStyles().type_seg}>
-            <Checkbox />
-            <Header
-              content='Building'
-              subheader='multistory building'
-            />
-            <Icon name='building' size='big' />
-          </Segment>
-          <Segment style={comStyles().type_seg}>
-            <Checkbox />
-            <Header
-              content='House'
-              subheader='Detached/Duplex House'
-            />
-            <Icon name='bed' size='big' />
-          </Segment>
-        </div>
 	      </Modal>
 	    )
 		}
@@ -97,81 +60,29 @@ class FilterBar extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <Dropdown
-          text='Property Type'
-        >
-          <Dropdown.Menu>
-            <div style={comStyles().type_container}>
-              <Segment style={comStyles().type_seg}>
-                <Checkbox />
-                <Header
-                  content='Building'
-                  subheader='multistory building'
-                />
-                <Icon name='building' size='big' />
-              </Segment>
-              <Segment style={comStyles().type_seg}>
-                <Checkbox />
-                <Header
-                  content='House'
-                  subheader='Detached/Duplex House'
-                />
-                <Icon name='bed' size='big' />
-              </Segment>
-            </div>
-          </Dropdown.Menu>
-        </Dropdown>
-        <Dropdown
-          text='Room Price Range'
-        >
-          <Dropdown.Menu >
-          <div style={comStyles().price_container} >
-            <h2>${this.state.price} CAD/month</h2>
-            <Input
-              min={300}
-              max={3000}
-              onChange={e => this.handlePrice(e)}
-              step={10}
-              type='range'
-              style={comStyles().price_range}
-            />
+        <div style={comStyles().searchbar}>
+          <Button
+            onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
+            content={this.state.show_search_panel ? 'CLOSE' : 'FILTER'}
+            icon={this.state.show_search_panel ? 'close' : 'filter'}
+          />
+          <h5>{ `Showing ${this.props.search_results.length} matching buildings` }</h5>
+          <div style={comStyles().right}>
+            <h4>Sort By</h4>
+            <Dropdown placeholder='Most Recent' search selection options={[
+              { key: 'price', value: 'price', text: 'Price' },
+              { key: 'rooms', value: 'rooms', text: 'Rooms' },
+              { key: 'date', value: 'date', text: 'Date' },
+            ]} />
           </div>
-          </Dropdown.Menu>
-        </Dropdown>
-        <Dropdown
-          text='Number of Rooms'
-        >
-          <Dropdown.Menu>
-            <div style={comStyles().num_rooms_container} >
-              <Checkbox
-                label='1 Room'
-
-                checked={this.state.num_of_rooms === 1}
-                onClick={e => this.handleRoomNum(1)}
-              />
-              <Checkbox
-                label='2 Rooms'
-                checked={this.state.num_of_rooms === 2}
-                onClick={e => this.handleRoomNum(2)}
-              />
-              <Checkbox
-                label='3 Rooms'
-                checked={this.state.num_of_rooms === 3}
-                onClick={e => this.handleRoomNum(3)}
-              />
-              <Checkbox
-                label='4 Rooms'
-                checked={this.state.num_of_rooms === 4}
-                onClick={e => this.handleRoomNum(4)}
-              />
-              <Checkbox
-                label='5 Rooms'
-                checked={this.state.num_of_rooms === 5}
-                onClick={e => this.handleRoomNum(5)}
-              />
-            </div>
-          </Dropdown.Menu>
-        </Dropdown>
+        </div>
+        {
+          this.state.show_search_panel
+          ?
+          <FilterCard />
+          :
+          null
+        }
         {
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
@@ -182,6 +93,7 @@ class FilterBar extends Component {
 
 // defines the types of variables in this.props
 FilterBar.propTypes = {
+  search_results: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
@@ -191,8 +103,20 @@ FilterBar.defaultProps = {
 // Wrap the prop in Radium to allow JS styling
 const RadiumHOC = Radium(FilterBar)
 
+
+// Get access to state from the Redux store
+const mapReduxToProps = (redux) => {
+	return {
+		search_results: redux.search.search_results,
+	}
+}
+
 // Connect together the Redux store with this React component
-export default RadiumHOC
+export default withRouter(
+	connect(mapReduxToProps, {
+
+	})(RadiumHOC)
+)
 
 // ===============================
 
@@ -201,49 +125,24 @@ const comStyles = () => {
 	return {
 		container: {
       display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-around',
+      flexDirection: 'column',
       width: '100%',
       // minHeight: '500px',
-      // maxHeight: '500px',
-      minHeight: '40px',
-      maxHeight: '40px',
-      padding: '10px'
+      // maxHeight: '500px',\
+      padding: '10px',
 		},
-    type_container: {
-      height: 'auto',
-      width: '300px',
-      border: 'black solid thin',
-      borderRadius: '3px',
-      padding: '20px',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    type_seg: {
+    searchbar: {
+      position: 'relative',
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center'
+      justifyContent: 'flex-start',
+      width: '100%',
     },
-    price_container: {
-      height: '200px',
-      width: '500px',
-      border: 'black solid thin',
-      borderRadius: '3px',
-      padding: '20px',
-    },
-    price_range: {
-      width: '90%'
-    },
-    num_rooms_container: {
-      height: '300px',
-      width: '200px',
-      border: 'black solid thin',
-      borderRadius: '3px',
-      padding: '20px',
+    right: {
       display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
+      flexDirection: 'row',
+      position: 'absolute',
+      right: '0px',
     }
 	}
 }

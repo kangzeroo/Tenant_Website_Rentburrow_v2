@@ -2,6 +2,7 @@ import {
   FOUND_BUILDINGS,
   CHANGE_CARD_STYLE,
   SELECT_PIN,
+  SEARCH_STRING,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -41,6 +42,16 @@ export const selectPinToRedux = (pin) => {
     dispatch({
       type: SELECT_PIN,
       payload: pin,
+    })
+  }
+}
+
+// select a pin on map
+export const searchByString = (string) => {
+  return (dispatch) => {
+    dispatch({
+      type: SEARCH_STRING,
+      payload: string,
     })
   }
 }
