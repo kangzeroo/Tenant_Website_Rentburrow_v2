@@ -10,14 +10,43 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
+import InputRange from 'react-input-range'
+require('../../styles/react-input-range.css')
 
 
 class FilterCard extends Component {
+
+	constructor() {
+		super()
+		this.state = {
+			price: {
+				min: 500,
+				max: 900,
+			},
+		}
+	}
+
+	updateAttr(attr, e) {
+		this.setState({
+			[attr]: e.target.value,
+		})
+	}
 
 	render() {
 		return (
 			<div style={comStyles().container}>
 				FilterCard
+				<div style={comStyles().sliderBox}>
+					<InputRange
+						step={5}
+	          maxValue={1200}
+	          minValue={300}
+	          formatLabel={(value) => `$${value}`}
+	          value={this.state.price}
+	          onChange={(value) => this.updateAttr('price', { target: { value: value } })}
+	          onChangeComplete={value => console.log(value)}
+					/>
+				</div>
 			</div>
 		)
 	}
@@ -58,6 +87,11 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+		},
+		sliderBox: {
+			padding: '10px',
+			width: '200px',
+			height: '50px',
+		},
 	}
 }
