@@ -90,6 +90,7 @@ class AppRoot extends Component {
               <Switch>
 
                 <Route exact path='/' component={HousingPage} />
+                <Route path='/:building_alias' component={BuildingPage} />
 
                 <Switch>
                   <Route path='/community' component={CommunityPage} />
@@ -104,17 +105,6 @@ class AppRoot extends Component {
                 </Switch>
 
               </Switch>
-
-              <Route
-                path='*'
-                component={
-                  this.props.selected_building
-                  ?
-                  BuildingPage
-                  :
-                  null
-                }
-              />
 
             </div>
 
