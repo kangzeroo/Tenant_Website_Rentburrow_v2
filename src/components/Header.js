@@ -25,6 +25,8 @@ import {
   WELCOME_MESSAGE,
 } from '../i18n/phrases/Header_i18n'
 import { changeAppLanguage } from '../actions/app/app_actions'
+import SearchInput from './filter/SearchInput'
+
 
 class Header extends Component {
 
@@ -68,6 +70,7 @@ class Header extends Component {
               <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
             </Link>
           </div>
+          <SearchInput />
           {/*
           <div style={comStyles().righterFloat}>
             <h3> { i18n(WELCOME_MESSAGE) } </h3>
