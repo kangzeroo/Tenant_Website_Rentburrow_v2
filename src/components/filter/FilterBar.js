@@ -130,6 +130,7 @@ const comStyles = () => {
       // minHeight: '500px',
       // maxHeight: '500px',\
       padding: '10px',
+      height: 'auto',
 		},
     searchbar: {
       position: 'relative',
