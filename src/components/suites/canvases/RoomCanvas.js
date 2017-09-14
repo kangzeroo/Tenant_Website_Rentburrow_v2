@@ -8,10 +8,10 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+  Icon,
 } from 'semantic-ui-react'
 import {
-  getRoomPage,
+  getRoomPage, getRoomAmenities
 } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 
@@ -20,7 +20,8 @@ class RoomCanvas extends Component {
 	constructor() {
 		super()
 		this.state = {
-			room: {}
+			room: {},
+      amenities: [],
 		}
 	}
 
@@ -34,8 +35,17 @@ class RoomCanvas extends Component {
 			this.setState({
 				room: JSON.parse(data)
 			})
-			console.log(this.state.room)
+			return getRoomAmenities({
+  			building_id: this.props.bottomContextValue.building_id,
+  			suite_id: this.props.bottomContextValue.suite_id,
+  			room_id: this.props.bottomContextValue.room_id,
+  		})
 		})
+    .then((data) => {
+      this.setState({
+        amenities: data.map(s => JSON.parse(s))
+      })
+    })
 	}
 
 	createMarkup(string) {
@@ -55,8 +65,9 @@ class RoomCanvas extends Component {
           <div style={comStyles().infoBanner}>
             <h1>{ this.state.room.room_alias || `Room ${this.state.room.room_code}` }</h1>
           </div>
-          <div style={comStyles().tipBanner}>
-            Scroll down for more info
+          <div style={comStyles().scrollDown}>
+            <Icon name='double angle down' size='huge' />
+            <p>Scroll Down</p>
           </div>
 				</div>
 				<div style={comStyles().content} >
@@ -71,7 +82,22 @@ class RoomCanvas extends Component {
 						</div>
 					</div>
 					<div style={comStyles().content_right} >
-
+            <div style={comStyles().price_box} >
+              <h2>${ this.state.room.price }/month</h2>
+            </div>
+            <div style={comStyles().amenities} >
+              <h2>Room Amenities</h2>
+              {
+                this.state.amenities.map((am) => {
+                   return (
+                     <div key={am.amenity_alias} style={comStyles().amenity}>
+                      <Icon name='checkmark' />
+                      { am.amenity_alias }
+                     </div>
+                   )
+                })
+              }
+            </div>
 					</div>
 				</div>
 			</div>
@@ -131,14 +157,34 @@ const comStyles = () => {
       backgroundColor: 'rgba(0,0,0,0.5)',
       color: 'white',
     },
-    tipBanner: {
+    scrollDown: {
       position: 'absolute',
-      bottom: '50px',
-      right: '0px',
+      bottom: '10px',
+      right: '50%',
       width: 'auto',
-      padding: '20px',
-      backgroundColor: 'rgba(0,0,0,0.5)',
       color: 'white',
     },
+    content: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    content_left: {
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1.5',
+    },
+    content_right: {
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1.5',
+    },
+    price_box: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
+    amenities: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
 	}
 }

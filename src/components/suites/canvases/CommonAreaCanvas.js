@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+  Icon,
 } from 'semantic-ui-react'
 import { getSuiteInfo } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
@@ -50,8 +50,9 @@ class CommonAreaCanvas extends Component {
   				    <h1>{ this.props.building.building_alias }</h1>
             }
           </div>
-          <div style={comStyles().tipBanner}>
-            Scroll down for more info
+          <div style={comStyles().scrollDown}>
+            <Icon name='double angle down' size='huge' />
+            <p>Scroll Down</p>
           </div>
         </div>
         {
@@ -123,13 +124,11 @@ const comStyles = () => {
       backgroundColor: 'rgba(0,0,0,0.5)',
       color: 'white',
     },
-    tipBanner: {
+    scrollDown: {
       position: 'absolute',
-      bottom: '50px',
-      right: '0px',
+      bottom: '10px',
+      right: '50%',
       width: 'auto',
-      padding: '20px',
-      backgroundColor: 'rgba(0,0,0,0.5)',
       color: 'white',
     },
 		bar: {
