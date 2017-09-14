@@ -265,7 +265,7 @@ const comStyles = () => {
       height: '80vh',
       maxHeight: '80vh',
       overflowY: 'scroll',
-      backgroundColor: 'rgba(0,0,0,0.1)'
+      backgroundColor: 'rgba(153,204,255,0.2)',
 		}
 	}
 }
