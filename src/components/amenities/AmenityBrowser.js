@@ -66,11 +66,19 @@ class AmenityBrowser extends Component {
               })
             }
           </div>
-          <div style={comStyles().imageGallery}>
-            <SingularImageGallery
-              list_of_images={this.state.current_amenity.image_urls || this.state.current_amenity.imgs}
-            />
-          </div>
+          {
+            this.state.current_amenity.imgs && this.state.current_amenity.imgs.length > 0
+            ?
+            <div style={comStyles().imageGallery}>
+              <SingularImageGallery
+                list_of_images={this.state.current_amenity.image_urls || this.state.current_amenity.imgs}
+              />
+            </div>
+            :
+            <div style={comStyles().imageGallery}>
+              <h1>No Image for this Amenity</h1>
+            </div>
+          }
         </div>
 			</div>
 		)
