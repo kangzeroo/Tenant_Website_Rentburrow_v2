@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { SEARCH_MICROSERVICE } from '../API_URLS'
 
-export const getFBPosts = (obj) => {
+export const querySubletsInArea = ({ lat, lng, filterParams }) => {
+  console.log({ lat, lng, filterParams })
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/get_fb_posts`, obj)
+    axios.post(`${SEARCH_MICROSERVICE}/get_fb_posts`, { lat, lng, filterParams })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -43,6 +44,9 @@ export const sortFBPosts = ({ sort_by }) => {
   return p
 }
 
+
+
+// MOVE THIS TO THE GENERAL QUERY
 export const filterFBPosts = ({ price, room_count, ensuite_bath, utils_incl, females_only, }) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SEARCH_MICROSERVICE}/filter_fb_posts`, { price, room_count, ensuite_bath, utils_incl, females_only, })

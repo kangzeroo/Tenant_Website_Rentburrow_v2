@@ -7,6 +7,7 @@ import {
   SAVE_LEASE_FILTER_PARAMS,
   SAVE_SUBLET_FILTER_PARAMS,
   CHANGE_RENT_TYPE,
+  SET_CURRENT_GPS_CENTER,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -105,6 +106,16 @@ export const saveSubletFilterParams = (params) => {
     dispatch({
       type: SAVE_SUBLET_FILTER_PARAMS,
       payload: params,
+    })
+  }
+}
+
+// set the current gps center (used for querying)
+export const setCurrentGPSCenter = ({ lat, lng }) => {
+  return (dispatch) => {
+    dispatch({
+      type: SET_CURRENT_GPS_CENTER,
+      payload: { lat, lng },
     })
   }
 }

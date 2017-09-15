@@ -13,7 +13,7 @@ import {
 import HousingPanel from './panel/HousingPanel'
 import MapComponent from '../map/MapComponent'
 import {
-	getBuildingsInArea,
+	queryBuildingsInArea,
 } from '../../api/search/search_api'
 import {
 	saveBuildingsToRedux,
@@ -28,9 +28,9 @@ class HousingPage extends Component {
 	}
 
 	refreshBuildings() {
-		getBuildingsInArea({
-			lat: 23,
-			long: 54,
+		queryBuildingsInArea({
+			...this.props.current_gps_center,
+			filterParams: this.props.lease_filter_params,
 		}).then((buildings) => {
 			this.props.saveBuildingsToRedux(buildings)
 		})
@@ -77,6 +77,9 @@ HousingPage.propTypes = {
 	selected_pin: PropTypes.string,
 	popup_building: PropTypes.object,
 	rent_type: PropTypes.string.isRequired,
+	current_gps_center: PropTypes.object.isRequired,
+  lease_filter_params: PropTypes.object.isRequired,
+  sublet_filter_params: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -85,6 +88,7 @@ HousingPage.defaultProps = {
 	sublet_search_results: [],
 	selected_pin: null,
 	popup_building: null,
+  search_radius: 1000,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -98,6 +102,9 @@ const mapReduxToProps = (redux) => {
 		selected_pin: redux.search.selected_pin,
 		popup_building: redux.selection.popup_building,
 		rent_type: redux.filter.rent_type,
+		current_gps_center: redux.filter.current_gps_center,
+    lease_filter_params: redux.filter.lease_filter_params,
+    sublet_filter_params: redux.filter.sublet_filter_params,
 	}
 }
 

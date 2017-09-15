@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { SEARCH_MICROSERVICE } from '../API_URLS'
 
-export const getBuildingsInArea = ({ lat, long }) => {
+export const queryBuildingsInArea = ({ lat, lng, filterParams }) => {
+  console.log({ lat, lng, filterParams })
   const p = new Promise((res, rej) => {
     // axios.post(`${SEARCH_MICROSERVICE}/search_buildings`, { lat, long })
     axios.post(`${SEARCH_MICROSERVICE}/get_all_active_buildings`, { query_params: {} })

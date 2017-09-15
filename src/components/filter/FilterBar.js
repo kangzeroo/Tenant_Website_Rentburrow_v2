@@ -27,9 +27,9 @@ import {
   changeRentType,
 } from '../../actions/search/search_actions'
 import {
-	getFBPosts,
+	querySubletsInArea,
   sortFBPosts,
-} from '../../api/fb/fb_api'
+} from '../../api/search/sublet_api'
 import LeaseFilterCard from './LeaseFilterCard'
 import SubletFilterCard from './SubletFilterCard'
 
@@ -103,7 +103,10 @@ class FilterBar extends Component {
 
   handleRentalLengthChange(e, value) {
     if (value.value === 'fourmonth') {
-      getFBPosts().then((data) => {
+      querySubletsInArea({
+        ...this.props.current_gps_center,
+        filterParams: this.props.sublet_filter_params,
+      }).then((data) => {
         this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
         this.props.history.push('/sublet')
         this.props.changeRentType('sublet')
@@ -192,6 +195,12 @@ FilterBar.propTypes = {
   saveSubletsToRedux: PropTypes.func.isRequired,
   changeRentType: PropTypes.func.isRequired,
   rent_type: PropTypes.string.isRequired,
+	current_gps_center: PropTypes.object.isRequired,
+  lease_filter_params: PropTypes.object.isRequired,
+  sublet_filter_params: PropTypes.object.isRequired,
+	rent_type: PropTypes.string.isRequired,
+	saveBuildingsToRedux: PropTypes.func.isRequired,
+	saveSubletsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -208,6 +217,9 @@ const mapReduxToProps = (redux) => {
 		building_search_results: redux.search.building_search_results,
     sublet_search_results: redux.search.sublet_search_results,
     rent_type: redux.filter.rent_type,
+		current_gps_center: redux.filter.current_gps_center,
+    lease_filter_params: redux.filter.lease_filter_params,
+    sublet_filter_params: redux.filter.sublet_filter_params,
 	}
 }
 
@@ -217,6 +229,8 @@ export default withRouter(
     saveBuildingsToRedux,
     saveSubletsToRedux,
     changeRentType,
+  	saveBuildingsToRedux,
+  	saveSubletsToRedux,
 	})(RadiumHOC)
 )
 
