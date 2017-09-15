@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import authReducer from './auth/auth_reducer'
 import communityReducer from './community/community_reducer'
 import searchReducer from './search/search_reducer'
+import filterReducer from './search/filter_reducer'
 import selectionReducer from './selection/selection_reducer'
 import messageReducer from './messaging/messaging_reducer'
 import appReducer from './app/app_reducer'
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
 	community: communityReducer,
 	messaging: messageReducer,
 	search: searchReducer,
+	filter: filterReducer,
 	selection: selectionReducer,
 })
 

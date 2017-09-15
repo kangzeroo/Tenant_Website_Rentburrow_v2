@@ -7,8 +7,8 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { filterBuildings } from '../../api/filter/filter_api'
-import { saveBuildingsToRedux } from '../../actions/search/search_actions'
+import { filterSublets } from '../../api/filter/filter_api'
+import { saveSubletsToRedux, saveSubletFilterParams, } from '../../actions/search/search_actions'
 import {
 	Checkbox,
 	Button,
@@ -17,7 +17,7 @@ import InputRange from 'react-input-range'
 require('../../styles/react-input-range.css')
 
 
-class FilterCard extends Component {
+class SubletFilterCard extends Component {
 
 	constructor() {
 		super()
@@ -26,19 +26,17 @@ class FilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			/*bedrooms: {
-				min: 1,
-				max: 5,
-			},*/
 			room_count: 0,
-			/*lease_length: {
-				min: 8,
-				max: 12,
-			},*/
 			ensuite_bath: false,
-			utils_incl: false,
-			parking_avail: false,
+			female_only: false,
+      utils_incl: false,
 		}
+	}
+
+	componentWillMount() {
+		this.setState({
+			...this.props.sublet_filter_params,
+		}, () => console.log(this.state))
 	}
 
 	updateAttr(attr, value) {
@@ -49,10 +47,9 @@ class FilterCard extends Component {
 	}
 
 	applyFilters() {
-		console.log(this.state)
-		filterBuildings(this.state)
-		.then((buildings) => {
-			this.props.saveBuildingsToRedux(buildings)
+		this.props.saveSubletFilterParams(this.state)
+		filterSublets(this.state).then((sublets) => {
+			this.props.saveSubletsToRedux(sublets)
 			this.props.closeFilterCard()
 		})
 	}
@@ -154,9 +151,9 @@ class FilterCard extends Component {
 						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
 						toggle />
 					<Checkbox
-						label='Parking Available'
-						checked={this.state.parking_avail}
-						onChange={(e, x) => this.updateAttr('parking_avail', x.checked)}
+						label='Female Only'
+						checked={this.state.female_only}
+						onChange={(e, x) => this.updateAttr('female_only', x.checked)}
 						toggle />
 				</div>
 				<div style={comStyles().buttons_container}>
@@ -179,31 +176,34 @@ class FilterCard extends Component {
 }
 
 // defines the types of variables in this.props
-FilterCard.propTypes = {
+SubletFilterCard.propTypes = {
 	history: PropTypes.object.isRequired,
-	saveBuildingsToRedux: PropTypes.func.isRequired,
+	saveSubletsToRedux: PropTypes.func.isRequired,
 	closeFilterCard: PropTypes.func.isRequired,
+	saveSubletFilterParams: PropTypes.func.isRequired,
+	sublet_filter_params: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-FilterCard.defaultProps = {
+SubletFilterCard.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(FilterCard)
+const RadiumHOC = Radium(SubletFilterCard)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+		sublet_filter_params: redux.filter.sublet_filter_params,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-		saveBuildingsToRedux,
+		saveSubletsToRedux,
+		saveSubletFilterParams,
 	})(RadiumHOC)
 )
 

@@ -28,3 +28,18 @@ export const sortBuildings = (obj) => {
   })
   return p
 }
+
+export const filterSublets = (ob) => {
+  const p = new Promise((res, rej) => {
+    // axios.post(`${SEARCH_MICROSERVICE}/filter_sublets`, obj)
+    //   .then((data) => {
+    //     // once we have the response, only then do we dispatch an action to Redux
+    //     res(data.data)
+    //   })
+    //   .catch((err) => {
+    //     rej(err)
+    //   })
+    res([])
+  })
+  return p
+}

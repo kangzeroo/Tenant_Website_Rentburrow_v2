@@ -53,7 +53,13 @@ class HousingPage extends Component {
 					refresh={() => this.refreshBuildings()}
 				/>
 				<MapComponent
-					listOfResults={this.props.buildings}
+					listOfResults={
+						this.props.rent_type === 'sublet'
+						?
+						this.props.sublet_search_results
+						:
+						this.props.building_search_results
+					}
 					selected_pin={this.props.selected_pin}
 					style={comStyles().map}
 				/>
@@ -66,14 +72,17 @@ class HousingPage extends Component {
 HousingPage.propTypes = {
 	history: PropTypes.object.isRequired,
 	saveBuildingsToRedux: PropTypes.func.isRequired,
-	buildings: PropTypes.array,
+	building_search_results: PropTypes.array,
+	sublet_search_results: PropTypes.array,
 	selected_pin: PropTypes.string,
 	popup_building: PropTypes.object,
+	rent_type: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
 HousingPage.defaultProps = {
-	buildings: [],
+	building_search_results: [],
+	sublet_search_results: [],
 	selected_pin: null,
 	popup_building: null,
 }
@@ -84,9 +93,11 @@ const RadiumHOC = Radium(HousingPage)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-		buildings: redux.search.search_results,
+		building_search_results: redux.search.building_search_results,
+		sublet_search_results: redux.search.sublet_search_results,
 		selected_pin: redux.search.selected_pin,
 		popup_building: redux.selection.popup_building,
+		rent_type: redux.filter.rent_type,
 	}
 }
 

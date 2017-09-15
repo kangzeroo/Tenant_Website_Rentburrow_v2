@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Radium from 'radium'
 import Rx from 'rxjs'
 import { selectPinToRedux } from '../../actions/search/search_actions'
-import { pinAlreadyPlaced, checkWherePinExistsInArray, generateEventCard, generatePromoCard } from '../../api/map/map_api'
+import { pinAlreadyPlaced, checkWherePinExistsInArray } from '../../api/map/map_api'
 import { selectPopupBuilding } from '../../actions/selection/selection_actions'
 
 class MapComponent extends Component {
@@ -64,6 +64,7 @@ class MapComponent extends Component {
 	}
 
 	componentDidUpdate() {
+		console.log(this.props.listOfResults)
 		this.refreshPins(this.props.listOfResults)
 	}
 
@@ -99,10 +100,12 @@ class MapComponent extends Component {
 	}
 
 	getCoordsOfCurrentPin(buildings, selected_pin) {
+		// default coords
 		let coords = {
       lat: 43.473897,
       lng: -80.531995
     }
+		// default replaced by coords of current pin
 		for (let m = 0; m < buildings.length; m++) {
 			// check if the pin is the one highlighted and set the color to blue and bouncing animation
 			if (selected_pin && buildings[m].building_id === selected_pin) {
@@ -128,7 +131,7 @@ class MapComponent extends Component {
 	            pin_type: 'building',
 							icon: this.red_map_pin,
 	        })
-	        marker.pin_id = n.building_id
+	        marker.pin_id = n.building_id || n.post_id
           marker.infowindow = new google.maps.InfoWindow({
             content: `<div>$${n.min_price}+</div>`
           })
@@ -249,12 +252,12 @@ MapComponent.defaultProps = {
 
 const RadiumHOC = Radium(MapComponent)
 
-const mapStateToProps = (redux) => {
+const mapReduxToProps = (redux) => {
 	return {
 	}
 }
 
-export default connect(mapStateToProps, {
+export default connect(mapReduxToProps, {
 	selectPinToRedux,
 	selectPopupBuilding,
 })(RadiumHOC)
