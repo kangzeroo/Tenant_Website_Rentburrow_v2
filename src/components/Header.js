@@ -57,11 +57,20 @@ class Header extends Component {
 
   renderLoginSuite() {
     return (
-        <Modal.Content>
-          <LoginPopup
-            toggleModal={() => this.toggleModal()}
+        <div style={comStyles().login_modal}>
+          <Button
+            circular
+            icon='close'
+            size='big'
+            style={comStyles().close_login}
+            onClick={() => this.toggleModal(false)}
           />
-        </Modal.Content>
+          <Modal.Content>
+            <LoginPopup
+              toggleModal={() => this.toggleModal()}
+            />
+          </Modal.Content>
+        </div>
     )
   }
 
@@ -105,6 +114,7 @@ class Header extends Component {
               <Button
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
+                primary
                 content='Login'
               />
             </div>
@@ -206,6 +216,11 @@ const comStyles = () => {
       position: 'absolute',
       maxHeight: '45px',
       maxWidth: '45px'
+    },
+    close_login: {
+      position: 'absolute',
+      top: '10px',
+      right: '10px',
     },
   }
 }
