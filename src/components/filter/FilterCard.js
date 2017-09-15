@@ -7,6 +7,8 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
+import { filterBuildings } from '../../api/filter/filter_api'
+import { saveBuildingsToRedux } from '../../actions/search/search_actions'
 import {
 	Checkbox,
 	Button,
@@ -24,10 +26,11 @@ class FilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			bedrooms: {
+			/*bedrooms: {
 				min: 1,
 				max: 5,
-			},
+			},*/
+			room_count: 0,
 			lease_length: {
 				min: 8,
 				max: 12,
@@ -44,6 +47,30 @@ class FilterCard extends Component {
 			[attr]: value
 		})
 	}
+
+	applyFilters() {
+		console.log(this.state)
+		filterBuildings(this.state)
+		.then((buildings) => {
+			this.props.saveBuildingsToRedux(buildings)
+			this.props.closeFilterCard()
+		})
+	}
+
+/*
+	renderRoomFilter() {
+		return (
+			<InputRange
+				step={1}
+				maxValue={10}
+				minValue={1}
+				formatLabel={(value) => `${value} bed${value > 1 ? 's' : ''}`}
+				value={this.state.bedrooms}
+				onChange={(value) => this.updateAttr('bedrooms', value)}
+				onChangeComplete={value => console.log(value)}
+			/>
+		)
+	}*/
 
 	render() {
 		return (
@@ -64,19 +91,29 @@ class FilterCard extends Component {
 						/>
 					</div>
 				</div>
-				<div style={comStyles().sliderBox}>
+				<div style={comStyles().roomCountBox}>
 					<div style={comStyles().label}>
 						<h2>Bedrooms</h2>
 					</div>
-					<div style={comStyles().slider}>
-						<InputRange
-							step={1}
-							maxValue={10}
-							minValue={1}
-							formatLabel={(value) => `${value} bed${value > 1 ? 's' : ''}`}
-							value={this.state.bedrooms}
-							onChange={(value) => this.updateAttr('bedrooms', value)}
-							onChangeComplete={value => console.log(value)}
+					<div style={comStyles().room_count}>
+						<Button
+							circular
+							primary
+							basic
+							icon='minus'
+							onClick={() => this.updateAttr('room_count', this.state.room_count - 1)}
+							disabled={this.state.room_count === 0}
+						/>
+						<div style={comStyles().room_text} >
+							{this.state.room_count}+
+						</div>
+						<Button
+							circular
+							primary
+							basic
+							icon='plus'
+							onClick={() => this.updateAttr('room_count', this.state.room_count + 1)}
+							disabled={this.state.room_count === 10}
 						/>
 					</div>
 				</div>
@@ -97,12 +134,34 @@ class FilterCard extends Component {
 					</div>
 				</div>
 				<div style={comStyles().main_amenities}>
-					<Checkbox label='Ensuite Bath' checked={this.state.ensuite_bath} onChange={(e, x) => this.updateAttr('ensuite_bath', x.checked)} toggle />
-					<Checkbox label='Utilities Included' checked={this.state.utils_incl} onChange={(e, x) => this.updateAttr('utils_incl', x.checked)} toggle />
-					<Checkbox label='Parking Available' checked={this.state.parking_avail} onChange={(e, x) => this.updateAttr('parking_avail', x.checked)} toggle />
+					<Checkbox
+						label='Ensuite Bath'
+						checked={this.state.ensuite_bath}
+						onChange={(e, x) => this.updateAttr('ensuite_bath', x.checked)}
+						toggle />
+					<Checkbox
+						label='Utilities Included'
+						checked={this.state.utils_incl}
+						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
+						toggle />
+					<Checkbox
+						label='Parking Available'
+						checked={this.state.parking_avail}
+						onChange={(e, x) => this.updateAttr('parking_avail', x.checked)}
+						toggle />
 				</div>
-				<div style={comStyles().search_buttons}>
-					<Button positive fluid content='Search' />
+				<div style={comStyles().buttons_container}>
+					<Button
+						primary
+						basic
+						content='Cancel'
+						onClick={() => this.props.closeFilterCard()}
+					/>
+					<Button
+						primary
+						content='Search'
+						onClick={() => this.applyFilters()}
+					/>
 					{/*<Button positive basic content='More options...' />*/}
 				</div>
 			</div>
@@ -113,6 +172,8 @@ class FilterCard extends Component {
 // defines the types of variables in this.props
 FilterCard.propTypes = {
 	history: PropTypes.object.isRequired,
+	saveBuildingsToRedux: PropTypes.func.isRequired,
+	closeFilterCard: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -133,7 +194,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+		saveBuildingsToRedux,
 	})(RadiumHOC)
 )
 
@@ -145,8 +206,13 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-			padding: '30px',
-			height: '600px',
+			minHeight: '300px',
+			maxHeight: '300px',
+			padding: '30px 30px 10px 30px',
+			border: 'gray solid thin',
+			zIndex: '1',
+			backgroundColor: 'white',
+			borderRadius: '3px'
 		},
 		sliderBox: {
 			padding: '10px',
@@ -168,10 +234,29 @@ const comStyles = () => {
 			padding: '30px',
 			height: 'auto',
 		},
-		search_buttons: {
+		buttons_container: {
 			display: 'flex',
-			flexDirection: 'column',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			height: '50px',
+		},
+		roomCountBox: {
+			padding: '20px 10px 20px 10px',
+			width: '100%',
 			height: '75px',
+			display: 'flex',
+			flexDirection: 'row',
+		},
+		room_count: {
+			display: 'flex',
+			flexDirection: 'row',
+			width: '100%',
+			justifyContent: 'space-around',
+			alignItems: 'center',
+			margin: '0px 200px 0px 200px',
+		},
+		room_text: {
+			fontSize: 'x-large'
 		}
 	}
 }

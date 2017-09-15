@@ -11,7 +11,7 @@ import {
 	xMidBlue,
 } from '../../../styles/base_colors'
 import {
-
+	Button,
 } from 'semantic-ui-react'
 import {
 	changeCardStyle,
@@ -59,13 +59,26 @@ class HousingPanel extends Component {
 						})
 					*/}
 					<FilterBar />
-				<div style={comStyles().scroll}>
-					{
-						this.props.buildings.map((building) => {
-							return this.generateCard(building)
-						})
-					}
-				</div>
+				{
+					this.props.buildings.length === 0
+					?
+					<div style={comStyles().no_matches_container} >
+						<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
+						<Button
+							primary
+							content='Go Back'
+							onClick={() => this.props.refresh()}
+						/>
+					</div>
+					:
+					<div style={comStyles().scroll}>
+						{
+							this.props.buildings.map((building) => {
+								return this.generateCard(building)
+							})
+						}
+					</div>
+				}
 			</div>
 		)
 	}
@@ -77,6 +90,7 @@ HousingPanel.propTypes = {
 	buildings: PropTypes.array,
 	changeCardStyle: PropTypes.func.isRequired,
 	card_style: PropTypes.string.isRequired,
+	refresh: PropTypes.func.isRequired, 					// passed in
 }
 
 // for all optional props, define a default value
@@ -114,7 +128,7 @@ const comStyles = () => {
 			width: '50vw',
       maxWidth: '50vw',
       height: '100%',
-			//backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
+			// backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
 			backgroundSize: 'cover',
 		},
 		scroll: {
@@ -131,6 +145,17 @@ const comStyles = () => {
 			width: '20px',
 			height: 'auto',
 			margin: '5px',
+		},
+		no_matches_container: {
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'center',
+			alignItems: 'center',
+			height: '100%',
+			width: '100%',
+		},
+		no_matches: {
+			color: 'gray'
 		}
 	}
 }
