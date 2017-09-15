@@ -97,13 +97,27 @@ class SingularImageGallery extends Component {
             style={comStyles().image}
           />
         </div>
-        <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
-          <Icon name='chevron left' size='big' inverted />
+          {
+            this.state.all_images.length > 1
+            ?
+            <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
+              <Icon name='chevron left' size='big' inverted />
+            </div>
+            :
+            null
+
+          }
+          {
+            this.state.all_images.length > 1
+            ?
+            <div onClick={(e) => this.cycleImage(e, 1)} style={comStyles().right}>
+              <Icon name='chevron right' size='big' inverted />
+            </div>
+            :
+            null
+          }
         </div>
-        <div onClick={(e) => this.cycleImage(e, 1)} style={comStyles().right}>
-          <Icon name='chevron right' size='big' inverted />
-        </div>
-			</div>
+
 		)
 	}
 }
