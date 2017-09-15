@@ -160,11 +160,11 @@ class FilterBar extends Component {
                 onChange={(e, value) => this.handleRentalLengthChange(e, value)}
               />
             </div>
-            <h5>
+            <h3>
               {
                 `Showing ${numberOfPropertiesShown} Propert${numberOfPropertiesShown > 1 ? 'ies' : 'y'}`
               }
-            </h5>
+            </h3>
             <Dropdown
               placeholder='Sort By'
               selection

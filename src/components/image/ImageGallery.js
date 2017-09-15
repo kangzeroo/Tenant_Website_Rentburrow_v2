@@ -83,12 +83,24 @@ class ImageGallery extends Component {
           height='auto'
           style={comStyles().image}
         />
-        <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
-          <Icon name='chevron left' size='huge' inverted />
-        </div>
-        <div onClick={(e) => this.cycleImage(e, 1)} style={comStyles().right}>
-          <Icon name='chevron right' size='huge' inverted />
-        </div>
+        {
+          this.state.current_image_position === 0
+          ?
+          null
+          :
+          <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
+            <Icon name='angle left' size='huge' inverted />
+          </div>
+        }
+        {
+          this.state.current_image_position === this.state.all_images.length - 1
+          ?
+          null
+          :
+          <div onClick={(e) => this.cycleImage(e, 1)} style={comStyles().right}>
+            <Icon name='angle right' size='huge' inverted />
+          </div>
+        }
         <div style={comStyles().caption} >
           <Header
             content={this.getCurrentCaption(this.state.current_image_position, this.state.all_images)}
@@ -157,7 +169,6 @@ const comStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      backgroundColor: 'rgba(0,0,0,0.1)',
     },
     right: {
       width: '15%',
@@ -168,7 +179,6 @@ const comStyles = () => {
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      backgroundColor: 'rgba(0,0,0,0.1)',
     },
     caption: {
       width: '100%',
