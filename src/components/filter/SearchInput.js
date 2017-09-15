@@ -9,6 +9,8 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
   Input,
+  Dropdown,
+  Icon
 } from 'semantic-ui-react'
 import { searchByString } from '../../actions/search/search_actions'
 
@@ -18,8 +20,27 @@ class SearchInput extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Input value={this.props.search_string} onChange={(e) => this.props.searchByString(e.target.value)} icon='search' placeholder='Search by name or address' />
-        <p>in Waterloo, ON</p>
+				<Input
+          value={this.props.search_string}
+          onChange={(e) => this.props.searchByString(e.target.value)}
+          icon='search'
+          iconPosition='left'
+          placeholder='Search Building...'
+          action={
+            <Dropdown
+              trigger={(<span>
+                          <Icon name='world'/> Waterloo, ON
+                        </span>)}
+              button
+              selection
+              item
+              options={[
+                { key: 'waterloo', text: 'Waterloo, ON', value: 'waterloo' }
+              ]}
+              defaultValue='waterloo'
+            />
+          }
+        />
 			</div>
 		)
 	}
@@ -62,6 +83,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
+      padding: '4px 0px 4px 0px',
+      margin: '0px 0px 0px 20px',
 		}
 	}
 }

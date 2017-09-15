@@ -88,24 +88,6 @@ class FilterBar extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <div style={comStyles().searchbar}>
-          <Button
-            onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
-            content='FILTER'
-          />
-          <h5>{ `Showing ${this.props.search_results.length} buildings` }</h5>
-          <Dropdown
-          placeholder='Sort By'
-          selection
-          options={[
-                    { key: 'price', value: 'price', text: 'Price' },
-                    { key: 'date', value: 'date', text: 'Date' },
-                  ]}
-
-          onChange={(e, value) => this.handleChange(e, value)}
-          />
-        </div>
-
         {
           this.state.show_search_panel
           ?
@@ -113,7 +95,24 @@ class FilterBar extends Component {
             closeFilterCard={() => this.closePanel()}
           />
           :
-          null
+          <div style={comStyles().searchbar}>
+            <Button
+              onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
+              content='FILTER'
+            />
+            <h5>{ `Showing ${this.props.search_results.length} buildings` }</h5>
+            <Dropdown
+            placeholder='Sort By'
+            selection
+            options={[
+                      { key: 'pricelow', value: 'pricelow', text: 'Price: Low to High' },
+                      { key: 'pricehigh', value: 'pricehigh', text: 'Price: High to Low' },
+                      { key: 'date', value: 'date', text: 'Date' },
+                    ]}
+
+            onChange={(e, value) => this.handleChange(e, value)}
+            />
+          </div>
         }
         {
           this.renderAppropriateModal(this.state.modal_name, this.state.context)

@@ -9,6 +9,8 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
   Button,
+  Divider,
+  Form,
 } from 'semantic-ui-react'
 import { loginFacebook, convertTokenIntoLongLived } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux } from '../../actions/auth/auth_actions'
@@ -27,9 +29,33 @@ class LoginPopup extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Button onClick={() => this.loginWithFacebook()}>Login with Facebook</Button>
-				<Button>Login with Google</Button>
-				<Button>Login with Email</Button>
+        <div style={comStyles().social_container} >
+  				<Button
+            onClick={() => this.loginWithFacebook()}
+            content='Login with Facebook'
+            color='facebook'
+            icon='facebook'
+          />
+          <Button
+            content='Login with Google'
+            color='google plus'
+            icon='google plus'
+          />
+        </div>
+        <Divider horizontal>Or</Divider>
+        <Form>
+          <Form.Input
+            label='Email'
+          />
+          <Form.Input
+            label='Password'
+          />
+          <Button
+            primary
+            content='Sign In'
+            fluid
+          />
+        </Form>
 			</div>
 		)
 	}
@@ -72,6 +98,14 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+      justifyContent: 'space-between',
+      padding: '10px 100px 10px 100px'
+		},
+    social_container: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      height: '100px'
+    }
 	}
 }

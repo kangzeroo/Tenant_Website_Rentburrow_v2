@@ -57,9 +57,11 @@ class Header extends Component {
 
   renderLoginSuite() {
     return (
-      <Modal.Content>
-        <LoginPopup toggleModal={() => this.toggleModal()} />
-      </Modal.Content>
+        <Modal.Content>
+          <LoginPopup
+            toggleModal={() => this.toggleModal()}
+          />
+        </Modal.Content>
     )
   }
 
@@ -88,19 +90,26 @@ class Header extends Component {
             <h3> { i18n(WELCOME_MESSAGE) } </h3>
             <Dropdown placeholder='Change Language' onChange={(e, data) => this.props.changeAppLanguage(data.value)} selection options={languageOptions()} />
           </div>*/}
-          <div style={comStyles().rightFloat}>
-            {
-              this.props.authenticated
-              ?
-              <div>
-                <Image src={this.props.tenant_profile.picurl} />
-                { this.props.tenant_profile.name }
-              </div>
-              :
-              <Button onClick={() => this.toggleModal(true, 'login')} style={comStyles().login}>Login</Button>
-            }
-          </div>
-
+          {
+            this.props.authenticated
+            ?
+            <div style={comStyles().user_container} >
+              <Image
+                src={this.props.tenant_profile.picurl}
+                shape='circular'
+                bordered
+              />
+            </div>
+            :
+            <div style={comStyles().rightFloat}>
+              <Button
+                onClick={() => this.toggleModal(true, 'login')}
+                style={comStyles().login}
+                content='Login'
+                color='white'
+              />
+            </div>
+          }
 
           <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
             {
@@ -171,7 +180,7 @@ const comStyles = () => {
     rightFloat: {
       position: 'absolute',
       right: '0px',
-      top: '0px',
+      top: '5px',
     },
     righterFloat: {
       color: 'white',
@@ -182,7 +191,16 @@ const comStyles = () => {
     },
     link: {
       margin: '10px',
-    }
+    },
+    user_container: {
+      display: 'flex',
+      flexDirection: 'row',
+      right: '20px',
+      top: '0px',
+      position: 'absolute',
+      maxHeight: '45px',
+      maxWidth: '45px'
+    },
   }
 }
 
