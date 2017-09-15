@@ -2,7 +2,7 @@ import axios from 'axios'
 import { SEARCH_MICROSERVICE } from '../API_URLS'
 
 export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
-	console.log('scrapeFacebookSublets')
+	console.log('scrapeFacebookSublets()')
 	getGroupsForCity({ city, profile })
 		.then(latestPostInServerPerGroup)
 		.then(getPostsFromGroups)
@@ -12,7 +12,6 @@ export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
 
 // user profile is not saved to TENANT_MICROSERVICE
 const getGroupsForCity = ({ city, profile }) => {
-	console.log('getGroupsForCity')
 	const p = new Promise((res, rej) => {
 		res({
 			profile,
@@ -96,7 +95,6 @@ const getGroupsForCity = ({ city, profile }) => {
 }
 
 const latestPostInServerPerGroup = ({ groups, profile }) => {
-	console.log('latestPostInServerPerGroup')
 	const p = new Promise((res, rej) => {
 		const promises = groups.map((group) => {
 			return axios.post(`${SEARCH_MICROSERVICE}/check_latest_sublet`, group)
@@ -104,7 +102,6 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 					if (data.data.length > 0) {
 						// lastPostTime = data.data
 						const lastPostTime = JSON.parse(data.data[0]).posted_date || 0
-						console.log(`${group.groupname}: ${lastPostTime}`)
 						return Promise.resolve({
               ...group,
               lastPostTime
@@ -128,14 +125,13 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 }
 
 const getPostsFromGroups = ({ groupsTime, profile }) => {
-	console.log('getPostsFromGroups')
 	const p = new Promise((resolve, rej) => {
 		const locallySavedAccessToken = localStorage.getItem('fbToken')
 		const access_token = profile.accessToken || locallySavedAccessToken
 		const promises = groupsTime.map((group) => {
 			const x = new Promise((res, rej) => {
 				FB.api(
-	        `/${group.groupid}/feed?limit=2`,
+	        `/${group.groupid}/feed?limit=30`,
 	        { access_token: access_token },
 	      	(response) => {
 	          if (response && !response.error) {
@@ -150,6 +146,7 @@ const getPostsFromGroups = ({ groupsTime, profile }) => {
 					  			groupid: group.groupid
 					  		}
 					  	})
+							console.log(response.data.length, postsArray.length)
 							res(postsArray)
 	          } else {
 							res([])

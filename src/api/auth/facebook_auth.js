@@ -140,7 +140,8 @@ export const convertTokenIntoLongLived = (accessToken) => {
 	const p = new Promise((res, rej)=>{
 		axios.post(SEARCH_MICROSERVICE+'/longlivetoken', {accessToken})
 			.then((longToken)=>{
-				res(longToken.data.longLiveToken)
+				console.log(longToken)
+				res(longToken.data.longLiveToken.access_token)
 			})
 			.catch((err)=>{
 				// console.log(err)
