@@ -75,6 +75,15 @@ class FilterCard extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+				<Button
+					color='black'
+					basic
+					circular
+					style={comStyles().close_button}
+					icon='close'
+					size='tiny'
+					onClick={() => this.props.closeFilterCard()}
+				/>
 				<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Price</h2>
@@ -213,6 +222,11 @@ const comStyles = () => {
 			zIndex: '1',
 			backgroundColor: 'white',
 			borderRadius: '3px'
+		},
+		close_button: {
+			position: 'absolute',
+			top: '15px',
+			left: '15px',
 		},
 		sliderBox: {
 			padding: '10px',
