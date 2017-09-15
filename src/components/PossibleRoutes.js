@@ -6,4 +6,5 @@ export default [
   '/building',
   '/sublet',
   '/sandbox',
+  '/lease',
 ]

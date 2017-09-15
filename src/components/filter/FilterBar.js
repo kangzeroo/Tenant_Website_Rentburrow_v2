@@ -105,9 +105,11 @@ class FilterBar extends Component {
     if (value.value === 'fourmonth') {
       getFBPosts().then((data) => {
         this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
+        this.props.history.push('/sublet')
         this.props.changeRentType('sublet')
   		})
     } else {
+      this.props.history.push('/lease')
       this.props.changeRentType('lease')
     }
   }

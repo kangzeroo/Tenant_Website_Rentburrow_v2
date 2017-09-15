@@ -30,22 +30,35 @@ import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_
 import { saveTenantToRedux } from '../actions/auth/auth_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import { scrapeFacebookSublets } from '../api/sublet/facebook_sublet'
+import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
+import { getFBPosts } from '../api/fb/fb_api'
 
 class AppRoot extends Component {
 
 	componentWillMount() {
     this.autoSetLanguage()
+    // grab the url that was given
+    const location = this.props.location.pathname
+    const onSublet = location === '/sublet' || location === '/sublets'
+    const onLease = location === '/lease' || location === '/leases'
     initiateFacebook().then(() => {
       // autologin to facebook if possible
       return checkIfFacebookLoggedIn()
     }).then((fbProfile) => {
       this.props.saveTenantToRedux(fbProfile)
-      if (location.indexOf('sublet') > -1) {
+      if (onSublet) {
         scrapeFacebookSublets(fbProfile)
       }
     })
-    // grab the url that was given
-    const location = this.props.location.pathname
+    if (onSublet) {
+      this.props.changeRentType('sublet')
+      getFBPosts().then((data) => {
+        this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
+      })
+    }
+    if (onLease) {
+      this.props.changeRentType('lease')
+    }
     // take the path in the url and go directly to that page and save to redux any actions necessary
     if (location !== '/') {
       redirectPath(location).then(({ path, actions }) => {
@@ -91,13 +104,14 @@ class AppRoot extends Component {
               <Switch>
 
                 <Route exact path='/' component={HousingPage} />
-                <Route path='/community' component={CommunityPage} />
-                <Route path='/housing' component={HousingPage} />
+                <Route exact path='/community' component={CommunityPage} />
 
-                <Route path='/building' component={BuildingPage} />
-
-                <Route path='/sublets/:post_id' component={SubletPage} />
-                <Route path='/:building_alias' component={BuildingPage} />
+                <Route exact path='/lease' component={HousingPage} />
+                <Route exact path='/leases' component={HousingPage} />
+                <Route exact path='/sublet' component={HousingPage} />
+                <Route exact path='/sublets' component={HousingPage} />
+                <Route path='/sublet' component={SubletPage} />
+                <Route exact path='/:building_alias' component={BuildingPage} />
 
               </Switch>
 
@@ -127,6 +141,8 @@ AppRoot.propTypes = {
   selected_building: PropTypes.object,
   language: PropTypes.string.isRequired,
   changeAppLanguage: PropTypes.func.isRequired,
+  changeRentType: PropTypes.func.isRequired,
+  saveSubletsToRedux: PropTypes.func.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -148,6 +164,8 @@ export default withRouter(connect(mapReduxToProps, {
   dispatchActionsToRedux,
   saveTenantToRedux,
   changeAppLanguage,
+  changeRentType,
+  saveSubletsToRedux,
 })(RadiumHOC))
 
 // =============================

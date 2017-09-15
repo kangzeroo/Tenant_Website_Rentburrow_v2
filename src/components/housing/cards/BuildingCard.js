@@ -25,8 +25,8 @@ import {
 class BuildingCard extends Component {
 
   selectThisBuilding(building) {
-    console.log(`${window.location.href}${aliasToURL(building.building_alias)}`)
-    window.open(`${window.location.href}${aliasToURL(building.building_alias)}`, '_blank')
+    console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
+    window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
   }
 
 	render() {
