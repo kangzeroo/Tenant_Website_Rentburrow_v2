@@ -18,6 +18,12 @@ import {
   renderProcessedImage,
   renderProcessedThumbnail,
 } from '../../api/general/general_api'
+import {
+  sortBuildings,
+} from '../../api/filter/filter_api'
+import {
+  saveBuildingsToRedux,
+ } from '../../actions/search/search_actions'
 import FilterCard from './FilterCard'
 
 
@@ -30,6 +36,8 @@ class FilterBar extends Component {
       toggle_modal: false,
       modal_name: '',
       context: {},
+
+      sort_by: '',
     }
   }
 
@@ -63,25 +71,41 @@ class FilterBar extends Component {
 		}
   }
 
+  handleChange(e, value) {
+    this.setState({
+      sort_by: value.value
+    }, () => {
+      sortBuildings({
+        sort_by: value.value
+      })
+      .then((buildings) => {
+        this.props.saveBuildingsToRedux(buildings)
+      })
+    })
+  }
+
+
 	render() {
 		return (
 			<div style={comStyles().container}>
         <div style={comStyles().searchbar}>
           <Button
             onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
-            content={this.state.show_search_panel ? 'CLOSE' : 'FILTERED LEASES'}
-            icon={this.state.show_search_panel ? 'close' : 'filter'}
+            content='FILTER'
           />
-          <h5>{ `Showing ${this.props.search_results.length} matching buildings` }</h5>
-          <div style={comStyles().right}>
-            <h4>Sort By</h4>
-            <Dropdown placeholder='Most Recent' search selection options={[
-              { key: 'price', value: 'price', text: 'Price' },
-              { key: 'rooms', value: 'rooms', text: 'Rooms' },
-              { key: 'date', value: 'date', text: 'Date' },
-            ]} />
-          </div>
+          <h5>{ `Showing ${this.props.search_results.length} buildings` }</h5>
+          <Dropdown
+          placeholder='Sort By'
+          selection
+          options={[
+                    { key: 'price', value: 'price', text: 'Price' },
+                    { key: 'date', value: 'date', text: 'Date' },
+                  ]}
+
+          onChange={(e, value) => this.handleChange(e, value)}
+          />
         </div>
+
         {
           this.state.show_search_panel
           ?
@@ -102,6 +126,7 @@ class FilterBar extends Component {
 // defines the types of variables in this.props
 FilterBar.propTypes = {
   search_results: PropTypes.array.isRequired,
+  saveBuildingsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -122,7 +147,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    saveBuildingsToRedux,
 	})(RadiumHOC)
 )
 
@@ -144,14 +169,9 @@ const comStyles = () => {
       position: 'relative',
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'flex-start',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       width: '100%',
     },
-    right: {
-      display: 'flex',
-      flexDirection: 'row',
-      position: 'absolute',
-      right: '0px',
-    }
 	}
 }
