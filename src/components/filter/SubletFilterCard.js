@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { querySubletsInArea } from '../../api/search/sublet_api'
+import { filterFBPosts } from '../../api/search/sublet_api'
 import { saveSubletsToRedux, saveSubletFilterParams, } from '../../actions/search/search_actions'
 import {
 	Checkbox,
@@ -48,29 +48,11 @@ class SubletFilterCard extends Component {
 
 	applyFilters() {
 		this.props.saveSubletFilterParams(this.state)
-		querySubletsInArea({
-			...this.props.current_gps_center,
-			filterParams: this.state,
-		}).then((data) => {
-      this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
+		filterFBPosts(this.state).then((sublets) => {
+			this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
 			this.props.closeFilterCard()
-    })
+		})
 	}
-
-/*
-	renderRoomFilter() {
-		return (
-			<InputRange
-				step={1}
-				maxValue={10}
-				minValue={1}
-				formatLabel={(value) => `${value} bed${value > 1 ? 's' : ''}`}
-				value={this.state.bedrooms}
-				onChange={(value) => this.updateAttr('bedrooms', value)}
-				onChangeComplete={value => console.log(value)}
-			/>
-		)
-	}*/
 
 	render() {
 		return (
@@ -126,22 +108,6 @@ class SubletFilterCard extends Component {
 						/>
 					</div>
 				</div>
-				{/*<div style={comStyles().sliderBox}>
-					<div style={comStyles().label}>
-						<h2>Lease Length</h2>
-					</div>
-					<div style={comStyles().slider}>
-						<InputRange
-							step={4}
-		          maxValue={16}
-		          minValue={0}
-		          formatLabel={(value) => `${value} months`}
-		          value={this.state.lease_length}
-		          onChange={(value) => this.updateAttr('lease_length', value)}
-		          onChangeComplete={value => console.log(value)}
-						/>
-					</div>
-				</div>*/}
 				<div style={comStyles().main_amenities}>
 					<Checkbox
 						label='Ensuite Bath'
@@ -185,7 +151,6 @@ SubletFilterCard.propTypes = {
 	closeFilterCard: PropTypes.func.isRequired,
 	saveSubletFilterParams: PropTypes.func.isRequired,
 	sublet_filter_params: PropTypes.object.isRequired,
-	current_gps_center: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -200,7 +165,6 @@ const RadiumHOC = Radium(SubletFilterCard)
 const mapReduxToProps = (redux) => {
 	return {
 		sublet_filter_params: redux.filter.sublet_filter_params,
-		current_gps_center: redux.filter.current_gps_center,
 	}
 }
 

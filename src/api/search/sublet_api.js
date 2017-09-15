@@ -44,8 +44,6 @@ export const sortFBPosts = ({ sort_by }) => {
   return p
 }
 
-
-
 // MOVE THIS TO THE GENERAL QUERY
 export const filterFBPosts = ({ price, room_count, ensuite_bath, utils_incl, females_only, }) => {
   const p = new Promise((res, rej) => {
