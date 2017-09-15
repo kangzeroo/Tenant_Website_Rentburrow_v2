@@ -119,6 +119,7 @@ class FilterBar extends Component {
   }
 
 	render() {
+    const numberOfPropertiesShown = this.props.rent_type === 'sublet' ? this.props.sublet_search_results.length : this.props.building_search_results.length
 		return (
 			<div style={comStyles().container}>
         {
@@ -144,7 +145,11 @@ class FilterBar extends Component {
                 onChange={(e, value) => this.handleRentalLengthChange(e, value)}
               />
             </div>
-            <h5>{ `Showing ${this.props.search_results.length} Properties` }</h5>
+            <h5>
+              {
+                `Showing ${numberOfPropertiesShown} Propert${numberOfPropertiesShown > 1 ? 'ies' : 'y'}`
+              }
+            </h5>
             <Dropdown
               placeholder='Sort By'
               selection
@@ -168,7 +173,8 @@ class FilterBar extends Component {
 
 // defines the types of variables in this.props
 FilterBar.propTypes = {
-  search_results: PropTypes.array.isRequired,
+  building_search_results: PropTypes.array.isRequired,
+  sublet_search_results: PropTypes.array.isRequired,
   saveBuildingsToRedux: PropTypes.func.isRequired,
   saveSubletsToRedux: PropTypes.func.isRequired,
   changeRentType: PropTypes.func.isRequired,
@@ -186,7 +192,8 @@ const RadiumHOC = Radium(FilterBar)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-		search_results: redux.search.building_search_results,
+		building_search_results: redux.search.building_search_results,
+    sublet_search_results: redux.search.sublet_search_results,
     rent_type: redux.filter.rent_type,
 	}
 }
