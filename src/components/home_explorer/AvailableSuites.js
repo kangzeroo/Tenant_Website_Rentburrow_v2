@@ -14,7 +14,6 @@ import {
 	Modal,
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
-import { getAmenitiesForSuite  } from '../../api/building/building_api'
 import { calculateSimpleSuiteBaths } from '../../api/amenities/amenity_calculations'
 
 
@@ -30,18 +29,7 @@ class AvailableSuites extends Component {
 	}
 
 	componentWillMount() {
-		const promises = this.props.suites.map((suite) => {
-			return getAmenitiesForSuite({
-				building_id: this.props.building.building_id,
-				suite_id: suite.suite_id,
-			}).then((data) => {
-				return Promise.resolve({
-					suite_id: suite.suite_id,
-					amenities: data,
-				})
-			})
-		})
-		Promise.all(promises).then((all_results) => {
+		Promise.all(this.props.promise_array_of_suite_amenities_with_id).then((all_results) => {
 			this.setState({
 				all_suite_amenities: all_results.map((amenity_summary) => {
 					return {
@@ -136,10 +124,12 @@ AvailableSuites.propTypes = {
   history: PropTypes.object.isRequired,
   suites: PropTypes.array.isRequired,			// passed in
 	building: PropTypes.object.isRequired,	// passed in
+	promise_array_of_suite_amenities_with_id: PropTypes.array,		// passed in
 }
 
 // for all optional props, define a default value
 AvailableSuites.defaultProps = {
+	promise_array_of_suite_amenities_with_id: [],
 }
 
 // Wrap the prop in Radium to allow JS styling

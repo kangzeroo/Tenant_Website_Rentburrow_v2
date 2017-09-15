@@ -19,7 +19,7 @@ import {
 } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import ImageGallery from '../../image/ImageGallery'
-import { calculateComplexSuiteBaths, calculateRoomsSummary, calculateSuiteCommonAreasSummary, } from '../../../api/amenities/amenity_calculations'
+import { calculateComplexSuiteBaths, calculateRoomsSummary, calculateSuiteCommonAreasSummary, calculateFreeUtilitiesForSuite, } from '../../../api/amenities/amenity_calculations'
 
 
 class SuiteCommonAreaCanvas extends Component {
@@ -37,6 +37,12 @@ class SuiteCommonAreaCanvas extends Component {
         ensuite_laundry: false,
         spare_rooms: 0,
         common_storage_closets: 0,
+      },
+      free_utilities_summary: {
+        water: false,
+        electric: false,
+        heating: false,
+        internet: false,
       },
       baths_summary: {
         full_baths: 0,
@@ -78,7 +84,8 @@ class SuiteCommonAreaCanvas extends Component {
         common_areas_summary: calculateSuiteCommonAreasSummary(suite_amenities),
         baths_summary: calculateComplexSuiteBaths(this.props.suite, data.map((am) => {
           return JSON.parse(am)
-        }))
+        })),
+        free_utilities_summary: calculateFreeUtilitiesForSuite(suite_amenities),
       })
     })
     // summarize the rooms and their amenities, details such as price and room amenities
@@ -197,9 +204,6 @@ class SuiteCommonAreaCanvas extends Component {
     return (
       <div style={comStyles().common_areas_summary}>
         {
-          console.log(this.state.common_areas_summary)
-        }
-        {
           this.state.common_areas_summary.kitchen
           ?
           <h2>{ `${this.state.common_areas_summary.kitchen} Kitchen${this.state.common_areas_summary.kitchen > 0 ? 's' : ''}` }</h2>
@@ -252,6 +256,41 @@ class SuiteCommonAreaCanvas extends Component {
     )
   }
 
+  generateFreeUtilities() {
+    return (
+      <div style={comStyles().free_utilities_summary}>
+        {
+          this.state.free_utilities_summary.electric
+          ?
+          <h3>Electricity (hydro) included</h3>
+          :
+          <h3>Electricity (hydro) costs seperate</h3>
+        }
+        {
+          this.state.free_utilities_summary.water
+          ?
+          <h3>Water included</h3>
+          :
+          <h3>Water costs seperate</h3>
+        }
+        {
+          this.state.free_utilities_summary.heating
+          ?
+          <h3>Heating included</h3>
+          :
+          <h3>Heating costs seperate</h3>
+        }
+        {
+          this.state.free_utilities_summary.internet
+          ?
+          <h3>Internet included</h3>
+          :
+          <h3>Interet cost seperate</h3>
+        }
+      </div>
+    )
+  }
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -288,6 +327,9 @@ class SuiteCommonAreaCanvas extends Component {
             }
             {
               this.generateSuiteCommonAreasSummary()
+            }
+            {
+              this.generateFreeUtilities()
             }
           </div>
         </div>
@@ -389,6 +431,12 @@ const comStyles = () => {
       border: '1px solid black',
     },
     common_areas_summary: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      border: '1px solid black',
+    },
+    free_utilities_summary: {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
