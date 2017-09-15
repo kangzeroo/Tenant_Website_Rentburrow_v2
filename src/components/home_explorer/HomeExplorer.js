@@ -48,7 +48,6 @@ class HomeExplorer extends Component {
   }
 
 	render() {
-    console.log(this.props.showVirtualTourFirst)
 		return (
 			<div style={comStyles().container}>
 				<HomeExplorerSidebar

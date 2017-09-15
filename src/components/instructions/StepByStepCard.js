@@ -12,7 +12,7 @@ import {
   Modal,
   Label,
 } from 'semantic-ui-react'
-import HomeExplorer from '../suites/HomeExplorer'
+import HomeExplorer from '../home_explorer/HomeExplorer'
 
 
 class StepByStepCard extends Component {

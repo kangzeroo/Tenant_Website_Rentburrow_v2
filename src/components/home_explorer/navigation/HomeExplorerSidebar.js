@@ -75,7 +75,6 @@ class HomeExplorerSidebar extends Component {
   }
 
   loadBottomContextItems(title, value) {
-    console.log('loadBottomContextItems')
     let buildingImages = '[]'
     // CASE WHERE WE WANT TO SEE BUILDING INFO
     if (title === 'Building') {

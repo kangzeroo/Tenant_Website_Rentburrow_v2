@@ -11,7 +11,8 @@ import {
   Icon,
 } from 'semantic-ui-react'
 import {
-  getRoomPage, getRoomAmenities
+  getRoomPage,
+  getRoomAmenities,
 } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 

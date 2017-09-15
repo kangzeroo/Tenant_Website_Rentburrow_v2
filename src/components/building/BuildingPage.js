@@ -34,7 +34,7 @@ import {
 } from '../../styles/base_colors'
 import AmenityBrowser from '../amenities/AmenityBrowser'
 import BuildingPageFixedMenu from './BuildingPageFixedMenu'
-import AvailableSuites from '../suites/AvailableSuites'
+import AvailableSuites from '../home_explorer/AvailableSuites'
 import MainAmenitiesBar from '../amenities/MainAmenitiesBar'
 import StepByStepCard from '../instructions/StepByStepCard'
 import AllLandlords from '../landlord/AllLandlords'
@@ -197,11 +197,17 @@ class BuildingPage extends Component {
 								building={this.state.building}
 							/>
 						</div>
-						<div style={comStyles().suites_table} >
-							<AvailableSuites
-								building={this.state.building}
-								suites={this.state.suites}
-							/>
+						<div style={comStyles().suites_table}>
+							{
+								this.state.suites && this.state.suites.length > 0
+								?
+								<AvailableSuites
+									building={this.state.building}
+									suites={this.state.suites}
+								/>
+								:
+								null
+							}
 						</div>
 					</div>
 					<div style={comStyles().content_right} >

@@ -27,7 +27,7 @@ class HomeExplorerCanvas extends Component {
 	 				return (
 	 					<CommonAreaCanvas
 	 						building={this.props.building}
-	 						bottomContextValue={this.props.bottomContextValue ? this.props.bottomContextValue : null }
+	 						images={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue) : null }
 	 					/>
 	 				)
 			  } else {
@@ -60,12 +60,12 @@ class HomeExplorerCanvas extends Component {
 				return (
 					<CommonAreaCanvas
 						building={this.props.building}
-						bottomContextValue={this.props.bottomContextValue ? JSON.stringify(JSON.parse(this.props.bottomContextValue).imgs.map((i) => {
+						images={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue).imgs.map((i) => {
 							return {
 								image_url: i
 							}
-						})) : null}
-						suite={this.props.bottomContextValue ? this.props.bottomContextValue : null}
+						}) : null}
+						suite={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue) : null}
 					/>
 				)
 			} else if (this.props.bottomContextText === 'Virtual Tour' && this.props.bottomContextValue) {
@@ -153,6 +153,7 @@ const comStyles = () => {
       flexDirection: 'column',
       width: '85%',
 			maxHeight: '100%',
+			overflow: 'scroll',
 		}
 	}
 }
