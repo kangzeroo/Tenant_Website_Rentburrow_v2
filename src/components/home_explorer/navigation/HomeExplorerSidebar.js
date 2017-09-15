@@ -265,7 +265,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       width: '100px',
-      minWidth: '200px',
+      minWidth: '220px',
       height: '80vh',
       maxHeight: '80vh',
       overflowY: 'scroll',

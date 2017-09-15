@@ -50,11 +50,20 @@ class LoginPopup extends Component {
           <Form.Input
             label='Password'
           />
-          <Button
-            primary
-            content='Sign In'
-            fluid
-          />
+          <div style={comStyles().buttons_container}>
+            <Button
+              primary
+              basic
+              content='Cancel'
+              fluid
+              onClick={() => this.props.toggleModal(false)}
+            />
+            <Button
+              primary
+              content='Sign In'
+              fluid
+            />
+          </div>
         </Form>
 			</div>
 		)
@@ -99,13 +108,17 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      padding: '10px 100px 10px 100px'
+      padding: '25px 100px 25px 100px',
 		},
     social_container: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-around',
       height: '100px'
+    },
+    buttons_container: {
+      display: 'flex',
+      flexDirection: 'row',
     }
 	}
 }
