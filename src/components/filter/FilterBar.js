@@ -88,7 +88,7 @@ class FilterBar extends Component {
           sort_by: value.value,
         })
         .then((sublets) => {
-          this.props.saveSubletsToRedux(sublets)
+          this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
         })
       } else {
         sortBuildings({

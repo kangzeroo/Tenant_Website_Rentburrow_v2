@@ -36,6 +36,7 @@ export const saveSubletsToRedux = (sublets) => {
       type: FOUND_SUBLETS,
       payload: sublets.map((sublet) => {
         const x = sublet
+        console.log(x)
         return {
           ...x,
           gps_x: parseFloat(x.gps_x),

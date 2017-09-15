@@ -29,9 +29,9 @@ export const getFBPostById = ({ post_id, }) => {
   return p
 }
 
-export const sortFBPosts = ({ sort_by }) => {
+export const sortFBPosts = ({ sort_by, }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/sort_fb_posts`, { sort_by })
+    axios.post(`${SEARCH_MICROSERVICE}/sort_fb_posts`, { sort_by, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -43,9 +43,9 @@ export const sortFBPosts = ({ sort_by }) => {
   return p
 }
 
-export const filterFBPosts = ({ price, room_count, ensuite_bath, utils_incl, females_only, }) => {
+export const filterFBPosts = ({ price, }) => { //, room_count, ensuite_bath, utils_incl, females_only, }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/filter_fb_posts`, { price, room_count, ensuite_bath, utils_incl, females_only, })
+    axios.post(`${SEARCH_MICROSERVICE}/filter_fb_posts`, { price, })//room_count, ensuite_bath, utils_incl, females_only, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

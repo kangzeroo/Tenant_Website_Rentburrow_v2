@@ -28,7 +28,7 @@ import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
 
 
-class SubletPage extends Component {
+class SubletPage  extends Component {
 	constructor() {
 		super()
 		this.state = {
@@ -84,7 +84,7 @@ class SubletPage extends Component {
 }
 
 // defines the types of variables in this.props
-SubletPage.propTypes = {
+SubletPage .propTypes = {
 	history: PropTypes.object.isRequired,
 	location: PropTypes.object,
 	// building: PropTypes.object.isRequired,
@@ -95,12 +95,12 @@ SubletPage.propTypes = {
 }
 
 // for all optional props, define a default value
-SubletPage.defaultProps = {
+SubletPage .defaultProps = {
 	location: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SubletPage)
+const RadiumHOC = Radium(SubletPage )
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
