@@ -16,11 +16,32 @@ import {
 import {
 	changeCardStyle,
 } from '../../../actions/search/search_actions'
+import {
+	getFBPosts,
+} from '../../../api/fb/fb_api'
 import BuildingCard from '../cards/BuildingCard'
 import BuildingRow from '../cards/BuildingRow'
+import SubletCard from '../cards/SubletCard'
 import FilterBar from '../../filter/FilterBar'
 
 class HousingPanel extends Component {
+
+	constructor() {
+		super()
+		this.state = {
+			renttype: 'lease',
+			fb_posts: [],
+		}
+	}
+
+	componentWillMount() {
+		getFBPosts()
+		.then((data) => {
+			this.setState({
+				fb_posts: data.map(s => JSON.parse(s))
+			})
+		})
+	}
 
 	generateCard(building) {
 		if (this.props.card_style === 'row') {
@@ -48,6 +69,21 @@ class HousingPanel extends Component {
 		}
 	}
 
+	changeRentType(type) {
+		this.setState({
+			rentaltype: type
+		})
+	}
+
+	renderSubletCard(fb_post) {
+		return (
+			<SubletCard
+				key={fb_post.post_id}
+				fb_post={fb_post}
+			/>
+		)
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -58,27 +94,40 @@ class HousingPanel extends Component {
 							)
 						})
 					*/}
-					<FilterBar />
-				{
-					this.props.buildings.length === 0
-					?
-					<div style={comStyles().no_matches_container} >
-						<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
-						<Button
-							primary
-							content='Go Back'
-							onClick={() => this.props.refresh()}
-						/>
-					</div>
-					:
-					<div style={comStyles().scroll}>
-						{
-							this.props.buildings.map((building) => {
-								return this.generateCard(building)
-							})
-						}
-					</div>
-				}
+					<FilterBar
+						changeRentType={type => this.changeRentType(type)}
+					/>
+					{
+						this.state.rentaltype === 'sublet'
+						?
+
+						<div style={comStyles().scroll}>
+							{
+								this.state.fb_posts.map((fb_post) => {
+									return this.renderSubletCard(fb_post)
+								})
+							}
+						</div>
+						:
+						<div style={comStyles().scroll}>
+							{
+								this.props.buildings.length > 0
+								?
+								this.props.buildings.map((building) => {
+									return this.generateCard(building)
+								})
+								:
+								<div style={comStyles().no_matches_container} >
+									<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
+									<Button
+										primary
+										content='Go Back'
+										onClick={() => this.props.refresh()}
+									/>
+								</div>
+							}
+						</div>
+					}
 			</div>
 		)
 	}

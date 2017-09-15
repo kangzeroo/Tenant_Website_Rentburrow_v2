@@ -31,10 +31,10 @@ class FilterCard extends Component {
 				max: 5,
 			},*/
 			room_count: 0,
-			lease_length: {
+			/*lease_length: {
 				min: 8,
 				max: 12,
-			},
+			},*/
 			ensuite_bath: false,
 			utils_incl: false,
 			parking_avail: false,
@@ -126,7 +126,7 @@ class FilterCard extends Component {
 						/>
 					</div>
 				</div>
-				<div style={comStyles().sliderBox}>
+				{/*<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Lease Length</h2>
 					</div>
@@ -141,7 +141,7 @@ class FilterCard extends Component {
 		          onChangeComplete={value => console.log(value)}
 						/>
 					</div>
-				</div>
+				</div>*/}
 				<div style={comStyles().main_amenities}>
 					<Checkbox
 						label='Ensuite Bath'

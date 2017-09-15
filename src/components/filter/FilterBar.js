@@ -38,6 +38,7 @@ class FilterBar extends Component {
       context: {},
 
       sort_by: '',
+      rental_length: '',
     }
   }
 
@@ -71,7 +72,7 @@ class FilterBar extends Component {
 		}
   }
 
-  handleChange(e, value) {
+  handleSortChange(e, value) {
     this.setState({
       sort_by: value.value
     }, () => {
@@ -82,6 +83,14 @@ class FilterBar extends Component {
         this.props.saveBuildingsToRedux(buildings)
       })
     })
+  }
+
+  handleRentalLengthChange(e, value) {
+    if (value.value === 'fourmonth') {
+      this.props.changeRentType('sublet')
+    } else {
+      this.props.changeRentType('lease')
+    }
   }
 
 
@@ -96,21 +105,34 @@ class FilterBar extends Component {
           />
           :
           <div style={comStyles().searchbar}>
-            <Button
-              onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
-              content='FILTER'
-            />
-            <h5>{ `Showing ${this.props.search_results.length} buildings` }</h5>
+            <div>
+              <Button
+                onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
+                content='FILTER'
+              />
+              <Dropdown
+                placeholder='Rental Length'
+                floating
+                selection
+                options={[
+                  { key: 'fourmonth', value: 'fourmonth', text: '4 Months Sublet' },
+                  { key: 'eightmonth', value: 'eightmonth', text: '8 Months Lease' },
+                  { key: 'twelvemonth', value: 'twelvemonth', text: '12 Months Lease' },
+                ]}
+                onChange={(e, value) => this.handleRentalLengthChange(e, value)}
+              />
+            </div>
+            <h5>{ `Showing ${this.props.search_results.length} Properties` }</h5>
             <Dropdown
-            placeholder='Sort By'
-            selection
-            options={[
-                      { key: 'pricelow', value: 'pricelow', text: 'Price: Low to High' },
-                      { key: 'pricehigh', value: 'pricehigh', text: 'Price: High to Low' },
-                      { key: 'date', value: 'date', text: 'Date' },
-                    ]}
+              placeholder='Sort By'
+              selection
+              options={[
+                        { key: 'pricelow', value: 'pricelow', text: 'Price: Low to High' },
+                        { key: 'pricehigh', value: 'pricehigh', text: 'Price: High to Low' },
+                        { key: 'date', value: 'date', text: 'Date' },
+                      ]}
 
-            onChange={(e, value) => this.handleChange(e, value)}
+              onChange={(e, value) => this.handleSortChange(e, value)}
             />
           </div>
         }
@@ -126,6 +148,7 @@ class FilterBar extends Component {
 FilterBar.propTypes = {
   search_results: PropTypes.array.isRequired,
   saveBuildingsToRedux: PropTypes.func.isRequired,
+  changeRentType: PropTypes.func.isRequired,        // passed in
 }
 
 // for all optional props, define a default value
