@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { filterSublets } from '../../api/filter/filter_api'
+import { filterFBPosts } from '../../api/fb/fb_api'
 import { saveSubletsToRedux, saveSubletFilterParams, } from '../../actions/search/search_actions'
 import {
 	Checkbox,
@@ -48,7 +48,7 @@ class SubletFilterCard extends Component {
 
 	applyFilters() {
 		this.props.saveSubletFilterParams(this.state)
-		filterSublets(this.state).then((sublets) => {
+		filterFBPosts(this.state).then((sublets) => {
 			this.props.saveSubletsToRedux(sublets)
 			this.props.closeFilterCard()
 		})

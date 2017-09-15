@@ -28,6 +28,7 @@ import {
 } from '../../actions/search/search_actions'
 import {
 	getFBPosts,
+  sortFBPosts,
 } from '../../api/fb/fb_api'
 import LeaseFilterCard from './LeaseFilterCard'
 import SubletFilterCard from './SubletFilterCard'
@@ -82,12 +83,21 @@ class FilterBar extends Component {
     this.setState({
       sort_by: value.value
     }, () => {
-      sortBuildings({
-        sort_by: value.value
-      })
-      .then((buildings) => {
-        this.props.saveBuildingsToRedux(buildings)
-      })
+      if (this.props.rent_type === 'sublet') {
+        sortFBPosts({
+          sort_by: value.value,
+        })
+        .then((sublets) => {
+          this.props.saveSubletsToRedux(sublets)
+        })
+      } else {
+        sortBuildings({
+          sort_by: value.value
+        })
+        .then((buildings) => {
+          this.props.saveBuildingsToRedux(buildings)
+        })
+      }
     })
   }
 
@@ -156,7 +166,8 @@ class FilterBar extends Component {
               options={[
                         { key: 'pricelow', value: 'pricelow', text: 'Price: Low to High' },
                         { key: 'pricehigh', value: 'pricehigh', text: 'Price: High to Low' },
-                        { key: 'date', value: 'date', text: 'Date' },
+                        { key: 'datenew', value: 'datenew', text: 'Date: Newest to Oldest' },
+                        { key: 'dateold', value: 'dateold', text: 'Date: Oldest to Newest' },
                       ]}
 
               onChange={(e, value) => this.handleSortChange(e, value)}

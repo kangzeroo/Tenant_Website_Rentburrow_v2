@@ -75,7 +75,9 @@ class HousingPanel extends Component {
 							)
 						})
 					*/}
-					<FilterBar />
+					<FilterBar
+						rent_type={this.props.rent_type}
+					/>
 					{
 						this.props.rent_type === 'sublet'
 						?

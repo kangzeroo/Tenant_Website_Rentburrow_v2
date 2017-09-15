@@ -39,9 +39,11 @@ class SubletCard extends Component {
 		return (
       <Card onClick={() => this.selectThisPost()} style={comStyles().hardCard}>
         <div style={comStyles().imageGallery}>
-          <SingularImageGallery
-            list_of_images={JSON.parse(this.props.fb_post.images)}
-          />
+          {console.log(this.props.fb_post.images)}
+
+            <SingularImageGallery
+              list_of_images={JSON.parse(this.props.fb_post.images)}
+            />
         </div>
         <Card.Content style={comStyles().info}>
           <Card.Header style={comStyles().headerPrint}>
