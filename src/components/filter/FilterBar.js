@@ -41,6 +41,12 @@ class FilterBar extends Component {
     })
   }
 
+  closePanel() {
+    this.setState({
+      show_search_panel: false,
+    })
+  }
+
 	renderAppropriateModal(modal_name, context) {
 		if (modal_name === 'advanced') {
 	    return (
@@ -79,7 +85,9 @@ class FilterBar extends Component {
         {
           this.state.show_search_panel
           ?
-          <FilterCard />
+          <FilterCard
+            closeFilterCard={() => this.closePanel()}
+          />
           :
           null
         }

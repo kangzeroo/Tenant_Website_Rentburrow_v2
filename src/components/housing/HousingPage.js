@@ -24,6 +24,10 @@ import PopupPanel from './panel/PopupPanel'
 class HousingPage extends Component {
 
 	componentWillMount() {
+		this.refreshBuildings()
+	}
+
+	refreshBuildings() {
 		getBuildingsInArea({
 			lat: 23,
 			long: 54,
@@ -45,7 +49,9 @@ class HousingPage extends Component {
 					:
 					null
 				}
-				<HousingPanel />
+				<HousingPanel
+					refresh={() => this.refreshBuildings()}
+				/>
 				<MapComponent
 					listOfResults={this.props.buildings}
 					selected_pin={this.props.selected_pin}
