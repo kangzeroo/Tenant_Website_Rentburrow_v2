@@ -33,7 +33,6 @@ export const redirectPath = (urlPath) => {
 				}],
 			})
 		}).catch((err) => {
-			console.log(err)
 			const partOfRoutes = checkIfPartOfRoutes(urlPath)
 			if (partOfRoutes) {
 				res({

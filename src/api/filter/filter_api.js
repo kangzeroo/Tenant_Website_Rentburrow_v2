@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { SEARCH_MICROSERVICE } from '../API_URLS'
 
+// MOVE THIS TO THE GENERAL QUERY
 export const filterBuildings = (obj) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SEARCH_MICROSERVICE}/filter_buildings`, obj)

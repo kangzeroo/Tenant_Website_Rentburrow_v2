@@ -2,6 +2,7 @@ import {
   SAVE_LEASE_FILTER_PARAMS,
   SAVE_SUBLET_FILTER_PARAMS,
   CHANGE_RENT_TYPE,
+  SET_CURRENT_GPS_CENTER,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
@@ -14,11 +15,24 @@ const INITIAL_STATE = {
     ensuite_bath: false,
     utils_incl: false,
     parking_avail: false,
+    search_radius: 1000,
   },
   sublet_filter_params: {
-
+    price: {
+      min: 500,
+      max: 900,
+    },
+    room_count: 0,
+    ensuite_bath: false,
+    utils_incl: false,
+    female_only: false,
+    search_radius: 1000,
   },
   rent_type: 'lease',     // 'lease' or 'sublet'
+  current_gps_center: {
+    lat: 43.473897,
+    lng: -80.531995,
+  },
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -37,6 +51,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         rent_type: action.payload,
+      }
+    case SET_CURRENT_GPS_CENTER:
+      return {
+        ...state,
+        current_gps_center: action.payload,
       }
 		default:
 			return {

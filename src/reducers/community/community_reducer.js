@@ -21,7 +21,7 @@ const INITIAL_STATE = {
       desc: '',
       time: 1501131833,
       lat: 43.47163729,
-      long: -80.5451423,
+      lng: -80.5451423,
     },
     {
       event_id: '903uofe8gasjlfsakd',
@@ -33,7 +33,7 @@ const INITIAL_STATE = {
       desc: '',
       time: 1501391033,
       lat: 43.4712483,
-      long: -80.5441159,
+      lng: -80.5441159,
     },
     {
       event_id: '2l773fysfjljsadf',
@@ -45,7 +45,7 @@ const INITIAL_STATE = {
       desc: '',
       time: 1501650233,
       lat: 43.4654872,
-      long: -80.5232353,
+      lng: -80.5232353,
     }
   ],
   latest_promos: [
@@ -60,7 +60,7 @@ const INITIAL_STATE = {
       desc: '',
       expiry: 1501391033,
       lat: 43.4733031,
-      long: -80.5332649,
+      lng: -80.5332649,
     },
     {
       promo_id: '2894fuoasdjflsdajf',
@@ -73,7 +73,7 @@ const INITIAL_STATE = {
       desc: '',
       expiry: 1501131833,
       lat: 43.4752375,
-      long: -80.52438919,
+      lng: -80.52438919,
     },
     {
       promo_id: 'saomfuufmosdsjkdfajl',
@@ -86,7 +86,7 @@ const INITIAL_STATE = {
       desc: '',
       expiry: 1501391033,
       lat: 43.4766346,
-      long: -80.525342,
+      lng: -80.525342,
     },
   ],
   selected_local: null,

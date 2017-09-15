@@ -7,25 +7,13 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import uuid from 'uuid'
-import { Route, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import {
-	Image,
-	Modal,
-	Item,
-	Icon,
-	Header,
-	Container,
-	Button,
 } from 'semantic-ui-react'
-import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
-import { URLToAlias, renderProcessedImage, shortenAddress, } from '../../api/general/general_api'
-import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
-import { selectChatThread } from '../../actions/messaging/messaging_actions'
 import {
 	getFBPostById,
-} from '../../api/fb/fb_api'
-import ImageGallery from '../image/ImageGallery'
-import MapComponent from '../map/MapComponent'
+} from '../../api/search/sublet_api'
+import SubletCard from '../housing/cards/SubletCard'
 
 
 class SubletPage extends Component {
@@ -37,17 +25,13 @@ class SubletPage extends Component {
 	}
 
 	componentWillMount() {
-    console.log(this.props.location.pathname)
-    let post_id = this.props.location.pathname
-    if (post_id[post_id.length - 1] === '/') {
-      post_id = post_id.slice(0, -1)
-    }
-    getFBPostById({ post_id, })
-    .then((data) => {
+		let position_start = this.props.location.pathname.indexOf('/sublet/') + 8
+    let post_id = this.props.location.pathname.slice(position_start)
+    console.log(post_id)
+    getFBPostById({ post_id }).then((data) => {
       this.setState({
         fb_post: JSON.parse(data)
-      })
-      console.log(this.state.fb_post)
+      }, () => console.log(this.state.fb_post))
     })
 	}
 
@@ -66,15 +50,22 @@ class SubletPage extends Component {
   }
 
 	renderAppropriateModal(modal_name, context) {
+		return null
   }
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<div style={comStyles().cover_photo} >
-          asdasdasdasdasdasd
-				</div>
-
+				{
+					this.state.fb_post.post_id
+					?
+					<SubletCard
+						key={this.state.fb_post.post_id}
+						fb_post={this.state.fb_post}
+					/>
+					:
+					null
+				}
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
@@ -88,9 +79,6 @@ SubletPage.propTypes = {
 	history: PropTypes.object.isRequired,
 	location: PropTypes.object,
 	// building: PropTypes.object.isRequired,
-	selectBuilding: PropTypes.func.isRequired,
-	selectCorporation: PropTypes.func.isRequired,
-	selectChatThread: PropTypes.func.isRequired,
 	tenant: PropTypes.object.isRequired,
 }
 
@@ -113,9 +101,6 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-		selectBuilding,
-		selectChatThread,
-		selectCorporation,
 	})(RadiumHOC)
 )
 

@@ -29,9 +29,9 @@ import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
 import { saveTenantToRedux } from '../actions/auth/auth_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
-import { scrapeFacebookSublets } from '../api/sublet/facebook_sublet'
+import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
 import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
-import { getFBPosts } from '../api/fb/fb_api'
+import { querySubletsInArea } from '../api/search/sublet_api'
 
 class AppRoot extends Component {
 
@@ -52,7 +52,10 @@ class AppRoot extends Component {
     })
     if (onSublet) {
       this.props.changeRentType('sublet')
-      getFBPosts().then((data) => {
+      querySubletsInArea({
+        ...this.props.current_gps_center,
+        filterParams: this.props.sublet_filter_params,
+      }).then((data) => {
         this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
       })
     }
@@ -90,7 +93,7 @@ class AppRoot extends Component {
       }
       >
         <Helmet>
-          <html lang={ this.props.language }></html>
+          <html lang={this.props.language}></html>
         </Helmet>
         <StyleRoot>
           <div style={comStyles().main}>
@@ -143,6 +146,8 @@ AppRoot.propTypes = {
   changeAppLanguage: PropTypes.func.isRequired,
   changeRentType: PropTypes.func.isRequired,
   saveSubletsToRedux: PropTypes.func.isRequired,
+	current_gps_center: PropTypes.object.isRequired,
+  sublet_filter_params: PropTypes.object.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -157,6 +162,8 @@ const mapReduxToProps = (redux) => {
 	return {
     selected_building: redux.selection.selected_building,
     language: redux.app.selected_language,
+    current_gps_center: redux.filter.current_gps_center,
+    sublet_filter_params: redux.filter.sublet_filter_params,
 	}
 }
 

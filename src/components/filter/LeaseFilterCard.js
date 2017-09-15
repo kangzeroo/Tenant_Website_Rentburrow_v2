@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { filterBuildings } from '../../api/filter/filter_api'
+import { queryBuildingsInArea } from '../../api/search/search_api'
 import { saveBuildingsToRedux, saveLeaseFilterParams, } from '../../actions/search/search_actions'
 import {
 	Checkbox,
@@ -30,6 +30,7 @@ class LeaseFilterCard extends Component {
 			ensuite_bath: false,
 			utils_incl: false,
 			parking_avail: false,
+			search_radius: 1000,
 		}
 	}
 
@@ -48,7 +49,10 @@ class LeaseFilterCard extends Component {
 
 	applyFilters() {
 		this.props.saveLeaseFilterParams(this.state)
-		filterBuildings(this.state).then((buildings) => {
+		queryBuildingsInArea({
+			...this.props.current_gps_center,
+			filterParams: this.state,
+		}).then((buildings) => {
 			this.props.saveBuildingsToRedux(buildings)
 			this.props.closeFilterCard()
 		})
@@ -182,6 +186,7 @@ LeaseFilterCard.propTypes = {
 	closeFilterCard: PropTypes.func.isRequired,
 	saveLeaseFilterParams: PropTypes.func.isRequired,
 	lease_filter_params: PropTypes.object.isRequired,
+	current_gps_center: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -196,6 +201,7 @@ const RadiumHOC = Radium(LeaseFilterCard)
 const mapReduxToProps = (redux) => {
 	return {
 		lease_filter_params: redux.filter.lease_filter_params,
+		current_gps_center: redux.filter.current_gps_center,
 	}
 }
 

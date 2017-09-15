@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { filterFBPosts } from '../../api/fb/fb_api'
+import { querySubletsInArea } from '../../api/search/sublet_api'
 import { saveSubletsToRedux, saveSubletFilterParams, } from '../../actions/search/search_actions'
 import {
 	Checkbox,
@@ -48,10 +48,13 @@ class SubletFilterCard extends Component {
 
 	applyFilters() {
 		this.props.saveSubletFilterParams(this.state)
-		filterFBPosts(this.state).then((sublets) => {
-			this.props.saveSubletsToRedux(sublets)
+		querySubletsInArea({
+			...this.props.current_gps_center,
+			filterParams: this.state,
+		}).then((data) => {
+      this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
 			this.props.closeFilterCard()
-		})
+    })
 	}
 
 /*
@@ -182,6 +185,7 @@ SubletFilterCard.propTypes = {
 	closeFilterCard: PropTypes.func.isRequired,
 	saveSubletFilterParams: PropTypes.func.isRequired,
 	sublet_filter_params: PropTypes.object.isRequired,
+	current_gps_center: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -196,6 +200,7 @@ const RadiumHOC = Radium(SubletFilterCard)
 const mapReduxToProps = (redux) => {
 	return {
 		sublet_filter_params: redux.filter.sublet_filter_params,
+		current_gps_center: redux.filter.current_gps_center,
 	}
 }
 

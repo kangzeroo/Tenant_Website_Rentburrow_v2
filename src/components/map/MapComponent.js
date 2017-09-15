@@ -3,9 +3,13 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import Rx from 'rxjs'
-import { selectPinToRedux } from '../../actions/search/search_actions'
 import { pinAlreadyPlaced, checkWherePinExistsInArray } from '../../api/map/map_api'
+import { querySubletsInArea } from '../../api/search/sublet_api'
 import { selectPopupBuilding } from '../../actions/selection/selection_actions'
+import { setCurrentGPSCenter, saveBuildingsToRedux, saveSubletsToRedux, selectPinToRedux, } from '../../actions/search/search_actions'
+import {
+	queryBuildingsInArea,
+} from '../../api/search/search_api'
 
 class MapComponent extends Component {
 
@@ -64,7 +68,6 @@ class MapComponent extends Component {
 	}
 
 	componentDidUpdate() {
-		console.log(this.props.listOfResults)
 		this.refreshPins(this.props.listOfResults)
 	}
 
@@ -80,31 +83,60 @@ class MapComponent extends Component {
     }, () => {
 		    self.refreshPins(self.props.listOfResults)
     })
-		// console.log(self.state)
+		// Observable on google maps 'center_changed' event, with debounceTime() to limit server calls
 		self.state.mapEvents.debounceTime(500).subscribe(
-			(x) => {
+			// pass in the currentMapTarget, which is `mapTarget` defined above
+			(currentMapTarget) => {
 				// do something when event happens
+				console.log('Doing somehting!')
+				// save to redux the new center gps position
+				const center = currentMapTarget.getCenter()
+				const currentCenterCoords = {
+					lat: parseFloat(center.lat().toFixed(7)),
+					lng: parseFloat(center.lng().toFixed(7)),
+				}
+				this.props.setCurrentGPSCenter(currentCenterCoords)
+				// // We want to compare the current center coords with the prev center coords and only requery the db if the distance between the two points is greater than a certain amount
+				// const prevCenterCoords = self.props.mapMoved
+				// if(self.panToPrev == self.props.panTo && getDistanceFromLatLonInKm(prevCenterCoords, currentCenterCoords) >= 0.5){
+					this.requeryDatabaseWithNewCoords(currentCenterCoords)
+				// })
 			},
 			(err) => {
-				// console.log('Stream error occurred:')
+				console.log('Stream error occurred:')
 				console.log(err)
 			},
 			() => {
-				// console.log('Stream finished')
+				console.log('Stream finished')
 			}
 		)
+		// listen to the google map event 'center_changed' and pass it along to the Observable `self.state.mapEvents`
 		google.maps.event.addListener(mapTarget, 'center_changed', (event) => {
-			const center = mapTarget.getCenter()
-			const currentCenterCoords = [parseFloat(center.lng().toFixed(7)), parseFloat(center.lat().toFixed(7))]
+			self.state.mapEvents.next(mapTarget)
 		})
+	}
+
+	requeryDatabaseWithNewCoords(currentCenterCoords) {
+		if (this.props.rent_type === 'sublet') {
+			querySubletsInArea({
+				...currentCenterCoords,
+				filterParams: this.props.sublet_filter_params,
+			}).then((data) => {
+        this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
+      })
+		} else {
+			queryBuildingsInArea({
+				...currentCenterCoords,
+				filterParams: this.props.lease_filter_params,
+			}).then((buildings) => {
+				this.props.saveBuildingsToRedux(buildings)
+			})
+		}
 	}
 
 	getCoordsOfCurrentPin(buildings, selected_pin) {
 		// default coords
-		let coords = {
-      lat: 43.473897,
-      lng: -80.531995
-    }
+		let coords = { ...this.props.current_gps_center }
 		// default replaced by coords of current pin
 		for (let m = 0; m < buildings.length; m++) {
 			// check if the pin is the one highlighted and set the color to blue and bouncing animation
@@ -239,8 +271,15 @@ MapComponent.propTypes = {
 	selected_pin: PropTypes.string,				// passed in
   selectPinToRedux: PropTypes.func.isRequired,
 	selectPopupBuilding: PropTypes.func.isRequired,
+	setCurrentGPSCenter: PropTypes.func.isRequired,
 	CSS_mapWidth: PropTypes.string,			// passed in
 	CSS_mapHeight: PropTypes.string,		// passed in
+	current_gps_center: PropTypes.object.isRequired,
+  lease_filter_params: PropTypes.object.isRequired,
+  sublet_filter_params: PropTypes.object.isRequired,
+	rent_type: PropTypes.string.isRequired,
+	saveBuildingsToRedux: PropTypes.func.isRequired,
+	saveSubletsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -248,18 +287,26 @@ MapComponent.defaultProps = {
   listOfResults: [],
 	CSS_mapWidth: '50vw',
 	CSS_mapHeight: '100%',
+  search_radius: 1000,
 }
 
 const RadiumHOC = Radium(MapComponent)
 
 const mapReduxToProps = (redux) => {
 	return {
+		current_gps_center: redux.filter.current_gps_center,
+    lease_filter_params: redux.filter.lease_filter_params,
+    sublet_filter_params: redux.filter.sublet_filter_params,
+		rent_type: redux.filter.rent_type,
 	}
 }
 
 export default connect(mapReduxToProps, {
 	selectPinToRedux,
 	selectPopupBuilding,
+	setCurrentGPSCenter,
+	saveBuildingsToRedux,
+	saveSubletsToRedux,
 })(RadiumHOC)
 
 

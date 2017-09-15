@@ -26,7 +26,7 @@ import {
 } from '../i18n/phrases/Header_i18n'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import SearchInput from './filter/SearchInput'
-import { getBuildingsInArea } from '../api/building/building_api'
+import { queryBuildingsInArea } from '../api/building/building_api'
 import { saveBuildingsToRedux } from '../actions/search/search_actions'
 
 class Header extends Component {
@@ -67,9 +67,9 @@ class Header extends Component {
 
   refreshEverything() {
     if (this.props.location.pathname === '/') {
-      getBuildingsInArea({
-  			lat: 23,
-  			long: 54,
+      queryBuildingsInArea({
+        ...this.props.current_gps_center,
+  			filterParams: this.props.lease_filter_params,
   		}).then((buildings) => {
   			this.props.saveBuildingsToRedux(buildings)
   		})
@@ -128,6 +128,9 @@ Header.propTypes = {
   tenant_profile: PropTypes.object,
   changeAppLanguage: PropTypes.func.isRequired,
   saveBuildingsToRedux: PropTypes.func.isRequired,
+  current_gps_center: PropTypes.object.isRequired,
+  lease_filter_params: PropTypes.object.isRequired,
+  sublet_filter_params: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -135,6 +138,7 @@ Header.defaultProps = {
   authenticated: false,
   tenant_profile: {},
   location: {},
+  search_radius: 1000,
 }
 
 const RadiumHOC = Radium(Header)
@@ -143,6 +147,9 @@ const mapReduxToProps = (redux) => {
   return {
     tenant_profile: redux.auth.tenant_profile,
     authenticated: redux.auth.authenticated,
+		current_gps_center: redux.filter.current_gps_center,
+    lease_filter_params: redux.filter.lease_filter_params,
+    sublet_filter_params: redux.filter.sublet_filter_params,
   }
 }
 
