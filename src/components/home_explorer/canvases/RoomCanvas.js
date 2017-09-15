@@ -27,6 +27,16 @@ class RoomCanvas extends Component {
 	}
 
 	componentWillMount() {
+    this.refreshRoom()
+	}
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.bottomContextValue.room_id !== this.props.bottomContextValue.room_id) {
+      this.refreshRoom()
+    }
+  }
+
+  refreshRoom() {
 		getRoomPage({
 			building_id: this.props.bottomContextValue.building_id,
 			suite_id: this.props.bottomContextValue.suite_id,
@@ -47,7 +57,7 @@ class RoomCanvas extends Component {
         amenities: data.map(s => JSON.parse(s))
       })
     })
-	}
+  }
 
 	createMarkup(string) {
 		return {
