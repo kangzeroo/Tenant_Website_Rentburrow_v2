@@ -1,4 +1,5 @@
 
+// for the simple baths info shown on <AvailableSuites>
 // simply tell me how many baths there are
 export const calculateSimpleSuiteBaths = (suite, all_suite_amenities) => {
   let bath_count = 0
@@ -20,6 +21,7 @@ export const calculateSimpleSuiteBaths = (suite, all_suite_amenities) => {
   return bath_count
 }
 
+// for the baths info shown on <SuiteCommonAreaCanvas>
 // give me a breakdown of what kind of baths there are, and how many of each
 export const calculateComplexSuiteBaths = (suite, suite_amenities) => {
   let baths_summary = {
@@ -41,6 +43,7 @@ export const calculateComplexSuiteBaths = (suite, suite_amenities) => {
   return baths_summary
 }
 
+// for the rooms info shown on <SuiteCommonAreaCanvas>
 // give me a breakdown of the rooms and any potential ensuite bathrooms
 export const calculateRoomsSummary = (result_of_api_calls) => {
   /*
@@ -84,4 +87,57 @@ export const calculateRoomsSummary = (result_of_api_calls) => {
     // })
   })
   return rooms_summary
+}
+
+// for the Common Areas shown on <SuiteCommonAreaCanvas>
+export const calculateSuiteCommonAreasSummary = (suite_amenities) => {
+  let suite_common_areas_summary = {
+    kitchen: 0,
+    living_room: 0,
+    study_den: 0,
+    patio: 0,
+    balcony: 0,
+    ensuite_laundry: false,
+    spare_rooms: 0,
+    common_storage_closets: 0,
+  }
+
+  suite_amenities.forEach((am) => {
+    // tracks all the standard common areas
+    if (am.amenity_type === 'full_kitchen') {
+      suite_common_areas_summary.kitchen += 1
+    }
+    if (am.amenity_type === 'partial_kitchen') {
+      suite_common_areas_summary.kitchen += 0.5
+    }
+    if (am.amenity_type === 'living_room') {
+      suite_common_areas_summary.living_room += 1
+    }
+    if (am.amenity_type === 'study_den') {
+      suite_common_areas_summary.study_den += 1
+    }
+    if (am.amenity_type === 'patio') {
+      suite_common_areas_summary.patio += 1
+    }
+    if (am.amenity_type === 'laundry') {
+      suite_common_areas_summary.ensuite_laundry = true
+    }
+    if (am.amenity_type === 'spare_room_1' || am.amenity_type === 'spare_room_2' || am.amenity_type === 'spare_room_3' || am.amenity_type === 'spare_room_4' || am.amenity_type === 'spare_room_5') {
+      suite_common_areas_summary.spare_rooms += 1
+    }
+    if (am.amenity_type === 'common_storage_closet_1' || am.amenity_type === 'common_storage_closet_2' || am.amenity_type === 'common_storage_closet_3' || am.amenity_type === 'common_storage_closet_4' || am.amenity_type === 'common_storage_closet_5') {
+      suite_common_areas_summary.common_storage_closets += 1
+    }
+  })
+  return suite_common_areas_summary
+}
+
+// for the quick utilities shown on <BuildingPage>
+export const calculateGeneralBuildingQuickAmenities = () => {
+  return null
+}
+
+// for the free utilities shown on <SuiteCommonAreaCanvas>
+export const calculateFreeUtilitiesForSuite = () => {
+  return null
 }
