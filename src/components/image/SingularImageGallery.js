@@ -101,7 +101,7 @@ class SingularImageGallery extends Component {
             this.state.all_images.length > 1
             ?
             <div onClick={(e) => this.cycleImage(e, -1)} style={comStyles().left}>
-              <Icon name='chevron left' size='big' inverted />
+              <Icon name='angle left' size='huge' inverted />
             </div>
             :
             null
@@ -111,7 +111,7 @@ class SingularImageGallery extends Component {
             this.state.all_images.length > 1
             ?
             <div onClick={(e) => this.cycleImage(e, 1)} style={comStyles().right}>
-              <Icon name='chevron right' size='big' inverted />
+              <Icon name='angle right' size='huge' inverted />
             </div>
             :
             null
@@ -187,7 +187,7 @@ const comStyles = () => {
       alignItems: 'center',
       position: 'absolute',
       backgroundColor: 'rgba(0,0,0,0)',
-      cursor: 'pointer',
+      cursor: 'pointer'
     }
 	}
 }

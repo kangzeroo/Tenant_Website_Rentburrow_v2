@@ -157,11 +157,8 @@ class BuildingPage extends Component {
 					open={this.state.toggle_modal}
 					onClose={() => this.toggleModal(false)}
 					closeIcon
-					size='fullscreen'
+					size='large'
 				>
-					<Header>
-						Images for {this.state.building.building_address}
-					</Header>
 	        <Modal.Content>
 						<ImageGallery
 							list_of_images={this.state.images}
@@ -196,7 +193,6 @@ class BuildingPage extends Component {
 					</div>
 				</div>
 				<div style={comStyles().content_top} >
-
 					<div style={comStyles().content_left} >
 						<div style={comStyles().building_header} >
 							<div style={comStyles().description} >
