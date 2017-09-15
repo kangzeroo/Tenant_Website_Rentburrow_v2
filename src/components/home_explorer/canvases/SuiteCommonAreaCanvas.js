@@ -19,15 +19,25 @@ import {
 } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import ImageGallery from '../../image/ImageGallery'
-import { calculateComplexSuiteBaths, calculateRoomsSummary } from '../../../api/amenities/amenity_calculations'
+import { calculateComplexSuiteBaths, calculateRoomsSummary, calculateSuiteCommonAreasSummary, } from '../../../api/amenities/amenity_calculations'
 
 
-class CommonAreaCanvas extends Component {
+class SuiteCommonAreaCanvas extends Component {
 
   constructor() {
     super()
     this.state = {
       suite_amenities: [],
+      common_areas_summary: {
+        kitchen: 0,
+        living_room: 0,
+        study_den: 0,
+        patio: 0,
+        balcony: 0,
+        ensuite_laundry: false,
+        spare_rooms: 0,
+        common_storage_closets: 0,
+      },
       baths_summary: {
         full_baths: 0,
         half_baths: 0,
@@ -40,7 +50,7 @@ class CommonAreaCanvas extends Component {
         standard_price: 0,
         min_price: 0,
         max_price: 0,
-      }
+      },
     }
   }
 
@@ -55,21 +65,23 @@ class CommonAreaCanvas extends Component {
   }
 
   summarizeSuite() {
-
+    // summarize the amenities for this suite, such as the bathrooms and common areas
     getAmenitiesForSuite({
       building_id: this.props.building.building_id,
       suite_id: this.props.suite.suite_id,
     }).then((data) => {
+      const suite_amenities = data.map((am) => {
+        return JSON.parse(am)
+      })
       this.setState({
-        suite_amenities: data.map((am) => {
-          return JSON.parse(am)
-        }),
+        suite_amenities: suite_amenities,
+        common_areas_summary: calculateSuiteCommonAreasSummary(suite_amenities),
         baths_summary: calculateComplexSuiteBaths(this.props.suite, data.map((am) => {
           return JSON.parse(am)
         }))
       })
     })
-
+    // summarize the rooms and their amenities, details such as price and room amenities
     getRoomsForSuite({
       building_id: this.props.building.building_id,
       suite_id: this.props.suite.suite_id,
@@ -154,9 +166,6 @@ class CommonAreaCanvas extends Component {
     return (
       <div style={comStyles().rooms_summary}>
         {
-          console.log(this.state.rooms_summary)
-        }
-        {
           this.state.rooms_summary.total_rooms
           ?
           <h1>Bedrooms:</h1>
@@ -184,26 +193,79 @@ class CommonAreaCanvas extends Component {
     )
   }
 
+  generateSuiteCommonAreasSummary() {
+    return (
+      <div style={comStyles().common_areas_summary}>
+        {
+          console.log(this.state.common_areas_summary)
+        }
+        {
+          this.state.common_areas_summary.kitchen
+          ?
+          <h2>{ `${this.state.common_areas_summary.kitchen} Kitchen${this.state.common_areas_summary.kitchen > 0 ? 's' : ''}` }</h2>
+          :
+          null
+        }
+        {
+          this.state.common_areas_summary.living_room
+          ?
+          <h2>{ `${this.state.common_areas_summary.living_room} Living Room${this.state.common_areas_summary.living_room > 0 ? 's' : ''}` }</h2>
+          :
+          null
+        }
+        {
+          this.state.common_areas_summary.study_den
+          ?
+          <h2>{ `${this.state.common_areas_summary.study_den} Study Den${this.state.common_areas_summary.study_den > 0 ? 's' : ''}` }</h2>
+          :
+          null
+        }
+        {
+          this.state.common_areas_summary.patio
+          ?
+          <h2>{ `${this.state.common_areas_summary.patio} Patio${this.state.common_areas_summary.patio > 0 ? 's' : ''}` }</h2>
+          :
+          null
+        }
+        {
+          this.state.common_areas_summary.balcony
+          ?
+          <h2>{ `${this.state.common_areas_summary.balcony} Balcon${this.state.common_areas_summary.balcony > 0 ? 'ies' : 'y'}` }</h2>
+          :
+          null
+        }
+        {
+          this.state.common_areas_summary.spare_rooms
+          ?
+          <h2>{ `${this.state.common_areas_summary.spare_rooms} Spare Room${this.state.common_areas_summary.spare_rooms > 0 ? 's' : ''}` }</h2>
+          :
+          null
+        }
+        {
+          this.state.common_areas_summary.common_storage_closets
+          ?
+          <h2>{ `${this.state.common_areas_summary.common_storage_closets} Storage Closet${this.state.common_areas_summary.common_storage_closets > 0 ? 's' : ''}` }</h2>
+          :
+          null
+        }
+      </div>
+    )
+  }
+
 	render() {
 		return (
 			<div style={comStyles().container}>
         <div id='containImage' style={comStyles().containImage}>
   				<SingularImageGallery
   					list_of_images={
-  						(this.props.suite ? [] : [this.props.building.thumbnail]).concat(this.props.images.map((img) => {
+  						this.props.images.map((img) => {
                 return img.image_url
-              })).concat([this.props.building.cover_photo])
+              })
   					}
   					image_size='hd'
   				/>
           <div style={comStyles().infoBanner}>
-            {
-              this.props.suite
-              ?
-  				    <h1>{ `${this.props.suite.suite_alias} Unit` || `Unit ${this.props.suite.suite_code}` }</h1>
-              :
-  				    <h1>{ this.props.building.building_alias }</h1>
-            }
+				    <h1>{ `${this.props.suite.suite_alias} Unit` || `Unit ${this.props.suite.suite_code}` }</h1>
           </div>
           <div style={comStyles().scrollDown}>
             <Icon name='double angle down' size='huge' />
@@ -212,15 +274,8 @@ class CommonAreaCanvas extends Component {
         </div>
         <div style={comStyles().summarization}>
           <div style={comStyles().desc_upper}>
-            {
-              this.props.suite
-              ?
-              null
-              :
-      				<h3>{ this.props.building.building_address }</h3>
-            }
     				<div
-    					dangerouslySetInnerHTML={this.createMarkup(this.props.suite ? this.props.suite.suite_desc : this.props.building.building_desc)}
+    					dangerouslySetInnerHTML={this.createMarkup(this.props.suite.suite_desc)}
     					style={comStyles().textMarkup}
     				/>
           </div>
@@ -231,6 +286,9 @@ class CommonAreaCanvas extends Component {
             {
               this.generateBathsSummary()
             }
+            {
+              this.generateSuiteCommonAreasSummary()
+            }
           </div>
         </div>
 			</div>
@@ -239,20 +297,19 @@ class CommonAreaCanvas extends Component {
 }
 
 // defines the types of variables in this.props
-CommonAreaCanvas.propTypes = {
+SuiteCommonAreaCanvas.propTypes = {
 	history: PropTypes.object.isRequired,
 	images: PropTypes.array.isRequired,	// passed in
 	building: PropTypes.object.isRequired,						// passed in
-  suite: PropTypes.object,             // passed in, determines if <CommonAreaCanvas> refers to the building or a suites common areas. Will affect order of images displayed and desc displayed
+  suite: PropTypes.object.isRequired,             // passed in
 }
 
 // for all optional props, define a default value
-CommonAreaCanvas.defaultProps = {
-  suite: null,
+SuiteCommonAreaCanvas.defaultProps = {
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(CommonAreaCanvas)
+const RadiumHOC = Radium(SuiteCommonAreaCanvas)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -331,5 +388,11 @@ const comStyles = () => {
       height: '100%',
       border: '1px solid black',
     },
+    common_areas_summary: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      border: '1px solid black',
+    }
 	}
 }

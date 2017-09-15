@@ -12,7 +12,8 @@ import {
 	Loader,
 } from 'semantic-ui-react'
 import AmenityProofs from '../canvases/AmenityProofs'
-import CommonAreaCanvas from '../canvases/CommonAreaCanvas'
+import BuildingCommonAreaCanvas from '../canvases/BuildingCommonAreaCanvas'
+import SuiteCommonAreaCanvas from '../canvases/SuiteCommonAreaCanvas'
 import VirtualTourCanvas from '../canvases/VirtualTourCanvas'
 import RoomCanvas from '../canvases/RoomCanvas'
 
@@ -22,10 +23,9 @@ class HomeExplorerCanvas extends Component {
 	renderAppropriateCanvas() {
 		if (this.props.topContextText === 'Building' && this.props.topContextValue) {
 			if (this.props.bottomContextText === 'Common Area' && this.props.bottomContextValue) {
-				console.log(JSON.parse(this.props.bottomContextValue))
 				if (JSON.parse(this.props.bottomContextValue).length && JSON.parse(this.props.bottomContextValue).length > 0) {
 	 				return (
-	 					<CommonAreaCanvas
+	 					<BuildingCommonAreaCanvas
 	 						building={this.props.building}
 	 						images={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue) : null }
 	 					/>
@@ -57,14 +57,15 @@ class HomeExplorerCanvas extends Component {
 			}
 		} else if (this.props.topContextValue) {
 			if (this.props.bottomContextText === 'Common Area' && this.props.bottomContextValue) {
+				const btmContext = JSON.parse(this.props.bottomContextValue)
 				return (
-					<CommonAreaCanvas
+					<SuiteCommonAreaCanvas
 						building={this.props.building}
-						images={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue).imgs.map((i) => {
+						images={btmContext && btmContext.imgs && btmContext.imgs.length > 0 ? JSON.parse(this.props.bottomContextValue).imgs.map((i) => {
 							return {
 								image_url: i
 							}
-						}) : null}
+						}) : []}
 						suite={this.props.bottomContextValue ? JSON.parse(this.props.bottomContextValue) : null}
 					/>
 				)
