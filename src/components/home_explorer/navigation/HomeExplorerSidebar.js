@@ -18,6 +18,9 @@ import {
   getSuiteInfo,
   getImagesForSpecificBuilding,
 } from '../../../api/building/building_api'
+import {
+  shortenAddress,
+} from '../../../api/general/general_api'
 
 
 class HomeExplorerSidebar extends Component {
@@ -196,7 +199,9 @@ class HomeExplorerSidebar extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<h2>{ this.props.building.building_address }</h2>
+        <div style={comStyles().title} >
+				    <h2>{ this.props.building.building_alias }</h2>
+        </div>
         <Dropdown
           text={ this.props.topContextText }
           value={ this.props.topContextValue }
@@ -259,13 +264,19 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '15%',
-      minWidth: '220px',
+      width: '100px',
+      minWidth: '200px',
       height: '80vh',
       maxHeight: '80vh',
       overflowY: 'scroll',
       backgroundColor: 'rgba(153,204,255,0.2)',
-		}
+		},
+    title: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '40px',
+    }
 	}
 }
 
@@ -274,7 +285,7 @@ const bottomContextStyles = (bottomContextText, thisItemText) => {
     backgroundColor: 'white'
   }
   if (thisItemText === bottomContextText) {
-    styles.backgroundColor = 'red'
+    styles.backgroundColor = 'rgba(153,204,255,0.8)'
   }
   return {
     item: {
