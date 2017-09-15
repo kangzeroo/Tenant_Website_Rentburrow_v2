@@ -26,12 +26,10 @@ import {
 class SubletCard extends Component {
 
   selectThisPost() {
-    console.log(`${window.location.href}sublets/${this.props.fb_post.post_id}`)
-    window.open(`${window.location.href}sublets/${this.props.fb_post.post_id}`, '_blank')
+    window.open(`${window.location.origin}/sublet/${this.props.fb_post.post_id}`, '_blank')
   }
 
   goToOriginalPost() {
-    console.log('go to original')
     window.open(`${this.props.fb_post.post_url}`)
   }
 

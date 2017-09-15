@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import uuid from 'uuid'
-import { withRouter } from 'react-router-dom'
+import { Route, withRouter } from 'react-router-dom'
 import {
 	Image,
 	Modal,
@@ -86,6 +86,7 @@ class SubletPage extends Component {
 // defines the types of variables in this.props
 SubletPage.propTypes = {
 	history: PropTypes.object.isRequired,
+	location: PropTypes.object,
 	// building: PropTypes.object.isRequired,
 	selectBuilding: PropTypes.func.isRequired,
 	selectCorporation: PropTypes.func.isRequired,
@@ -95,6 +96,7 @@ SubletPage.propTypes = {
 
 // for all optional props, define a default value
 SubletPage.defaultProps = {
+	location: {},
 }
 
 // Wrap the prop in Radium to allow JS styling

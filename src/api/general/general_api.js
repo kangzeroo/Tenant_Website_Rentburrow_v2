@@ -76,7 +76,7 @@ export const setLanguageFromLocale = (country_code) => {
 const checkIfPartOfRoutes = (urlPath) => {
 	let exists = false
 	PossibleRoutes.forEach((route) => {
-		if (route === urlPath) {
+		if (urlPath.indexOf(route) > -1) {
 			exists = true
 		}
 	})

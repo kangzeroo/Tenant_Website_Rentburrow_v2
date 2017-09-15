@@ -25,7 +25,7 @@ import { selectPinToRedux } from '../../../actions/search/search_actions'
 class BuildingRow extends Component {
 
   selectThisBuilding(building) {
-    window.open(`${window.location.href}${building.building_id}`, '_blank')
+    window.open(`${window.location.origin}/${building.building_id}`, '_blank')
     // this.props.history.push(`/building/${building.building_id}`)
     // this.props.selectBuilding(building)
   }
