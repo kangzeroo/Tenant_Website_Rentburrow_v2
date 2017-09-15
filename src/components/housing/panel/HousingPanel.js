@@ -16,9 +16,6 @@ import {
 import {
 	changeCardStyle,
 } from '../../../actions/search/search_actions'
-import {
-	getFBPosts,
-} from '../../../api/fb/fb_api'
 import BuildingCard from '../cards/BuildingCard'
 import BuildingRow from '../cards/BuildingRow'
 import SubletCard from '../cards/SubletCard'
@@ -29,18 +26,8 @@ class HousingPanel extends Component {
 	constructor() {
 		super()
 		this.state = {
-			renttype: 'lease',
 			fb_posts: [],
 		}
-	}
-
-	componentWillMount() {
-		getFBPosts()
-		.then((data) => {
-			this.setState({
-				fb_posts: data.map(s => JSON.parse(s))
-			})
-		})
 	}
 
 	generateCard(building) {
@@ -69,12 +56,6 @@ class HousingPanel extends Component {
 		}
 	}
 
-	changeRentType(type) {
-		this.setState({
-			rentaltype: type
-		})
-	}
-
 	renderSubletCard(fb_post) {
 		return (
 			<SubletCard
@@ -94,16 +75,13 @@ class HousingPanel extends Component {
 							)
 						})
 					*/}
-					<FilterBar
-						changeRentType={type => this.changeRentType(type)}
-					/>
+					<FilterBar />
 					{
-						this.state.rentaltype === 'sublet'
+						this.props.rent_type === 'sublet'
 						?
-
 						<div style={comStyles().scroll}>
 							{
-								this.state.fb_posts.map((fb_post) => {
+								this.props.sublet_search_results.map((fb_post) => {
 									return this.renderSubletCard(fb_post)
 								})
 							}
@@ -111,9 +89,9 @@ class HousingPanel extends Component {
 						:
 						<div style={comStyles().scroll}>
 							{
-								this.props.buildings.length > 0
+								this.props.building_search_results.length > 0
 								?
-								this.props.buildings.map((building) => {
+								this.props.building_search_results.map((building) => {
 									return this.generateCard(building)
 								})
 								:
@@ -136,15 +114,17 @@ class HousingPanel extends Component {
 // defines the types of variables in this.props
 HousingPanel.propTypes = {
 	history: PropTypes.object.isRequired,
-	buildings: PropTypes.array,
+	building_search_results: PropTypes.array,
+	sublet_search_results: PropTypes.array,
 	changeCardStyle: PropTypes.func.isRequired,
 	card_style: PropTypes.string.isRequired,
+	rent_type: PropTypes.string.isRequired,
 	refresh: PropTypes.func.isRequired, 					// passed in
 }
 
 // for all optional props, define a default value
 HousingPanel.defaultProps = {
-	buildings: []
+	building_search_results: []
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -153,8 +133,10 @@ const RadiumHOC = Radium(HousingPanel)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-		buildings: redux.search.search_results,
+		building_search_results: redux.search.building_search_results,
+		sublet_search_results: redux.search.sublet_search_results,
 		card_style: redux.search.card_style,
+		rent_type: redux.filter.rent_type,
 	}
 }
 

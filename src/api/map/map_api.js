@@ -11,7 +11,6 @@ export const pinAlreadyPlaced = (pin, newPins) => {
 	return exists
 }
 
-
 // check if lease exists via gps coords
 export const checkWherePinExistsInArray = (pin, existingPins) => {
 	let where = -1
@@ -21,17 +20,4 @@ export const checkWherePinExistsInArray = (pin, existingPins) => {
 		}
 	})
 	return where
-}
-
-
-export const generateEventCard = (event) => {
-  return `
-    <div>${event.title}</div>
-  `
-}
-
-export const generatePromoCard = (promo) => {
-  return `
-    <div>${promo.title}</div>
-  `
 }

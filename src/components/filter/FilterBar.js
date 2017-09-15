@@ -23,8 +23,14 @@ import {
 } from '../../api/filter/filter_api'
 import {
   saveBuildingsToRedux,
- } from '../../actions/search/search_actions'
-import FilterCard from './FilterCard'
+  saveSubletsToRedux,
+  changeRentType,
+} from '../../actions/search/search_actions'
+import {
+	getFBPosts,
+} from '../../api/fb/fb_api'
+import LeaseFilterCard from './LeaseFilterCard'
+import SubletFilterCard from './SubletFilterCard'
 
 
 class FilterBar extends Component {
@@ -87,12 +93,30 @@ class FilterBar extends Component {
 
   handleRentalLengthChange(e, value) {
     if (value.value === 'fourmonth') {
-      this.props.changeRentType('sublet')
+      getFBPosts().then((data) => {
+        this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
+        this.props.changeRentType('sublet')
+  		})
     } else {
       this.props.changeRentType('lease')
     }
   }
 
+  renderFilterCard(rent_type) {
+    if (rent_type === 'sublet') {
+      return (
+        <SubletFilterCard
+          closeFilterCard={() => this.closePanel()}
+        />
+      )
+    } else {
+      return (
+        <LeaseFilterCard
+          closeFilterCard={() => this.closePanel()}
+        />
+      )
+    }
+  }
 
 	render() {
 		return (
@@ -100,9 +124,7 @@ class FilterBar extends Component {
         {
           this.state.show_search_panel
           ?
-          <FilterCard
-            closeFilterCard={() => this.closePanel()}
-          />
+          this.renderFilterCard(this.props.rent_type)
           :
           <div style={comStyles().searchbar}>
             <div>
@@ -148,7 +170,9 @@ class FilterBar extends Component {
 FilterBar.propTypes = {
   search_results: PropTypes.array.isRequired,
   saveBuildingsToRedux: PropTypes.func.isRequired,
-  changeRentType: PropTypes.func.isRequired,        // passed in
+  saveSubletsToRedux: PropTypes.func.isRequired,
+  changeRentType: PropTypes.func.isRequired,
+  rent_type: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -162,7 +186,8 @@ const RadiumHOC = Radium(FilterBar)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-		search_results: redux.search.search_results,
+		search_results: redux.search.building_search_results,
+    rent_type: redux.filter.rent_type,
 	}
 }
 
@@ -170,6 +195,8 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
     saveBuildingsToRedux,
+    saveSubletsToRedux,
+    changeRentType,
 	})(RadiumHOC)
 )
 
