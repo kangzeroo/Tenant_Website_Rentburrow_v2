@@ -21,10 +21,12 @@ import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api
 import { URLToAlias, renderProcessedImage, shortenAddress, } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
-import { getAmenitiesForSpecificBuilding,
-				 getImagesForSpecificBuilding,
-				 getAvailableSuites,
-			 } from '../../api/building/building_api'
+import {
+	getAmenitiesForSpecificBuilding,
+	getImagesForSpecificBuilding,
+	getAvailableSuites,
+	getAmenitiesForSuite,
+} from '../../api/building/building_api'
 import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
 import {
@@ -35,7 +37,7 @@ import {
 import AmenityBrowser from '../amenities/AmenityBrowser'
 import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import AvailableSuites from '../home_explorer/AvailableSuites'
-import MainAmenitiesBar from '../amenities/MainAmenitiesBar'
+import BuildingQuickAmenitiesBar from '../amenities/BuildingQuickAmenitiesBar'
 import StepByStepCard from '../instructions/StepByStepCard'
 import AllLandlords from '../landlord/AllLandlords'
 
@@ -45,10 +47,11 @@ class BuildingPage extends Component {
 		super()
 		this.state = {
 			building: {},
-			suites: [],
-
 			images: [],
 			amenities: [],
+
+			suites: [],
+			promise_array_of_suite_amenities_with_id: [],
 
 			toggle_modal: false,
       modal_name: '',
@@ -94,8 +97,20 @@ class BuildingPage extends Component {
 	    })
 		})
 		.then((data) => {
+			const suites = data.map((s) => JSON.parse(s))
 			this.setState({
-				suites: data.map((s) => JSON.parse(s))
+				suites: suites,
+				promise_array_of_suite_amenities_with_id: suites.map((suite) => {
+					return getAmenitiesForSuite({
+						building_id: this.state.building.building_id,
+						suite_id: suite.suite_id,
+					}).then((data) => {
+						return Promise.resolve({
+							suite_id: suite.suite_id,
+							amenities: data,
+						})
+					})
+				})
 			})
 		})
 	}
@@ -192,10 +207,17 @@ class BuildingPage extends Component {
 							</div>
 						</div>
 						<div style={comStyles().amenities} >
-							<MainAmenitiesBar
-								amenities={this.state.amenities}
-								building={this.state.building}
-							/>
+							{
+								this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.suites && this.state.suites.length > 0
+								?
+								<BuildingQuickAmenitiesBar
+									building={this.state.building}
+									building_amenities={this.state.amenities}
+									promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
+								/>
+								:
+								null
+							}
 						</div>
 						<div style={comStyles().suites_table}>
 							{
@@ -204,6 +226,7 @@ class BuildingPage extends Component {
 								<AvailableSuites
 									building={this.state.building}
 									suites={this.state.suites}
+									promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
 								/>
 								:
 								null

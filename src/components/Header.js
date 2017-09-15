@@ -106,7 +106,6 @@ class Header extends Component {
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
                 content='Login'
-                color='white'
               />
             </div>
           }

@@ -64,27 +64,25 @@ export const calculateRoomsSummary = (result_of_api_calls) => {
   result_of_api_calls.forEach((resulting_room) => {
     rooms_summary.total_rooms += 1
     // iterate through all the resulting_rooms to get necessary data about rooms
-    // resulting_room.getRoomPage_results.forEach((room) => {
-      const room = resulting_room.getRoomPage_results
-      // set the min price
-      if (parseInt(room.price) < rooms_summary.min_price) {
-        rooms_summary.min_price = parseInt(room.price)
+    const room = resulting_room.getRoomPage_results
+    // set the min price
+    if (parseInt(room.price) < rooms_summary.min_price) {
+      rooms_summary.min_price = parseInt(room.price)
+    }
+    // set the max price
+    if (parseInt(room.price) > rooms_summary.max_price) {
+      rooms_summary.max_price = parseInt(room.price)
+    }
+    // tracks if the rooms are all the same price
+    if (parseInt(room.price) !== rooms_summary.standard_price) {
+      rooms_summary.standard_price = 0
+    }
+    // iterate through all the resulting_rooms to get necessary data about ensuite baths
+    resulting_room.getRoomAmenities_results.forEach((am) => {
+      if (am.amenity_type === 'bathroom_1' || am.amenity_type === 'bathroom_2' || am.amenity_type === 'half_bathroom_1' || am.amenity_type === 'shared_bathroom_1') {
+        rooms_summary.total_ensuite_baths += 1
       }
-      // set the max price
-      if (parseInt(room.price) > rooms_summary.max_price) {
-        rooms_summary.max_price = parseInt(room.price)
-      }
-      // tracks if the rooms are all the same price
-      if (parseInt(room.price) !== rooms_summary.standard_price) {
-        rooms_summary.standard_price = 0
-      }
-      // iterate through all the resulting_rooms to get necessary data about ensuite baths
-      resulting_room.getRoomAmenities_results.forEach((am) => {
-        if (am.amenity_type === 'bathroom_1' || am.amenity_type === 'bathroom_2' || am.amenity_type === 'half_bathroom_1' || am.amenity_type === 'shared_bathroom_1') {
-          rooms_summary.total_ensuite_baths += 1
-        }
-      })
-    // })
+    })
   })
   return rooms_summary
 }
@@ -133,11 +131,66 @@ export const calculateSuiteCommonAreasSummary = (suite_amenities) => {
 }
 
 // for the quick utilities shown on <BuildingPage>
-export const calculateGeneralBuildingQuickAmenities = () => {
-  return null
+export const calculateBuildingQuickAmenities = (buildingAmenities, allSuiteAmenities) => {
+  let quick_amenities = {
+    elec_incl: false,
+    water_incl: false,
+    heat_incl: false,
+    internet_incl: false,
+    free_parking: false,
+    paid_parking: false,
+  }
+  // calculate based on building amenities, which determine parking
+  buildingAmenities.forEach((am) => {
+    if (am.amenity_type === 'sheltered_parking' || am.amenity_type === 'indoor_parking' || am.amenity_type === 'assigned_parking') {
+      quick_amenities.paid_parking = true
+    }
+    if (am.amenity_type === 'free_parking') {
+      quick_amenities.paid_parking = false
+      quick_amenities.free_parking = true
+    }
+  })
+  // calculate based on suite amenities, which determine utilities
+  allSuiteAmenities.forEach((suiteAmenities) => {
+    suiteAmenities.amenities.forEach((am) => {
+      if (am.amenity_type === 'free_electricity') {
+        quick_amenities.elec_incl = true
+      }
+      if (am.amenity_type === 'free_water') {
+        quick_amenities.water_incl = true
+      }
+      if (am.amenity_type === 'free_heating') {
+        quick_amenities.heat_incl = true
+      }
+      if (am.amenity_type === 'free_internet') {
+        quick_amenities.internet_incl = true
+      }
+    })
+  })
+  return quick_amenities
 }
 
 // for the free utilities shown on <SuiteCommonAreaCanvas>
-export const calculateFreeUtilitiesForSuite = () => {
-  return null
+export const calculateFreeUtilitiesForSuite = (suite_amenities) => {
+  const free_utilities_summary = {
+    water: false,
+    electric: false,
+    heating: false,
+    internet: false,
+  }
+  suite_amenities.forEach((am) => {
+    if (am.amenity_type === 'free_water') {
+      free_utilities_summary.water = true
+    }
+    if (am.amenity_type === 'free_electricity') {
+      free_utilities_summary.electric = true
+    }
+    if (am.amenity_type === 'free_heating') {
+      free_utilities_summary.heating = true
+    }
+    if (am.amenity_type === 'free_internet') {
+      free_utilities_summary.internet = true
+    }
+  })
+  return free_utilities_summary
 }
