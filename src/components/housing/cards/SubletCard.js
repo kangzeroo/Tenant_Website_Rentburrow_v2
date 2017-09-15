@@ -25,10 +25,10 @@ import {
 
 class SubletCard extends Component {
 
-  /*selectThisPost(fb_post) {
-    console.log(`${window.location.href}${aliasToURL(fb_post.fb_post_alias)}`)
-    window.open(`${window.location.href}${aliasToURL(fb_post.fb_post_alias)}`, '_blank')
-  }*/
+  selectThisPost() {
+    console.log(`${window.location.href}sublets/${this.props.fb_post.post_id}`)
+    window.open(`${window.location.href}sublets/${this.props.fb_post.post_id}`, '_blank')
+  }
 
   goToOriginalPost() {
     console.log('go to original')
@@ -37,7 +37,7 @@ class SubletCard extends Component {
 
 	render() {
 		return (
-      <Card style={comStyles().hardCard}>
+      <Card onClick={() => this.selectThisPost()} style={comStyles().hardCard}>
         <div style={comStyles().imageGallery}>
           <SingularImageGallery
             list_of_images={JSON.parse(this.props.fb_post.images)}

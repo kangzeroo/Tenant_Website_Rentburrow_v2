@@ -23,6 +23,7 @@ import Chat from './chat/ChatPopup/Chat'
 import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
+import SubletPage from './sublets/SubletPage'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -90,19 +91,14 @@ class AppRoot extends Component {
               <Switch>
 
                 <Route exact path='/' component={HousingPage} />
-                <Route path='/:building_alias' component={BuildingPage} />
-
-                <Switch>
                   <Route path='/community' component={CommunityPage} />
-                </Switch>
-
-                <Switch>
                   <Route path='/housing' component={HousingPage} />
-                </Switch>
 
-                <Switch>
                   <Route path='/building' component={BuildingPage} />
-                </Switch>
+
+                  <Route path='/sublets/:post_id' component={SubletPage} />
+                  <Route path='/:building_alias' component={BuildingPage} />
+
 
               </Switch>
 
