@@ -26,7 +26,8 @@ import {
 } from '../i18n/phrases/Header_i18n'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import SearchInput from './filter/SearchInput'
-
+import { getBuildingsInArea } from '../api/building/building_api'
+import { saveBuildingsToRedux } from '../actions/search/search_actions'
 
 class Header extends Component {
 
@@ -62,11 +63,22 @@ class Header extends Component {
     )
   }
 
+  refreshEverything() {
+    if (this.props.location.pathname === '/') {
+      getBuildingsInArea({
+  			lat: 23,
+  			long: 54,
+  		}).then((buildings) => {
+  			this.props.saveBuildingsToRedux(buildings)
+  		})
+    }
+  }
+
   render() {
     return (
         <div style={comStyles().header}>
           <div style={comStyles().leftFloat}>
-            <Link to='/'>
+            <Link to='/' onClick={() => this.refreshEverything()}>
               <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
             </Link>
           </div>
@@ -103,15 +115,18 @@ class Header extends Component {
 // defines the types of variables in this.props
 Header.propTypes = {
 	history: PropTypes.object.isRequired,
+  location: PropTypes.object,
   authenticated: PropTypes.bool,
   tenant_profile: PropTypes.object,
   changeAppLanguage: PropTypes.func.isRequired,
+  saveBuildingsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 Header.defaultProps = {
   authenticated: false,
   tenant_profile: {},
+  location: {},
 }
 
 const RadiumHOC = Radium(Header)
@@ -126,6 +141,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
   connect(mapReduxToProps, {
     changeAppLanguage,
+    saveBuildingsToRedux,
   })(RadiumHOC)
 )
 
