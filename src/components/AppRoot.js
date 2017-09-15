@@ -72,7 +72,7 @@ class AppRoot extends Component {
       <div style={
         {
     			width: '100vw',
-    			height: '100vh'
+    			height: '100vh',
         }
       }
       >
@@ -91,14 +91,13 @@ class AppRoot extends Component {
               <Switch>
 
                 <Route exact path='/' component={HousingPage} />
-                  <Route path='/community' component={CommunityPage} />
-                  <Route path='/housing' component={HousingPage} />
+                <Route path='/community' component={CommunityPage} />
+                <Route path='/housing' component={HousingPage} />
 
-                  <Route path='/building' component={BuildingPage} />
+                <Route path='/building' component={BuildingPage} />
 
-                  <Route path='/sublets/:post_id' component={SubletPage} />
-                  <Route path='/:building_alias' component={BuildingPage} />
-
+                <Route path='/sublets/:post_id' component={SubletPage} />
+                <Route path='/:building_alias' component={BuildingPage} />
 
               </Switch>
 
