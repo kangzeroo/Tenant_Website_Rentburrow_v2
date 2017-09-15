@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Card,
   Image,
+  Button,
 } from 'semantic-ui-react'
 import {
   renderProcessedThumbnail,
@@ -22,32 +23,45 @@ import {
 } from '../../../api/general/general_api'
 
 
-class BuildingCard extends Component {
+class SubletCard extends Component {
 
-  selectThisBuilding(building) {
-    console.log(`${window.location.href}${aliasToURL(building.building_alias)}`)
-    window.open(`${window.location.href}${aliasToURL(building.building_alias)}`, '_blank')
+  /*selectThisPost(fb_post) {
+    console.log(`${window.location.href}${aliasToURL(fb_post.fb_post_alias)}`)
+    window.open(`${window.location.href}${aliasToURL(fb_post.fb_post_alias)}`, '_blank')
+  }*/
+
+  goToOriginalPost() {
+    console.log('go to original')
+    window.open(`${this.props.fb_post.post_url}`)
   }
 
 	render() {
 		return (
-      <Card onClick={() => this.selectThisBuilding(this.props.building)} raised onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)} style={comStyles().hardCard}>
-        {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
+      <Card style={comStyles().hardCard}>
         <div style={comStyles().imageGallery}>
           <SingularImageGallery
-            list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
-            image_size='thumbnail'
+            list_of_images={JSON.parse(this.props.fb_post.images)}
           />
         </div>
         <Card.Content style={comStyles().info}>
           <Card.Header style={comStyles().headerPrint}>
-            <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
+            <div style={comStyles().address}>{ shortenAddress(this.props.fb_post.address) }</div>
           </Card.Header>
           <Card.Meta>
-            {this.props.building.building_address}
+            {this.props.fb_post.fb_username}
           </Card.Meta>
           <Card.Description style={comStyles().more_info}>
-            <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
+            <div style={comStyles().price}>${ this.props.fb_post.price }/Month</div>
+            <div style={comStyles().user_container} >
+              <Image
+                shape='circular'
+                src={this.props.fb_post.fb_user_pic}
+                size='tiny'
+                bordered
+                onClick={() => this.goToOriginalPost()}
+              />
+            </div>
+            <div> Posted by {this.props.fb_post.fb_user_name} </div>
           </Card.Description>
         </Card.Content>
       </Card>
@@ -56,19 +70,19 @@ class BuildingCard extends Component {
 }
 
 // defines the types of variables in this.props
-BuildingCard.propTypes = {
+SubletCard.propTypes = {
 	history: PropTypes.object.isRequired,
-  building: PropTypes.object.isRequired,    // passed in
+  fb_post: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
-BuildingCard.defaultProps = {
+SubletCard.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(BuildingCard)
+const RadiumHOC = Radium(SubletCard)
 
 // Get access to state from the Redux store
 function mapStateToProps(state) {
@@ -97,6 +111,8 @@ const comStyles = () => {
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
+      display: 'flex',
+      flexDirection: 'column',
       // padding: '30px 10px 10px 10px',
     },
     imageGallery: {
@@ -113,6 +129,16 @@ const comStyles = () => {
     more_info: {
       display: 'flex',
       flexDirection: 'row',
+    },
+    user_container: {
+      display: 'flex',
+      flexDirection: 'row',
+      right: '5px',
+      top: '5px',
+      position: 'absolute',
+      maxHeight: '45px',
+      maxWidth: '45px',
+      cursor: 'pointer',
     },
 	}
 }
