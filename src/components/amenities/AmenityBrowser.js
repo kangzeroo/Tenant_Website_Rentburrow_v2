@@ -56,7 +56,7 @@ class AmenityBrowser extends Component {
                     this.setState({ current_amenity: am })
                   }} key={am.amenity_alias} style={amenityStyles(this.state.current_amenity, am).amenity}>
                     <Icon name='checkmark' />
-                    <Item.Content verticalAlign='middle'>
+                    <Item.Content>
                       <Item.Header>
                         { am.amenity_alias }
                       </Item.Header>
@@ -76,7 +76,12 @@ class AmenityBrowser extends Component {
             </div>
             :
             <div style={comStyles().imageGallery}>
-              <h1>No Image for this Amenity</h1>
+              <Icon
+                name='dont'
+                size='huge'
+                color='blue'
+              />
+              <h2>No Image Available</h2>
             </div>
           }
         </div>
@@ -122,15 +127,14 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      minHeight: '150px',
-      height: 'auto',
+      height: '100%',
       overflow: 'scroll',
       backgroundColor: 'white',
       padding: '20px',
 		},
 		amenities: {
-			fontSize: '1.5rem',
-			lineHeight: '1.5rem',
+			fontSize: '2.5rem',
+			lineHeight: '2.5rem',
 			fontWeight: 'bold',
 			margin: '20px auto',
 			padding: '5px 0px 5px 0px',
@@ -140,16 +144,27 @@ const comStyles = () => {
       flexDirection: 'row',
       flexWrap: 'wrap',
       width: '50%',
-      padding: '40px',
+      height: '100%',
+      padding: '10px',
+      border: 'black solid thin',
+      borderRadius: '3px',
     },
     imageGallery: {
-      minHeight: '100%',
-      minWidth: '50%',
+      width: '45%',
+      height: 'auto',
+      border: 'black solid thin',
+      borderRadius: '3px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     box: {
       display: 'flex',
-      flexDirection: 'row'
-    }
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
 	}
 }
 
@@ -159,7 +174,8 @@ const amenityStyles = (current_amenity, this_amenity) => {
   }
   if (current_amenity.amenity_alias === this_amenity.amenity_alias) {
     style = {
-      backgroundColor: 'rgba(0,0,0,0.2)'
+      backgroundColor: 'rgba(153,204,255,0.8)',
+      borderRadius: '3px'
     }
   }
   return {
@@ -168,8 +184,9 @@ const amenityStyles = (current_amenity, this_amenity) => {
 			lineHeight: '1.0rem',
 			display: 'flex',
 			flexDirection: 'row',
-      width: '24%',
+      width: '33%',
       cursor: 'pointer',
+      padding: '10px',
       ...style,
 		},
   }

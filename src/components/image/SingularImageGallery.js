@@ -175,6 +175,7 @@ const comStyles = () => {
       alignItems: 'center',
       position: 'absolute',
       backgroundColor: 'rgba(0,0,0,0)',
+      cursor: 'pointer',
     },
     right: {
       width: '15%',
@@ -186,6 +187,7 @@ const comStyles = () => {
       alignItems: 'center',
       position: 'absolute',
       backgroundColor: 'rgba(0,0,0,0)',
+      cursor: 'pointer',
     }
 	}
 }
