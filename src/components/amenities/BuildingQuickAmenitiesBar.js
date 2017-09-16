@@ -9,9 +9,11 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
   Icon,
+  Modal,
 } from 'semantic-ui-react'
 import { calculateBuildingQuickAmenities } from '../../api/amenities/amenity_calculations'
-import { temperatureIcon, wifiIcon, electricityIcon, parkingIcon, } from '../../api/amenities/amenity_icons'
+import { temperatureIcon, wifiIcon, electricityIcon, parkingIcon, seeFullListIcon, } from '../../api/amenities/amenity_icons'
+import HomeExplorer from '../home_explorer/HomeExplorer'
 
 
 class BuildingQuickAmenitiesBar extends Component {
@@ -25,6 +27,10 @@ class BuildingQuickAmenitiesBar extends Component {
       internet_incl: false,
       free_parking: false,
       paid_parking: false,
+
+      toggle_modal: false,
+      modal_name: '',
+      context: {},
     }
   }
 
@@ -42,6 +48,36 @@ class BuildingQuickAmenitiesBar extends Component {
         ...calculateBuildingQuickAmenities(this.props.building_amenities, all_suite_amenities)
       })
 		})
+  }
+
+  toggleModal(bool, attr, context) {
+		this.setState({
+      toggle_modal: bool,
+      modal_name: attr,
+      context,
+    })
+  }
+
+	renderAppropriateModal(modal_name, context) {
+		if (modal_name === 'building_amenities') {
+	    return (
+	      <Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='fullscreen'
+				>
+	        <Modal.Content>
+						<HomeExplorer
+							building={this.props.building}
+							all_suites={this.props.suites}
+              showBuildingAmenitiesFirst
+						/>
+	        </Modal.Content>
+	      </Modal>
+	    )
+		}
   }
 
 	render() {
@@ -83,6 +119,21 @@ class BuildingQuickAmenitiesBar extends Component {
           />
           <h5>{ parkingIcon(this.state).text }</h5>
         </div>
+        <div
+          onClick={() => this.toggleModal(true, 'building_amenities')}
+          style={comStyles().iconBox_fullList}
+        >
+          <img
+            className='icon icons8-Temperature'
+            width='75'
+            height='75'
+            src={seeFullListIcon().icon}
+          />
+          <h5>{ seeFullListIcon().text }</h5>
+        </div>
+        {
+          this.renderAppropriateModal(this.state.modal_name, this.state.context)
+        }
 			</div>
 		)
 	}
@@ -135,11 +186,28 @@ const comStyles = () => {
 		},
     icon: {
       fontSize: '3rem',
+      margin: 'auto',
     },
     iconBox: {
       display: 'flex',
       flexDirection: 'column',
       textAlign: 'center',
+      flexWrap: 'wrap',
+      width: '20%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    iconBox_fullList: {
+       color: '#3498db',
+       display: 'flex',
+       flexDirection: 'column',
+       textAlign: 'center',
+       flexWrap: 'wrap',
+       width: '20%',
+       justifyContent: 'center',
+       alignItems: 'center',
+       fontWeight: 'bold',
+       cursor: 'pointer',
     }
 	}
 }

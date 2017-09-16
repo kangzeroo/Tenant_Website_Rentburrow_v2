@@ -33,6 +33,7 @@ class HomeExplorerSidebar extends Component {
   }
 
   componentWillMount() {
+    console.log(this.props.topContextText, this.props.topContextValue)
     this.loadBottomContextItems(this.props.topContextText, this.props.topContextValue)
   }
 
@@ -71,6 +72,7 @@ class HomeExplorerSidebar extends Component {
   loadSidebarItems(data) {
     const title = JSON.parse(data.value).suite_alias || 'Building'
     this.props.changeTopContext({
+      key: data.key,
       text: title,
       value: data.value
     })
@@ -97,6 +99,15 @@ class HomeExplorerSidebar extends Component {
         })
   		})
       .then((data) => {
+        if (this.props.showBuildingAmenitiesFirst) {
+          this.props.changeBottomContext({
+            key: 'am',
+            text: 'Building Amenities',
+            value: JSON.stringify(data.map((d) => {
+              return JSON.parse(d)
+            }))
+          })
+        }
         // Step 3b: Save those amenities to the list of bottomContext options
         this.setState({
           menu_items: [
@@ -108,7 +119,7 @@ class HomeExplorerSidebar extends Component {
           ].concat([
             {
               key: 'am',
-              text: 'Amenities',
+              text: 'Building Amenities',
               value: data.map((d) => {
                 return JSON.parse(d)
               })
@@ -229,6 +240,7 @@ HomeExplorerSidebar.propTypes = {
   topContextText: PropTypes.string,
   bottomContextText: PropTypes.string,
   showVirtualTourFirst: PropTypes.bool,         // passed in
+  showBuildingAmenitiesFirst: PropTypes.bool,   // passed in
 }
 
 // for all optional props, define a default value
@@ -244,8 +256,8 @@ const RadiumHOC = Radium(HomeExplorerSidebar)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-    topContextText: redux.selection.nav_top_context,
-    bottomContextText: redux.selection.nav_bottom_context,
+    topContextText: redux.selection.nav_top_title,
+    bottomContextText: redux.selection.nav_bottom_title,
 	}
 }
 

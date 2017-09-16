@@ -2,8 +2,8 @@ import {
   SELECT_BUILDING,
   SELECT_CORPORATION,
   SELECT_POPUP_BUILDING,
-  NAV_BOTTOM_CONTEXT,
-  NAV_TOP_CONTEXT,
+  NAV_BOTTOM_TITLE,
+  NAV_TOP_TITLE,
 } from '../action_types'
 
 export const selectBuilding = (building) => {
@@ -35,19 +35,19 @@ export const selectCorporation = (corp) => {
   }
 }
 
-export const selectTopContext = (context) => {
+export const selectTopTitle = (context) => {
   return (dispatch) => {
     dispatch({
-      type: NAV_TOP_CONTEXT,
+      type: NAV_TOP_TITLE,
       payload: context,
     })
   }
 }
 
-export const selectBottomContext = (context) => {
+export const selectBottomTitle = (context) => {
   return (dispatch) => {
     dispatch({
-      type: NAV_BOTTOM_CONTEXT,
+      type: NAV_BOTTOM_TITLE,
       payload: context,
     })
   }

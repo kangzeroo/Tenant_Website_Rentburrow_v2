@@ -38,6 +38,7 @@ class HomeExplorerCanvas extends Component {
 					)
 			  }
 			} else if (this.props.bottomContextValue) {
+				console.log(this.props.bottomContextValue)
 				return (
 					<AmenityProofs
 						building={this.props.building}
@@ -132,8 +133,8 @@ const RadiumHOC = Radium(HomeExplorerCanvas)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-    topContextText: redux.selection.nav_top_context,
-    bottomContextText: redux.selection.nav_bottom_context,
+    topContextText: redux.selection.nav_top_title,
+    bottomContextText: redux.selection.nav_bottom_title,
 	}
 }
 
