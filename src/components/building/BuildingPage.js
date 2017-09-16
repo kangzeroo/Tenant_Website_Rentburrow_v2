@@ -18,7 +18,12 @@ import {
 	Button,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
-import { URLToAlias, renderProcessedImage, shortenAddress, } from '../../api/general/general_api'
+import {
+	URLToAlias,
+	renderProcessedImage,
+	shortenAddress,
+	renderProcessedThumbnail,
+} from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
 import {
@@ -196,7 +201,7 @@ class BuildingPage extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<div style={comStyles().cover_photo} >
+				<div style={loadStyles(renderProcessedImage(this.state.building.cover_photo)).cover_photo}>
 					{/*}<Image
 						src={renderProcessedImage(this.state.building.cover_photo)}
 						fluid
@@ -332,6 +337,21 @@ export default withRouter(
 // ===============================
 
 // the JS function that returns Radium JS styling
+const loadStyles = (img) => {
+	return {
+		cover_photo: {
+			minHeight: '500px',
+			maxHeight: '500px',
+			minWidth: '100%',
+			maxWidth: '100%',
+			overflow: 'hidden',
+      position: 'relative',
+			background: `url('${img}') center center no-repeat`,
+			backgroundSize: 'cover',
+		},
+	}
+}
+
 const comStyles = () => {
 	return {
 		container: {
@@ -345,7 +365,7 @@ const comStyles = () => {
 			maxWidth: '100%',
 			overflow: 'hidden',
       position: 'relative',
-		// 	background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
+			//background: `transparent url('${this.state.building.istaging_url}') center no-repeat`,
 		},
 		action_sticker: {
       position: 'absolute',

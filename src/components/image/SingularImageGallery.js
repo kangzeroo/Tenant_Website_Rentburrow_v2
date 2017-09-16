@@ -8,6 +8,7 @@ import Rx from 'rxjs'
 import {
   Image,
   Icon,
+  Transition,
 } from 'semantic-ui-react'
 import {
   shortenAddress,
