@@ -40,6 +40,7 @@ import AvailableSuites from '../home_explorer/AvailableSuites'
 import BuildingQuickAmenitiesBar from '../amenities/BuildingQuickAmenitiesBar'
 import StepByStepCard from '../instructions/StepByStepCard'
 import AllLandlords from '../landlord/AllLandlords'
+import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 
 
 class BuildingPage extends Component {
@@ -173,7 +174,7 @@ class BuildingPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().cover_photo} >
-					<Image
+					{/*}<Image
 						src={renderProcessedImage(this.state.building.cover_photo)}
 						fluid
 						onClick={() => { this.toggleModal(true, 'images') }}
@@ -187,10 +188,12 @@ class BuildingPage extends Component {
 							size='large'
 							style={comStyles().viewPhoto}
 						/>
-					</div>
-					<div style={comStyles().title_address} >
+
+					</div>*/}
+					<iframe width='100%' height={`500px`} src={'https://livetour.istaging.com/25943b26-63e9-451b-8238-8c92847de709?ui=true'} frameBorder='0' allowFullScreen=''></iframe>
+					{/*}<div style={comStyles().title_address} >
 						{ shortenAddress(this.state.building.building_address) }
-					</div>
+					</div>*/}
 				</div>
 				<div style={comStyles().content_top} >
 					<div style={comStyles().content_left} >
@@ -305,13 +308,13 @@ const comStyles = () => {
       flexDirection: 'column',
 		},
 		cover_photo: {
-			minHeight: '600px',
-			maxHeight: '600px',
+			minHeight: '500px',
+			maxHeight: '500px',
 			minWidth: '100%',
 			maxWidth: '100%',
 			overflow: 'hidden',
       position: 'relative',
-			background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
+		// 	background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
 		},
 		action_sticker: {
       position: 'absolute',
