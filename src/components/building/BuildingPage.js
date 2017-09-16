@@ -41,7 +41,7 @@ import BuildingQuickAmenitiesBar from '../amenities/BuildingQuickAmenitiesBar'
 import StepByStepCard from '../instructions/StepByStepCard'
 import AllLandlords from '../landlord/AllLandlords'
 import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
-
+import SingularImageGallery from '../image/SingularImageGallery'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -170,6 +170,29 @@ class BuildingPage extends Component {
 		}
   }
 
+	photo_or_vr(building) {
+		if (building.istaging_url !== '') {
+			console.log(building.istaging_url)
+			return (
+				<iframe
+					width='100%'
+					height={`500px`}
+					src={building.istaging_url}
+					frameBorder='0'
+					allowFullScreen=''
+				/>
+			)
+		} else {
+			return (
+				<Image
+					src={renderProcessedImage(this.state.building.cover_photo)}
+					fluid
+					onClick={() => { this.toggleModal(true, 'images') }}
+				/>
+			)
+		}
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -190,7 +213,9 @@ class BuildingPage extends Component {
 						/>
 
 					</div>*/}
-					<iframe width='100%' height={`500px`} src={'https://livetour.istaging.com/25943b26-63e9-451b-8238-8c92847de709?ui=true'} frameBorder='0' allowFullScreen=''></iframe>
+					{
+						this.photo_or_vr(this.state.building)
+					}
 					{/*}<div style={comStyles().title_address} >
 						{ shortenAddress(this.state.building.building_address) }
 					</div>*/}
@@ -204,6 +229,12 @@ class BuildingPage extends Component {
 									style={comStyles().textMarkup}
 								/>
 							</div>
+						</div>
+						<div style={comStyles().images_container}>
+							<SingularImageGallery
+								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
+								image_size='hd'
+							/>
 						</div>
 						<div style={comStyles().amenities} >
 							{
@@ -406,6 +437,9 @@ const comStyles = () => {
 			margin: '10px 0px 10px 0px',
 			borderRadius: '2px',
 			padding: '10px',
+		},
+		images_container: {
+			margin: '20px 0px 10px 0px'
 		}
 	}
 }

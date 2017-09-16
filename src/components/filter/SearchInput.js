@@ -83,7 +83,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
-      padding: '4px 0px 4px 0px',
+      padding: '5px 0px 5px 0px',
       margin: '0px 0px 0px 20px',
 		}
 	}
