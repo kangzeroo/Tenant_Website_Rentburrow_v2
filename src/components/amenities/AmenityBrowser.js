@@ -50,11 +50,15 @@ class AmenityBrowser extends Component {
         <div style={comStyles().box}>
           <div style={comStyles().amenitiesGrid}>
             {
-              this.props.amenities.map((am) => {
+              this.props.amenities.map((am, index) => {
                 return (
-                  <Item onClick={() => {
-                    this.setState({ current_amenity: am })
-                  }} key={am.amenity_alias} style={amenityStyles(this.state.current_amenity, am).amenity}>
+                  <Item
+                    onClick={() => {
+                      this.setState({ current_amenity: am })
+                    }}
+                    key={am.amenity_alias || index}
+                    style={amenityStyles(this.state.current_amenity, am).amenity}
+                  >
                     <Icon name='checkmark' />
                     <Item.Content>
                       <Item.Header>

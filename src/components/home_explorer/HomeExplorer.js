@@ -12,7 +12,7 @@ import {
 } from 'semantic-ui-react'
 import HomeExplorerCanvas from './navigation/HomeExplorerCanvas'
 import HomeExplorerSidebar from './navigation/HomeExplorerSidebar'
-import { selectTopContext, selectBottomContext } from '../../actions/selection/selection_actions'
+import { selectTopTitle, selectBottomTitle } from '../../actions/selection/selection_actions'
 
 
 class HomeExplorer extends Component {
@@ -26,22 +26,33 @@ class HomeExplorer extends Component {
   }
 
   componentWillMount() {
-    this.props.selectTopContext(this.props.current_suite.suite_alias)
-    this.setState({
-      topContextValue: JSON.stringify(this.props.current_suite),
-      bottomContextValue: '',
-    })
+    if (this.props.current_suite.suite_id) {
+      this.props.selectTopTitle(this.props.current_suite.suite_alias)
+      console.log(this.props.current_suite)
+      this.setState({
+        topContextValue: JSON.stringify(this.props.current_suite),
+        bottomContextValue: '',
+      })
+    } else if (this.props.showBuildingAmenitiesFirst) {
+      this.props.selectTopTitle('Building')
+      console.log('showBuildingAmenitiesFirst')
+      this.setState({
+        topContextValue: JSON.stringify(this.props.building),
+        bottomContextValue: '',
+      })
+    }
   }
 
   changeTopContext(top_context) {
-    this.props.selectTopContext(top_context.text)
+    this.props.selectTopTitle(top_context.text)
     this.setState({
       topContextValue: top_context.value,
     })
   }
 
   changeBottomContext(bottom_context) {
-    this.props.selectBottomContext(bottom_context.text)
+    this.props.selectBottomTitle(bottom_context.text)
+    console.log(typeof bottom_context.value)
     this.setState({
       bottomContextValue: bottom_context.value,
     })
@@ -50,16 +61,23 @@ class HomeExplorer extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<HomeExplorerSidebar
-          building={this.props.building}
-          current_suite={this.props.current_suite}
-          all_suites={this.props.all_suites}
-          changeTopContext={(top_context) => this.changeTopContext(top_context)}
-          changeBottomContext={(bottom_context) => this.changeBottomContext(bottom_context)}
-          topContextValue={this.state.topContextValue}
-          bottomContextValue={this.state.bottomContextValue}
-          showVirtualTourFirst={this.props.showVirtualTourFirst}
-        />
+        {
+          this.state.topContextValue
+          ?
+  				<HomeExplorerSidebar
+            building={this.props.building}
+            current_suite={this.props.current_suite}
+            all_suites={this.props.all_suites}
+            changeTopContext={(top_context) => this.changeTopContext(top_context)}
+            changeBottomContext={(bottom_context) => this.changeBottomContext(bottom_context)}
+            topContextValue={this.state.topContextValue}
+            bottomContextValue={this.state.bottomContextValue}
+            showVirtualTourFirst={this.props.showVirtualTourFirst}
+            showBuildingAmenitiesFirst={this.props.showBuildingAmenitiesFirst}
+          />
+          :
+          null
+        }
         {
           this.state.bottomContextValue
           ?
@@ -82,14 +100,16 @@ HomeExplorer.propTypes = {
   building: PropTypes.object.isRequired,        // passed in
   current_suite: PropTypes.object,   // passed in
   all_suites: PropTypes.array,       // passed in
-  selectTopContext: PropTypes.func.isRequired,
-  selectBottomContext: PropTypes.func.isRequired,
+  selectTopTitle: PropTypes.func.isRequired,
+  selectBottomTitle: PropTypes.func.isRequired,
   showVirtualTourFirst: PropTypes.bool,         // passed in
+  showBuildingAmenitiesFirst: PropTypes.bool,   // passed in
 }
 
 // for all optional props, define a default value
 HomeExplorer.defaultProps = {
   showVirtualTourFirst: false,
+  showBuildingAmenitiesFirst: false,
   current_suite: {},
   all_suites: [],
 }
@@ -106,8 +126,8 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-    selectTopContext,
-    selectBottomContext,
+    selectTopTitle,
+    selectBottomTitle,
 	})(RadiumHOC)
 )
 
