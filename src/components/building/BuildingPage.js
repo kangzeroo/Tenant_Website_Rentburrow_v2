@@ -190,7 +190,7 @@ class BuildingPage extends Component {
 						/>
 
 					</div>*/}
-					<iframe width='100%' height={`500px`} src={'https://livetour.istaging.com/25943b26-63e9-451b-8238-8c92847de709?ui=true'} frameBorder='0' allowFullScreen=''></iframe>
+					<iframe width='100%' height='500px' src={this.state.building.istaging_url} frameBorder='0' allowFullScreen=''></iframe>
 					{/*}<div style={comStyles().title_address} >
 						{ shortenAddress(this.state.building.building_address) }
 					</div>*/}
