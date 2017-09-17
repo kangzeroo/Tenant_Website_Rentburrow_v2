@@ -162,6 +162,10 @@ class FilterBar extends Component {
             </div>
             <h3>
               {
+                this.props.rent_type === 'sublet'
+                ?
+                `Showing ${numberOfPropertiesShown} Facebook Sublet${numberOfPropertiesShown > 1 ? 's' : ''}`
+                :
                 `Showing ${numberOfPropertiesShown} Propert${numberOfPropertiesShown > 1 ? 'ies' : 'y'}`
               }
             </h3>

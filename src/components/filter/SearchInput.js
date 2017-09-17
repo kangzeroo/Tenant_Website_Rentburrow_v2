@@ -29,11 +29,10 @@ class SearchInput extends Component {
           action={
             <Dropdown
               trigger={(<span>
-                          <Icon name='world'/> Waterloo, ON
+                          <Icon name='world' /> Waterloo, ON
                         </span>)}
               button
               item
-              selection
               options={[
                 { key: 'waterloo', text: 'Waterloo, ON', value: 'waterloo' }
               ]}
