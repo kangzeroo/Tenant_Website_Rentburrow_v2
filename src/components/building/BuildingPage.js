@@ -262,6 +262,12 @@ class BuildingPage extends Component {
 								null
 							}
 						</div>
+						<div style={comStyles().images_container}>
+							<SingularImageGallery
+								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
+								image_size='hd'
+							/>
+						</div>
 					</div>
 					<div style={comStyles().content_right} >
 						<StepByStepCard

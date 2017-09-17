@@ -83,6 +83,18 @@ class BuildingQuickAmenitiesBar extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+        <div
+          onClick={() => this.toggleModal(true, 'building_amenities')}
+          style={comStyles().iconBox_fullList}
+        >
+          <img
+            className='icon icons8-Temperature'
+            width='75'
+            height='75'
+            src={seeFullListIcon().icon}
+          />
+          <h5>{ seeFullListIcon().text }</h5>
+        </div>
         <div style={comStyles().iconBox}>
           <img
             className='icon icons8-Temperature'
@@ -118,18 +130,6 @@ class BuildingQuickAmenitiesBar extends Component {
             src={parkingIcon(this.state).icon}
           />
           <h5>{ parkingIcon(this.state).text }</h5>
-        </div>
-        <div
-          onClick={() => this.toggleModal(true, 'building_amenities')}
-          style={comStyles().iconBox_fullList}
-        >
-          <img
-            className='icon icons8-Temperature'
-            width='75'
-            height='75'
-            src={seeFullListIcon().icon}
-          />
-          <h5>{ seeFullListIcon().text }</h5>
         </div>
         {
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
@@ -200,7 +200,11 @@ const comStyles = () => {
       alignItems: 'center',
     },
     iconBox_fullList: {
-       color: '#3498db',
+      //  color: '#3498db',
+       color: 'black',
+      //  backgroundColor: 'black',
+       border: '3px solid black',
+       borderRadius: '20px',
        display: 'flex',
        flexDirection: 'column',
        textAlign: 'center',
