@@ -38,7 +38,6 @@ class HomeExplorerCanvas extends Component {
 					)
 			  }
 			} else if (this.props.bottomContextValue) {
-				console.log(this.props.bottomContextValue)
 				return (
 					<AmenityProofs
 						building={this.props.building}

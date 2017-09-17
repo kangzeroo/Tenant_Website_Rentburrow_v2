@@ -33,7 +33,6 @@ class SearchInput extends Component {
                         </span>)}
               button
               item
-              selection
               options={[
                 { key: 'waterloo', text: 'Waterloo, ON', value: 'waterloo' }
               ]}

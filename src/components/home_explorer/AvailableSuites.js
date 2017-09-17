@@ -70,13 +70,31 @@ class AvailableSuites extends Component {
 	        </Modal.Content>
 	      </Modal>
 	    )
+		} else if (modal_name === 'building') {
+			return (
+				<Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='fullscreen'
+				>
+	        <Modal.Content>
+						<HomeExplorer
+							building={this.props.building}
+							all_suites={this.props.suites}
+							showBuildingCommonAreaFirst
+						/>
+	        </Modal.Content>
+	      </Modal>
+			)
 		}
   }
 
 	render() {
 		return (
       <div style={comStyles().container} >
-        <h3>Select a Suite</h3>
+        <h3>Explore Photos Of This Home</h3>
         <Table basic selectable>
           <Table.Header>
             <Table.Row>
@@ -88,11 +106,26 @@ class AvailableSuites extends Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
+						<Table.Row key='Building' >
+							<Table.Cell>The Building Common Areas</Table.Cell>
+							<Table.Cell></Table.Cell>
+							<Table.Cell></Table.Cell>
+							<Table.Cell></Table.Cell>
+							<Table.Cell>
+								<Button
+									basic
+									fluid
+									onClick={() => this.toggleModal(true, 'building', this.props.building)}
+									color='green'
+									content='Explore'
+								/>
+							</Table.Cell>
+						</Table.Row>
             {
               this.props.suites.map((suite) => {
                 return (
                   <Table.Row key={suite.suite_code} >
-                    <Table.Cell>{suite.suite_alias}</Table.Cell>
+                    <Table.Cell>{`${suite.suite_alias} Unit`}</Table.Cell>
                     <Table.Cell>{suite.total}</Table.Cell>
                     <Table.Cell>{ this.state.all_suite_amenities.length > 0 ? calculateSimpleSuiteBaths(suite, this.state.all_suite_amenities) : '?'}</Table.Cell>
                     <Table.Cell>${parseInt(suite.min_price)}</Table.Cell>
