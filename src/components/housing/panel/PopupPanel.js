@@ -13,11 +13,12 @@ import {
 import { selectPopupBuilding } from '../../../actions/selection/selection_actions'
 import BuildingCard from '../cards/BuildingCard'
 import BuildingRow from '../cards/BuildingRow'
+import SubletCard from '../cards/SubletCard'
 
 
 class PopupPanel extends Component {
 
-  generateCard(building) {
+  generateBuildingCard(building) {
 		if (this.props.card_style === 'row') {
 			return (
 				null
@@ -43,6 +44,15 @@ class PopupPanel extends Component {
 		}
 	}
 
+  generateSubletCard(sublet) {
+    return (
+      <SubletCard
+				key={sublet.post_id}
+				fb_post={sublet}
+			/>
+    )
+  }
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -51,7 +61,11 @@ class PopupPanel extends Component {
           content='Back'
         />
         {
-          this.generateCard(this.props.building)
+          this.props.rent_type === 'sublet'
+          ?
+          this.generateSubletCard(this.props.building)
+          :
+          this.generateBuildingCard(this.props.building)
         }
 			</div>
 		)
@@ -64,11 +78,11 @@ PopupPanel.propTypes = {
   building: PropTypes.object.isRequired,            // passed in
 	selectPopupBuilding: PropTypes.func.isRequired,
 	card_style: PropTypes.string.isRequired,
+  rent_type: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
 PopupPanel.defaultProps = {
-
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -78,6 +92,7 @@ const RadiumHOC = Radium(PopupPanel)
 const mapReduxToProps = (redux) => {
 	return {
     card_style: redux.search.card_style,
+    rent_type: redux.filter.rent_type,
 	}
 }
 

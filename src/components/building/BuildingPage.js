@@ -202,7 +202,7 @@ class BuildingPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={loadStyles(renderProcessedImage(this.state.building.cover_photo)).cover_photo}>
-					{/*}<Image
+					{/*<Image
 						src={renderProcessedImage(this.state.building.cover_photo)}
 						fluid
 						onClick={() => { this.toggleModal(true, 'images') }}
