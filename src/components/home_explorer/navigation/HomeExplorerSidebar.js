@@ -34,6 +34,7 @@ class HomeExplorerSidebar extends Component {
 
   componentWillMount() {
     console.log(this.props.topContextText, this.props.topContextValue)
+    console.log(this.props.building, this.props.all_suites)
     this.loadBottomContextItems(this.props.topContextText, this.props.topContextValue)
   }
 
@@ -241,6 +242,7 @@ HomeExplorerSidebar.propTypes = {
   bottomContextText: PropTypes.string,
   showVirtualTourFirst: PropTypes.bool,         // passed in
   showBuildingAmenitiesFirst: PropTypes.bool,   // passed in
+  showBuildingCommonAreaFirst: PropTypes.bool,  // passed in
 }
 
 // for all optional props, define a default value
@@ -248,6 +250,8 @@ HomeExplorerSidebar.defaultProps = {
   topContext: {},
   bottomContext: {},
   showVirtualTourFirst: false,
+  showBuildingAmenitiesFirst: false,
+  showBuildingCommonAreaFirst: false,
 }
 
 // Wrap the prop in Radium to allow JS styling

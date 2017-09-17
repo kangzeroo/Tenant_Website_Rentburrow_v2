@@ -184,7 +184,7 @@ class BuildingPage extends Component {
 					height={`500px`}
 					src={building.istaging_url}
 					frameBorder='0'
-					allowFullScreen=''
+					allowFullScreen
 				/>
 			)
 		} else {
@@ -242,6 +242,7 @@ class BuildingPage extends Component {
 								<BuildingQuickAmenitiesBar
 									building={this.state.building}
 									building_amenities={this.state.amenities}
+									all_suites={this.state.suites}
 									promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
 								/>
 								:
@@ -289,6 +290,12 @@ class BuildingPage extends Component {
 						}
 					</div>
 				</div>
+				{/*<div style={comStyles().images_container}>
+					<SingularImageGallery
+						list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
+						image_size='hd'
+					/>
+				</div>*/}
 				{/*<div style={comStyles().content_bottom}>
 					<AllLandlords />
 				</div>*/}

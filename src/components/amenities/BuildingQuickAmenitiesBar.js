@@ -71,7 +71,7 @@ class BuildingQuickAmenitiesBar extends Component {
 	        <Modal.Content>
 						<HomeExplorer
 							building={this.props.building}
-							all_suites={this.props.suites}
+							all_suites={this.props.all_suites}
               showBuildingAmenitiesFirst
 						/>
 	        </Modal.Content>
@@ -144,6 +144,7 @@ BuildingQuickAmenitiesBar.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,
   building_amenities: PropTypes.array,
+  all_suites: PropTypes.array,
   suite_amenities: PropTypes.array,
   promise_array_of_suite_amenities_with_id: PropTypes.array,
 }
@@ -152,7 +153,8 @@ BuildingQuickAmenitiesBar.propTypes = {
 BuildingQuickAmenitiesBar.defaultProps = {
   building_amenities: [],
   suite_amenities: [],
-  promise_array_of_suite_amenities_with_id: []
+  promise_array_of_suite_amenities_with_id: [],
+  all_suites: [],
 }
 
 // Wrap the prop in Radium to allow JS styling

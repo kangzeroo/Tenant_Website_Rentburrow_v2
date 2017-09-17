@@ -33,7 +33,7 @@ class HomeExplorer extends Component {
         topContextValue: JSON.stringify(this.props.current_suite),
         bottomContextValue: '',
       })
-    } else if (this.props.showBuildingAmenitiesFirst) {
+    } else if (this.props.showBuildingAmenitiesFirst || this.props.showBuildingCommonAreaFirst) {
       this.props.selectTopTitle('Building')
       console.log('showBuildingAmenitiesFirst')
       this.setState({
@@ -74,6 +74,7 @@ class HomeExplorer extends Component {
             bottomContextValue={this.state.bottomContextValue}
             showVirtualTourFirst={this.props.showVirtualTourFirst}
             showBuildingAmenitiesFirst={this.props.showBuildingAmenitiesFirst}
+            showBuildingCommonAreaFirst={this.props.showBuildingCommonAreaFirst}
           />
           :
           null
@@ -104,12 +105,14 @@ HomeExplorer.propTypes = {
   selectBottomTitle: PropTypes.func.isRequired,
   showVirtualTourFirst: PropTypes.bool,         // passed in
   showBuildingAmenitiesFirst: PropTypes.bool,   // passed in
+  showBuildingCommonAreaFirst: PropTypes.bool,  // passed in
 }
 
 // for all optional props, define a default value
 HomeExplorer.defaultProps = {
   showVirtualTourFirst: false,
   showBuildingAmenitiesFirst: false,
+  showBuildingCommonAreaFirst: false,
   current_suite: {},
   all_suites: [],
 }
