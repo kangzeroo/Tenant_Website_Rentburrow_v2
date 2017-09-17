@@ -20,6 +20,10 @@ import {
 import SingularImageGallery from '../../image/SingularImageGallery'
 import ImageGallery from '../../image/ImageGallery'
 import { calculateComplexSuiteBaths, calculateRoomsSummary, calculateSuiteCommonAreasSummary, calculateFreeUtilitiesForSuite, } from '../../../api/amenities/amenity_calculations'
+import SuiteBathSummary from './summary/SuiteBathSummary'
+import SuiteBedSummary from './summary/SuiteBedSummary'
+import SuiteCommonAreaSummary from './summary/SuiteCommonAreaSummary'
+import SuiteFreeUtilitiesSummary from './summary/SuiteFreeUtilitiesSummary'
 
 
 class SuiteCommonAreaCanvas extends Component {
@@ -137,157 +141,24 @@ class SuiteCommonAreaCanvas extends Component {
 	}
 
   generateBathsSummary() {
-    return (<div style={comStyles().baths_summary}>
-      {
-        this.state.baths_summary.full_baths > 0 || this.state.baths_summary.half_baths > 0 || this.state.baths_summary.shared_baths > 0
-        ?
-        <h1>Common Area Bathrooms:</h1>
-        :
-        null
-      }
-      {
-        this.state.baths_summary.full_baths > 0
-        ?
-        <h2>{`${this.state.baths_summary.full_baths} full bathroom${this.state.baths_summary.full_baths > 0 ? 's' : ''}`}</h2>
-        :
-        null
-      }
-      {
-        this.state.baths_summary.half_baths > 0
-        ?
-        <h2>{`${this.state.baths_summary.half_baths} half bathroom${this.state.baths_summary.half_baths > 0 ? 's' : ''}`}</h2>
-        :
-        null
-      }
-      {
-        this.state.baths_summary.shared_baths > 0
-        ?
-        <h2>{`${this.state.baths_summary.shared_baths} suite bathroom${this.state.shared_baths.shared_baths > 0 ? 's' : ''} shared with a bedroom`}</h2>
-        :
-        null
-      }
-    </div>)
+    return (<SuiteBathSummary baths_summary={this.state.baths_summary}/>)
   }
 
   generateBedsSummary() {
     return (
-      <div style={comStyles().rooms_summary}>
-        {
-          this.state.rooms_summary.total_rooms
-          ?
-          <h1>Bedrooms:</h1>
-          :
-          null
-        }
-        {
-          this.state.rooms_summary.total_rooms
-          ?
-          <h2>
-            { `${this.state.rooms_summary.total_rooms} total rooms` }
-            { this.state.rooms_summary.total_ensuite_baths > 0 ? ` with ${this.state.rooms_summary.total_ensuite_baths} ensuite baths` : null }
-          </h2>
-          :
-          null
-        }
-        {
-          this.state.rooms_summary.standard_price
-          ?
-          <h2>{ `$${this.state.rooms_summary.standard_price} per room` }</h2>
-          :
-          <h2>{ `$${this.state.rooms_summary.min_price} to $${this.state.rooms_summary.max_price} per room` }</h2>
-        }
-      </div>
+      <SuiteBedSummary rooms_summary={this.state.rooms_summary} />
     )
   }
 
   generateSuiteCommonAreasSummary() {
     return (
-      <div style={comStyles().common_areas_summary}>
-        {
-          this.state.common_areas_summary.kitchen
-          ?
-          <h2>{ `${this.state.common_areas_summary.kitchen} Kitchen${this.state.common_areas_summary.kitchen > 0 ? 's' : ''}` }</h2>
-          :
-          null
-        }
-        {
-          this.state.common_areas_summary.living_room
-          ?
-          <h2>{ `${this.state.common_areas_summary.living_room} Living Room${this.state.common_areas_summary.living_room > 0 ? 's' : ''}` }</h2>
-          :
-          null
-        }
-        {
-          this.state.common_areas_summary.study_den
-          ?
-          <h2>{ `${this.state.common_areas_summary.study_den} Study Den${this.state.common_areas_summary.study_den > 0 ? 's' : ''}` }</h2>
-          :
-          null
-        }
-        {
-          this.state.common_areas_summary.patio
-          ?
-          <h2>{ `${this.state.common_areas_summary.patio} Patio${this.state.common_areas_summary.patio > 0 ? 's' : ''}` }</h2>
-          :
-          null
-        }
-        {
-          this.state.common_areas_summary.balcony
-          ?
-          <h2>{ `${this.state.common_areas_summary.balcony} Balcon${this.state.common_areas_summary.balcony > 0 ? 'ies' : 'y'}` }</h2>
-          :
-          null
-        }
-        {
-          this.state.common_areas_summary.spare_rooms
-          ?
-          <h2>{ `${this.state.common_areas_summary.spare_rooms} Spare Room${this.state.common_areas_summary.spare_rooms > 0 ? 's' : ''}` }</h2>
-          :
-          null
-        }
-        {
-          this.state.common_areas_summary.common_storage_closets
-          ?
-          <h2>{ `${this.state.common_areas_summary.common_storage_closets} Storage Closet${this.state.common_areas_summary.common_storage_closets > 0 ? 's' : ''}` }</h2>
-          :
-          null
-        }
-      </div>
+      <SuiteCommonAreaSummary common_areas_summary={this.state.common_areas_summary} />
     )
   }
 
   generateFreeUtilities() {
     return (
-      <div style={comStyles().free_utilities_summary}>
-        {
-          this.state.free_utilities_summary.electric
-          ?
-          <h3>Electricity (hydro) included</h3>
-          :
-          <h3>Electricity (hydro) costs seperate</h3>
-        }
-        {
-          this.state.free_utilities_summary.water
-          ?
-          <h3>Water included</h3>
-          :
-          <h3>Water costs seperate</h3>
-        }
-        {
-          this.state.free_utilities_summary.heating
-          ?
-          <h3>Heating included</h3>
-          :
-          <h3>Heating costs seperate</h3>
-        }
-        {
-          this.state.free_utilities_summary.internet
-          ?
-          <h3>Internet included</h3>
-          :
-          <h3>Interet cost seperate</h3>
-        }
-      </div>
+      <SuiteFreeUtilitiesSummary free_utilities_summary={this.state.free_utilities_summary} />
     )
   }
 
@@ -418,29 +289,5 @@ const comStyles = () => {
       flexDirection: 'row',
       width: '100%',
     },
-    baths_summary: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      border: '1px solid black',
-    },
-    rooms_summary: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      border: '1px solid black',
-    },
-    common_areas_summary: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      border: '1px solid black',
-    },
-    free_utilities_summary: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      border: '1px solid black',
-    }
 	}
 }
