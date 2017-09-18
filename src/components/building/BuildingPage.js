@@ -62,6 +62,8 @@ class BuildingPage extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+
+			expand_amenities: false,
 		}
 	}
 
@@ -198,6 +200,12 @@ class BuildingPage extends Component {
 		}
 	}
 
+	expandAmenities() {
+		this.setState({
+			expand_amenities: true,
+		})
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -244,11 +252,31 @@ class BuildingPage extends Component {
 									building_amenities={this.state.amenities}
 									all_suites={this.state.suites}
 									promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
+									expandAmenities={() => this.expandAmenities()}
+									expand_amenities={this.state.expand_amenities}
 								/>
 								:
 								null
 							}
 						</div>
+						{
+							this.state.expand_amenities
+							?
+							<div style={comStyles().expanded_amenities} >
+								<Icon
+									name='close'
+									size='large'
+									style={comStyles().close_amenities}
+									onClick={() => this.setState({ expand_amenities: false, })}
+								/>
+								<AmenityBrowser
+									building={this.state.building}
+									amenities={this.state.amenities}
+								/>
+							</div>
+							:
+							null
+						}
 						<div style={comStyles().suites_table}>
 							{
 								this.state.suites && this.state.suites.length > 0
@@ -434,6 +462,11 @@ const comStyles = () => {
 			margin: '10px 0px 10px 0px',
 			backgroundColor: 'white',
 		},
+		expanded_amenities: {
+			margin: '10px 0px 10px 0px',
+			backgroundColor: 'white',
+			display: 'flex',
+		},
 		map: {
 			margin: '30px 0px 0px 0px',
 			width: '100%',
@@ -461,6 +494,13 @@ const comStyles = () => {
 		},
 		images_container: {
 			margin: '20px 0px 10px 0px'
+		},
+		close_amenities: {
+			position: 'relative',
+			top: '10px',
+			left: '10px',
+			height: '20px',
+			width: '20px',
 		}
 	}
 }

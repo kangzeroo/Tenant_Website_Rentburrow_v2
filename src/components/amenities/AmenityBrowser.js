@@ -71,11 +71,16 @@ class AmenityBrowser extends Component {
             }
           </div>
           {
+            console.log(this.state.current_amenity)
+          }
+          {
             this.state.current_amenity.imgs && this.state.current_amenity.imgs.length > 0
+            && this.state.current_amenity.imgs[0] !== null
             ?
             <div style={comStyles().imageGallery}>
               <SingularImageGallery
-                list_of_images={this.state.current_amenity.image_urls || this.state.current_amenity.imgs}
+                list_of_images={this.state.current_amenity.imgs}
+                image_size='thumbnail'
               />
             </div>
             :
@@ -137,10 +142,10 @@ const comStyles = () => {
       padding: '20px',
 		},
 		amenities: {
-			fontSize: '2.5rem',
-			lineHeight: '2.5rem',
+			fontSize: '2.0rem',
+			lineHeight: '2.0rem',
 			fontWeight: 'bold',
-			margin: '20px auto',
+			margin: '10px auto',
 			padding: '5px 0px 5px 0px',
 		},
     amenitiesGrid: {
