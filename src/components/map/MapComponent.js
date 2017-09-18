@@ -288,7 +288,7 @@ MapComponent.propTypes = {
 // for all optional props, define a default value
 MapComponent.defaultProps = {
   listOfResults: [],
-	CSS_mapWidth: '50vw',
+	CSS_mapWidth: '100%',
 	CSS_mapHeight: '100%',
   search_radius: 1000,
 }

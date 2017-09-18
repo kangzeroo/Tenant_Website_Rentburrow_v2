@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --watch --https --port 8081",
     "build": "webpack -p",
+    "start-http": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --watch --port 8081",
     "node": "nodemon --harmony server.js",
     "prod": "forever --harmony server.js"
   },

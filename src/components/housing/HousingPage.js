@@ -64,7 +64,7 @@ class HousingPage extends Component {
 					style={comStyles().map}
 				/>
 				<div style={comStyles().beta_tag_container}>
-					<img style={comStyles().beta_tag} src={require('../../../assets/images/beta_tag.png')} alt='logo' />
+					<img style={comStyles().beta_tag} src='https://s3.amazonaws.com/rentburrow-static-assets/Images/beta_tag.png' alt='logo' />
 				</div>
 			</div>
 		)
