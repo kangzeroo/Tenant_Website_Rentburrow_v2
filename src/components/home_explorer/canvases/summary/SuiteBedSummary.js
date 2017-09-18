@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Statistic,
 } from 'semantic-ui-react'
 
 
@@ -16,33 +16,31 @@ class SuiteBedSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<div style={comStyles().rooms_summary}>
-					{
-						this.props.rooms_summary.total_rooms
-						?
-						<h1>Bedrooms:</h1>
-						:
-						null
-					}
-					{
-						this.props.rooms_summary.total_rooms
-						?
-						<h2>
-							{ `${this.props.rooms_summary.total_rooms} total rooms` }
-							{ this.props.rooms_summary.total_ensuite_baths > 0 ? ` with ${this.props.rooms_summary.total_ensuite_baths} ensuite baths` : null }
-						</h2>
-						:
-						null
-					}
-					{
-						this.props.rooms_summary.standard_price
-						?
-						<h2>{ `$${this.props.rooms_summary.standard_price} per room` }</h2>
-						:
-						<h2>{ `$${this.props.rooms_summary.min_price} to $${this.props.rooms_summary.max_price} per room` }</h2>
-					}
-				</div>
+			<div style={comStyles().rooms_summary}>
+				{
+					this.props.rooms_summary.total_rooms
+					?
+					<Statistic>
+			      <Statistic.Value>
+			        {this.props.rooms_summary.total_rooms}
+			      </Statistic.Value>
+			      <Statistic.Label>Bedrooms <br /> { this.props.rooms_summary.total_ensuite_baths > 0 ? `with ${this.props.rooms_summary.total_ensuite_baths} ensuite baths` : null }</Statistic.Label>
+			    </Statistic>
+					:
+					null
+				}
+				{
+					this.props.rooms_summary.standard_price
+					?
+					<Statistic horizontal value={`$${this.props.rooms_summary.standard_price}`} label='per room' />
+					:
+					<Statistic>
+			      <Statistic.Value text>
+			        {`$${this.props.rooms_summary.min_price} - $${this.props.rooms_summary.max_price}`}
+			      </Statistic.Value>
+			      <Statistic.Label>Per Room</Statistic.Label>
+			    </Statistic>
+				}
 			</div>
 		)
 	}
@@ -87,15 +85,12 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-		container: {
-      display: 'flex',
-      flexDirection: 'column',
-		},
     rooms_summary: {
       display: 'flex',
       flexDirection: 'column',
+			justifyContent: 'center',
       height: '100%',
-      border: '1px solid black',
+			padding: '30px',
     },
 	}
 }

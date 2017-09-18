@@ -63,6 +63,9 @@ class HousingPage extends Component {
 					selected_pin={this.props.selected_pin}
 					style={comStyles().map}
 				/>
+				<div style={comStyles().beta_tag_container}>
+					<img style={comStyles().beta_tag} src={require('../../../assets/images/beta_tag.png')} alt='logo' />
+				</div>
 			</div>
 		)
 	}
@@ -134,6 +137,15 @@ const comStyles = () => {
 			position: 'absolute',
 			zIndex: 100,
 			left: 0,
-		}
+		},
+		beta_tag_container: {
+			position: 'absolute',
+			right: '0px',
+			top: '0px',
+		},
+		beta_tag: {
+			width: '120px',
+			height: '120px',
+		},
 	}
 }

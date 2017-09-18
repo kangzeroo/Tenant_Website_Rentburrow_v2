@@ -16,37 +16,35 @@ class SuiteFreeUtilitiesSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<div style={comStyles().free_utilities_summary}>
-					{
-						this.props.free_utilities_summary.electric
-						?
-						<h3>Electricity (hydro) included</h3>
-						:
-						<h3>Electricity (hydro) costs seperate</h3>
-					}
-					{
-						this.props.free_utilities_summary.water
-						?
-						<h3>Water included</h3>
-						:
-						<h3>Water costs seperate</h3>
-					}
-					{
-						this.props.free_utilities_summary.heating
-						?
-						<h3>Heating included</h3>
-						:
-						<h3>Heating costs seperate</h3>
-					}
-					{
-						this.props.free_utilities_summary.internet
-						?
-						<h3>Internet included</h3>
-						:
-						<h3>Interet cost seperate</h3>
-					}
-				</div>
+			<div style={comStyles().free_utilities_summary}>
+				{
+					this.props.free_utilities_summary.electric
+					?
+					<h3>Electricity (hydro) included</h3>
+					:
+					<h3>Electricity (hydro) costs seperate</h3>
+				}
+				{
+					this.props.free_utilities_summary.water
+					?
+					<h3>Water included</h3>
+					:
+					<h3>Water costs seperate</h3>
+				}
+				{
+					this.props.free_utilities_summary.heating
+					?
+					<h3>Heating included</h3>
+					:
+					<h3>Heating costs seperate</h3>
+				}
+				{
+					this.props.free_utilities_summary.internet
+					?
+					<h3>Internet included</h3>
+					:
+					<h3>Interet cost seperate</h3>
+				}
 			</div>
 		)
 	}
@@ -90,15 +88,12 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-		container: {
-      display: 'flex',
-      flexDirection: 'column',
-		},
     free_utilities_summary: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
+			justifyContent: 'center',
       height: '100%',
-      border: '1px solid black',
+			padding: '30px',
     }
 	}
 }
