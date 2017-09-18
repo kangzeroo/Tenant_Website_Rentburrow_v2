@@ -57,8 +57,12 @@ class PopupPanel extends Component {
 		return (
 			<div style={comStyles().container}>
         <Button
-          onClick={() => this.props.selectPopupBuilding(null)}
+          primary
+          basic
+          icon='caret left'
           content='Back'
+          onClick={() => this.props.selectPopupBuilding(null)}
+          style={comStyles().back_button}
         />
         {
           this.props.rent_type === 'sublet'
@@ -115,7 +119,8 @@ const comStyles = () => {
 			width: '50vw',
       maxWidth: '50vw',
       height: '100%',
-			backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
+			//backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
+      backgroundColor: 'white',
 			backgroundSize: 'cover',
 			position: 'absolute',
 			zIndex: 100,
@@ -135,6 +140,11 @@ const comStyles = () => {
 			width: '20px',
 			height: 'auto',
 			margin: '5px',
-		}
+		},
+    back_button: {
+      width: '100px',
+      padding: '10px',
+      margin: '10px'
+    }
 	}
 }
