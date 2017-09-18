@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Statistic,
 } from 'semantic-ui-react'
 
 
@@ -16,58 +16,56 @@ class SuiteCommonAreaSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<div style={comStyles().common_areas_summary}>
-					{
-						this.props.common_areas_summary.kitchen
-						?
-						<h2>{ `${this.props.common_areas_summary.kitchen} Kitchen${this.props.common_areas_summary.kitchen > 0 ? 's' : ''}` }</h2>
-						:
-						null
-					}
-					{
-						this.props.common_areas_summary.living_room
-						?
-						<h2>{ `${this.props.common_areas_summary.living_room} Living Room${this.props.common_areas_summary.living_room > 0 ? 's' : ''}` }</h2>
-						:
-						null
-					}
-					{
-						this.props.common_areas_summary.study_den
-						?
-						<h2>{ `${this.props.common_areas_summary.study_den} Study Den${this.props.common_areas_summary.study_den > 0 ? 's' : ''}` }</h2>
-						:
-						null
-					}
-					{
-						this.props.common_areas_summary.patio
-						?
-						<h2>{ `${this.props.common_areas_summary.patio} Patio${this.props.common_areas_summary.patio > 0 ? 's' : ''}` }</h2>
-						:
-						null
-					}
-					{
-						this.props.common_areas_summary.balcony
-						?
-						<h2>{ `${this.props.common_areas_summary.balcony} Balcon${this.props.common_areas_summary.balcony > 0 ? 'ies' : 'y'}` }</h2>
-						:
-						null
-					}
-					{
-						this.props.common_areas_summary.spare_rooms
-						?
-						<h2>{ `${this.props.common_areas_summary.spare_rooms} Spare Room${this.props.common_areas_summary.spare_rooms > 0 ? 's' : ''}` }</h2>
-						:
-						null
-					}
-					{
-						this.props.common_areas_summary.common_storage_closets
-						?
-						<h2>{ `${this.props.common_areas_summary.common_storage_closets} Storage Closet${this.props.common_areas_summary.common_storage_closets > 0 ? 's' : ''}` }</h2>
-						:
-						null
-					}
-				</div>
+			<div style={comStyles().common_areas_summary}>
+				{
+					this.props.common_areas_summary.kitchen
+					?
+					<Statistic color='orange' value={this.props.common_areas_summary.kitchen} label={`Kitchen${this.props.common_areas_summary.kitchen > 0 ? 's' : ''}`} />
+					:
+					null
+				}
+				{
+					this.props.common_areas_summary.living_room
+					?
+					<Statistic color='red' value={this.props.common_areas_summary.living_room} label={`Living Room${this.props.common_areas_summary.living_room > 0 ? 's' : ''}`} />
+					:
+					null
+				}
+				{
+					this.props.common_areas_summary.study_den
+					?
+					<Statistic color='yellow' value={this.props.common_areas_summary.study_den} label={`Study Den${this.props.common_areas_summary.study_den > 0 ? 's' : ''}`} />
+					:
+					null
+				}
+				{
+					this.props.common_areas_summary.patio
+					?
+					<Statistic color='olive' value={this.props.common_areas_summary.patio} label={`Patio${this.props.common_areas_summary.patio > 0 ? 's' : ''}`} />
+					:
+					null
+				}
+				{
+					this.props.common_areas_summary.balcony
+					?
+					<Statistic color='green' value={this.props.common_areas_summary.balcony} label={`Balcon${this.props.common_areas_summary.balcony > 0 ? 'ies' : 'y'}`} />
+					:
+					null
+				}
+				{
+					this.props.common_areas_summary.spare_rooms
+					?
+					<Statistic color='teal' value={this.props.common_areas_summary.spare_rooms} label={`Spare Room${this.props.common_areas_summary.spare_rooms > 0 ? 's' : ''}`} />
+					:
+					null
+				}
+				{
+					this.props.common_areas_summary.common_storage_closets
+					?
+					<Statistic color='blue' value={this.props.common_areas_summary.common_storage_closets} label={`Storage Closet${this.props.common_areas_summary.common_storage_closets > 0 ? 's' : ''}`} />
+					:
+					null
+				}
 			</div>
 		)
 	}
@@ -115,15 +113,11 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-		container: {
-      display: 'flex',
-      flexDirection: 'column',
-		},
     common_areas_summary: {
       display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      border: '1px solid black',
+      flexDirection: 'row',
+			justifyContent: 'center',
+			padding: '30px',
     },
 	}
 }

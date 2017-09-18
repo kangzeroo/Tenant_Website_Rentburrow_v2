@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Statistic,
 } from 'semantic-ui-react'
 
 
@@ -16,37 +16,31 @@ class SuiteBathSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<div style={comStyles().baths_summary}>
-					{
-						this.props.baths_summary.full_baths > 0 || this.props.baths_summary.half_baths > 0 || this.props.baths_summary.shared_baths > 0
-						?
-						<h1>Common Area Bathrooms:</h1>
-						:
-						null
-					}
-					{
-						this.props.baths_summary.full_baths > 0
-						?
-						<h2>{`${this.props.baths_summary.full_baths} full bathroom${this.props.baths_summary.full_baths > 0 ? 's' : ''}`}</h2>
-						:
-						null
-					}
-					{
-						this.props.baths_summary.half_baths > 0
-						?
-						<h2>{`${this.props.baths_summary.half_baths} half bathroom${this.props.baths_summary.half_baths > 0 ? 's' : ''}`}</h2>
-						:
-						null
-					}
-					{
-						this.props.baths_summary.shared_baths > 0
-						?
-						<h2>{`${this.props.baths_summary.shared_baths} suite bathroom${this.props.baths_summary.shared_baths > 0 ? 's' : ''} shared with a bedroom`}</h2>
-						:
-						null
-					}
-				</div>
+			<div style={comStyles().baths_summary}>
+				{
+					this.props.baths_summary.full_baths > 0
+					?
+					<Statistic>
+			      <Statistic.Value>{`${this.props.baths_summary.full_baths}`}</Statistic.Value>
+			      <Statistic.Label>{`Full Bathroom${this.props.baths_summary.full_baths > 0 ? 's' : ''}`}</Statistic.Label>
+			    </Statistic>
+					:
+					null
+				}
+				{
+					this.props.baths_summary.half_baths > 0
+					?
+					<h2>{`${this.props.baths_summary.half_baths} half bathroom${this.props.baths_summary.half_baths > 0 ? 's' : ''}`}</h2>
+					:
+					null
+				}
+				{
+					this.props.baths_summary.shared_baths > 0
+					?
+					<h2>{`${this.props.baths_summary.shared_baths} suite bathroom${this.props.baths_summary.shared_baths > 0 ? 's' : ''} shared with a bedroom`}</h2>
+					:
+					null
+				}
 			</div>
 		)
 	}
@@ -89,15 +83,12 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-		container: {
-      display: 'flex',
-      flexDirection: 'column',
-		},
 		baths_summary: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
+			justifyContent: 'center',
       height: '100%',
-      border: '1px solid black',
+			padding: '30px',
     },
 	}
 }

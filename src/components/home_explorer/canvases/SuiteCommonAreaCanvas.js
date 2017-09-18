@@ -286,8 +286,10 @@ const comStyles = () => {
     },
     stats_lower: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       width: '100%',
+      height: 'auto',
+      minHeight: '1000px',
     },
 	}
 }
