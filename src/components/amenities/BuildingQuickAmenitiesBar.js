@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Icon,
   Modal,
+  Button,
 } from 'semantic-ui-react'
 import { calculateBuildingQuickAmenities } from '../../api/amenities/amenity_calculations'
 import { temperatureIcon, wifiIcon, electricityIcon, parkingIcon, seeFullListIcon, } from '../../api/amenities/amenity_icons'
@@ -82,59 +83,97 @@ class BuildingQuickAmenitiesBar extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-        <div
-          onClick={() => this.toggleModal(true, 'building_amenities')}
-          style={comStyles().iconBox_fullList}
-        >
-          <img
-            className='icon icons8-Temperature'
-            width='75'
-            height='75'
-            src={seeFullListIcon().icon}
-          />
-          <h5>{ seeFullListIcon().text }</h5>
-        </div>
-        <div style={comStyles().iconBox}>
-          <img
-            className='icon icons8-Temperature'
-            width='75'
-            height='75'
-            src={temperatureIcon(this.state).icon}
-          />
-          <h5>{ temperatureIcon(this.state).text }</h5>
-        </div>
-        <div style={comStyles().iconBox}>
-          <img
-            className='icon icons8-Temperature'
-            width='75'
-            height='75'
-            src={wifiIcon(this.state).icon}
-          />
-          <h5>{ wifiIcon(this.state).text }</h5>
-        </div>
-        <div style={comStyles().iconBox}>
-          <img
-            className='icon icons8-Temperature'
-            width='75'
-            height='75'
-            src={electricityIcon(this.state).icon}
-          />
-          <h5>{ electricityIcon(this.state).text }</h5>
-        </div>
-        <div style={comStyles().iconBox}>
-          <img
-            className='icon icons8-Temperature'
-            width='75'
-            height='75'
-            src={parkingIcon(this.state).icon}
-          />
-          <h5>{ parkingIcon(this.state).text }</h5>
-        </div>
+      <div style={comStyles().container}>
+  			<div style={comStyles().amenities_container}>
+          <div
+            onClick={() => this.toggleModal(true, 'building_amenities')}
+            style={comStyles().iconBox_fullList}
+          >
+            {/*}<img
+              className='icon icons8-Temperature'
+              width='75'
+              height='75'
+              src={seeFullListIcon().icon}
+            />*/}
+            <Icon
+              name='maximize'
+              size='big'
+            />
+            <h6>Expandable Amenities</h6>
+          </div>
+          <div style={comStyles().iconBox}>
+            {/*}<img
+              className='icon icons8-Temperature'
+              width='75'
+              height='75'
+              src={temperatureIcon(this.state).icon}
+            />*/}
+            <Icon
+              name='tasks'
+              size='big'
+            />
+            <h6>{ temperatureIcon(this.state).text }</h6>
+          </div>
+          <div style={comStyles().iconBox}>
+            {/*}<img
+              className='icon icons8-Temperature'
+              width='75'
+              height='75'
+              src={wifiIcon(this.state).icon}
+            />*/}
+            <Icon
+              name='wifi'
+              size='big'
+            />
+            <h6>{ wifiIcon(this.state).text }</h6>
+          </div>
+          <div style={comStyles().iconBox}>
+          {/*
+            <img
+              className='icon icons8-Temperature'
+              width='75'
+              height='75'
+              src={electricityIcon(this.state).icon}
+            />
+            <h6>{ electricityIcon(this.state).text }</h6>*/}
+            <Icon
+              name='lightning'
+              size='big'
+            />
+            <h6>{ electricityIcon(this.state).text }</h6>
+          </div>
+          <div style={comStyles().iconBox}>
+            {/*}<img
+              className='icon icons8-Temperature'
+              width='75'
+              height='75'
+              src={parkingIcon(this.state).icon}
+            />*/}
+            <Icon
+              name='car'
+              size='big'
+            />
+            <h6>{ parkingIcon(this.state).text }</h6>
+          </div>
+          {
+            this.renderAppropriateModal(this.state.modal_name, this.state.context)
+          }
+  			</div>
         {
-          this.renderAppropriateModal(this.state.modal_name, this.state.context)
+          this.props.expand_amenities
+          ?
+          null
+          :
+          <div style={comStyles().see_more} >
+            <Button
+              content='See More'
+              primary
+              basic
+              onClick={() => this.props.expandAmenities()}
+            />
+          </div>
         }
-			</div>
+      </div>
 		)
 	}
 }
@@ -147,6 +186,8 @@ BuildingQuickAmenitiesBar.propTypes = {
   all_suites: PropTypes.array,
   suite_amenities: PropTypes.array,
   promise_array_of_suite_amenities_with_id: PropTypes.array,
+  expandAmenities: PropTypes.func.isRequired,                 // passed in
+  expand_amenities: PropTypes.bool.isRequired,                // passed in
 }
 
 // for all optional props, define a default value
@@ -179,13 +220,23 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-		container: {
+    container: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+		amenities_container: {
       display: 'flex',
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-around',
-      padding: '30px',
+      padding: '30px 30px 10px 30px',
 		},
+    see_more: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      margin: '0px 30px 10px 0px'
+    },
     icon: {
       fontSize: '3rem',
       margin: 'auto',
