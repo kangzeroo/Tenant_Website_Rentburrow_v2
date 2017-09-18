@@ -1,1 +1,1 @@
-docker build -t rentburrowtenant .
+docker build -t tenant_frontend .

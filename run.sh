@@ -1,1 +1,1 @@
-docker run -d -it -p 8080:8080 --name=rentburrowtenant rentburrowtenant npm run start -- --host=0.0.0.0
+docker run -d -it -p 8081:8081 --name=tenant_frontend tenant_frontend npm run node -- --host=54.162.169.7
