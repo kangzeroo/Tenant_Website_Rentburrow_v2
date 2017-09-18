@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
-const https = require('https')
-// const http = require('http')
+// const https = require('https')
+const http = require('http')
 const fs = require('fs')
 const router = require('./router')
 
@@ -26,8 +26,8 @@ const options = {
 const port = process.env.PORT || 8081
 
 // create a server with the native node https library
-const server = https.createServer(options, app)
-// const server = http.createServer(app)
+// const server = https.createServer(options, app)
+const server = http.createServer(app)
 
 // listen to the server on port
 server.listen(port, () => {
