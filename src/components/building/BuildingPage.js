@@ -243,6 +243,12 @@ class BuildingPage extends Component {
 								/>
 							</div>
 						</div>
+						<div style={comStyles().images_container}>
+							<SingularImageGallery
+								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
+								image_size='hd'
+							/>
+						</div>
 						<div style={comStyles().amenities} >
 							{
 								this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.suites && this.state.suites.length > 0
