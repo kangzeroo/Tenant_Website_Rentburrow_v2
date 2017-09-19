@@ -236,6 +236,7 @@ class BuildingPage extends Component {
 				<div style={comStyles().content_top} >
 					<div style={comStyles().content_left} >
 						<div style={comStyles().building_header} >
+							<h1>Welcome to {this.state.building.building_alias}!</h1>
 							<div style={comStyles().description} >
 								<div
 									dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
