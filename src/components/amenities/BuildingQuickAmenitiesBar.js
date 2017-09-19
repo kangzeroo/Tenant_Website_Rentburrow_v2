@@ -85,22 +85,22 @@ class BuildingQuickAmenitiesBar extends Component {
 		return (
       <div style={comStyles().container}>
   			<div style={comStyles().amenities_container}>
-          <div
+          {/*}<div
             onClick={() => this.toggleModal(true, 'building_amenities')}
             style={comStyles().iconBox_fullList}
           >
-            {/*}<img
+            <img
               className='icon icons8-Temperature'
               width='75'
               height='75'
               src={seeFullListIcon().icon}
-            />*/}
+            />
             <Icon
               name='maximize'
               size='big'
             />
             <h6>Expandable Amenities</h6>
-          </div>
+          </div>*/}
           <div style={comStyles().iconBox}>
             {/*}<img
               className='icon icons8-Temperature'
