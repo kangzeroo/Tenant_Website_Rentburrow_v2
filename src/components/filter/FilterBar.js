@@ -28,7 +28,6 @@ import {
 } from '../../actions/search/search_actions'
 import {
 	querySubletsInArea,
-  sortFBPosts,
 } from '../../api/search/sublet_api'
 import LeaseFilterCard from './LeaseFilterCard'
 import SubletFilterCard from './SubletFilterCard'
@@ -84,12 +83,57 @@ class FilterBar extends Component {
       sort_by: value.value
     }, () => {
       if (this.props.rent_type === 'sublet') {
-        sortFBPosts({
-          sort_by: value.value,
-        })
-        .then((sublets) => {
-          this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
-        })
+        // sortFBPosts({
+        //   sort_by: value.value,
+        // })
+        // .then((sublets) => {
+        //   this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
+        // })
+        let sorted_sublets
+        if (value.value === 'pricelow') {
+          sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
+            let a_price
+            let b_price
+            if (isNaN(a.price)) {
+              a_price = 99999
+            } else {
+              a_price = parseInt(a.price, 10)
+            }
+
+            if (isNaN(b.price)) {
+              b_price = 99999
+            } else {
+              b_price = parseInt(b.price, 10)
+            }
+            return a_price - b_price
+          })
+        } else if (value.value === 'pricehigh') {
+          sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
+            let a_price
+            let b_price
+            if (isNaN(a.price)) {
+              a_price = 0
+            } else {
+              a_price = parseInt(a.price, 10)
+            }
+
+            if (isNaN(b.price)) {
+              b_price = 0
+            } else {
+              b_price = parseInt(b.price, 10)
+            }
+            return b_price - a_price
+          })
+        } else if (value.value === 'datenew') {
+          sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
+            return a.scrapped_at - b.scrapped_at
+          })
+        } else if (value.value === 'dateold') {
+          sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
+            return b.scrapped_at - a.scrapped_at
+          })
+        }
+        this.props.saveSubletsToRedux(sorted_sublets)
       } else {
         let sorted_buildings
         if (value.value === 'pricelow') {
@@ -97,13 +141,13 @@ class FilterBar extends Component {
             let a_price
             let b_price
             if (isNaN(a.min_price)) {
-              a_price = 0
+              a_price = 99999
             } else {
               a_price = parseInt(a.min_price, 10)
             }
 
             if (isNaN(b.min_price)) {
-              b_price = 0
+              b_price = 99999
             } else {
               b_price = parseInt(b.min_price, 10)
             }

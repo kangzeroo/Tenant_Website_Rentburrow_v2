@@ -7,8 +7,12 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { filterFBPosts } from '../../api/search/sublet_api'
-import { saveSubletsToRedux, saveSubletFilterParams, } from '../../actions/search/search_actions'
+import { } from '../../api/search/sublet_api'
+import {
+	saveSubletsToRedux,
+	saveSubletFilterParams,
+	saveFilteredSubletsToRedux,
+} from '../../actions/search/search_actions'
 import {
 	Checkbox,
 	Button,
@@ -26,7 +30,7 @@ class SubletFilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			room_count: 0,
+			room_count: 1,
 			ensuite_bath: false,
 			female_only: false,
       utils_incl: false,
@@ -47,11 +51,53 @@ class SubletFilterCard extends Component {
 	}
 
 	applyFilters() {
+		// this.props.saveSubletFilterParams(this.state)
+		// filterFBPosts(this.state).then((sublets) => {
+		// 	this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
+		// 	this.props.closeFilterCard()
+		// })
+
 		this.props.saveSubletFilterParams(this.state)
-		filterFBPosts(this.state).then((sublets) => {
-			this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
-			this.props.closeFilterCard()
-		})
+
+		let filtered = this.props.sublets
+
+		// If pricing filters have changed...
+		if (this.state.price.min !== 500 || this.state.price.max !== 900) {
+			filtered = filtered.filter((building) => {
+				return building.price >= this.state.price.min && building.price <= this.state.price.max
+			})
+		}
+
+		// if the number of rooms filter has changed...
+		if (this.state.room_count > 1) {
+			filtered = filtered.filter((building) => {
+				return building.rooms_left >= this.state.room_count
+			})
+		}
+
+		// if ensuite_bath is true
+		if (this.state.ensuite_bath) {
+			filtered = filtered.filter((building) => {
+				return building.ensuite_bath
+			})
+		}
+
+		// if utilities_included is true
+		if (this.state.utils_incl) {
+			filtered = filtered.filter((building) => {
+				return building.utils_included
+			})
+		}
+
+		// if female onlys is true
+		if (this.state.female_only) {
+			filtered = filtered.filter((building) => {
+				return building.female_only
+			})
+		}
+
+		this.props.saveFilteredSubletsToRedux(filtered)
+		this.props.closeFilterCard()
 	}
 
 	render() {
@@ -151,6 +197,9 @@ SubletFilterCard.propTypes = {
 	closeFilterCard: PropTypes.func.isRequired,
 	saveSubletFilterParams: PropTypes.func.isRequired,
 	sublet_filter_params: PropTypes.object.isRequired,
+	sublet_search_results: PropTypes.array.isRequired,
+	sublets: PropTypes.array.isRequired,
+	saveFilteredSubletsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -165,6 +214,8 @@ const RadiumHOC = Radium(SubletFilterCard)
 const mapReduxToProps = (redux) => {
 	return {
 		sublet_filter_params: redux.filter.sublet_filter_params,
+		sublet_search_results: redux.search.sublet_search_results,
+		sublets: redux.search.sublets,
 	}
 }
 
@@ -173,6 +224,7 @@ export default withRouter(
 	connect(mapReduxToProps, {
 		saveSubletsToRedux,
 		saveSubletFilterParams,
+		saveFilteredSubletsToRedux,
 	})(RadiumHOC)
 )
 
