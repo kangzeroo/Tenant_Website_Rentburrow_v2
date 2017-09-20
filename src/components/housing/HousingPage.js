@@ -23,6 +23,13 @@ import PopupPanel from './panel/PopupPanel'
 
 class HousingPage extends Component {
 
+	constructor() {
+		super()
+		this.state = {
+			buildings: [],
+		}
+	}
+
 	componentWillMount() {
 		this.refreshBuildings()
 	}
@@ -31,8 +38,12 @@ class HousingPage extends Component {
 		queryBuildingsInArea({
 			...this.props.current_gps_center,
 			filterParams: this.props.lease_filter_params,
-		}).then((buildings) => {
+		}).then((data) => {
+			const buildings = data.map(s => JSON.parse(s))
 			this.props.saveBuildingsToRedux(buildings)
+			this.setState({
+				buildings,
+			})
 		})
 	}
 
@@ -51,6 +62,7 @@ class HousingPage extends Component {
 				}
 				<HousingPanel
 					refresh={() => this.refreshBuildings()}
+					buildings={this.state.buildings}
 				/>
 				<MapComponent
 					listOfResults={
