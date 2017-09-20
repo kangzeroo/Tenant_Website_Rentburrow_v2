@@ -41,6 +41,7 @@ class AppRoot extends Component {
     const location = this.props.location.pathname
     const onSublet = location === '/sublet' || location === '/sublets'
     const onLease = location === '/lease' || location === '/leases'
+    this.checkIfMobile()
     initiateFacebook().then(() => {
       // autologin to facebook if possible
       return checkIfFacebookLoggedIn()
@@ -71,6 +72,12 @@ class AppRoot extends Component {
         this.props.history.push(path)
       })
     }
+  }
+
+  checkIfMobile() {
+    if(screen.width <= 600 || screen.height <= 740){
+			window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
+		}
   }
 
   autoSetLanguage() {
