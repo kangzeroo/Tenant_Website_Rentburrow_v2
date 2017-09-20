@@ -56,8 +56,8 @@ class LeaseFilterCard extends Component {
 		// 	this.props.saveBuildingsToRedux(buildings)
 		// 	this.props.closeFilterCard()
 		// })
-		console.log(this.props.buildings)
-		const filtered = this.props.buildings.filter((building) => {
+		console.log(this.props.building_search_results)
+		const filtered = this.props.building_search_results.filter((building) => {
 			return building.min_price >= this.state.price.min && building.min_price <= this.state.price.max
 		})
 		this.props.saveBuildingsToRedux(filtered)
@@ -194,7 +194,7 @@ LeaseFilterCard.propTypes = {
 	saveLeaseFilterParams: PropTypes.func.isRequired,
 	lease_filter_params: PropTypes.object.isRequired,
 	current_gps_center: PropTypes.object.isRequired,
-	buildings: PropTypes.array.isRequired, 						// passed in
+	building_search_results: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
@@ -210,6 +210,7 @@ const mapReduxToProps = (redux) => {
 	return {
 		lease_filter_params: redux.filter.lease_filter_params,
 		current_gps_center: redux.filter.current_gps_center,
+		building_search_results: redux.search.building_search_results,
 	}
 }
 
