@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { SEARCH_MICROSERVICE } from '../API_URLS'
+import { convertToRegularSubletObj } from '../search/sublet_api'
 
 export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
 	console.log('scrapeFacebookSublets()')
@@ -101,7 +102,8 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 				.then((data) => {
 					if (data.data.length > 0) {
 						// lastPostTime = data.data
-						const lastPostTime = JSON.parse(data.data[0]).posted_date || 0
+						const lastPostTime = convertToRegularSubletObj(data.data[0]).scrapped_at * 1000 || 0
+						console.log(lastPostTime)
 						return Promise.resolve({
               ...group,
               lastPostTime
@@ -131,7 +133,7 @@ const getPostsFromGroups = ({ groupsTime, profile }) => {
 		const promises = groupsTime.map((group) => {
 			const x = new Promise((res, rej) => {
 				FB.api(
-	        `/${group.groupid}/feed?limit=30`,
+	        `/${group.groupid}/feed?limit=10`,
 	        { access_token: access_token },
 	      	(response) => {
 	          if (response && !response.error) {

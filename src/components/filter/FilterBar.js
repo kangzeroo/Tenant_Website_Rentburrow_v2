@@ -127,7 +127,7 @@ class FilterBar extends Component {
         ...this.props.current_gps_center,
         filterParams: this.props.sublet_filter_params,
       }).then((data) => {
-        this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
+        this.props.saveSubletsToRedux(data)
         this.props.history.push('/sublet')
         this.props.changeRentType('sublet')
   		})

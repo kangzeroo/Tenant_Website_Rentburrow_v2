@@ -29,8 +29,11 @@ class SubletCard extends Component {
     window.open(`${window.location.origin}/sublet/${this.props.fb_post.post_id}`, '_blank')
   }
 
-  goToOriginalPost() {
-    window.open(`${this.props.fb_post.post_url}`)
+  goToOriginalPost(e) {
+    if (e) {
+      e.stopPropagation()
+    }
+    window.open(`https://www.facebook.com/${this.props.fb_post.post_id}`, '_blank')
   }
 
 	render() {
@@ -56,7 +59,7 @@ class SubletCard extends Component {
                 src={this.props.fb_post.fb_user_pic}
                 size='tiny'
                 bordered
-                onClick={() => this.goToOriginalPost()}
+                onClick={(e) => this.goToOriginalPost(e)}
               />
             </div>
             <div> Posted by {this.props.fb_post.fb_user_name} </div>
