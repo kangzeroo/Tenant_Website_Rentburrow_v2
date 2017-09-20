@@ -6,6 +6,7 @@ import {
   CHANGE_SEARCH_STYLE,
   SELECT_PIN,
   FOUND_SUBLETS,
+  FILTERED_SUBLETS,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
@@ -62,6 +63,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         sublets: action.payload,
+        sublet_search_results: action.payload,
+      }
+    case FILTERED_SUBLETS:
+      return {
+        ...state,
         sublet_search_results: action.payload,
       }
 		default:

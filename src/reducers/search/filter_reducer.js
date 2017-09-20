@@ -22,7 +22,7 @@ const INITIAL_STATE = {
       min: 500,
       max: 900,
     },
-    room_count: 0,
+    room_count: 1,
     ensuite_bath: false,
     utils_incl: false,
     female_only: false,

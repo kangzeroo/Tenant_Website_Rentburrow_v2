@@ -9,6 +9,7 @@ import {
   CHANGE_RENT_TYPE,
   SET_CURRENT_GPS_CENTER,
   FILTERED_BUILDINGS,
+  FILTERED_SUBLETS,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -66,6 +67,25 @@ export const saveSubletsToRedux = (sublets) => {
     })
   }
 }
+
+// save filtered sublets to Redux
+export const saveFilteredSubletsToRedux = (sublets) => {
+  return (dispatch) => {
+    dispatch({
+      type: FILTERED_SUBLETS,
+      payload: sublets.map((sublet) => {
+        const x = sublet
+        return {
+          ...x,
+          gps_x: parseFloat(x.gps_x),
+          gps_y: parseFloat(x.gps_y),
+          price: parseFloat(x.price),
+        }
+      }),
+    })
+  }
+}
+
 
 // determine what style of card to show (row, grid, cover)
 export const changeCardStyle = (style) => {
