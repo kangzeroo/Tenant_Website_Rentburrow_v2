@@ -92,14 +92,39 @@ class FilterBar extends Component {
         })
       } else {
         let sorted_buildings
-        console.log(this.props.building_search_results)
         if (value.value === 'pricelow') {
           sorted_buildings = this.props.building_search_results.sort((a, b) => {
-            return parseInt(a.min_price, 10) - parseInt(b.min_price, 10)
+            let a_price
+            let b_price
+            if (isNaN(a.min_price)) {
+              a_price = 0
+            } else {
+              a_price = parseInt(a.min_price, 10)
+            }
+
+            if (isNaN(b.min_price)) {
+              b_price = 0
+            } else {
+              b_price = parseInt(b.min_price, 10)
+            }
+            return a_price - b_price
           })
         } else if (value.value === 'pricehigh') {
           sorted_buildings = this.props.building_search_results.sort((a, b) => {
-            return parseInt(b.min_price, 10) - parseInt(a.min_price, 10)
+            let a_price
+            let b_price
+            if (isNaN(a.min_price)) {
+              a_price = 0
+            } else {
+              a_price = parseInt(a.min_price, 10)
+            }
+
+            if (isNaN(b.min_price)) {
+              b_price = 0
+            } else {
+              b_price = parseInt(b.min_price, 10)
+            }
+            return b_price - a_price
           })
         } else if (value.value === 'datenew') {
           sorted_buildings = this.props.building_search_results.sort((a, b) => {
