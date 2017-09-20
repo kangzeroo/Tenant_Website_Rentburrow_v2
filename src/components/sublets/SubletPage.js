@@ -26,11 +26,11 @@ class SubletPage extends Component {
 
 	componentWillMount() {
 		let position_start = this.props.location.pathname.indexOf('/sublet/') + 8
-    let post_id = this.props.location.pathname.slice(position_start)
-    console.log(post_id)
-    getFBPostById({ post_id }).then((data) => {
+    let fb_post_id = this.props.location.pathname.slice(position_start)
+    console.log(fb_post_id)
+    getFBPostById({ fb_post_id }).then((data) => {
       this.setState({
-        fb_post: JSON.parse(data)
+        fb_post: data
       }, () => console.log(this.state.fb_post))
     })
 	}

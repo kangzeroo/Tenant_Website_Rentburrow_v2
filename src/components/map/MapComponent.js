@@ -122,7 +122,7 @@ class MapComponent extends Component {
 				...currentCenterCoords,
 				filterParams: this.props.sublet_filter_params,
 			}).then((data) => {
-        this.props.saveSubletsToRedux(data.map(s => JSON.parse(s)))
+        this.props.saveSubletsToRedux(data)
       })
 		} else {
 			queryBuildingsInArea({
