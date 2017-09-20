@@ -1,6 +1,7 @@
 import {
   SEARCH_STRING,
   FOUND_BUILDINGS,
+  FILTERED_BUILDINGS,
   CHANGE_CARD_STYLE,
   CHANGE_SEARCH_STYLE,
   SELECT_PIN,
@@ -36,6 +37,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         building_search_results: action.payload,
         buildings: action.payload,
+      }
+    case FILTERED_BUILDINGS:
+      return {
+        ...state,
+        building_search_results: action.payload,
       }
     case CHANGE_SEARCH_STYLE:
       return {
