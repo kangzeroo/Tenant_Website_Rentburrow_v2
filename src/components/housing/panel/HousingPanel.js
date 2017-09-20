@@ -77,6 +77,7 @@ class HousingPanel extends Component {
 					*/}
 					<FilterBar
 						rent_type={this.props.rent_type}
+						buildings={this.props.buildings}
 					/>
 					{
 						this.props.rent_type === 'sublet'
@@ -122,6 +123,7 @@ HousingPanel.propTypes = {
 	card_style: PropTypes.string.isRequired,
 	rent_type: PropTypes.string.isRequired,
 	refresh: PropTypes.func.isRequired, 					// passed in
+	buildings: PropTypes.array.isReqruied,				// passed in
 }
 
 // for all optional props, define a default value

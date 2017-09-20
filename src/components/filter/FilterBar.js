@@ -91,12 +91,32 @@ class FilterBar extends Component {
           this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
         })
       } else {
-        sortBuildings({
-          sort_by: value.value
-        })
-        .then((buildings) => {
-          this.props.saveBuildingsToRedux(buildings)
-        })
+        let sorted_buildings
+        console.log(this.props.buildings)
+        if (value.value === 'pricelow') {
+          sorted_buildings = this.props.buildings.sort((a, b) => {
+            return parseInt(a.min_price, 10) - parseInt(b.min_price, 10)
+          })
+        } else if (value.value === 'pricehigh') {
+          sorted_buildings = this.props.buildings.sort((a, b) => {
+            return parseInt(b.min_price, 10) - parseInt(a.min_price, 10)
+          })
+        } else if (value.value === 'datenew') {
+          sorted_buildings = this.props.buildings.sort((a, b) => {
+            return Date.parse(a.created_at) - Date.parse(b.created_at)
+          })
+        } else if (value.value === 'dateold') {
+          sorted_buildings = this.props.buildings.sort((a, b) => {
+            return Date.parse(b.created_at) - Date.parse(a.created_at)
+          })
+        }
+        this.props.saveBuildingsToRedux(sorted_buildings)
+        // sortBuildings({
+        //   sort_by: value.value
+        // })
+        // .then((buildings) => {
+        //   this.props.saveBuildingsToRedux(buildings)
+        // })
       }
     })
   }
@@ -128,6 +148,7 @@ class FilterBar extends Component {
       return (
         <LeaseFilterCard
           closeFilterCard={() => this.closePanel()}
+          buildings={this.props.buildings}
         />
       )
     }
@@ -205,6 +226,7 @@ FilterBar.propTypes = {
 	rent_type: PropTypes.string.isRequired,
 	saveBuildingsToRedux: PropTypes.func.isRequired,
 	saveSubletsToRedux: PropTypes.func.isRequired,
+  buildings: PropTypes.array.isRequired,        // passed in
 }
 
 // for all optional props, define a default value
