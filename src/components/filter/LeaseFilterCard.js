@@ -71,6 +71,21 @@ class LeaseFilterCard extends Component {
 				return parseInt(building.max_rooms, 10) >= this.state.room_count
 			})
 		}
+
+		// if ensuite_bath is true
+		if (this.state.ensuite_bath) {
+			filtered = filtered.filter((building) => {
+				return building.ensuite_bath
+			})
+		}
+
+		// if utilities_included is true
+		if (this.state.utils_incl) {
+			filtered = filtered.filter((building) => {
+				return building.utils_incl ? true : false
+			})
+		}
+
 		this.props.saveFilteredBuildingsToRedux(filtered)
 		this.props.saveLeaseFilterParams(this.state)
 		this.props.closeFilterCard()
@@ -172,11 +187,12 @@ class LeaseFilterCard extends Component {
 						checked={this.state.utils_incl}
 						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
 						toggle />
+					{/*
 					<Checkbox
 						label='Parking Available'
 						checked={this.state.parking_avail}
 						onChange={(e, x) => this.updateAttr('parking_avail', x.checked)}
-						toggle />
+						toggle />*/}
 				</div>
 				<div style={comStyles().buttons_container}>
 					<Button
