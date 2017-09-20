@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import { queryBuildingsInArea } from '../../api/search/search_api'
-import { saveBuildingsToRedux, saveLeaseFilterParams, } from '../../actions/search/search_actions'
+import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRedux, } from '../../actions/search/search_actions'
 import {
 	Checkbox,
 	Button,
@@ -26,7 +26,7 @@ class LeaseFilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			room_count: 0,
+			room_count: 1,
 			ensuite_bath: false,
 			utils_incl: false,
 			parking_avail: false,
@@ -48,14 +48,47 @@ class LeaseFilterCard extends Component {
 	}
 
 	applyFilters() {
+		// this.props.saveLeaseFilterParams(this.state)
+		// queryBuildingsInArea({
+		// 	...this.props.current_gps_center,
+		// 	filterParams: this.state,
+		// }).then((buildings) => {
+		// 	this.props.saveBuildingsToRedux(buildings)
+		// 	this.props.closeFilterCard()
+		// })
+		let filtered = this.props.buildings
+
+		// If pricing filters have changed...
+		if (this.state.price.min !== 500 || this.state.price.max !== 900) {
+			filtered = filtered.filter((building) => {
+				return building.min_price >= this.state.price.min && building.min_price <= this.state.price.max
+			})
+		}
+
+		// if the number of rooms filter has changed...
+		if (this.state.room_count > 1) {
+			filtered = filtered.filter((building) => {
+				return parseInt(building.max_rooms, 10) >= this.state.room_count
+			})
+		}
+
+		// if ensuite_bath is true
+		if (this.state.ensuite_bath) {
+			filtered = filtered.filter((building) => {
+				return building.ensuite_bath
+			})
+		}
+
+		// if utilities_included is true
+		if (this.state.utils_incl) {
+			filtered = filtered.filter((building) => {
+				return building.utils_incl ? true : false
+			})
+		}
+
+		this.props.saveFilteredBuildingsToRedux(filtered)
 		this.props.saveLeaseFilterParams(this.state)
-		queryBuildingsInArea({
-			...this.props.current_gps_center,
-			filterParams: this.state,
-		}).then((buildings) => {
-			this.props.saveBuildingsToRedux(buildings)
-			this.props.closeFilterCard()
-		})
+		this.props.closeFilterCard()
 	}
 
 /*
@@ -112,7 +145,7 @@ class LeaseFilterCard extends Component {
 							basic
 							icon='minus'
 							onClick={() => this.updateAttr('room_count', this.state.room_count - 1)}
-							disabled={this.state.room_count === 0}
+							disabled={this.state.room_count <= 1}
 						/>
 						<div style={comStyles().room_text} >
 							{this.state.room_count}+
@@ -123,7 +156,7 @@ class LeaseFilterCard extends Component {
 							basic
 							icon='plus'
 							onClick={() => this.updateAttr('room_count', this.state.room_count + 1)}
-							disabled={this.state.room_count === 10}
+							disabled={this.state.room_count >= 10}
 						/>
 					</div>
 				</div>
@@ -154,11 +187,12 @@ class LeaseFilterCard extends Component {
 						checked={this.state.utils_incl}
 						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
 						toggle />
+					{/*
 					<Checkbox
 						label='Parking Available'
 						checked={this.state.parking_avail}
 						onChange={(e, x) => this.updateAttr('parking_avail', x.checked)}
-						toggle />
+						toggle />*/}
 				</div>
 				<div style={comStyles().buttons_container}>
 					<Button
@@ -187,6 +221,9 @@ LeaseFilterCard.propTypes = {
 	saveLeaseFilterParams: PropTypes.func.isRequired,
 	lease_filter_params: PropTypes.object.isRequired,
 	current_gps_center: PropTypes.object.isRequired,
+	building_search_results: PropTypes.array.isRequired,
+	buildings: PropTypes.array.isRequired,
+	saveFilteredBuildingsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -202,6 +239,8 @@ const mapReduxToProps = (redux) => {
 	return {
 		lease_filter_params: redux.filter.lease_filter_params,
 		current_gps_center: redux.filter.current_gps_center,
+		building_search_results: redux.search.building_search_results,
+		buildings: redux.search.buildings,
 	}
 }
 
@@ -210,6 +249,7 @@ export default withRouter(
 	connect(mapReduxToProps, {
 		saveBuildingsToRedux,
 		saveLeaseFilterParams,
+		saveFilteredBuildingsToRedux,
 	})(RadiumHOC)
 )
 

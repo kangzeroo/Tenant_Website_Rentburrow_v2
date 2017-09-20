@@ -9,6 +9,7 @@ export const CHANGE_CARD_STYLE = 'CHANGE_CARD_STYLE'
 
 // actions related to search
 export const FOUND_BUILDINGS = 'FOUND_BUILDINGS'
+export const FILTERED_BUILDINGS = 'FILTERED_BUILDINGS'
 export const FOUND_SUBLETS = 'FOUND_SUBLETS'
 export const SELECT_PIN = 'SELECT_PIN'
 export const SELECT_CORPORATION = 'SELECT_CORPORATION'

@@ -8,6 +8,7 @@ import {
   SAVE_SUBLET_FILTER_PARAMS,
   CHANGE_RENT_TYPE,
   SET_CURRENT_GPS_CENTER,
+  FILTERED_BUILDINGS,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -16,8 +17,26 @@ export const saveBuildingsToRedux = (buildings) => {
   return (dispatch) => {
     dispatch({
       type: FOUND_BUILDINGS,
-      payload: buildings.map((building) => {
-        const x = JSON.parse(building)
+      payload: buildings.map((x) => {
+        return {
+          ...x,
+          gps_x: parseFloat(x.gps_x),
+          gps_y: parseFloat(x.gps_y),
+          max_price: parseFloat(x.max_price),
+          min_price: parseFloat(x.min_price),
+        }
+      }),
+    })
+  }
+}
+
+// Save filtered buildings to redux
+export const saveFilteredBuildingsToRedux = (buildings) => {
+  // dispatch lets you send actions to Redux
+  return (dispatch) => {
+    dispatch({
+      type: FILTERED_BUILDINGS,
+      payload: buildings.map((x) => {
         return {
           ...x,
           gps_x: parseFloat(x.gps_x),

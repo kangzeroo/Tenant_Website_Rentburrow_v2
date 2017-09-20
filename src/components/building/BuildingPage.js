@@ -236,6 +236,7 @@ class BuildingPage extends Component {
 				<div style={comStyles().content_top} >
 					<div style={comStyles().content_left} >
 						<div style={comStyles().building_header} >
+							<h1>Welcome to {this.state.building.building_alias}!</h1>
 							<div style={comStyles().description} >
 								<div
 									dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
@@ -277,6 +278,12 @@ class BuildingPage extends Component {
 							:
 							null
 						}
+						<div style={comStyles().images_container}>
+							<SingularImageGallery
+								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
+								image_size='hd'
+							/>
+						</div>
 						<div style={comStyles().suites_table}>
 							{
 								this.state.suites && this.state.suites.length > 0
