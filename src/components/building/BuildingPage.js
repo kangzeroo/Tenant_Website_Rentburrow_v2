@@ -183,7 +183,7 @@ class BuildingPage extends Component {
 			return (
 				<iframe
 					width='100%'
-					height={`500px`}
+					height={`600px`}
 					src={building.istaging_url}
 					frameBorder='0'
 					allowFullScreen
@@ -376,8 +376,8 @@ export default withRouter(
 const loadStyles = (img) => {
 	return {
 		cover_photo: {
-			minHeight: '500px',
-			maxHeight: '500px',
+			minHeight: '600px',
+			maxHeight: '600px',
 			minWidth: '100%',
 			maxWidth: '100%',
 			overflow: 'hidden',

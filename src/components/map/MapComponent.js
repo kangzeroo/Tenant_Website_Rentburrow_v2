@@ -99,7 +99,7 @@ class MapComponent extends Component {
 				// // We want to compare the current center coords with the prev center coords and only requery the db if the distance between the two points is greater than a certain amount
 				// const prevCenterCoords = self.props.mapMoved
 				// if(self.panToPrev == self.props.panTo && getDistanceFromLatLonInKm(prevCenterCoords, currentCenterCoords) >= 0.5){
-					// this.requeryDatabaseWithNewCoords(currentCenterCoords)
+					this.requeryDatabaseWithNewCoords(currentCenterCoords)
 				// })
 			},
 			(err) => {

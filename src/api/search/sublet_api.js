@@ -19,12 +19,15 @@ export const querySubletsInArea = ({ lat, lng, filterParams }) => {
   return p
 }
 
-export const getFBPostById = ({ fb_post_id, }) => {
+export const matchSubletsByPlaceId = ({ place_id }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/get_sublet_by_id`, { fb_post_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets`, { place_id })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
-        res(convertToRegularSubletObj(data.data[0]))
+        console.log(data)
+        res(data.data.map((sublet) => {
+          return convertToRegularSubletObj(sublet)
+        }))
       })
       .catch((err) => {
         rej(err)
@@ -38,7 +41,7 @@ export const convertToRegularSubletObj = (sublet) => {
     posted_date: sublet.POSTED_DATE,
     post_id: sublet.POST_ID,
     address: sublet.ADDRESS,
-    place_id: sublet.POSTED_DATE,
+    place_id: sublet.PLACE_ID,
     description: sublet.DESCRIPTION,
     price: sublet.PRICE,
     fb_user_id: sublet.FB_USER_ID,

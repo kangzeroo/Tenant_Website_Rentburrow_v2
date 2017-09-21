@@ -48,7 +48,7 @@ class PopupPanel extends Component {
     return (
       <SubletCard
 				key={sublet.post_id}
-				fb_post={sublet}
+				sublet={sublet}
 			/>
     )
   }
