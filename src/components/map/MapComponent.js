@@ -247,8 +247,7 @@ class MapComponent extends Component {
 				// check if there is a marker passed in
 				if (marker) {
 					// check if the pin is the one highlighted and set the color to blue and bouncing animation
-					if (this.pins[m].pin_id === marker.pin_id) {
-					// if (matchPinIDFromPins(marker, this.pins)) {
+					if (this.props.rent_type === 'sublet' ? matchPinIDFromPins(marker.pin_id, this.pins, this.props.listOfResults) === this.pins[m].pin_id : this.pins[m].pin_id === marker.pin_id) {
 	          this.pins[m].setIcon(this.blue_map_pin)
 						this.pins[m].setZIndex(12)
 						this.pins[m].setAnimation(google.maps.Animation.BOUNCE)

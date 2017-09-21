@@ -39,6 +39,7 @@ class AppRoot extends Component {
     this.autoSetLanguage()
     // grab the url that was given
     const location = this.props.location.pathname
+    console.log(location)
     const onSublet = location === '/sublet' || location === '/sublets'
     const onLease = location === '/lease' || location === '/leases'
     this.checkIfMobile()
