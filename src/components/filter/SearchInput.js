@@ -32,6 +32,7 @@ class SearchInput extends Component {
                           <Icon name='world' /> Waterloo, ON
                         </span>)}
               button
+              selection
               options={[
                 { key: 'waterloo', text: 'Waterloo, ON', value: 'waterloo' }
               ]}
