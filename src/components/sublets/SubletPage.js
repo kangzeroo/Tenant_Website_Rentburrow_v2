@@ -11,7 +11,7 @@ import { withRouter } from 'react-router-dom'
 import {
 } from 'semantic-ui-react'
 import {
-	getFBPostById,
+	matchSubletsByPlaceId,
 } from '../../api/search/sublet_api'
 import SubletCard from '../housing/cards/SubletCard'
 
@@ -20,18 +20,17 @@ class SubletPage extends Component {
 	constructor() {
 		super()
 		this.state = {
-			fb_post: {},
+			sublets: [],
 		}
 	}
 
 	componentWillMount() {
 		let position_start = this.props.location.pathname.indexOf('/sublet/') + 8
-    let fb_post_id = this.props.location.pathname.slice(position_start)
-    console.log(fb_post_id)
-    getFBPostById({ fb_post_id }).then((data) => {
+    let place_id = this.props.location.pathname.slice(position_start)
+    matchSubletsByPlaceId({ place_id }).then((sublets) => {
       this.setState({
-        fb_post: data
-      }, () => console.log(this.state.fb_post))
+        sublets: sublets
+      }, () => console.log(this.state.sublets))
     })
 	}
 
@@ -57,14 +56,14 @@ class SubletPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				{
-					this.state.fb_post.post_id
-					?
-					<SubletCard
-						key={this.state.fb_post.post_id}
-						fb_post={this.state.fb_post}
-					/>
-					:
-					null
+					this.state.sublets.map((sublet) => {
+						return (
+							<SubletCard
+								key={sublet.post_id}
+								sublet={sublet}
+							/>
+						)
+					})
 				}
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)

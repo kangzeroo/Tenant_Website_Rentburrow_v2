@@ -60,7 +60,7 @@ class HousingPanel extends Component {
 		return (
 			<SubletCard
 				key={fb_post.post_id}
-				fb_post={fb_post}
+				sublet={fb_post}
 			/>
 		)
 	}

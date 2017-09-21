@@ -20,6 +20,7 @@ import {
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
 import { xGreyText, xBootstrapRed } from '../../../styles/base_colors'
+import { sortAmenitiesSublet } from '../../../api/amenities/sublet_amenities'
 import {
   shortenAddress,
 } from '../../../api/general/general_api'
@@ -27,8 +28,8 @@ import {
 
 class SubletCard extends Component {
 
-  selectThisPost() {
-    window.open(`${window.location.origin}/sublet/${this.props.fb_post.post_id}`, '_blank')
+  selectThisPost(sublet) {
+    window.open(`${window.location.origin}/sublet/${sublet.place_id}`, '_blank')
   }
 
   goToOriginalPost(e, post_id) {
@@ -47,40 +48,54 @@ class SubletCard extends Component {
 
 	render() {
 		return (
-      <Card key={this.props.fb_post.post_id} onClick={() => this.selectThisPost()} onMouseEnter={() => this.props.selectPinToRedux(this.props.fb_post.post_id)} style={comStyles().hardCard}>
+      <Card key={this.props.sublet.post_id} onClick={() => this.selectThisPost(this.props.sublet)} onMouseEnter={() => this.props.selectPinToRedux(this.props.sublet.post_id)} raised style={comStyles().hardCard}>
 
 				<div id='infobar' style={comStyles().infobar}>
 					{/* Profile Picture */}
           <Image
             shape='circular'
-            src={this.props.fb_post.fb_user_pic}
+            src={this.props.sublet.fb_user_pic}
             size='tiny'
             bordered
-            onClick={(e) => this.goToFacebookUser(e, this.props.fb_post.fb_user_id)}
+            onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)}
           />
 
 					<div id='infobadge' style={comStyles().infobadge}>
 						{/* Address */}
-						<div onClick={(e) => this.goToOriginalPost(e, this.props.fb_post.post_id)} style={comStyles().address}>
-							{shortenAddress(this.props.fb_post.address)}
+						<div onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().address}>
+							{shortenAddress(this.props.sublet.address)}
 						</div>
 						{/* User Name */}
 						<div style={comStyles().userinfo}>
-							<a href={`http://www.facebook.com/${this.props.fb_post.fb_user_id}`} target='_blank'>{this.props.fb_post.fb_user_name}</a> &nbsp;
+							<a href={`http://www.facebook.com/${this.props.sublet.fb_user_id}`} target='_blank'>{this.props.sublet.fb_user_name}</a> &nbsp;
 							on &nbsp;
-							<b>{moment(this.props.fb_post.posted_date).format('MMM Do')}</b>
+							<b>{moment(this.props.sublet.posted_date).format('MMM Do')}</b>
 						</div>
 					</div>
 				</div>
 
 				{/* Price */}
 				<div style={comStyles().pricediv}>
-					<div style={comStyles().price}>$ {this.props.fb_post.price}</div>
+					<div style={comStyles().price}>{this.props.sublet.price ? `$${this.props.sublet.price}` : <h3>Inquire Price</h3>}</div>
 				</div>
 
 				{/* Icons */}
 				<div id='iconbar' style={comStyles().iconbar}>
-					{/*sortIconsSublet(this.props.fb_post)*/}
+					{
+            sortAmenitiesSublet(this.props.sublet).map((amenity, index) => {
+              return (
+                <div key={`${this.props.sublet}_${index}`} style={comStyles().amenity_icon}>
+                  <img
+                    className='icon icons8-Temperature'
+                    width='20'
+                    height='20'
+                    src={amenity.icon}
+                  />
+                  <div style={comStyles().amenity_caption}>{amenity.text}</div>
+                </div>
+              )
+            })
+          }
 				</div>
 
 				{/* Buttons Bar */}
@@ -96,7 +111,7 @@ class SubletCard extends Component {
 // defines the types of variables in this.props
 SubletCard.propTypes = {
 	history: PropTypes.object.isRequired,
-  fb_post: PropTypes.object.isRequired,    // passed in
+  sublet: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
 }
 
@@ -129,9 +144,9 @@ const comStyles = () => {
     hardCard: {
       minWidth: '360px',
       maxWidth: '360px',
-      minHeight: '200px',
-      maxHeight: '200px',
-      margin: '5px auto',
+      minHeight: '250px',
+      maxHeight: '250px',
+      margin: '10px auto',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
@@ -141,14 +156,6 @@ const comStyles = () => {
     },
     imageGallery: {
       height: '200px',
-    },
-    address: {
-      width: '60%',
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    price: {
-      width: '40%',
     },
     more_info: {
       display: 'flex',
@@ -171,15 +178,17 @@ const comStyles = () => {
 			alignItems: 'flex-start',
 			WebkitBoxOrient: 'horizontal', WebkitBoxDirection: 'normal', flexDirection: 'row',
 			padding: '10px',
+      backgroundColor: 'rgba(0,0,0,0.05)',
+      maxHeight: '70px',
 		},
 		infobadge: {
 			display: '-webkit-box', display: '-webkit-flex', display: 'flexbox', display: 'box', display: 'flex',
 			WebkitBoxOrient: 'vertical', WebkitBoxDirection: 'normal', flexDirection: 'column',
 			margin: '1% 1% 1% 5%',
-			width: '70%'
+			width: '70%',
 		},
 		address: {
-			fontSize:'1.5rem',
+			fontSize:'1.6rem',
 			fontWeight:'bold',
 			width: '100%',
 			height:'60%',
@@ -194,7 +203,7 @@ const comStyles = () => {
 		},
 		pricediv: {
 			textAlign:'center',
-			padding: '30px',
+			padding: '50px',
 			display: '-webkit-box', display: '-webkit-flex', display: 'flexbox', display: 'box', display: 'flex',
 			WebkitBoxOrient: 'horizontal', WebkitBoxDirection: 'normal', flexDirection: 'row',
 			WebkitBoxPack: 'justify', WebkitJustifyContent: 'center', justifyContent: 'center',
@@ -273,7 +282,17 @@ const comStyles = () => {
 		blankPlaceholderImage: {
 			height: '30px',
 			width: '100%'
-		}
+		},
+    amenity_icon: {
+      display: 'flex',
+      flexDirection: 'column',
+      margin: '10px',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    amenity_caption: {
+      margin: '5px auto',
+    }
 	}
 }
 
@@ -297,28 +316,28 @@ const profileStyle = (src) => {
   <Card onClick={() => this.selectThisPost()} style={comStyles().hardCard}>
     <div style={comStyles().imageGallery}>
       <SingularImageGallery
-        list_of_images={JSON.parse(this.props.fb_post.images)}
+        list_of_images={JSON.parse(this.props.sublet.images)}
       />
     </div>
     <Card.Content style={comStyles().info}>
       <Card.Header style={comStyles().headerPrint}>
-        <div style={comStyles().address}>{ shortenAddress(this.props.fb_post.address) }</div>
+        <div style={comStyles().address}>{ shortenAddress(this.props.sublet.address) }</div>
       </Card.Header>
       <Card.Meta>
-        {this.props.fb_post.fb_username}
+        {this.props.sublet.fb_username}
       </Card.Meta>
       <Card.Description style={comStyles().more_info}>
-        <div style={comStyles().price}>${ this.props.fb_post.price }/Month</div>
+        <div style={comStyles().price}>${ this.props.sublet.price }/Month</div>
         <div style={comStyles().user_container} >
           <Image
             shape='circular'
-            src={this.props.fb_post.fb_user_pic}
+            src={this.props.sublet.fb_user_pic}
             size='tiny'
             bordered
             onClick={(e) => this.goToOriginalPost(e)}
           />
         </div>
-        <div> Posted by {this.props.fb_post.fb_user_name} </div>
+        <div> Posted by {this.props.sublet.fb_user_name} </div>
       </Card.Description>
     </Card.Content>
   </Card>
