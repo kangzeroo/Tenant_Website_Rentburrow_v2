@@ -102,7 +102,6 @@ class SubletDetailed extends Component {
           <div style={comStyles().imageGallery}>
             <SingularImageGallery
               list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['http://bento.cdn.pbs.org/hostedbento-prod/filer_public/_bento_media/img/no-image-available.jpg']}
-              image_size='thumbnail'
             />
           </div>
         </div>
