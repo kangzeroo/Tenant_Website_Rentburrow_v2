@@ -28,14 +28,14 @@ class HomeExplorer extends Component {
   componentWillMount() {
     if (this.props.current_suite.suite_id) {
       this.props.selectTopTitle(this.props.current_suite.suite_alias)
-      console.log(this.props.current_suite)
+      // console.log(this.props.current_suite)
       this.setState({
         topContextValue: JSON.stringify(this.props.current_suite),
         bottomContextValue: '',
       })
     } else if (this.props.showBuildingAmenitiesFirst || this.props.showBuildingCommonAreaFirst) {
       this.props.selectTopTitle('Building')
-      console.log('showBuildingAmenitiesFirst')
+      // console.log('showBuildingAmenitiesFirst')
       this.setState({
         topContextValue: JSON.stringify(this.props.building),
         bottomContextValue: '',
@@ -52,7 +52,7 @@ class HomeExplorer extends Component {
 
   changeBottomContext(bottom_context) {
     this.props.selectBottomTitle(bottom_context.text)
-    console.log(typeof bottom_context.value)
+    // console.log(typeof bottom_context.value)
     this.setState({
       bottomContextValue: bottom_context.value,
     })

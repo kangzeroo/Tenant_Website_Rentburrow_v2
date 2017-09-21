@@ -188,7 +188,7 @@ class BuildingPage extends Component {
 
 	photo_or_vr(building) {
 		if (building.istaging_url !== '') {
-			console.log(building.istaging_url)
+			// console.log(building.istaging_url)
 			return (
 				<iframe
 					width='100%'

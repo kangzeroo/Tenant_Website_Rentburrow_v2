@@ -39,7 +39,6 @@ class AppRoot extends Component {
     this.autoSetLanguage()
     // grab the url that was given
     const location = this.props.location.pathname
-    console.log(location)
     const onSublet = location === '/sublet' || location === '/sublets'
     const onLease = location === '/lease' || location === '/leases'
     this.checkIfMobile()
@@ -129,7 +128,7 @@ class AppRoot extends Component {
             </div>
 
             {
-              this.props.selected_building
+              this.props.selected_building && false
               ?
               <Chat style={comStyles().chat} />
               :

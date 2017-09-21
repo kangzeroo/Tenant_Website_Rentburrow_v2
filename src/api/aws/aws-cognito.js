@@ -140,7 +140,7 @@ export const VerifyAccount = ({ email, pin }) => {
 		// console.log('Verifying account...')
 		cognitoUser.confirmRegistration(pin, true, (err, result) => {
 	        if (err) {
-            console.log(err);
+            // console.log(err);
 		        rej(err)
             return;
 	        }
@@ -218,11 +218,11 @@ export function forgotPassword(email) {
 
 		cognitoUser.forgotPassword({
 	        onSuccess: (result) => {
-						console.log(result)
+						// console.log(result)
             // console.log('call result: ' + result);
 	        },
 	        onFailure: (err) => {
-            console.log(err);
+            // console.log(err);
 		        rej(err)
 	        },
 	        // Optional automatic callback
@@ -264,7 +264,7 @@ export const retrieveStaffFromLocalStorage = () => {
 	    if (cognitoUser != null) {
 	        cognitoUser.getSession((err, session) => {
             if (err) {
-                console.log(err)
+                // console.log(err)
                 return
             }
             // console.log('session validity: ' + session.isValid());

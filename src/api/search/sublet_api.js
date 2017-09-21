@@ -2,11 +2,9 @@ import axios from 'axios'
 import { SEARCH_MICROSERVICE } from '../API_URLS'
 
 export const querySubletsInArea = ({ lat, lng, filterParams }) => {
-  console.log({ lat, lng, filterParams })
   const p = new Promise((res, rej) => {
     axios.post(`${SEARCH_MICROSERVICE}/get_sublets`, { lat, lng, filterParams })
       .then((data) => {
-        console.log(data)
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data.map((sublet) => {
           return convertToRegularSubletObj(sublet)
@@ -22,12 +20,11 @@ export const querySubletsInArea = ({ lat, lng, filterParams }) => {
 }
 
 export const matchSubletsByPlaceId = ({ place_id }) => {
-  console.log(place_id)
   const p = new Promise((res, rej) => {
     axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets`, { place_id })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
-        console.log(data)
+        // console.log(data)
         res(data.data.map((sublet) => {
           return convertToRegularSubletObj(sublet)
         }))

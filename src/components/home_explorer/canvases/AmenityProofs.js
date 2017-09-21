@@ -17,7 +17,7 @@ import AmenityBrowser from '../../amenities/AmenityBrowser'
 class AmenityProofs extends Component {
 
   componentWillMount() {
-    console.log(this.props.bottomContextValue)
+    // console.log(this.props.bottomContextValue)
   }
 
 	render() {

@@ -37,11 +37,10 @@ class LeaseFilterCard extends Component {
 	componentWillMount() {
 		this.setState({
 			...this.props.lease_filter_params,
-		}, () => console.log(this.state))
+		})
 	}
 
 	updateAttr(attr, value) {
-		console.log(value)
 		this.setState({
 			[attr]: value
 		})

@@ -45,7 +45,7 @@ class MapComponent extends Component {
 	componentWillMount() {
 		// create an observable stream as a Subject so that it can act as both an observable and an observer
 		const center_changed_event_stream = new Rx.Subject()
-		// console.log(center_changed_event_stream)
+		// // console.log(center_changed_event_stream)
 		this.setState({
       mapEvents: center_changed_event_stream
     })
@@ -88,7 +88,7 @@ class MapComponent extends Component {
 			// pass in the currentMapTarget, which is `mapTarget` defined above
 			(currentMapTarget) => {
 				// do something when event happens
-				console.log('Doing somehting!')
+				// console.log('Doing somehting!')
 				// save to redux the new center gps position
 				const center = currentMapTarget.getCenter()
 				const currentCenterCoords = {
@@ -103,11 +103,11 @@ class MapComponent extends Component {
 				// })
 			},
 			(err) => {
-				console.log('Stream error occurred:')
-				console.log(err)
+				// console.log('Stream error occurred:')
+				// console.log(err)
 			},
 			() => {
-				console.log('Stream finished')
+				// console.log('Stream finished')
 			}
 		)
 		// listen to the google map event 'center_changed' and pass it along to the Observable `self.state.mapEvents`
@@ -188,7 +188,7 @@ class MapComponent extends Component {
 		// remove old pins
 		self.pins = self.pins.filter((xPin) => {
 			const where = checkWherePinExistsInArray(xPin, self.props.listOfResults)
-			// console.log(where)
+			// // console.log(where)
 			if (where < 0) {
 				// remove the pin from self.recenteredPins
 				xPin.setMap(null)
@@ -215,7 +215,7 @@ class MapComponent extends Component {
 	// this command is to efficiently recolor the pins to their appropriate colors (blue, red, gray)
 	paintPins(marker) {
 		// let alreadyViewed = {}
-		// // console.log(this.props.alreadyViewed.length)
+		// // // console.log(this.props.alreadyViewed.length)
 		// this.props.alreadyViewed.forEach((clicked, index)=>{
 		// 	alreadyViewed[clicked] = index
 		// })

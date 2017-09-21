@@ -23,7 +23,7 @@ import { selectPinToRedux } from '../../../actions/search/search_actions'
 class BuildingPreview extends Component {
 
   selectThisBuilding(building) {
-    console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
+    // console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
     window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
   }
 
