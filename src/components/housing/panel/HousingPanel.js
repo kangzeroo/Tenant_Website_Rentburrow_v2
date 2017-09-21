@@ -56,11 +56,11 @@ class HousingPanel extends Component {
 		}
 	}
 
-	renderSubletCard(fb_post) {
+	renderSubletCard(sublet) {
 		return (
 			<SubletCard
-				key={fb_post.post_id}
-				sublet={fb_post}
+				key={sublet.post_id}
+				sublet={sublet}
 			/>
 		)
 	}
@@ -84,8 +84,8 @@ class HousingPanel extends Component {
 						?
 						<div style={comStyles().scroll}>
 							{
-								this.props.sublet_search_results.map((fb_post) => {
-									return this.renderSubletCard(fb_post)
+								this.props.sublet_search_results.map((sublet) => {
+									return this.renderSubletCard(sublet)
 								})
 							}
 						</div>
