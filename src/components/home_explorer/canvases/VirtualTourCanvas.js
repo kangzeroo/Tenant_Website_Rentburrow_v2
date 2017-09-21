@@ -16,19 +16,7 @@ import {
 
 class VirtualTourCanvas extends Component {
 
-  constructor() {
-    super()
-    this.state = {
-      loading: true,
-    }
-  }
-
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        loading: false,
-      })
-    }, 2000)
     this.setState({
       vr_tour_height: document.getElementById('container').clientHeight
     })
@@ -36,7 +24,7 @@ class VirtualTourCanvas extends Component {
 
   renderVirtualTour_iStaging(link) {
     return (
-      <iframe width='100%' height={`${this.state.vr_tour_height}px`} src={link} frameBorder='0' allowFullScreen=''></iframe>
+      <iframe width='100%' height={`${this.state.vr_tour_height}px`} src={link} frameBorder='0' allowFullScreen></iframe>
     )
   }
 
@@ -71,34 +59,30 @@ class VirtualTourCanvas extends Component {
 		return (
 			<div id='container' style={comStyles().container}>
         {
-          this.state.loading
-          ?
-          <Dimmer active>
-  	        <Loader>Loading Virtual Tour...</Loader>
-  	      </Dimmer>
-          :
-          null
-        }
-        {
           this.props.istaging_url && this.props.iguide_url
           ?
           <Tab panes={panes} />
           :
           <div style={comStyles().vrTour}>
-            {
-              this.props.istaging_url
-              ?
-              this.renderVirtualTour_iStaging(this.props.istaging_url)
-              :
-              null
-            }
-            {
-              this.props.iguide_url
-              ?
-              this.renderVirtualTour_Matterport(this.props.iguide_url)
-              :
-              null
-            }
+            <div style={comStyles().hidden_loading}>
+              <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading_blue_blobs.gif' width='200px' height='auto' />
+            </div>
+            <div style={comStyles().visible_virtual_tour}>
+              {
+                this.props.istaging_url
+                ?
+                this.renderVirtualTour_iStaging(this.props.istaging_url)
+                :
+                null
+              }
+              {
+                this.props.iguide_url
+                ?
+                this.renderVirtualTour_Matterport(this.props.iguide_url)
+                :
+                null
+              }
+            </div>
           </div>
         }
 			</div>
@@ -150,6 +134,25 @@ const comStyles = (vr_tour_height) => {
       display: 'flex',
       flexDirection: 'column',
       height: vr_tour_height ? `${vr_tour_height-50}px` : '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    hidden_loading: {
+      position: 'absolute',
+      zIndex: 5,
+      minWidth: '100%',
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    visible_virtual_tour: {
+      position: 'absolute',
+      zIndex: 10,
+      width: '100%',
+      height: '100%',
     }
 	}
 }

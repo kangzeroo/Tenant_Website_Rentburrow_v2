@@ -66,6 +66,16 @@ class SubletsList extends Component {
 			<div style={comStyles().container}>
 				<div style={comStyles().header_container} >
 					<div style={comStyles().header}>
+					<div style={comStyles().title}>
+						{
+							this.props.sublets.length > 0
+							?
+							this.props.sublets[0].address
+							:
+							null
+						}
+					</div>
+					<div style={comStyles().subtitle}>
 						Sublets from Facebook
 					</div>
 					{
@@ -95,7 +105,9 @@ class SubletsList extends Component {
 				}
 				<div style={comStyles().scroll}>
 					{
-						this.props.sublets.map((sublet) => {
+						this.props.sublets.sort((a, b) => {
+		          return b.posted_date - a.posted_date
+		        }).map((sublet) => {
 							return (
 								<SubletDetailed
 									key={sublet.post_id}
@@ -160,12 +172,22 @@ const comStyles = () => {
 			justifyContent: 'space-between',
 		},
 		header: {
-			height: '50px',
+			height: '100px',
 			width: '100%',
 			padding: '10px',
-			fontSize: '2rem',
-			fontWeight: 'bold',
 			color: xGreyText,
+			display: 'flex',
+			flexDirection: 'column',
+		},
+		title: {
+			fontSize: '2.2rem',
+			fontWeight: 'bold',
+			height: '70%',
+		},
+		subtitle: {
+			fontSize: '1.4rem',
+			fontWeight: 'bold',
+			height: '30%',
 		},
 		view_button: {
 			width: '200px',
