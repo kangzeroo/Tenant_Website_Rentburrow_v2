@@ -7,6 +7,7 @@ import {
   SELECT_PIN,
   FOUND_SUBLETS,
   SELECT_POPUP_BUILDING,
+  FILTERED_SUBLETS,
 } from '../../actions/action_types'
 import { findAllMatchingGPS } from '../../api/map/map_api'
 
@@ -71,6 +72,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         popup_buildings: action.payload ? findAllMatchingGPS(action.payload, action.payload.post_id ? state.sublets : state.buildings) : [],
+      }
+    case FILTERED_SUBLETS:
+      return {
+        ...state,
+        sublet_search_results: action.payload,
       }
 		default:
 			return {
