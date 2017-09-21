@@ -30,7 +30,7 @@ class SubletPage extends Component {
     matchSubletsByPlaceId({ place_id }).then((sublets) => {
       this.setState({
         sublets: sublets
-      }, () => console.log(this.state.sublets))
+      })
     })
 	}
 

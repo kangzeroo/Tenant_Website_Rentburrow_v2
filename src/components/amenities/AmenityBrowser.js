@@ -28,12 +28,12 @@ class AmenityBrowser extends Component {
     if (this.props.amenities.length > 0) {
       this.setState({
         current_amenity: this.props.amenities[0]
-      }, () => console.log(this.state.current_amenity))
+      })
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(this.props.amenities)
+    // console.log(this.props.amenities)
     if (prevProps && (prevProps.amenities !== this.props.amenities)) {
       this.setState({
         current_amenity: this.props.amenities[0]
@@ -70,9 +70,6 @@ class AmenityBrowser extends Component {
               })
             }
           </div>
-          {
-            console.log(this.state.current_amenity)
-          }
           {
             this.state.current_amenity.imgs && this.state.current_amenity.imgs.length > 0
             && this.state.current_amenity.imgs[0] !== null

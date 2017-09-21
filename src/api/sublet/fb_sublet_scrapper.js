@@ -3,7 +3,7 @@ import { SEARCH_MICROSERVICE } from '../API_URLS'
 import { convertToRegularSubletObj } from '../search/sublet_api'
 
 export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
-	console.log('scrapeFacebookSublets()')
+	// console.log('scrapeFacebookSublets()')
 	getGroupsForCity({ city, profile })
 		.then(latestPostInServerPerGroup)
 		.then(getPostsFromGroups)
@@ -103,7 +103,7 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 					if (data.data.length > 0) {
 						// lastPostTime = data.data
 						const lastPostTime = convertToRegularSubletObj(data.data[0]).scrapped_at * 1000 || 0
-						console.log(lastPostTime)
+						// console.log(lastPostTime)
 						return Promise.resolve({
               ...group,
               lastPostTime
@@ -148,7 +148,7 @@ const getPostsFromGroups = ({ groupsTime, profile }) => {
 					  			groupid: group.groupid
 					  		}
 					  	})
-							console.log(response.data.length, postsArray.length)
+							// console.log(response.data.length, postsArray.length)
 							res(postsArray)
 	          } else {
 							res([])
@@ -193,7 +193,7 @@ const filterNonSublets = ({ postsArray, profile }) => {
 }
 
 const sendToServer = ({ filteredSublets, profile }) => {
-	console.log(filteredSublets)
+	// console.log(filteredSublets)
 	axios.post(`${SEARCH_MICROSERVICE}/new_sublets`, { newSublets: filteredSublets, profile })
 		.then((data) => {
 			// console.log(data);

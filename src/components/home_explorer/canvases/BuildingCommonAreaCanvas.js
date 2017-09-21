@@ -35,7 +35,7 @@ class BuildingCommonAreaCanvas extends Component {
   }
 
   summarizeBuilding() {
-    console.log('summarizeBuilding')
+    // console.log('summarizeBuilding')
   }
 
 	createMarkup(string) {

@@ -48,7 +48,7 @@ export const createUserS3Album = ({ corp_id }) => {
 			    }
 			    S3.putObject(albumParams, (err, data) => {
 		      	if (err) {
-							console.log(err)
+							// console.log(err)
 		      		const msg = `There was an error creating your album: ${err.message}`
 		      		// console.log(msg);
 		        	rej(msg)

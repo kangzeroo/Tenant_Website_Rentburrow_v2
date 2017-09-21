@@ -33,8 +33,8 @@ class HomeExplorerSidebar extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.topContextText, this.props.topContextValue)
-    console.log(this.props.building, this.props.all_suites)
+    // console.log(this.props.topContextText, this.props.topContextValue)
+    // console.log(this.props.building, this.props.all_suites)
     this.loadBottomContextItems(this.props.topContextText, this.props.topContextValue)
   }
 
