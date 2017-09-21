@@ -195,7 +195,7 @@ class BuildingPage extends Component {
 					height={`600px`}
 					src={building.istaging_url}
 					frameBorder='0'
-					allowFullScreen
+					allowFullScreens
 				/>
 			)
 		} else {
@@ -553,6 +553,6 @@ const comStyles = () => {
 			height: '100px',
 			fontSize: '1.3rem',
 			lineHeight: '30px',
-		}
+		},
 	}
 }
