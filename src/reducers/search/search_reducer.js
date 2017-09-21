@@ -6,8 +6,10 @@ import {
   CHANGE_SEARCH_STYLE,
   SELECT_PIN,
   FOUND_SUBLETS,
+  SELECT_POPUP_BUILDING,
   FILTERED_SUBLETS,
 } from '../../actions/action_types'
+import { findAllMatchingGPS } from '../../api/map/map_api'
 
 const INITIAL_STATE = {
   search_string: '',
@@ -15,6 +17,7 @@ const INITIAL_STATE = {
   sublets: [],
   building_search_results: [],
   sublet_search_results: [],
+  popup_buildings: [],      // for when you click on a pin and get quick info
   search_style: 'map',     // list, map
   card_style: 'grid',       // row, grid or cover
   selected_pin: null,
@@ -64,6 +67,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         sublets: action.payload,
         sublet_search_results: action.payload,
+      }
+    case SELECT_POPUP_BUILDING:
+      return {
+        ...state,
+        popup_buildings: action.payload ? findAllMatchingGPS(action.payload, action.payload.post_id ? state.sublets : state.buildings) : [],
       }
     case FILTERED_SUBLETS:
       return {

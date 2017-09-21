@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import Rx from 'rxjs'
-import { pinAlreadyPlaced, checkWherePinExistsInArray } from '../../api/map/map_api'
+import { pinAlreadyPlaced, checkWherePinExistsInArray, matchPinIDFromPins } from '../../api/map/map_api'
 import { querySubletsInArea } from '../../api/search/sublet_api'
 import { selectPopupBuilding } from '../../actions/selection/selection_actions'
 import { setCurrentGPSCenter, saveBuildingsToRedux, saveSubletsToRedux, selectPinToRedux, } from '../../actions/search/search_actions'
@@ -248,6 +248,7 @@ class MapComponent extends Component {
 				if (marker) {
 					// check if the pin is the one highlighted and set the color to blue and bouncing animation
 					if (this.pins[m].pin_id === marker.pin_id) {
+					// if (matchPinIDFromPins(marker, this.pins)) {
 	          this.pins[m].setIcon(this.blue_map_pin)
 						this.pins[m].setZIndex(12)
 						this.pins[m].setAnimation(google.maps.Animation.BOUNCE)
