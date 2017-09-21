@@ -20,6 +20,7 @@ export const querySubletsInArea = ({ lat, lng, filterParams }) => {
 }
 
 export const matchSubletsByPlaceId = ({ place_id }) => {
+  console.log(place_id)
   const p = new Promise((res, rej) => {
     axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets`, { place_id })
       .then((data) => {

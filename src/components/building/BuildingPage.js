@@ -32,6 +32,9 @@ import {
 	getAvailableSuites,
 	getAmenitiesForSuite,
 } from '../../api/building/building_api'
+import {
+	matchSubletsByPlaceId,
+} from '../../api/search/sublet_api'
 import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
 import {
@@ -47,6 +50,7 @@ import StepByStepCard from '../instructions/StepByStepCard'
 import AllLandlords from '../landlord/AllLandlords'
 import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 import SingularImageGallery from '../image/SingularImageGallery'
+// import SubletsList from '../sublets/SubletsList'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -58,6 +62,8 @@ class BuildingPage extends Component {
 
 			suites: [],
 			promise_array_of_suite_amenities_with_id: [],
+
+			sublets: [],
 
 			toggle_modal: false,
       modal_name: '',
@@ -119,6 +125,12 @@ class BuildingPage extends Component {
 						})
 					})
 				})
+			})
+			return matchSubletsByPlaceId({ place_id: this.state.building.place_id })
+		})
+		.then((sublets) => {
+			this.setState({
+				sublets: sublets,
 			})
 		})
 	}
@@ -319,6 +331,7 @@ class BuildingPage extends Component {
 						}
 					</div>
 				</div>
+
 				{/*<div style={comStyles().images_container}>
 					<SingularImageGallery
 						list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
@@ -328,6 +341,11 @@ class BuildingPage extends Component {
 				{/*<div style={comStyles().content_bottom}>
 					<AllLandlords />
 				</div>*/}
+
+				{/*<SubletsList
+					sublets={this.state.sublets}
+				/>*/}
+
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
