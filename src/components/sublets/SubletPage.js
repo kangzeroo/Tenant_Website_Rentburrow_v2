@@ -13,7 +13,7 @@ import {
 import {
 	matchSubletsByPlaceId,
 } from '../../api/search/sublet_api'
-import SubletCard from '../housing/cards/SubletCard'
+import SubletsList from '../sublets/SubletsList'
 
 
 class SubletPage extends Component {
@@ -55,16 +55,9 @@ class SubletPage extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				{
-					this.state.sublets.map((sublet) => {
-						return (
-							<SubletCard
-								key={sublet.post_id}
-								sublet={sublet}
-							/>
-						)
-					})
-				}
+				<SubletsList
+					sublets={this.state.sublets}
+				/>
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
