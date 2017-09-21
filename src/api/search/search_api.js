@@ -56,6 +56,25 @@ export const searchForSpecificBuildingByAlias = (urlPath) => {
   return p
 }
 
+
+// searches for buildings based on Google's place ID
+export const searchBuildingByPlaceID = ({ place_id, }) => {
+  const p = new Promise((res, rej) => {
+    // search for a specific building from backend
+    // axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: building_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_building_by_place_id`, { place_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data[0])
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+
 export const getSpecificLandlord = ({ corporation_id }) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SEARCH_MICROSERVICE}/get_specific_landlord`, { corporation_id })

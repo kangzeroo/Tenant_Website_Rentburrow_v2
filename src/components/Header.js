@@ -114,7 +114,9 @@ class Header extends Component {
               <Button
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
-                primary
+                basic
+                
+                inverted
                 content='Login'
               />
             </div>
