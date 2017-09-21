@@ -51,10 +51,10 @@ class HousingPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				{
-					this.props.popup_building
+					this.props.popup_buildings.length > 0
 					?
 					<PopupPanel
-						building={this.props.popup_building}
+						buildings={this.props.popup_buildings}
 						style={comStyles().popupPanel}
 					/>
 					:
@@ -90,7 +90,7 @@ HousingPage.propTypes = {
 	building_search_results: PropTypes.array,
 	sublet_search_results: PropTypes.array,
 	selected_pin: PropTypes.string,
-	popup_building: PropTypes.object,
+	popup_buildings: PropTypes.array,
 	rent_type: PropTypes.string.isRequired,
 	current_gps_center: PropTypes.object.isRequired,
   lease_filter_params: PropTypes.object.isRequired,
@@ -102,7 +102,7 @@ HousingPage.defaultProps = {
 	building_search_results: [],
 	sublet_search_results: [],
 	selected_pin: null,
-	popup_building: null,
+	popup_buildings: [],
   search_radius: 1000,
 }
 
@@ -115,7 +115,7 @@ const mapReduxToProps = (redux) => {
 		building_search_results: redux.search.building_search_results,
 		sublet_search_results: redux.search.sublet_search_results,
 		selected_pin: redux.search.selected_pin,
-		popup_building: redux.selection.popup_building,
+		popup_buildings: redux.search.popup_buildings,
 		rent_type: redux.filter.rent_type,
 		current_gps_center: redux.filter.current_gps_center,
     lease_filter_params: redux.filter.lease_filter_params,

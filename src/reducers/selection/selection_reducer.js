@@ -9,7 +9,6 @@ import {
 const INITIAL_STATE = {
   selected_building: null,
   selected_landlord: null,
-  popup_building: null,       // for when you click on a pin and get quick info
   nav_top_title: '',        // for when you are in the <SuiteRoomBrowser> and changing the topContext
   nav_bottom_title: '',     // for when you are in the <SuiteRoomBrowser> and changing the bottomContext
 }
@@ -25,11 +24,6 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selected_landlord: action.payload,
-      }
-    case SELECT_POPUP_BUILDING:
-      return {
-        ...state,
-        popup_building: action.payload,
       }
     case NAV_TOP_TITLE:
       return {

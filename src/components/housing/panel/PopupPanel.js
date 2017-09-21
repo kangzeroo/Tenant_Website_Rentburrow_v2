@@ -56,22 +56,28 @@ class PopupPanel extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <Button
-          primary
-          basic
-          icon='caret left'
-          content='Back'
-          onClick={() => this.props.selectPopupBuilding(null)}
-          style={comStyles().back_button}
-        />
-        {
-          this.props.rent_type === 'sublet'
-          ?
-          this.generateSubletCard(this.props.building)
-          :
-          this.generateBuildingCard(this.props.building)
-        }
-			</div>
+         <Button
+           primary
+           basic
+           icon='caret left'
+           content='Back'
+           onClick={() => this.props.selectPopupBuilding(null)}
+           style={comStyles().back_button}
+         />
+			   <div style={comStyles().scroll}>
+          {
+            this.props.rent_type === 'sublet'
+            ?
+            this.props.buildings.map((building) => {
+              return this.generateSubletCard(building)
+            })
+            :
+            this.props.buildings.map((building) => {
+              return this.generateBuildingCard(building)
+            })
+          }
+  			</div>
+      </div>
 		)
 	}
 }
@@ -79,7 +85,7 @@ class PopupPanel extends Component {
 // defines the types of variables in this.props
 PopupPanel.propTypes = {
 	history: PropTypes.object.isRequired,
-  building: PropTypes.object.isRequired,            // passed in
+  buildings: PropTypes.array,            // passed in
 	selectPopupBuilding: PropTypes.func.isRequired,
 	card_style: PropTypes.string.isRequired,
   rent_type: PropTypes.string.isRequired,
@@ -87,6 +93,7 @@ PopupPanel.propTypes = {
 
 // for all optional props, define a default value
 PopupPanel.defaultProps = {
+  buildings: [],
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -118,7 +125,8 @@ const comStyles = () => {
       minWidth: '800px',
 			width: '50vw',
       maxWidth: '50vw',
-      height: '100%',
+      maxHeight: '100%',
+      minHeight: '100%',
 			//backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
       backgroundColor: 'white',
 			backgroundSize: 'cover',

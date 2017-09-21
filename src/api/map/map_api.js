@@ -21,3 +21,29 @@ export const checkWherePinExistsInArray = (pin, existingPins) => {
 	})
 	return where
 }
+
+// return an array of buildings that match the GPS coords
+export const findAllMatchingGPS = (building, all_buildings) => {
+	// sublets
+	if (building.post_id) {
+		return all_buildings.filter((sublet) => {
+			return sublet.gps_x === building.gps_x && sublet.gps_y === building.gps_y
+		})
+	} else {
+	// leases
+		return all_buildings.filter((sublet) => {
+			return sublet.gps_x === building.gps_x && sublet.gps_y === building.gps_y
+		})
+	}
+}
+
+// return the Pin_ID of the pin with GPS coords matching the Pin passed in
+// FIX THIS
+export const matchPinIDFromPins = (marker, pins) => {
+	console.log(marker)
+	console.log(marker.position)
+	console.log(marker.position.lat().toFixed(7), marker.position.lng().toFixed(7))
+	return pins.filter((pin) => {
+		return pin.position.lat().toFixed(7) === marker.position.lat().toFixed(7) && pin.position.lng().toFixed(7) === marker.position.lng().toFixed(7)
+	})
+}
