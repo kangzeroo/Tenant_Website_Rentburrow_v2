@@ -83,24 +83,18 @@ class FilterBar extends Component {
       sort_by: value.value
     }, () => {
       if (this.props.rent_type === 'sublet') {
-        // sortFBPosts({
-        //   sort_by: value.value,
-        // })
-        // .then((sublets) => {
-        //   this.props.saveSubletsToRedux(sublets.map(s => JSON.parse(s)))
-        // })
         let sorted_sublets
         if (value.value === 'pricelow') {
           sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
             let a_price
             let b_price
-            if (isNaN(a.price)) {
+            if (a.price === 0) {
               a_price = 99999
             } else {
               a_price = parseInt(a.price, 10)
             }
 
-            if (isNaN(b.price)) {
+            if (b.price === 0) {
               b_price = 99999
             } else {
               b_price = parseInt(b.price, 10)
@@ -111,13 +105,13 @@ class FilterBar extends Component {
           sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
             let a_price
             let b_price
-            if (isNaN(a.price)) {
+            if (a.price === 0) {
               a_price = 0
             } else {
               a_price = parseInt(a.price, 10)
             }
 
-            if (isNaN(b.price)) {
+            if (b.price === 0) {
               b_price = 0
             } else {
               b_price = parseInt(b.price, 10)
@@ -126,11 +120,11 @@ class FilterBar extends Component {
           })
         } else if (value.value === 'datenew') {
           sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
-            return a.scrapped_at - b.scrapped_at
+            return b.posted_date - a.posted_date
           })
         } else if (value.value === 'dateold') {
           sorted_sublets = this.props.sublet_search_results.sort((a, b) => {
-            return b.scrapped_at - a.scrapped_at
+            return a.posted_date - b.posted_date
           })
         }
         this.props.saveSubletsToRedux(sorted_sublets)
@@ -180,12 +174,6 @@ class FilterBar extends Component {
           })
         }
         this.props.saveBuildingsToRedux(sorted_buildings)
-        // sortBuildings({
-        //   sort_by: value.value
-        // })
-        // .then((buildings) => {
-        //   this.props.saveBuildingsToRedux(buildings)
-        // })
       }
     })
   }
