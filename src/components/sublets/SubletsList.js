@@ -10,7 +10,8 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
-// import SubletCard from '../housing/cards/SubletCard'
+import SubletDetailed from './SubletDetailed'
+import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
 
 
 class SubletsList extends Component {
@@ -18,16 +19,19 @@ class SubletsList extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				{
-					this.props.sublets.map((sublet) => {
-						return (
-							{/*<SubletCard
-								key={sublet.post_id}
-								sublet={sublet}
-							/>*/}
-						)
-					})
-				}
+				<div style={comStyles().header}>Sublets from Facebook</div>
+				<div style={comStyles().scroll}>
+					{
+						this.props.sublets.map((sublet) => {
+							return (
+								<SubletDetailed
+									key={sublet.post_id}
+									sublet={sublet}
+								/>
+							)
+						})
+					}
+				</div>
 			</div>
 		)
 	}
@@ -68,11 +72,25 @@ const comStyles = () => {
 	return {
 		container: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
 			maxWidth: '100%',
 			minWidth: '100%',
-			overflowX: 'scroll',
-			height: '300px',
+			height: '100%',
+			maxHeight: '100%',
+			padding: '20px',
+		},
+		header: {
+			height: '50px',
+			width: '100%',
+			padding: '10px',
+			fontSize: '2rem',
+			fontWeight: 'bold',
+			color: xGreyText,
+		},
+		scroll: {
+			overflowY: 'scroll',
+      display: 'flex',
+      flexDirection: 'column',
 		}
 	}
 }

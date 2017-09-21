@@ -17,14 +17,14 @@ import {
   renderProcessedThumbnail,
   aliasToURL,
   shortenAddress,
-} from '../../../api/general/general_api'
-import SingularImageGallery from '../../image/SingularImageGallery'
-import { selectPinToRedux } from '../../../actions/search/search_actions'
-import { xGreyText, xBootstrapRed } from '../../../styles/base_colors'
-import { sortAmenitiesSublet } from '../../../api/amenities/sublet_amenities'
+} from '../../api/general/general_api'
+import SingularImageGallery from '../image/SingularImageGallery'
+import { selectPinToRedux } from '../../actions/search/search_actions'
+import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
+import { sortAmenitiesSublet } from '../../api/amenities/sublet_amenities'
 
 
-class SubletCard extends Component {
+class SubletDetailed extends Component {
 
   selectThisPost(sublet) {
     window.open(`${window.location.origin}/sublet/${sublet.place_id}`, '_blank')
@@ -46,60 +46,71 @@ class SubletCard extends Component {
 
 	render() {
 		return (
-      <Card key={this.props.sublet.post_id} onClick={() => this.selectThisPost(this.props.sublet)} onMouseEnter={() => this.props.selectPinToRedux(this.props.sublet.post_id)} raised style={comStyles().hardCard}>
+      <Card key={this.props.sublet.post_id} raised style={comStyles().hardCard}>
 
-				<div id='infobar' style={comStyles().infobar}>
-					{/* Profile Picture */}
-          <Image
-            shape='circular'
-            src={this.props.sublet.fb_user_pic}
-            size='tiny'
-            bordered
-            onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)}
-          />
+        <div style={comStyles().left}>
+  				<div id='infobar' style={comStyles().infobar}>
+  					{/* Profile Picture */}
+            <Image
+              shape='circular'
+              src={this.props.sublet.fb_user_pic}
+              size='tiny'
+              bordered
+              onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)}
+            />
 
-					<div id='infobadge' style={comStyles().infobadge}>
-						{/* Address */}
-						<div onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().address}>
-							{shortenAddress(this.props.sublet.address)}
-						</div>
-						{/* User Name */}
-						<div style={comStyles().userinfo}>
-							<a href={`http://www.facebook.com/${this.props.sublet.fb_user_id}`} target='_blank'>{this.props.sublet.fb_user_name}</a> &nbsp;
-							on &nbsp;
-							<b>{moment(this.props.sublet.posted_date).format('MMM Do')}</b>
-						</div>
-					</div>
-				</div>
+  					<div id='infobadge' style={comStyles().infobadge}>
+  						{/* Address */}
+  						<div onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().address}>
+  							{shortenAddress(this.props.sublet.address)}
+  						</div>
+  						{/* User Name */}
+  						<div style={comStyles().userinfo}>
+  							<a href={`http://www.facebook.com/${this.props.sublet.fb_user_id}`} target='_blank'>{this.props.sublet.fb_user_name}</a> &nbsp;
+  							on &nbsp;
+  							<b>{moment(this.props.sublet.posted_date).format('MMM Do')}</b>
+  						</div>
+  					</div>
+  				</div>
 
-				{/* Price */}
-				<div style={comStyles().pricediv}>
-					<div style={comStyles().price}>{this.props.sublet.price ? `$${this.props.sublet.price}` : <h3>Inquire Price</h3>}</div>
-				</div>
+  				{/* Price */}
+  				<div style={comStyles().pricediv}>
+  					<div style={comStyles().price}>{this.props.sublet.price ? `$${this.props.sublet.price}` : <h3>Inquire Price</h3>}</div>
+  				</div>
 
-				{/* Icons */}
-				<div id='iconbar' style={comStyles().iconbar}>
-					{
-            sortAmenitiesSublet(this.props.sublet).map((amenity, index) => {
-              return (
-                <div key={`${this.props.sublet}_${index}`} style={comStyles().amenity_icon}>
-                  <img
-                    className='icon icons8-Temperature'
-                    width='20'
-                    height='20'
-                    src={amenity.icon}
-                  />
-                  <div style={comStyles().amenity_caption}>{amenity.text}</div>
-                </div>
-              )
-            })
-          }
-				</div>
+  				{/* Icons */}
+  				<div id='iconbar' style={comStyles().iconbar}>
+  					{
+              sortAmenitiesSublet(this.props.sublet).map((amenity, index) => {
+                return (
+                  <div key={`${this.props.sublet}_${index}`} style={comStyles().amenity_icon}>
+                    <img
+                      className='icon icons8-Temperature'
+                      width='20'
+                      height='20'
+                      src={amenity.icon}
+                    />
+                    <div style={comStyles().amenity_caption}>{amenity.text}</div>
+                  </div>
+                )
+              })
+            }
+  				</div>
+        </div>
 
-				{/* Buttons Bar */}
-				<div id='buttonsBar' style={comStyles().buttonsBar}>
+        <div style={comStyles().center}>
+          <div style={comStyles().imageGallery}>
+            <SingularImageGallery
+              list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['http://bento.cdn.pbs.org/hostedbento-prod/filer_public/_bento_media/img/no-image-available.jpg']}
+              image_size='thumbnail'
+            />
+          </div>
+        </div>
 
-				</div>
+        <div style={comStyles().right}>
+          <div style={comStyles().desc}>{ this.props.sublet.description }</div>
+  				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+        </div>
 
 			</Card>
 		)
@@ -107,19 +118,19 @@ class SubletCard extends Component {
 }
 
 // defines the types of variables in this.props
-SubletCard.propTypes = {
+SubletDetailed.propTypes = {
 	history: PropTypes.object.isRequired,
   sublet: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
-SubletCard.defaultProps = {
+SubletDetailed.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SubletCard)
+const RadiumHOC = Radium(SubletDetailed)
 
 // Get access to state from the Redux store
 function mapStateToProps(state) {
@@ -140,20 +151,19 @@ export default withRouter(
 const comStyles = () => {
 	return {
     hardCard: {
-      minWidth: '360px',
-      maxWidth: '360px',
+      minWidth: '600px',
+      width: '100%',
       minHeight: '250px',
       maxHeight: '250px',
       margin: '10px auto',
+      display: 'flex',
+      flexDirection: 'row',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
       display: 'flex',
       flexDirection: 'column',
       // padding: '30px 10px 10px 10px',
-    },
-    imageGallery: {
-      height: '200px',
     },
     more_info: {
       display: 'flex',
@@ -242,6 +252,14 @@ const comStyles = () => {
 			fontSize: '1.1rem',
 			fontWeight: 'bold'
 		},
+    desc: {
+      height: '80%',
+      textAlign: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 		seeOriginalAhref: {
 			flexGrow: 3
 		},
@@ -290,6 +308,34 @@ const comStyles = () => {
     },
     amenity_caption: {
       margin: '5px auto',
+    },
+    left: {
+      width: '30%',
+      height: '100%',
+      minWidth: '360px',
+    },
+    center: {
+      width: '30%',
+      minWidth: '360px',
+      minHeight: '100%',
+    },
+    imageGallery: {
+      height: '100%',
+      minHeight: '250px',
+      maxHeight: '250px',
+    },
+    right: {
+      width: '40%',
+      color: xGreyText,
+      minHeight: '100%',
+      maxHeight: '100%',
+      textAlign: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      padding: '20px',
+      minWidth: '360px',
     }
 	}
 }

@@ -50,7 +50,7 @@ import StepByStepCard from '../instructions/StepByStepCard'
 import AllLandlords from '../landlord/AllLandlords'
 import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 import SingularImageGallery from '../image/SingularImageGallery'
-// import SubletsList from '../sublets/SubletsList'
+import SubletsList from '../sublets/SubletsList'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -338,13 +338,12 @@ class BuildingPage extends Component {
 						image_size='hd'
 					/>
 				</div>*/}
-				{/*<div style={comStyles().content_bottom}>
-					<AllLandlords />
-				</div>*/}
-
-				{/*<SubletsList
-					sublets={this.state.sublets}
-				/>*/}
+				<div style={comStyles().content_bottom}>
+					{/*<AllLandlords />*/}
+					<SubletsList
+						sublets={this.state.sublets}
+					/>
+				</div>
 
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
@@ -454,7 +453,7 @@ const comStyles = () => {
 			display: 'flex',
 			flexDirection: 'row',
 			backgroundColor: 'rgba(153,204,255,0.2)',
-			height: '500px',
+			height: '800px',
 			width: '100%',
 		},
 		content_left: {
