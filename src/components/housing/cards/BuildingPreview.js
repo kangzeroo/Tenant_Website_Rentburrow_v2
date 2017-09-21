@@ -19,7 +19,8 @@ import {
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
 
-class BuildingCard extends Component {
+
+class BuildingPreview extends Component {
 
   selectThisBuilding(building) {
     console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
@@ -30,15 +31,15 @@ class BuildingCard extends Component {
 		return (
       <Card
         onClick={() => this.selectThisBuilding(this.props.building)}
-        raised
         onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)}
+        fluid
         style={comStyles().hardCard}
       >
         {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
         <div style={comStyles().imageGallery}>
           <SingularImageGallery
             list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
-            image_size='thumbnail'
+            image_size='hd'
           />
         </div>
         <Card.Content style={comStyles().info}>
@@ -58,19 +59,19 @@ class BuildingCard extends Component {
 }
 
 // defines the types of variables in this.props
-BuildingCard.propTypes = {
+BuildingPreview.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
-BuildingCard.defaultProps = {
+BuildingPreview.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(BuildingCard)
+const RadiumHOC = Radium(BuildingPreview)
 
 // Get access to state from the Redux store
 function mapStateToProps(state) {
@@ -90,31 +91,6 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-    hardCard: {
-      minWidth: '360px',
-      maxWidth: '360px',
-      minHeight: '300px',
-      maxHeight: '300px',
-      margin: '5px auto',
-    },
-    info: {
-      backgroundColor: 'rgba(0,0,0,0)',
-      // padding: '30px 10px 10px 10px',
-    },
-    imageGallery: {
-      height: '200px',
-    },
-    address: {
-      width: '60%',
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    price: {
-      width: '40%',
-    },
-    more_info: {
-      display: 'flex',
-      flexDirection: 'row',
-    },
+
 	}
 }

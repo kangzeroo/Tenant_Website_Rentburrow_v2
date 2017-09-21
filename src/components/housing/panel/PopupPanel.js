@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 import { selectPopupBuilding } from '../../../actions/selection/selection_actions'
 import BuildingCard from '../cards/BuildingCard'
+import BuildingPreview from '../cards/BuildingPreview'
 import BuildingRow from '../cards/BuildingRow'
 import SubletCard from '../cards/SubletCard'
 
@@ -44,6 +45,15 @@ class PopupPanel extends Component {
 		}
 	}
 
+  generateBuildingPreview(building) {
+    return (
+      <BuildingPreview
+        key={building.building_id}
+        building={building}
+      />
+    )
+  }
+
   generateSubletCard(sublet) {
     return (
       <SubletCard
@@ -56,27 +66,33 @@ class PopupPanel extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-         <Button
-           primary
-           basic
-           icon='caret left'
-           content='Back'
-           onClick={() => this.props.selectPopupBuilding(null)}
-           style={comStyles().back_button}
-         />
-			   <div style={comStyles().scroll}>
-          {
-            this.props.rent_type === 'sublet'
-            ?
-            this.props.buildings.map((building) => {
-              return this.generateSubletCard(building)
-            })
-            :
-            this.props.buildings.map((building) => {
-              return this.generateBuildingCard(building)
-            })
-          }
-  			</div>
+        <Button
+          primary
+          basic
+          icon='caret left'
+          content='Back'
+          onClick={() => this.props.selectPopupBuilding(null)}
+          style={comStyles().back_button}
+        />
+        {
+          this.props.rent_type === 'sublet'
+          ?
+          <div style={comStyles().scroll} >
+            {
+              this.props.buildings.map((building) => {
+                return this.generateSubletCard(building)
+              })
+            }
+          </div>
+          :
+          <div style={comStyles().BuildingPreview} >
+            {
+              this.props.buildings.map((building) => {
+                return this.generateBuildingPreview(building)
+              })
+            }
+          </div>
+        }
       </div>
 		)
 	}
@@ -134,6 +150,11 @@ const comStyles = () => {
 			zIndex: 100,
 			left: 0,
 		},
+    buttons_container: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
 		scroll: {
 			display: 'flex',
 			flexDirection: 'row',
@@ -144,6 +165,10 @@ const comStyles = () => {
 			padding: '20px',
 			justifyContent: 'flex-start',
 		},
+    BuildingPreview: {
+      width: '100%',
+      height: '100%'
+    },
 		icon: {
 			width: '20px',
 			height: 'auto',
@@ -153,6 +178,9 @@ const comStyles = () => {
       width: '100px',
       padding: '10px',
       margin: '10px'
+    },
+    building_button: {
+      margin: '10px',
     }
 	}
 }
