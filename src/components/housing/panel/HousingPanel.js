@@ -12,6 +12,7 @@ import {
 } from '../../../styles/base_colors'
 import {
 	Button,
+	Image,
 } from 'semantic-ui-react'
 import {
 	changeCardStyle,
@@ -98,13 +99,25 @@ class HousingPanel extends Component {
 									return this.generateCard(building)
 								})
 								:
-								<div style={comStyles().no_matches_container} >
-									<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
-									<Button
-										primary
-										content='Go Back'
-										onClick={() => this.props.refresh()}
-									/>
+								<div style={comStyles().panel_background}>
+									{
+										this.props.buildings.length === 0
+										?
+										<div style={comStyles().loading} >
+											<Image
+												src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
+											/>
+										</div>
+										:
+										<div style={comStyles().no_matches_container} >
+											<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
+											<Button
+												primary
+												content='Go Back'
+												onClick={() => this.props.refresh()}
+											/>
+										</div>
+									}
 								</div>
 							}
 						</div>
@@ -123,6 +136,7 @@ HousingPanel.propTypes = {
 	card_style: PropTypes.string.isRequired,
 	rent_type: PropTypes.string.isRequired,
 	refresh: PropTypes.func.isRequired, 					// passed in
+	buildings: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
@@ -140,6 +154,7 @@ const mapReduxToProps = (redux) => {
 		sublet_search_results: redux.search.sublet_search_results,
 		card_style: redux.search.card_style,
 		rent_type: redux.filter.rent_type,
+		buildings: redux.search.buildings,
 	}
 }
 
@@ -190,6 +205,15 @@ const comStyles = () => {
 		},
 		no_matches: {
 			color: 'gray'
+		},
+		panel_background: {
+			width: '100%',
+			height: '100%',
+		},
+		loading: {
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
 		}
 	}
 }
