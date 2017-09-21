@@ -101,7 +101,7 @@ class SubletDetailed extends Component {
         <div style={comStyles().center}>
           <div style={comStyles().imageGallery}>
             <SingularImageGallery
-              list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['http://bento.cdn.pbs.org/hostedbento-prod/filer_public/_bento_media/img/no-image-available.jpg']}
+              list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/no-image-available.jpg']}
             />
           </div>
         </div>

@@ -45,7 +45,7 @@ import {
 } from '../../styles/base_colors'
 import AmenityBrowser from '../amenities/AmenityBrowser'
 import BuildingPageFixedMenu from './BuildingPageFixedMenu'
-import AvailableSuites from '../home_explorer/AvailableSuites'
+import HomeOverview from '../home_overview/HomeOverview'
 import BuildingQuickAmenitiesBar from '../amenities/BuildingQuickAmenitiesBar'
 import StepByStepCard from '../instructions/StepByStepCard'
 import AllLandlords from '../landlord/AllLandlords'
@@ -249,7 +249,7 @@ class BuildingPage extends Component {
 				<div style={comStyles().content_top} >
 					<div style={comStyles().content_left} >
 						<div style={comStyles().building_header} >
-							<h1>Welcome to {this.state.building.building_alias}!</h1>
+							<h1>Welcome to {this.state.building.building_alias}</h1>
 							<div style={comStyles().description} >
 								{
 									this.state.building.building_desc
@@ -260,10 +260,10 @@ class BuildingPage extends Component {
 								}
 							</div>
 						</div>
-						<div style={comStyles().amenities} >
-							{
-								this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.suites && this.state.suites.length > 0
-								?
+						{
+							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.suites && this.state.suites.length > 0
+							?
+							<div style={comStyles().amenities} >
 								<BuildingQuickAmenitiesBar
 									building={this.state.building}
 									building_amenities={this.state.amenities}
@@ -272,10 +272,10 @@ class BuildingPage extends Component {
 									expandAmenities={() => this.expandAmenities()}
 									expand_amenities={this.state.expand_amenities}
 								/>
-								:
-								null
-							}
-						</div>
+							</div>
+							:
+							null
+						}
 						{
 							this.state.expand_amenities
 							?
@@ -294,12 +294,12 @@ class BuildingPage extends Component {
 							:
 							null
 						}
-						<div style={comStyles().images_container}>
+						{/*<div style={comStyles().images_container}>
 							<SingularImageGallery
 								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
 								image_size='hd'
 							/>
-						</div>
+						</div>*/}
 					</div>
 					<div style={comStyles().content_right} >
 						<StepByStepCard
@@ -348,7 +348,7 @@ class BuildingPage extends Component {
 					{
 						this.state.suites && this.state.suites.length > 0
 						?
-						<AvailableSuites
+						<HomeOverview
 							building={this.state.building}
 							suites={this.state.suites}
 							promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
@@ -482,7 +482,7 @@ const comStyles = () => {
 		content_left: {
 			display: 'flex',
 			flexDirection: 'column',
-			justifyContent: 'space-between',
+			justifyContent: 'flex-start',
 			flex: '2',
 			margin: '20px 20px 20px 50px',
 			backgroundColor: 'rgba(153,204,255,0)',
@@ -530,10 +530,9 @@ const comStyles = () => {
 			borderTop: 'gray solid thin'
 		},
 		suites_table: {
-			backgroundColor: 'white',
-			margin: '10px 0px 10px 0px',
 			borderRadius: '2px',
-			padding: '10px',
+			padding: '35px',
+			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
 		images_container: {
 			margin: '20px 0px 10px 0px'
