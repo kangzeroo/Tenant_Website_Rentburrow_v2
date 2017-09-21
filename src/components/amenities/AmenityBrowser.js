@@ -87,7 +87,7 @@ class AmenityBrowser extends Component {
                 size='huge'
                 color='blue'
               />
-              <h2>No Image Available</h2>
+              <h2>No Image Proof</h2>
             </div>
           }
         </div>
@@ -142,7 +142,8 @@ const comStyles = () => {
 			fontSize: '2.0rem',
 			lineHeight: '2.0rem',
 			fontWeight: 'bold',
-			margin: '10px auto',
+      display: 'flex',
+      flexDirection: 'flex-start',
 			padding: '5px 0px 5px 0px',
 		},
     amenitiesGrid: {
@@ -152,13 +153,12 @@ const comStyles = () => {
       width: '50%',
       height: '100%',
       padding: '10px',
-      border: 'black solid thin',
       borderRadius: '3px',
     },
     imageGallery: {
-      width: '45%',
+      minWidth: '45%',
+      minHeight: '300px',
       height: 'auto',
-      border: 'black solid thin',
       borderRadius: '3px',
       display: 'flex',
       flexDirection: 'column',

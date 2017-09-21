@@ -11,6 +11,8 @@ import {
   Card,
   Modal,
   Label,
+  Input,
+  Image,
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
 
@@ -63,8 +65,11 @@ class StepByStepCard extends Component {
 					size='fullscreen'
 				>
 	        <Modal.Content>
-            {
+            {/*
               this.generateSocialLinks()
+            */}
+            {
+              this.generateShareURL()
             }
 	        </Modal.Content>
 	      </Modal>
@@ -78,14 +83,44 @@ class StepByStepCard extends Component {
 					closeIcon
 					size='fullscreen'
 				>
-	        <Modal.Content>
+          {/*<Modal.Content>
             {
               this.generatePaymentOptions()
             }
-	        </Modal.Content>
+          </Modal.Content>*/}
+          {
+            this.generateComingSoon()
+          }
 	      </Modal>
       )
     }
+  }
+
+  generateShareURL() {
+    return (
+      <div style={comStyles().share_div}>
+        <Input
+          action={{ color: 'teal', labelPosition: 'left', icon: 'external share', content: 'Share Link' }}
+          actionPosition='left'
+          fluid
+          value={window.location}
+        />
+      </div>
+    )
+  }
+
+  generateComingSoon() {
+    return (
+      <div style={comStyles().coming_soon_div}>
+        <h1>Sign & Pay Online</h1>
+        <br/>
+        <br/>
+        <Image src='https://s3.amazonaws.com/rentburrow-static-assets/Images/comingsoon.png' spaced />
+        <br/>
+        <br/>
+        <h1>Renting is about to get a lot easier</h1>
+      </div>
+    )
   }
 
   generateSocialLinks() {
@@ -268,6 +303,19 @@ const comStyles = () => {
       display: 'flex',
       justifyContent: 'space-around',
       alignItems: 'center',
+    },
+    share_div: {
+      width: '100%',
+      fontSize: '2rem',
+      fontWeight: 'bold',
+    },
+    coming_soon_div: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '50px',
     }
 	}
 }

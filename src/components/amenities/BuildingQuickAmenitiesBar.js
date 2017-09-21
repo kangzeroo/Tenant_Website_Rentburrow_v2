@@ -85,22 +85,6 @@ class BuildingQuickAmenitiesBar extends Component {
 		return (
       <div style={comStyles().container}>
   			<div style={comStyles().amenities_container}>
-          {/*}<div
-            onClick={() => this.toggleModal(true, 'building_amenities')}
-            style={comStyles().iconBox_fullList}
-          >
-            <img
-              className='icon icons8-Temperature'
-              width='75'
-              height='75'
-              src={seeFullListIcon().icon}
-            />
-            <Icon
-              name='maximize'
-              size='big'
-            />
-            <h6>Expandable Amenities</h6>
-          </div>*/}
           <div style={comStyles().iconBox}>
             {/*}<img
               className='icon icons8-Temperature'
@@ -112,7 +96,7 @@ class BuildingQuickAmenitiesBar extends Component {
               name='tasks'
               size='big'
             />
-            <h6>{ temperatureIcon(this.state).text }</h6>
+            <h5>{ temperatureIcon(this.state).text }</h5>
           </div>
           <div style={comStyles().iconBox}>
             {/*}<img
@@ -125,7 +109,7 @@ class BuildingQuickAmenitiesBar extends Component {
               name='wifi'
               size='big'
             />
-            <h6>{ wifiIcon(this.state).text }</h6>
+            <h5>{ wifiIcon(this.state).text }</h5>
           </div>
           <div style={comStyles().iconBox}>
           {/*
@@ -135,12 +119,12 @@ class BuildingQuickAmenitiesBar extends Component {
               height='75'
               src={electricityIcon(this.state).icon}
             />
-            <h6>{ electricityIcon(this.state).text }</h6>*/}
+            <h5>{ electricityIcon(this.state).text }</h5>*/}
             <Icon
               name='lightning'
               size='big'
             />
-            <h6>{ electricityIcon(this.state).text }</h6>
+            <h5>{ electricityIcon(this.state).text }</h5>
           </div>
           <div style={comStyles().iconBox}>
             {/*}<img
@@ -153,25 +137,20 @@ class BuildingQuickAmenitiesBar extends Component {
               name='car'
               size='big'
             />
-            <h6>{ parkingIcon(this.state).text }</h6>
+            <h5>{ parkingIcon(this.state).text }</h5>
           </div>
-          {
-            this.renderAppropriateModal(this.state.modal_name, this.state.context)
-          }
   			</div>
         {
           this.props.expand_amenities
           ?
           null
           :
-          <div style={comStyles().see_more} >
-            <Button
-              content='See More'
-              primary
-              basic
-              onClick={() => this.props.expandAmenities()}
-            />
+          <div onClick={() => this.props.expandAmenities()} style={comStyles().see_more}>
+            See More
           </div>
+        }
+        {
+          this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
       </div>
 		)
@@ -223,6 +202,7 @@ const comStyles = () => {
     container: {
       display: 'flex',
       flexDirection: 'column',
+      padding: '10px',
     },
 		amenities_container: {
       display: 'flex',
@@ -231,12 +211,6 @@ const comStyles = () => {
       justifyContent: 'space-around',
       padding: '30px 30px 10px 30px',
 		},
-    see_more: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      margin: '0px 30px 10px 0px'
-    },
     icon: {
       fontSize: '3rem',
       margin: 'auto',
@@ -265,6 +239,19 @@ const comStyles = () => {
        alignItems: 'center',
        fontWeight: 'bold',
        cursor: 'pointer',
+    },
+    see_more: {
+      margin: '10px auto',
+      display: 'flex',
+      flexDirection: 'row',
+      height: '30px',
+      justifyContent: 'center',
+      width: '100%',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.05)',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      padding: '10px auto',
     }
 	}
 }

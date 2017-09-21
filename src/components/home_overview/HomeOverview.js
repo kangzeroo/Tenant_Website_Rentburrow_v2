@@ -16,11 +16,12 @@ import {
 	Card,
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
-import { calculateSimpleSuiteBaths } from '../../api/amenities/amenity_calculations'
-import SingularImageGallery from '../image/SingularImageGallery'
 import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
+import BuildingOverviewRow from './rows/BuildingOverviewRow'
+import SuiteOverviewRow from './rows/SuiteOverviewRow'
 
-class AvailableSuites extends Component {
+
+class HomeOverview extends Component {
 	constructor() {
 		super()
 		this.state = {
@@ -47,11 +48,12 @@ class AvailableSuites extends Component {
 	}
 
 	toggleModal(bool, attr, context) {
+		console.log('toggleModal')
 		this.setState({
       toggle_modal: bool,
       modal_name: attr,
       context,
-    })
+    }, () => console.log(this.state))
   }
 
 	renderAppropriateModal(modal_name, context) {
@@ -94,139 +96,36 @@ class AvailableSuites extends Component {
 		}
   }
 
-	/*render() {
-		return (
-      <div style={comStyles().container} >
-        <h3>Explore Photos Of This Home</h3>
-        <Table basic selectable>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Suite Style</Table.HeaderCell>
-              <Table.HeaderCell>Rooms</Table.HeaderCell>
-              <Table.HeaderCell>Baths</Table.HeaderCell>
-              <Table.HeaderCell>Rooms starting at</Table.HeaderCell>
-							<Table.HeaderCell></Table.HeaderCell>
-              <Table.HeaderCell />
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-						<Table.Row key='Building' >
-							<Table.Cell>The Building Common Areas</Table.Cell>
-							<Table.Cell></Table.Cell>
-							<Table.Cell></Table.Cell>
-							<Table.Cell></Table.Cell>
-							<Table.Cell></Table.Cell>
-							<Table.Cell>
-								<Button
-									basic
-									fluid
-									onClick={() => this.toggleModal(true, 'building', this.props.building)}
-									color='green'
-									content='Explore'
-								/>
-							</Table.Cell>
-						</Table.Row>
-            {
-              this.props.suites.map((suite) => {
-                return (
-                  <Table.Row key={suite.suite_code} >
-                    <Table.Cell>{`${suite.suite_alias} Unit`}</Table.Cell>
-                    <Table.Cell>{suite.total}</Table.Cell>
-                    <Table.Cell>{ this.state.all_suite_amenities.length > 0 ? calculateSimpleSuiteBaths(suite, this.state.all_suite_amenities) : '?'}</Table.Cell>
-                    <Table.Cell>${parseInt(suite.min_price, 10)}</Table.Cell>
-										<Table.Cell>
-										<div style={comStyles().images_gallery}>
-											{ console.log(suite)}
-											<SingularImageGallery
-												list_of_images={suite.imgs}
-												image_size='thumbnail'
-											/>
-										</div>
-										</Table.Cell>
-                    <Table.Cell>
-                      <Button
-                        basic
-												fluid
-												onClick={() => this.toggleModal(true, 'suite', suite)}
-                        color='green'
-                        content='Explore'
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              })
-            }
-          </Table.Body>
-        </Table>
-				{
-          this.renderAppropriateModal(this.state.modal_name, this.state.context)
-        }
-      </div>
-    )
-	} */
-
-	renderSuiteCard(suite) {
-		return (
-			<Card
-				key={suite.suite_id}
-				raised
-				style={comStyles().hardCard}
-			>
-				<div style={comStyles().left} >
-					<div id='infobar' style={comStyles().infobar} >
-							<Image
-								shape='circular'
-								src={suite.thumbnail}
-								size='tiny'
-								bordered
-							/>
-
-						<div id='infobadge' style={comStyles().infobadge} >
-							<div style={comStyles().address}>
-								{suite.suite_code}
-							</div>
-							<div style={comStyles().userinfo}>
-								{suite.suite_alias}
-							</div>
-						</div>
-
-						<div style={comStyles().pricediv}>
-							<div style={comStyles().price}>
-								${parseInt(suite.min_price, 10)}
-							</div>
-						</div>
-					</div>
-
-
-				</div>
-
-				<div style={comStyles().center} >
-					<div style={comStyles().ImageGallery} >
-						<SingularImageGallery
-							list_of_images={[suite.cover_photo].concat(suite.imgs)}
-							image_size='thumbnail'
-						/>
-					</div>
-				</div>
-			</Card>
-		)
-	}
-
 	render() {
 		return (
 			<div style={comStyles().container} >
+				<BuildingOverviewRow
+					key='building_overview_row'
+					building={this.props.building}
+					toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
+				/>
 				{
 					this.props.suites.map((suite) => {
-						return this.renderSuiteCard(suite)
+						return (
+							<SuiteOverviewRow
+								key={suite.suite_id}
+								building={this.props.building}
+								suite={suite}
+								toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
+							/>
+						)
 					})
 				}
+				{
+          this.renderAppropriateModal(this.state.modal_name, this.state.context)
+        }
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-AvailableSuites.propTypes = {
+HomeOverview.propTypes = {
   history: PropTypes.object.isRequired,
   suites: PropTypes.array.isRequired,			// passed in
 	building: PropTypes.object.isRequired,	// passed in
@@ -234,12 +133,12 @@ AvailableSuites.propTypes = {
 }
 
 // for all optional props, define a default value
-AvailableSuites.defaultProps = {
+HomeOverview.defaultProps = {
 	promise_array_of_suite_amenities_with_id: [],
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(AvailableSuites)
+const RadiumHOC = Radium(HomeOverview)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -268,10 +167,8 @@ const comStyles = () => {
 			height: '100%'
 		},
 		hardCard: {
-      minWidth: '600px',
       width: '100%',
       minHeight: '225px',
-      maxHeight: '225px',
       margin: '10px auto',
       display: 'flex',
       flexDirection: 'row',
@@ -303,42 +200,12 @@ const comStyles = () => {
 			alignItems: 'flex-start',
 			WebkitBoxOrient: 'horizontal', WebkitBoxDirection: 'normal', flexDirection: 'row',
 			padding: '10px',
-      backgroundColor: 'rgba(0,0,0,0.05)',
-      maxHeight: '70px',
-		},
-		infobadge: {
-			display: '-webkit-box', display: '-webkit-flex', display: 'flexbox', display: 'box', display: 'flex',
-			WebkitBoxOrient: 'vertical', WebkitBoxDirection: 'normal', flexDirection: 'column',
-			margin: '1% 1% 1% 5%',
-			width: '70%',
-		},
-		address: {
-			fontSize:'1.6rem',
-			fontWeight:'bold',
-			width: '100%',
-			height:'60%',
-			color: xGreyText,
-		},
-		userinfo: {
-			width: '100%',
-			height: '35%',
-			color: xGreyText,
-			fontSize: '1.1rem',
-			margin: '5px 0px 0px 0px'
-		},
-		pricediv: {
-			textAlign:'center',
-			padding: '50px',
-			display: '-webkit-box', display: '-webkit-flex', display: 'flexbox', display: 'box', display: 'flex',
-			WebkitBoxOrient: 'horizontal', WebkitBoxDirection: 'normal', flexDirection: 'row',
-			WebkitBoxPack: 'justify', WebkitJustifyContent: 'center', justifyContent: 'center',
-			position: 'relative',
+      maxHeight: '150px',
 		},
 		price: {
-			fontSize:'2.5rem',
-			fontWeight:'bold',
+			fontSize: '2.5rem',
+			fontWeight: 'bold',
 			color: xGreyText,
-			width: '100%',
 		},
 		imageTile: {
 			position: 'absolute',
@@ -427,12 +294,40 @@ const comStyles = () => {
       margin: '5px auto',
     },
 		left: {
-      width: '30%',
-      height: '100%',
+      width: '40%',
+      minHeight: '100%',
+      maxHeight: '100%',
       minWidth: '360px',
+			padding: '20px',
     },
+		left_top: {
+			height: '30%',
+			width: '100%',
+			color: xGreyText,
+			fontSize: '2.2rem',
+			fontWeight: 'bold',
+			margin: '5px 0px 0px 0px',
+			textAlign: 'center',
+			padding: '15px',
+			lineHeight: '35px',
+		},
+		left_middle: {
+			height: '55%',
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		left_bottom: {
+			height: '15%',
+		},
+		explore_button: {
+			height: '100%',
+			width: '100%',
+			fontSize: '1.8rem',
+		},
     center: {
-      width: '30%',
+      width: '60%',
       minWidth: '360px',
       minHeight: '100%',
     },
@@ -453,6 +348,10 @@ const comStyles = () => {
       justifyContent: 'center',
       padding: '20px',
       minWidth: '360px',
-    }
+    },
+		ImageGallery: {
+			height: '100%',
+			maxHeight: '100%',
+		}
 	}
 }

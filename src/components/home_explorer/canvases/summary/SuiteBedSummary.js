@@ -32,10 +32,15 @@ class SuiteBedSummary extends Component {
 				{
 					this.props.rooms_summary.standard_price
 					?
-					<Statistic horizontal value={`$${this.props.rooms_summary.standard_price}`} label='per room' />
+					<Statistic>
+			      <Statistic.Value>
+			        ${this.props.rooms_summary.standard_price}
+			      </Statistic.Value>
+			      <Statistic.Label>Per Room</Statistic.Label>
+			    </Statistic>
 					:
 					<Statistic>
-			      <Statistic.Value text>
+			      <Statistic.Value>
 			        {`$${this.props.rooms_summary.min_price} - $${this.props.rooms_summary.max_price}`}
 			      </Statistic.Value>
 			      <Statistic.Label>Per Room</Statistic.Label>
@@ -87,10 +92,10 @@ const comStyles = () => {
 	return {
     rooms_summary: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
 			justifyContent: 'center',
       height: '100%',
-			padding: '30px',
+			width: '100%',
     },
 	}
 }

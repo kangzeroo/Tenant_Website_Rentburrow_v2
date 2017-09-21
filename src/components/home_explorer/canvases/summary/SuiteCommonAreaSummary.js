@@ -116,7 +116,7 @@ const comStyles = () => {
     common_areas_summary: {
       display: 'flex',
       flexDirection: 'row',
-			justifyContent: 'center',
+			justifyContent: 'space-around',
 			padding: '30px',
     },
 	}
