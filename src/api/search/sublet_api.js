@@ -10,6 +10,8 @@ export const querySubletsInArea = ({ lat, lng, filterParams }) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data.map((sublet) => {
           return convertToRegularSubletObj(sublet)
+        }).sort((a, b) => {
+          return b.posted_date - a.posted_date
         }))
       })
       .catch((err) => {
@@ -59,4 +61,17 @@ export const convertToRegularSubletObj = (sublet) => {
     images: JSON.parse(sublet.IMAGES) || [],
     scrapped_at: sublet.SCRAPPED_AT,
   }
+}
+
+export const calculateCheapestSublet = (sublets) => {
+  let cheapest = sublets[0].price
+  sublets.forEach((sublet) => {
+    if (!cheapest) {
+      cheapest = sublet.price
+    }
+    if (sublet.price && sublet.price < cheapest) {
+      cheapest = sublet.price
+    }
+  })
+  return cheapest
 }

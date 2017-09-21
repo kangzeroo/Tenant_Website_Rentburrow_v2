@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 import SubletDetailed from './SubletDetailed'
 import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
+import MapComponent from '../map/MapComponent'
 
 
 class SubletsList extends Component {
@@ -20,6 +21,18 @@ class SubletsList extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().header}>Sublets from Facebook</div>
+				{
+					this.props.sublets.length > 0
+					?
+					<MapComponent
+						listOfResults={this.props.sublets}
+						selected_pin={this.props.sublets[0].post_id}
+						CSS_mapWidth='100%'
+						CSS_mapHeight='300px'
+					/>
+					:
+					null
+				}
 				<div style={comStyles().scroll}>
 					{
 						this.props.sublets.map((sublet) => {

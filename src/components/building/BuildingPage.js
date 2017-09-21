@@ -34,6 +34,7 @@ import {
 } from '../../api/building/building_api'
 import {
 	matchSubletsByPlaceId,
+	calculateCheapestSublet,
 } from '../../api/search/sublet_api'
 import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
@@ -51,6 +52,8 @@ import AllLandlords from '../landlord/AllLandlords'
 import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 import SingularImageGallery from '../image/SingularImageGallery'
 import SubletsList from '../sublets/SubletsList'
+import DescriptionBox from './DescriptionBox'
+
 
 class BuildingPage extends Component {
 	constructor() {
@@ -155,12 +158,6 @@ class BuildingPage extends Component {
 		})
 	}
 
-	createMarkup(string) {
-		return {
-			__html: string,
-		}
-	}
-
 	toggleModal(bool, attr, context) {
 		this.setState({
       toggle_modal: bool,
@@ -218,6 +215,10 @@ class BuildingPage extends Component {
 		})
 	}
 
+	selectThisPost(sublet) {
+    window.open(`${window.location.origin}/sublet/${sublet.place_id}`, '_blank')
+  }
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -250,10 +251,13 @@ class BuildingPage extends Component {
 						<div style={comStyles().building_header} >
 							<h1>Welcome to {this.state.building.building_alias}!</h1>
 							<div style={comStyles().description} >
-								<div
-									dangerouslySetInnerHTML={this.createMarkup(this.state.building.building_desc)}
-									style={comStyles().textMarkup}
-								/>
+								{
+									this.state.building.building_desc
+									?
+									<DescriptionBox description={this.state.building.building_desc} />
+									:
+									null
+								}
 							</div>
 						</div>
 						<div style={comStyles().amenities} >
@@ -329,6 +333,27 @@ class BuildingPage extends Component {
 							:
 							null
 						}
+						{
+							this.state.sublets.length > 0
+							?
+							<div style={comStyles().four_month_sublet}>
+								<h3>Prefer a 4 month lease?</h3>
+								<Button onClick={() => this.selectThisPost(this.state.sublets[0])} basic fluid primary style={comStyles().facebook_sublets}>
+									View {this.state.sublets.length} sublets from Facebook <br />
+									{
+										calculateCheapestSublet(this.state.sublets)
+										?
+										`Prices starting from $${calculateCheapestSublet(this.state.sublets)}`
+										:
+										null
+									}
+								</Button>
+							</div>
+							:
+							<div style={comStyles().four_month_sublet}>
+								<h3>No 4 month sublets available</h3>
+							</div>
+						}
 					</div>
 				</div>
 
@@ -340,9 +365,6 @@ class BuildingPage extends Component {
 				</div>*/}
 				<div style={comStyles().content_bottom}>
 					{/*<AllLandlords />*/}
-					<SubletsList
-						sublets={this.state.sublets}
-					/>
 				</div>
 
 				{
@@ -453,7 +475,7 @@ const comStyles = () => {
 			display: 'flex',
 			flexDirection: 'row',
 			backgroundColor: 'rgba(153,204,255,0.2)',
-			height: '800px',
+			// height: '800px',
 			width: '100%',
 		},
 		content_left: {
@@ -470,10 +492,6 @@ const comStyles = () => {
 			flexDirection: 'column',
 			flex: '1',
 			margin: '20px 50px 20px 20px',
-		},
-		textMarkup: {
-			fontSize: '1rem',
-			lineHeight: '2rem',
 		},
 		about: {
 			fontSize: '2.5rem',
@@ -525,6 +543,16 @@ const comStyles = () => {
 			left: '10px',
 			height: '20px',
 			width: '20px',
+		},
+		four_month_sublet: {
+			padding: '20px',
+			display: 'flex',
+			flexDirection: 'column',
+		},
+		facebook_sublets: {
+			height: '100px',
+			fontSize: '1.3rem',
+			lineHeight: '30px',
 		}
 	}
 }
