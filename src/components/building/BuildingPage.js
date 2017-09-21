@@ -296,19 +296,6 @@ class BuildingPage extends Component {
 								image_size='hd'
 							/>
 						</div>
-						<div style={comStyles().suites_table}>
-							{
-								this.state.suites && this.state.suites.length > 0
-								?
-								<AvailableSuites
-									building={this.state.building}
-									suites={this.state.suites}
-									promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
-								/>
-								:
-								null
-							}
-						</div>
 					</div>
 					<div style={comStyles().content_right} >
 						<StepByStepCard
@@ -330,6 +317,20 @@ class BuildingPage extends Component {
 							null
 						}
 					</div>
+				</div>
+
+				<div style={comStyles().suites_table}>
+					{
+						this.state.suites && this.state.suites.length > 0
+						?
+						<AvailableSuites
+							building={this.state.building}
+							suites={this.state.suites}
+							promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
+						/>
+						:
+						null
+					}
 				</div>
 
 				{/*<div style={comStyles().images_container}>

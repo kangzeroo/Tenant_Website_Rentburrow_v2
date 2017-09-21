@@ -15,6 +15,7 @@ import {
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
 import { calculateSimpleSuiteBaths } from '../../api/amenities/amenity_calculations'
+import SingularImageGallery from '../image/SingularImageGallery'
 
 
 class AvailableSuites extends Component {
@@ -102,12 +103,14 @@ class AvailableSuites extends Component {
               <Table.HeaderCell>Rooms</Table.HeaderCell>
               <Table.HeaderCell>Baths</Table.HeaderCell>
               <Table.HeaderCell>Rooms starting at</Table.HeaderCell>
+							<Table.HeaderCell></Table.HeaderCell>
               <Table.HeaderCell />
             </Table.Row>
           </Table.Header>
           <Table.Body>
 						<Table.Row key='Building' >
 							<Table.Cell>The Building Common Areas</Table.Cell>
+							<Table.Cell></Table.Cell>
 							<Table.Cell></Table.Cell>
 							<Table.Cell></Table.Cell>
 							<Table.Cell></Table.Cell>
@@ -128,7 +131,16 @@ class AvailableSuites extends Component {
                     <Table.Cell>{`${suite.suite_alias} Unit`}</Table.Cell>
                     <Table.Cell>{suite.total}</Table.Cell>
                     <Table.Cell>{ this.state.all_suite_amenities.length > 0 ? calculateSimpleSuiteBaths(suite, this.state.all_suite_amenities) : '?'}</Table.Cell>
-                    <Table.Cell>${parseInt(suite.min_price)}</Table.Cell>
+                    <Table.Cell>${parseInt(suite.min_price, 10)}</Table.Cell>
+										<Table.Cell>
+										<div style={comStyles().images_gallery}>
+											{ console.log(suite)}
+											<SingularImageGallery
+												list_of_images={suite.imgs}
+												image_size='thumbnail'
+											/>
+										</div>
+										</Table.Cell>
                     <Table.Cell>
                       <Button
                         basic
@@ -186,6 +198,9 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-
+		images_gallery: {
+			width: '300px',
+			height: '175px'
+		}
 	}
 }
