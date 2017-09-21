@@ -17,9 +17,12 @@ import {
 } from '../../api/search/search_api'
 import {
 	saveBuildingsToRedux,
+	saveSubletsToRedux,
 } from '../../actions/search/search_actions'
 import PopupPanel from './panel/PopupPanel'
-
+import {
+	querySubletsInArea,
+} from '../../api/search/sublet_api'
 
 class HousingPage extends Component {
 
@@ -38,12 +41,20 @@ class HousingPage extends Component {
 		queryBuildingsInArea({
 			...this.props.current_gps_center,
 			filterParams: this.props.lease_filter_params,
-		}).then((data) => {
+		})
+		.then((data) => {
 			const buildings = data.map(s => JSON.parse(s))
 			this.props.saveBuildingsToRedux(buildings)
 			this.setState({
 				buildings,
 			})
+			return querySubletsInArea({
+				...this.props.current_gps_center,
+				filterParams: this.props.sublet_filter_params,
+			})
+		})
+		.then((data) => {
+			this.props.saveSubletsToRedux(data)
 		})
 	}
 
@@ -95,6 +106,7 @@ HousingPage.propTypes = {
 	current_gps_center: PropTypes.object.isRequired,
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
+	saveSubletsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -127,6 +139,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
 		saveBuildingsToRedux,
+		saveSubletsToRedux,
 	})(RadiumHOC)
 )
 

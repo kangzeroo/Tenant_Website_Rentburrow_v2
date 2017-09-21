@@ -191,15 +191,9 @@ class FilterBar extends Component {
   }
 
   handleRentalLengthChange(e, value) {
-    if (value.value === 'fourmonth') {
-      querySubletsInArea({
-        ...this.props.current_gps_center,
-        filterParams: this.props.sublet_filter_params,
-      }).then((data) => {
-        this.props.saveSubletsToRedux(data)
-        this.props.history.push('/sublet')
-        this.props.changeRentType('sublet')
-  		})
+    if (value.value === 'sublet') {
+      this.props.history.push('/sublet')
+      this.props.changeRentType('sublet')
     } else {
       this.props.history.push('/lease')
       this.props.changeRentType('lease')
@@ -239,13 +233,12 @@ class FilterBar extends Component {
                 content='FILTER'
               />
               <Dropdown
-                placeholder='Rental Length'
+                placeholder='Rental Type'
                 floating
                 selection
                 options={[
-                  { key: 'fourmonth', value: 'fourmonth', text: '4 Months Sublet' },
-                  { key: 'eightmonth', value: 'eightmonth', text: '8 Months Lease' },
-                  { key: 'twelvemonth', value: 'twelvemonth', text: '12 Months Lease' },
+                  { key: 'sublet', value: 'sublet', text: 'Sublets' },
+                  { key: 'lease', value: 'lease', text: 'Leases' },
                 ]}
                 onChange={(e, value) => this.handleRentalLengthChange(e, value)}
               />
@@ -283,6 +276,7 @@ class FilterBar extends Component {
 
 // defines the types of variables in this.props
 FilterBar.propTypes = {
+  history: PropTypes.object.isRequired,
   building_search_results: PropTypes.array.isRequired,
   sublet_search_results: PropTypes.array.isRequired,
   saveBuildingsToRedux: PropTypes.func.isRequired,
