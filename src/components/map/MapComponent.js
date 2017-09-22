@@ -156,7 +156,7 @@ class MapComponent extends Component {
 		listOfResults.forEach((n, i) => {
 			if (!pinAlreadyPlaced(n, self.pins)) {
 				let marker
-        let infowindow
+        // let infowindow
 				if (true) {
 	        marker = new google.maps.Marker({
 	            position: new google.maps.LatLng(n.gps_x, n.gps_y),
@@ -164,19 +164,19 @@ class MapComponent extends Component {
 							icon: this.red_map_pin,
 	        })
 	        marker.pin_id = n.building_id || n.post_id
-          marker.infowindow = new google.maps.InfoWindow({
-            content: `<div>$${n.min_price}+</div>`
-          })
+          // marker.infowindow = new google.maps.InfoWindow({
+          //   content: `<div>$${n.min_price}+</div>`
+          // })
 	      }
         // listen to marker click
         marker.addListener('click', (event) => {
-          marker.infowindow.open(self.state.mapTarget, marker)
+          // marker.infowindow.open(self.state.mapTarget, marker)
 					self.props.selectPinToRedux(marker.pin_id)
 					self.props.selectPopupBuilding(n)
 					this.highlightPin(marker)
-					setTimeout(() => {
-						marker.infowindow.close()
-					}, 2000)
+					// setTimeout(() => {
+					// 	marker.infowindow.close()
+					// }, 2000)
         })
 				// save the pins
 				if (marker) {
@@ -234,14 +234,14 @@ class MapComponent extends Component {
 					if ((this.pins[m].icon !== this.grey_map_pin) || (this.pins[m].animating)) {
           	this.pins[m].setIcon(this.grey_map_pin)
 						this.pins[m].setAnimation(null)
-						this.pins[m].infowindow.close()
+						// this.pins[m].infowindow.close()
 					}
 				} else {
 					// found a pin that has not yet been clicked
 					if ((this.pins[m].icon !== this.red_map_pin) || (this.pins[m].animating)) {
 						this.pins[m].setIcon(this.red_map_pin)
 						this.pins[m].setAnimation(null)
-						this.pins[m].infowindow.close()
+						// this.pins[m].infowindow.close()
 					}
         }
 				// check if there is a marker passed in
