@@ -27,14 +27,16 @@ class BuildingOverviewRow extends Component {
       >
         <div style={comStyles().left} >
           <div id='infobar' style={comStyles().left_top} >
-            Common Areas
+            <div>{building.building_alias}</div>
+            <div>Common Areas</div>
           </div>
           <div style={comStyles().left_bottom}>
             <Button
               fluid
               onClick={() => this.props.toggleModal(true, 'building', building)}
               color='blue'
-              content='Explore'
+              content='Explore Property'
+              icon='building'
               style={comStyles().explore_button}
             />
           </div>
@@ -228,6 +230,9 @@ const comStyles = () => {
       maxHeight: '100%',
       minWidth: '360px',
 			padding: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
     },
 		left_top: {
 			height: '85%',
@@ -243,12 +248,12 @@ const comStyles = () => {
 			lineHeight: '35px',
 		},
 		left_bottom: {
-			height: '15%',
+			height: '40px',
 		},
 		explore_button: {
 			height: '100%',
 			width: '100%',
-			fontSize: '1.8rem',
+			// fontSize: '1.8rem',
 		},
     center: {
       width: '60%',

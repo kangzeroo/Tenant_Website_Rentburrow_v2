@@ -522,8 +522,8 @@ const comStyles = () => {
 			borderTop: 'gray solid thin'
 		},
 		suites_table: {
-			borderRadius: '2px',
-			padding: '35px',
+			borderRadius: '3px',
+			padding: '50px',
 		},
 		images_container: {
 			margin: '20px 0px 10px 0px'

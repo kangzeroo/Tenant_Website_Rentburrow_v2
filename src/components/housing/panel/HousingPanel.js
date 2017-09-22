@@ -85,9 +85,32 @@ class HousingPanel extends Component {
 						?
 						<div style={comStyles().scroll}>
 							{
+								this.props.sublet_search_results.length > 0
+								?
 								this.props.sublet_search_results.map((sublet, index) => {
 									return this.renderSubletCard(sublet, index)
 								})
+								:
+								<div style={comStyles().panel_background}>
+									{
+										this.props.sublets.length === 0
+										?
+										<div style={comStyles().loading} >
+											<Image
+												src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
+											/>
+										</div>
+										:
+										<div style={comStyles().no_matches_container} >
+											<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
+											<Button
+												primary
+												content='Go Back'
+												onClick={() => this.props.refresh()}
+											/>
+										</div>
+									}
+								</div>
 							}
 						</div>
 						:
@@ -137,6 +160,7 @@ HousingPanel.propTypes = {
 	rent_type: PropTypes.string.isRequired,
 	refresh: PropTypes.func.isRequired, 					// passed in
 	buildings: PropTypes.array.isRequired,
+	sublets: PropTypes.array.isRequired,
 }
 
 // for all optional props, define a default value
@@ -155,6 +179,7 @@ const mapReduxToProps = (redux) => {
 		card_style: redux.search.card_style,
 		rent_type: redux.filter.rent_type,
 		buildings: redux.search.buildings,
+		sublets: redux.search.sublets,
 	}
 }
 

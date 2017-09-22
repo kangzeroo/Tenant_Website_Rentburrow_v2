@@ -9,6 +9,7 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
 	Statistic,
+	Icon,
 } from 'semantic-ui-react'
 
 
@@ -20,8 +21,9 @@ class SuiteBedSummary extends Component {
 				{
 					this.props.rooms_summary.total_rooms
 					?
-					<Statistic>
+					<Statistic size='small'>
 			      <Statistic.Value>
+							<Icon name='bed' />
 			        {this.props.rooms_summary.total_rooms}
 			      </Statistic.Value>
 			      <Statistic.Label>Bedrooms <br /> { this.props.rooms_summary.total_ensuite_baths > 0 ? `with ${this.props.rooms_summary.total_ensuite_baths} ensuite baths` : null }</Statistic.Label>
@@ -30,21 +32,29 @@ class SuiteBedSummary extends Component {
 					null
 				}
 				{
-					this.props.rooms_summary.standard_price
+					this.props.rooms_summary.standard_price !== 0
 					?
-					<Statistic>
+					<Statistic size='small'>
 			      <Statistic.Value>
 			        ${this.props.rooms_summary.standard_price}
 			      </Statistic.Value>
 			      <Statistic.Label>Per Room</Statistic.Label>
 			    </Statistic>
 					:
-					<Statistic>
-			      <Statistic.Value>
-			        {`$${this.props.rooms_summary.min_price} - $${this.props.rooms_summary.max_price}`}
-			      </Statistic.Value>
-			      <Statistic.Label>Per Room</Statistic.Label>
-			    </Statistic>
+					<div>
+						{
+							this.props.rooms_summary.min_price !== 0
+							?
+							<Statistic size='small'>
+								<Statistic.Value>
+									{`$${this.props.rooms_summary.min_price}+`}
+								</Statistic.Value>
+								<Statistic.Label>Per Room</Statistic.Label>
+							</Statistic>
+							:
+							null
+						}
+					</div>
 				}
 			</div>
 		)

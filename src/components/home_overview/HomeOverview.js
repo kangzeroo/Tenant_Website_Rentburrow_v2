@@ -173,7 +173,7 @@ const comStyles = () => {
 		hardCard: {
       width: '100%',
       minHeight: '225px',
-      margin: '10px auto',
+      margin: '20px auto',
       display: 'flex',
       flexDirection: 'row',
     },

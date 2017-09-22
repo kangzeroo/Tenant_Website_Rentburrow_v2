@@ -9,6 +9,7 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
 	Statistic,
+	Image,
 } from 'semantic-ui-react'
 
 
@@ -20,8 +21,11 @@ class SuiteBathSummary extends Component {
 				{
 					this.props.baths_summary.full_baths > 0
 					?
-					<Statistic>
-			      <Statistic.Value>{`${this.props.baths_summary.full_baths}`}</Statistic.Value>
+					<Statistic size='small'>
+			      <Statistic.Value>
+							<Image src='https://d30y9cdsu7xlg0.cloudfront.net/png/693-200.png' inline />
+							{`${this.props.baths_summary.full_baths}`}
+						</Statistic.Value>
 			      <Statistic.Label>{`Full Bathroom${this.props.baths_summary.full_baths > 0 ? 's' : ''}`}</Statistic.Label>
 			    </Statistic>
 					:
