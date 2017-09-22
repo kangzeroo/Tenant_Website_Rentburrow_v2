@@ -32,8 +32,6 @@ class SubletsList extends Component {
     if (place_id[place_id.length - 1] === '/') {
       place_id = place_id.slice(0, -1)
     }
-		console.log(this.props.location)
-		console.log(place_id)
 		this.getBuilding(place_id)
 	}
 
@@ -46,8 +44,7 @@ class SubletsList extends Component {
 				this.setState({
 					building: JSON.parse(building),
 					exists: true,
-				})
-				console.log(this.state)
+				}, () => console.log(this.state))
 			}
 		})
 	}
