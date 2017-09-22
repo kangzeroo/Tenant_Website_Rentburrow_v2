@@ -76,6 +76,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      padding: '20px',
 		}
 	}
 }

@@ -115,13 +115,22 @@ class Header extends Component {
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
                 basic
-
                 inverted
                 content='Login'
               />
             </div>
           }
-
+          {
+            this.props.rent_type === 'sublet' && this.props.force_signin && this.state.modal_name !== 'login'
+            ?
+            <Modal dimmer='blurring' open={true} onClose={() => this.toggleModal(false)}>
+              {
+                this.renderLoginSuite()
+              }
+     				</Modal>
+            :
+            null
+          }
           <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
             {
               this.renderAppropriateModal(this.state.modal_name, this.state.context)
@@ -143,6 +152,8 @@ Header.propTypes = {
   current_gps_center: PropTypes.object.isRequired,
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
+  force_signin: PropTypes.bool,
+  rent_type: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -151,6 +162,7 @@ Header.defaultProps = {
   tenant_profile: {},
   location: {},
   search_radius: 1000,
+  force_signin: false,
 }
 
 const RadiumHOC = Radium(Header)
@@ -162,6 +174,8 @@ const mapReduxToProps = (redux) => {
 		current_gps_center: redux.filter.current_gps_center,
     lease_filter_params: redux.filter.lease_filter_params,
     sublet_filter_params: redux.filter.sublet_filter_params,
+    rent_type: redux.filter.rent_type,
+    force_signin: redux.auth.force_signin,
   }
 }
 

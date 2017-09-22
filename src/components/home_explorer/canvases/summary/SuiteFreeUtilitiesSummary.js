@@ -90,8 +90,9 @@ const comStyles = () => {
 	return {
     free_utilities_summary: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
 			justifyContent: 'center',
+			alignItems: 'center',
       height: '100%',
 			padding: '30px',
     }

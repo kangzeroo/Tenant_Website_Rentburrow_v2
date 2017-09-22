@@ -21,6 +21,7 @@ import {
 import {
   shortenAddress,
 } from '../../../api/general/general_api'
+import { renameRoom, renameSuite } from '../../../api/general/renaming_api'
 
 
 class HomeExplorerSidebar extends Component {
@@ -47,7 +48,7 @@ class HomeExplorerSidebar extends Component {
     }].concat(this.props.all_suites.map((suite) => {
       return {
         key: suite.suite_alias,
-        text: suite.suite_alias,
+        text: renameSuite(suite.suite_alias),
         value: JSON.stringify(suite)
       }
     }))
@@ -177,7 +178,7 @@ class HomeExplorerSidebar extends Component {
             const x = JSON.parse(d)
             return {
               key: x.room_code,
-              text: x.room_alias ? `Room ${x.room_alias}` : `Room ${x.room_code}`,
+              text: x.room_alias ? renameRoom(x.room_alias) : renameRoom(x.room_code),
               value: x,
             }
           }))

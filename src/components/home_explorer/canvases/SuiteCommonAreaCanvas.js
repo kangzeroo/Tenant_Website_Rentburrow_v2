@@ -184,10 +184,10 @@ class SuiteCommonAreaCanvas extends Component {
         </div>
         <div style={comStyles().summarization}>
           <div style={comStyles().desc_upper}>
-    				<div
-    					dangerouslySetInnerHTML={this.createMarkup(this.props.suite.suite_desc)}
-    					style={comStyles().textMarkup}
-    				/>
+            <div
+              dangerouslySetInnerHTML={this.createMarkup(this.props.suite.suite_desc)}
+              style={comStyles().textMarkup}
+            />
           </div>
           <div style={comStyles().stats_lower}>
             {
@@ -277,19 +277,25 @@ const comStyles = () => {
     summarization: {
       display: 'flex',
       flexDirection: 'column',
+      padding: '20px',
     },
     desc_upper: {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
       minHeight: '100px',
+      justifyContent: 'center',
+      textAlign: 'center',
+      alignItems: 'center',
+      padding: '20px',
     },
     stats_lower: {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
       height: 'auto',
-      minHeight: '1000px',
+      minHeight: '600px',
+      padding: '20px',
     },
 	}
 }

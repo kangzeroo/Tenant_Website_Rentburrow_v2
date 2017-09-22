@@ -13,7 +13,7 @@ import {
   Form,
 } from 'semantic-ui-react'
 import { loginFacebook, convertTokenIntoLongLived } from '../../api/auth/facebook_auth'
-import { saveTenantToRedux } from '../../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
 
 
 class LoginPopup extends Component {
@@ -22,6 +22,7 @@ class LoginPopup extends Component {
     loginFacebook().then((fbProfile) => {
       this.props.saveTenantToRedux(fbProfile)
       this.props.toggleModal(false)
+      this.props.triggerForcedSignin(false)
       return convertTokenIntoLongLived(fbProfile.fbToken)
     })
   }
@@ -29,6 +30,13 @@ class LoginPopup extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+        {
+          this.props.rent_type === 'sublet' && this.props.force_signin
+          ?
+          <h4>Rentburrow pulls sublets from Facebook. By signing in, you help make this service possible. Thank you.</h4>
+          :
+          null
+        }
         <div style={comStyles().social_container} >
   				<Button
             onClick={() => this.loginWithFacebook()}
@@ -79,11 +87,14 @@ LoginPopup.propTypes = {
 	history: PropTypes.object.isRequired,
   toggleModal: PropTypes.func.isRequired,
   saveTenantToRedux: PropTypes.func.isRequired,
+  triggerForcedSignin: PropTypes.func.isRequired,
+  force_signin: PropTypes.bool,
+  rent_type: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
 LoginPopup.defaultProps = {
-
+  force_signin: false,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -92,7 +103,8 @@ const RadiumHOC = Radium(LoginPopup)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    rent_type: redux.filter.rent_type,
+    force_signin: redux.auth.force_signin,
 	}
 }
 
@@ -100,6 +112,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
     saveTenantToRedux,
+    triggerForcedSignin,
 	})(RadiumHOC)
 )
 

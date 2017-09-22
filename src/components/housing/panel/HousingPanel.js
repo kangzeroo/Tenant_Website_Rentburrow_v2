@@ -57,7 +57,7 @@ class HousingPanel extends Component {
 		}
 	}
 
-	renderSubletCard(sublet) {
+	renderSubletCard(sublet, index) {
 		return (
 			<SubletCard
 				key={sublet.post_id}
@@ -85,8 +85,8 @@ class HousingPanel extends Component {
 						?
 						<div style={comStyles().scroll}>
 							{
-								this.props.sublet_search_results.map((sublet) => {
-									return this.renderSubletCard(sublet)
+								this.props.sublet_search_results.map((sublet, index) => {
+									return this.renderSubletCard(sublet, index)
 								})
 							}
 						</div>
