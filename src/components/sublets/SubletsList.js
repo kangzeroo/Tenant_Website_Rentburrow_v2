@@ -14,7 +14,7 @@ import SubletDetailed from './SubletDetailed'
 import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
 import MapComponent from '../map/MapComponent'
 import { searchBuildingByPlaceID, } from '../../api/search/search_api'
-import { aliasToURL, } from '../../api/general/general_api'
+import { aliasToURL, shortenAddress, } from '../../api/general/general_api'
 
 class SubletsList extends Component {
 
@@ -66,17 +66,13 @@ class SubletsList extends Component {
 			<div style={comStyles().container}>
 				<div style={comStyles().header_container} >
 					<div style={comStyles().header}>
-					<div style={comStyles().title}>
 						{
 							this.props.sublets.length > 0
 							?
-							this.props.sublets[0].address
+							'Sublets Available For ' + shortenAddress(this.props.sublets[0].address)
 							:
-							null
+							'Facebook Sublets'
 						}
-					</div>
-					<div style={comStyles().subtitle}>
-						Sublets from Facebook
 					</div>
 					{
 						this.state.exists
@@ -172,12 +168,14 @@ const comStyles = () => {
 			justifyContent: 'space-between',
 		},
 		header: {
-			height: '100px',
+			height: '50px',
 			width: '100%',
 			padding: '10px',
 			color: xGreyText,
 			display: 'flex',
 			flexDirection: 'column',
+			fontSize: '2.0rem',
+			fontWeight: 'bold',
 		},
 		title: {
 			fontSize: '2.2rem',
