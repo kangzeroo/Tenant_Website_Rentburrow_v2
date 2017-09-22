@@ -264,7 +264,7 @@ const comStyles = () => {
 			maxHeight: '300px',
 			padding: '30px 30px 10px 30px',
 			border: 'gray solid thin',
-			zIndex: '1',
+			zIndex: '9999',
 			backgroundColor: 'white',
 			borderRadius: '3px'
 		},

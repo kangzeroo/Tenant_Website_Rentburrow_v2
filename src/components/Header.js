@@ -115,7 +115,7 @@ class Header extends Component {
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
                 basic
-                
+
                 inverted
                 content='Login'
               />
@@ -179,7 +179,7 @@ const comStyles = () => {
     header: {
       backgroundColor: xMidBlue,
       padding: '0px',
-      height: '7vh',
+      height: '50px',
       width: '100%',
       zIndex: '1',
       display: 'flex',
@@ -190,10 +190,10 @@ const comStyles = () => {
       float: 'left',
     },
     logo: {
-      height: '5vh',
+      height: '35px',
       width: 'auto',
       float: 'left',
-      margin: '1vh'
+      margin: '5px'
     },
     rightFloat: {
       position: 'absolute',
