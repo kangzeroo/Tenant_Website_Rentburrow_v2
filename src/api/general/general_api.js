@@ -115,5 +115,5 @@ export const aliasToURL = (building_alias) => {
 }
 
 export const URLToAlias = (building_alias) => {
-	return building_alias.replace(/-/g, ' ')
+	return building_alias.replace(/-/g, ' ').toLowerCase()
 }
