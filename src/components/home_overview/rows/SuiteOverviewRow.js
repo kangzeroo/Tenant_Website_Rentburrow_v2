@@ -177,7 +177,8 @@ class SuiteOverviewRow extends Component {
 							fluid
 							onClick={() => this.props.toggleModal(true, 'suite', suite)}
 							color='blue'
-							content='Explore'
+							content='Explore Suite Style'
+              icon='bed'
 							style={comStyles().explore_button}
 						/>
 					</div>
@@ -242,7 +243,7 @@ const comStyles = () => {
 		hardCard: {
       width: '100%',
       minHeight: '225px',
-      margin: '10px auto',
+      margin: '20px auto',
       display: 'flex',
       flexDirection: 'row',
     },
@@ -372,9 +373,12 @@ const comStyles = () => {
       maxHeight: '100%',
       minWidth: '360px',
 			padding: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between'
     },
 		left_top: {
-			height: '30%',
+			height: 'auto',
 			width: '100%',
 			color: xGreyText,
 			fontSize: '2.2rem',
@@ -385,19 +389,19 @@ const comStyles = () => {
 			lineHeight: '35px',
 		},
 		left_middle: {
-			height: '55%',
+			height: 'auto',
 			display: 'flex',
 			flexDirection: 'column',
 			justifyContent: 'space-between',
 			alignItems: 'space-between',
 		},
 		left_bottom: {
-			height: '15%',
+			height: 'auto',
 		},
 		explore_button: {
 			height: '100%',
 			width: '100%',
-			fontSize: '1.8rem',
+			// fontSize: '1.8rem',
 		},
     center: {
       width: '60%',
