@@ -4,7 +4,7 @@ import { SEARCH_MICROSERVICE } from '../API_URLS'
 export const queryBuildingsInArea = ({ lat, lng, filterParams }) => {
   const p = new Promise((res, rej) => {
     // axios.post(`${SEARCH_MICROSERVICE}/search_buildings`, { lat, long })
-    axios.post(`${SEARCH_MICROSERVICE}/get_all_active_buildings`, { lat, lng, filterParams })
+    axios.post(`${SEARCH_MICROSERVICE}/get_all_active_buildings_geo`, { lat, lng, filterParams })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
