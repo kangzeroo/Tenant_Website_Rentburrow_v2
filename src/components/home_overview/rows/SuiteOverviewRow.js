@@ -25,6 +25,7 @@ import SuiteBathSummary from '../../home_explorer/canvases/summary/SuiteBathSumm
 import SuiteBedSummary from '../../home_explorer/canvases/summary/SuiteBedSummary'
 import SuiteCommonAreaSummary from '../../home_explorer/canvases/summary/SuiteCommonAreaSummary'
 import SuiteFreeUtilitiesSummary from '../../home_explorer/canvases/summary/SuiteFreeUtilitiesSummary'
+import { renameSuite } from '../../../api/general/renaming_api'
 
 
 class SuiteOverviewRow extends Component {
@@ -161,7 +162,7 @@ class SuiteOverviewRow extends Component {
 			>
 				<div style={comStyles().left}>
 					<div id='infobar' style={comStyles().left_top} >
-						Style {suite.suite_alias}
+						{ renameSuite(suite.suite_alias) }
 					</div>
 					<div id='infobar' style={comStyles().left_middle} >
             {

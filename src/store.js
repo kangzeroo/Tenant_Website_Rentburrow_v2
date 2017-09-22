@@ -9,7 +9,7 @@ import establishFirebaseMessaging from './middleware/firebase_cloud_messaging_mi
 // recall that all actions will flow through each middleware until it reaches the end to be passed to reducers
 const createStoreWithMiddleware = applyMiddleware(
 	reduxThunk,
-	// filteredLogger,
+	filteredLogger,
 	// establishFirebaseMessaging,
 )(createStore);
 // create an instance of the redux store with all our reducers

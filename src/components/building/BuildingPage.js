@@ -195,7 +195,7 @@ class BuildingPage extends Component {
 					height={`600px`}
 					src={building.istaging_url}
 					frameBorder='0'
-					allowFullScreens
+					allowFullScreen
 				/>
 			)
 		} else {
@@ -223,28 +223,14 @@ class BuildingPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={loadStyles(renderProcessedImage(this.state.building.cover_photo)).cover_photo}>
-					{/*<Image
-						src={renderProcessedImage(this.state.building.cover_photo)}
-						fluid
-						onClick={() => { this.toggleModal(true, 'images') }}
-					/>
-					<div style={comStyles().action_sticker} >
-						<Button
-							fluid
-							primary
-							onClick={() => { this.toggleModal(true, 'images') }}
-							content='View Photos'
-							size='large'
-							style={comStyles().viewPhoto}
-						/>
-
-					</div>*/}
-					{
-						this.photo_or_vr(this.state.building)
-					}
-					{/*}<div style={comStyles().title_address} >
-						{ shortenAddress(this.state.building.building_address) }
-					</div>*/}
+					<div style={comStyles().hidden_loading}>
+						<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+					</div>
+					<div style={comStyles().visible_virtual_tour}>
+						{
+							this.photo_or_vr(this.state.building)
+						}
+					</div>
 				</div>
 				<div style={comStyles().content_top} >
 					<div style={comStyles().content_left} >
@@ -433,16 +419,24 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
-		cover_photo: {
-			minHeight: '500px',
-			maxHeight: '500px',
-			minWidth: '100%',
-			maxWidth: '100%',
-			overflow: 'hidden',
-      position: 'relative',
-			//background: `transparent url('${this.state.building.istaging_url}') center no-repeat`,
-		},
+    hidden_loading: {
+      position: 'absolute',
+      zIndex: 5,
+      minWidth: '100%',
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    visible_virtual_tour: {
+      position: 'absolute',
+      zIndex: 10,
+      width: '100%',
+      height: '100%',
+    },
 		action_sticker: {
       position: 'absolute',
       bottom: '40px',
@@ -470,12 +464,10 @@ const comStyles = () => {
 		content_top: {
 			display: 'flex',
 			flexDirection: 'row',
-			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
 		content_bottom: {
 			display: 'flex',
 			flexDirection: 'row',
-			backgroundColor: 'rgba(153,204,255,0.2)',
 			// height: '800px',
 			width: '100%',
 		},
@@ -532,7 +524,6 @@ const comStyles = () => {
 		suites_table: {
 			borderRadius: '2px',
 			padding: '35px',
-			backgroundColor: 'rgba(153,204,255,0.2)',
 		},
 		images_container: {
 			margin: '20px 0px 10px 0px'

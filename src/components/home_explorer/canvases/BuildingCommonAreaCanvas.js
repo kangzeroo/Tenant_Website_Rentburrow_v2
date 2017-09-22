@@ -148,6 +148,7 @@ const comStyles = () => {
     summarization: {
       display: 'flex',
       flexDirection: 'column',
+      padding: '20px',
     },
     desc_upper: {
       display: 'flex',

@@ -21,6 +21,7 @@ export const SET_CURRENT_GPS_CENTER = 'SET_CURRENT_GPS_CENTER'
 
 // actions related to auth
 export const AUTHENTICATE_TENANT = 'AUTHENTICATE_TENANT'
+export const FORCE_SIGNIN = 'FORCE_SIGNIN'
 
 // actions related to selections
 export const SELECT_BUILDING = 'SELECT_BUILDING'

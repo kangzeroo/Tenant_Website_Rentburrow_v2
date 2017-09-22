@@ -20,6 +20,8 @@ class VirtualTourCanvas extends Component {
     this.setState({
       vr_tour_height: document.getElementById('container').clientHeight
     })
+    console.log(this.props.istaging_url)
+    console.log(this.props.iguide_url)
   }
 
   renderVirtualTour_iStaging(link) {
@@ -64,9 +66,17 @@ class VirtualTourCanvas extends Component {
           <Tab panes={panes} />
           :
           <div style={comStyles().vrTour}>
-            <div style={comStyles().hidden_loading}>
-              <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading_blue_blobs.gif' width='200px' height='auto' />
-            </div>
+            {
+              this.props.istaging_url || this.props.iguide_url
+              ?
+              <div style={comStyles().hidden_loading}>
+                <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+              </div>
+              :
+              <div style={comStyles().hidden_loading}>
+                <h2>There is no virtual tour available for this unit</h2>
+              </div>
+            }
             <div style={comStyles().visible_virtual_tour}>
               {
                 this.props.istaging_url

@@ -15,6 +15,8 @@ import {
   getRoomAmenities,
 } from '../../../api/building/building_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
+import { renameRoom } from '../../../api/general/renaming_api'
+
 
 class RoomCanvas extends Component {
 
@@ -74,7 +76,7 @@ class RoomCanvas extends Component {
   					image_size='hd'
 					/>
           <div style={comStyles().infoBanner}>
-            <h1>{ this.state.room.room_alias || `Room ${this.state.room.room_code}` }</h1>
+            <h1>{ renameRoom(this.state.room.room_alias) || renameRoom(this.state.room.room_code) }</h1>
           </div>
           <div style={comStyles().scrollDown}>
             <Icon name='double angle down' size='huge' />
@@ -83,8 +85,8 @@ class RoomCanvas extends Component {
 				</div>
 				<div style={comStyles().content} >
 					<div style={comStyles().content_left} >
-						<h2>Room {this.state.room.room_code}</h2>
-						<p>{this.state.room.room_alias}</p>
+						<h2>{renameRoom(this.state.room.room_code)}</h2>
+						<p>{renameRoom(this.state.room.room_alias)}</p>
 						<div style={comStyles().description} >
 							<div
 								dangerouslySetInnerHTML={this.createMarkup(this.state.room.room_desc)}
@@ -94,7 +96,7 @@ class RoomCanvas extends Component {
 					</div>
 					<div style={comStyles().content_right} >
             <div style={comStyles().price_box} >
-              <h2>${ this.state.room.price }/month</h2>
+              <h2>${ parseInt(this.state.room.price).toFixed(0) }/month</h2>
             </div>
             <div style={comStyles().amenities} >
               <h2>Room Amenities</h2>
@@ -178,6 +180,7 @@ const comStyles = () => {
     content: {
       display: 'flex',
       flexDirection: 'row',
+      padding: '20px',
     },
     content_left: {
       display: 'flex',

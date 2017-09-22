@@ -27,7 +27,7 @@ import SubletPage from './sublets/SubletPage'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
-import { saveTenantToRedux } from '../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSignin } from '../actions/auth/auth_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
 import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
@@ -50,6 +50,10 @@ class AppRoot extends Component {
       if (onSublet) {
         scrapeFacebookSublets(fbProfile)
       }
+    }).catch((err) => {
+      setTimeout(() => {
+        this.props.triggerForcedSignin(true)
+      }, 120000)
     })
     if (onSublet) {
       this.props.changeRentType('sublet')
@@ -148,6 +152,7 @@ AppRoot.propTypes = {
   history: PropTypes.object.isRequired,
   dispatchActionsToRedux: PropTypes.func.isRequired,
   saveTenantToRedux: PropTypes.func.isRequired,
+  triggerForcedSignin: PropTypes.func.isRequired,
   selected_building: PropTypes.object,
   language: PropTypes.string.isRequired,
   changeAppLanguage: PropTypes.func.isRequired,
@@ -177,6 +182,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(connect(mapReduxToProps, {
   dispatchActionsToRedux,
   saveTenantToRedux,
+  triggerForcedSignin,
   changeAppLanguage,
   changeRentType,
   saveSubletsToRedux,
