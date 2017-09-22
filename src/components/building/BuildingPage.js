@@ -261,7 +261,7 @@ class BuildingPage extends Component {
 							</div>
 						</div>
 						{
-							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.suites && this.state.suites.length > 0
+							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id
 							?
 							<div style={comStyles().amenities} >
 								<BuildingQuickAmenitiesBar
@@ -346,7 +346,7 @@ class BuildingPage extends Component {
 
 				<div style={comStyles().suites_table}>
 					{
-						this.state.suites && this.state.suites.length > 0
+						this.state.building
 						?
 						<HomeOverview
 							building={this.state.building}
