@@ -16,7 +16,7 @@ router(app);
 
 // Server setup
 // if there is an environment variable of PORT already defined, use it. otherwise use port 3091
-const port = process.env.PORT || 80
+const port = process.env.PORT || 8081
 
 if (process.env.NODE_ENV === 'production') {
   const options = {
