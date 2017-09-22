@@ -40,15 +40,18 @@ class LoginPopup extends Component {
             content='Login with Google'
             color='google plus'
             icon='google plus'
+            disabled
           />
         </div>
         <Divider horizontal>Or</Divider>
         <Form>
           <Form.Input
             label='Email'
+            disabled
           />
           <Form.Input
             label='Password'
+            disabled
           />
           <div style={comStyles().buttons_container}>
             <Button
@@ -61,6 +64,7 @@ class LoginPopup extends Component {
             <Button
               primary
               content='Sign In'
+              disabled
               fluid
             />
           </div>
