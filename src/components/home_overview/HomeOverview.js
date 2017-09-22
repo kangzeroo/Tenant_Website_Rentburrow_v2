@@ -105,6 +105,8 @@ class HomeOverview extends Component {
 					toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
 				/>
 				{
+					this.props.suites.length > 0
+					?
 					this.props.suites.map((suite) => {
 						return (
 							<SuiteOverviewRow
@@ -115,6 +117,8 @@ class HomeOverview extends Component {
 							/>
 						)
 					})
+					:
+					null
 				}
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
