@@ -193,7 +193,7 @@ const comStyles = () => {
     header: {
       backgroundColor: xMidBlue,
       padding: '0px',
-      height: '50px',
+      height: '7vh',
       width: '100%',
       zIndex: '1',
       display: 'flex',

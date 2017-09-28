@@ -16,6 +16,9 @@ import {
   Route,
   withRouter,
 } from 'react-router-dom'
+import {
+  Modal,
+} from 'semantic-ui-react'
 import locale from 'browser-locale'
 import { Helmet } from 'react-helmet';
 import Header from './Header'
@@ -32,11 +35,24 @@ import { changeAppLanguage } from '../actions/app/app_actions'
 import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
 import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
 import { querySubletsInArea } from '../api/search/sublet_api'
+import UseChrome from './instructions/UseChrome'
 
 class AppRoot extends Component {
 
+  constructor() {
+    super()
+    this.state = {
+      toggle_modal: false,
+      modal_name: '',              // name of the modal
+      context: {},
+    }
+  }
+
 	componentWillMount() {
+    // automatically set language
     this.autoSetLanguage()
+    // detect browser and limit to chrome
+    this.detectBrowser()
     // grab the url that was given
     const location = this.props.location.pathname
     const onSublet = location === '/sublet' || location === '/sublets'
@@ -78,8 +94,19 @@ class AppRoot extends Component {
     }
   }
 
+  detectBrowser() {
+    // detech if using chrome and throw popup modal if not
+    const chrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1
+    if (!chrome) {
+      this.setState({
+        toggle_modal: true,
+        modal_name: 'chrome',
+      })
+    }
+  }
+
   checkIfMobile() {
-    if(screen.width <= 600 || screen.height <= 740){
+    if (screen.width <= 600 || screen.height <= 740){
 			window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
 		}
   }
@@ -89,6 +116,30 @@ class AppRoot extends Component {
     setLanguageFromLocale(country_code).then((language_code) => {
       this.props.changeAppLanguage(language_code)
     })
+  }
+
+  renderAppropriateModal(modal_name, context) {
+    if (modal_name === 'chrome') {
+      return this.renderChromeMessage()
+    }
+    return null
+  }
+
+  // toggle modal
+  toggleModal(bool, attr, context) {
+    this.setState({
+      toggle_modal: bool,
+      modal_name: attr,
+      context,
+    })
+  }
+
+  renderChromeMessage() {
+    return (
+      <UseChrome
+        toggleModal={(x, y, z) => this.toggleModal(x, y, z)}
+      />
+    )
   }
 
   // note that we have <StyleRoot>, which must be defined in order to use Radium
@@ -108,6 +159,12 @@ class AppRoot extends Component {
         </Helmet>
         <StyleRoot>
           <div style={comStyles().main}>
+
+          <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+            {
+              this.renderAppropriateModal(this.state.modal_name, this.state.context)
+            }
+          </Modal>
 
             <div id='language_tag' value={this.props.language} />
 

@@ -248,12 +248,12 @@ const comStyles = () => {
 			lineHeight: '35px',
 		},
 		left_bottom: {
-			height: '40px',
+			height: 'auto',
 		},
 		explore_button: {
 			height: '100%',
 			width: '100%',
-			// fontSize: '1.8rem',
+			fontSize: '1.8rem',
 		},
     center: {
       width: '60%',
