@@ -23,6 +23,7 @@ class SingularImageGallery extends Component {
     this.state = {
       current_image_position: 0,
       all_images: [],
+      visible: true,
     }
   }
 
@@ -56,6 +57,11 @@ class SingularImageGallery extends Component {
     if (event) {
       event.stopPropagation()
     }
+    if (this.props.image_size === 'hd') {
+      this.setState({
+        visible: false,
+      })
+    }
     if (this.state.current_image_position + itr < 0) {
     // if we are at first image and trying to go into negatives
       this.setState({
@@ -64,13 +70,23 @@ class SingularImageGallery extends Component {
     } else if (this.state.current_image_position + itr > this.state.all_images.length -1) {
     // if we are at the last image and trying to go into more
       this.setState({
-        current_image_position: 0
-      })
+        current_image_position: 0,
+      }, () => this.transitionImageFade())
     } else {
     // if we can iterate we shall
       this.setState({
-        current_image_position: this.state.current_image_position + itr
-      })
+        current_image_position: this.state.current_image_position + itr,
+      }, () => this.transitionImageFade())
+    }
+  }
+
+  transitionImageFade() {
+    if (this.props.image_size === 'hd') {
+      setTimeout(() => {
+        this.setState({
+          visible: true
+        })
+      }, 0)
     }
   }
 
@@ -91,12 +107,29 @@ class SingularImageGallery extends Component {
 		return (
 			<div style={comStyles().container}>
         <div style={comStyles().imageContainer}>
+          {/*<Transition visible={this.state.visible} animation='scale' duration='300'>*/}
+            <Image
+              src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
+              width='100%'
+              height='auto'
+              style={comStyles().image}
+            />
+          {/*</Transition>*/}
           <Image
-            src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
+            src={this.getCurrentImage(this.state.current_image_position+1, this.state.all_images)}
             width='100%'
             height='auto'
-            style={comStyles().image}
+            style={comStyles().nextHiddenImage}
           />
+          {
+            this.props.image_size === 'hd'
+            ?
+            <div style={comStyles().indicator}>
+              {`${this.state.current_image_position+1}/${this.state.all_images.length}`}
+            </div>
+            :
+            null
+          }
         </div>
           {
             this.state.all_images.length > 1
@@ -106,7 +139,6 @@ class SingularImageGallery extends Component {
             </div>
             :
             null
-
           }
           {
             this.state.all_images.length > 1
@@ -132,7 +164,7 @@ SingularImageGallery.propTypes = {
 // for all optional props, define a default value
 SingularImageGallery.defaultProps = {
   list_of_images: [],
-  image_size: '',            // 'thumbnail', 'hd'
+  image_size: 'thumbnail',            // 'thumbnail', 'hd'
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -160,6 +192,7 @@ const comStyles = () => {
 		},
     image: {
       height: 'auto',
+      zIndex: 5,
     },
     imageContainer: {
       width: '100%',
@@ -177,6 +210,7 @@ const comStyles = () => {
       position: 'absolute',
       backgroundColor: 'rgba(0,0,0,0)',
       cursor: 'pointer',
+      zIndex: 6,
     },
     right: {
       width: '15%',
@@ -188,7 +222,24 @@ const comStyles = () => {
       alignItems: 'center',
       position: 'absolute',
       backgroundColor: 'rgba(0,0,0,0)',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      zIndex: 6,
+    },
+    indicator: {
+      left: '20px',
+      bottom: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'absolute',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      color: 'white',
+      zIndex: 10,
+    },
+    nextHiddenImage: {
+      display: 'none',
     }
 	}
 }

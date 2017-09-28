@@ -223,9 +223,15 @@ class BuildingPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={loadStyles(renderProcessedImage(this.state.building.cover_photo)).cover_photo}>
-					<div style={comStyles().hidden_loading}>
-						<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-					</div>
+					{
+						this.state.building.istaging_url || this.state.building.iguide_url
+						?
+						<div style={comStyles().hidden_loading}>
+							<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+						</div>
+						:
+						null
+					}
 					<div style={comStyles().visible_virtual_tour}>
 						{
 							this.photo_or_vr(this.state.building)
@@ -402,8 +408,9 @@ export default withRouter(
 const loadStyles = (img) => {
 	return {
 		cover_photo: {
-			minHeight: '600px',
-			maxHeight: '600px',
+			minHeight: '550px',
+			height: '70vh',
+			maxHeight: '70vh',
 			minWidth: '100%',
 			maxWidth: '100%',
 			overflow: 'hidden',
