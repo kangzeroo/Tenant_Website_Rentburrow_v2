@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Card,
   Image,
+  Button,
 } from 'semantic-ui-react'
 import {
   renderProcessedThumbnail,
@@ -52,6 +53,7 @@ class BuildingPreview extends Component {
           <Card.Description style={comStyles().more_info}>
             <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
           </Card.Description>
+          <Button fluid color='blue' content='Explore' size='large' />
         </Card.Content>
       </Card>
 		)
