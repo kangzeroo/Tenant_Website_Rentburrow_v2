@@ -3,6 +3,7 @@ import {
   SAVE_SUBLET_FILTER_PARAMS,
   CHANGE_RENT_TYPE,
   SET_CURRENT_GPS_CENTER,
+  UPDATE_SEARCH_RADIUS,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
@@ -56,6 +57,18 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         current_gps_center: action.payload,
+      }
+    case UPDATE_SEARCH_RADIUS:
+      return {
+        ...state,
+        lease_filter_params: {
+          ...state.lease_filter_params,
+          search_radius: action.payload,
+        },
+        sublet_filter_params: {
+          ...state.sublet_filter_params,
+          search_radius: action.payload,
+        }
       }
 		default:
 			return {
