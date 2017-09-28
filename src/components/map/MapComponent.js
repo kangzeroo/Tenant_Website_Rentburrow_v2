@@ -3,10 +3,10 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Radium from 'radium'
 import Rx from 'rxjs'
-import { pinAlreadyPlaced, checkWherePinExistsInArray, matchPinIDFromPins } from '../../api/map/map_api'
+import { pinAlreadyPlaced, checkWherePinExistsInArray, matchPinIDFromPins, getDistanceFromLatLonInKm } from '../../api/map/map_api'
 import { querySubletsInArea } from '../../api/search/sublet_api'
 import { selectPopupBuilding } from '../../actions/selection/selection_actions'
-import { setCurrentGPSCenter, saveBuildingsToRedux, saveSubletsToRedux, selectPinToRedux, } from '../../actions/search/search_actions'
+import { setCurrentGPSCenter, saveBuildingsToRedux, saveSubletsToRedux, selectPinToRedux, changeSearchRadius, } from '../../actions/search/search_actions'
 import {
 	queryBuildingsInArea,
 } from '../../api/search/search_api'
@@ -27,6 +27,7 @@ class MapComponent extends Component {
 		// we use this.recenteredPins as a holding array so that we can diff old pins (held in this.pins) with new pins (held in this.recenteredPins)
 		// diffing like this improved performance
 		// this.recenteredPins = []
+		this.prevCenterCoords = null
 
 		this.paintPins.bind(this)
 		this.highlightPin.bind(this)
@@ -69,6 +70,7 @@ class MapComponent extends Component {
 
 	componentDidUpdate() {
 		this.refreshPins(this.props.listOfResults)
+		this.prevCenterCoords = this.props.current_gps_center
 	}
 
 	mountGoogleMap() {
@@ -97,10 +99,10 @@ class MapComponent extends Component {
 				}
 				this.props.setCurrentGPSCenter(currentCenterCoords)
 				// // We want to compare the current center coords with the prev center coords and only requery the db if the distance between the two points is greater than a certain amount
-				// const prevCenterCoords = self.props.mapMoved
-				// if(self.panToPrev == self.props.panTo && getDistanceFromLatLonInKm(prevCenterCoords, currentCenterCoords) >= 0.5){
+				// getDistanceFromLatLonInKm() returns the # of km between 2 points
+				if (getDistanceFromLatLonInKm(self.prevCenterCoords, self.props.current_gps_center) >= 1) {
 					this.requeryDatabaseWithNewCoords(currentCenterCoords)
-				// })
+				}
 			},
 			(err) => {
 				// console.log('Stream error occurred:')
@@ -111,8 +113,17 @@ class MapComponent extends Component {
 			}
 		)
 		// listen to the google map event 'center_changed' and pass it along to the Observable `self.state.mapEvents`
-		google.maps.event.addListener(mapTarget, 'center_changed', (event) => {
+		google.maps.event.addListener(mapTarget, 'center_changed', () => {
 			self.state.mapEvents.next(mapTarget)
+		})
+		// listen to the google map event 'zoom_changed' and pass it along to the Observable `self.state.mapEvents`
+		google.maps.event.addListener(mapTarget, 'zoom_changed', () => {
+			const zoomDiff = this.state.mapTarget.getZoom() - 15
+			let newRadius = 1000
+			if (zoomDiff < 0) {
+				newRadius = 1000 * (zoomDiff * -1) * Math.pow(2, (zoomDiff * -1))
+			}
+			this.props.changeSearchRadius(newRadius)
 		})
 	}
 
@@ -273,6 +284,7 @@ MapComponent.propTypes = {
   listOfResults: PropTypes.array,        // passed in
 	selected_pin: PropTypes.string,				// passed in
   selectPinToRedux: PropTypes.func.isRequired,
+	changeSearchRadius: PropTypes.func.isRequired,
 	selectPopupBuilding: PropTypes.func.isRequired,
 	setCurrentGPSCenter: PropTypes.func.isRequired,
 	CSS_mapWidth: PropTypes.string,			// passed in
@@ -310,6 +322,7 @@ export default connect(mapReduxToProps, {
 	setCurrentGPSCenter,
 	saveBuildingsToRedux,
 	saveSubletsToRedux,
+	changeSearchRadius,
 })(RadiumHOC)
 
 

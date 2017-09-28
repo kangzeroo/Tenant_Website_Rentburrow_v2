@@ -10,6 +10,7 @@ import {
   SET_CURRENT_GPS_CENTER,
   FILTERED_BUILDINGS,
   FILTERED_SUBLETS,
+  UPDATE_SEARCH_RADIUS,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -155,6 +156,16 @@ export const setCurrentGPSCenter = ({ lat, lng }) => {
     dispatch({
       type: SET_CURRENT_GPS_CENTER,
       payload: { lat, lng },
+    })
+  }
+}
+
+// change search radius
+export const changeSearchRadius = (radius) => {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_SEARCH_RADIUS,
+      payload: radius,
     })
   }
 }
