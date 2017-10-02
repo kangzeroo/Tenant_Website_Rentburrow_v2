@@ -4,7 +4,7 @@ import uuid from 'uuid'
 import AWS from 'aws-sdk/global'
 import 'amazon-cognito-js'
 import { CognitoUserPool, CognitoUserAttribute, CognitoUser, AuthenticationDetails, CognitoIdentityCredentials, WebIdentityCredentials } from 'amazon-cognito-identity-js';
-import { staffPool, STAFF_USERPOOL_ID, STAFF_IDENTITY_POOL_ID } from './aws-profile'
+import { staffPool, STAFF_USERPOOL_ID, STAFF_IDENTITY_POOL_ID, STUDENT_IDENTITY_POOL_ID } from './aws-profile'
 // import AWS_CognitoIdentity from 'aws-sdk/clients/cognitoidentity'
 // import AWS_CognitoSyncManager from 'aws-sdk/clients/cognitosync'
 
@@ -304,14 +304,14 @@ export const signOutLandlord = () => {
 	return p
 }
 
-export function registerFacebookLoginWithCognito(response){
+export const registerFacebookLoginWithCognito = (response) => {
 	// console.log('registerFacebookLoginWithCognito')
 	// console.log(response)
 	// Check if the user logged in successfully.
 	  if (response.authResponse) {
 
 	    // console.log('You are now logged in.');
-	    const cognitoidentity = new AWS.CognitoIdentity();
+	    const cognitoidentity = new AWS.CognitoIdentity()
 
 	    // Add the Facebook access token to the Cognito credentials login map.
 	    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -322,45 +322,48 @@ export function registerFacebookLoginWithCognito(response){
 	    })
 
 	    // AWS Cognito Sync to sync Facebook
-	    AWS.config.credentials.get(function() {
-		    const client = new AWS.CognitoSyncManager();
+	    AWS.config.credentials.get(() => {
+		    const client = new AWS.CognitoSyncManager()
 		    // console.log(AWS.config.credentials)
-			});
+			})
 
 	  } else {
 	    // console.log('There was a problem logging you in.');
 	  }
 }
 
-export function corporationClaimViewIdentity(){
-	// Add the unauthenticated_staff user to the Cognito credentials login map.
-	AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-		IdentityPoolId: STAFF_IDENTITY_POOL_ID
-	})
+// export function corporationClaimViewIdentity(){
+// 	// Add the unauthenticated_staff user to the Cognito credentials login map.
+// 	AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+// 		IdentityPoolId: STAFF_IDENTITY_POOL_ID
+// 	})
+//
+// 	// AWS Cognito Sync to sync Facebook
+// 	AWS.config.credentials.get(function() {
+// 		const client = new AWS.CognitoSyncManager();
+// 		// console.log(AWS.config.credentials)
+// 	});
+// }
 
-	// AWS Cognito Sync to sync Facebook
-	AWS.config.credentials.get(function() {
-		const client = new AWS.CognitoSyncManager();
-		// console.log(AWS.config.credentials)
-	});
-}
-
-export function unauthRoleLandlordLogin(){
-	const p = new Promise((res, rej)=>{
+export const unauthRoleStudent = () => {
+	const p = new Promise((res, rej) => {
 		// Add the unauthenticated_staff user to the Cognito credentials login map.
-		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-			IdentityPoolId: STAFF_IDENTITY_POOL_ID
+		// AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+		// 	IdentityPoolId: STUDENT_IDENTITY_POOL_ID
+		// })
+		// // AWS Cognito Sync to sync Facebook
+		// AWS.config.credentials.get(() => {
+		// 	const client = new AWS.CognitoSyncManager();
+		// 	// console.log(AWS.config.credentials)
+		// 	res({
+		// 		id: AWS.config.credentials.identityId,
+		// 		name: 'Student on RentBurrow',
+		// 		picurl: 'https://image.flaticon.com/icons/png/128/149/149071.png'
+		// 	})
+		// });
+		res({
+			id: 'COGNITO_UNAUTH_USER'
 		})
-		// AWS Cognito Sync to sync Facebook
-		AWS.config.credentials.get(function() {
-			const client = new AWS.CognitoSyncManager();
-			// console.log(AWS.config.credentials)
-			res({
-				id: AWS.config.credentials.identityId,
-				name: 'Student on RentBurrow',
-				picurl: 'https://image.flaticon.com/icons/png/128/149/149071.png'
-			})
-		});
 	})
 	return p
 }

@@ -5,6 +5,7 @@ import searchReducer from './search/search_reducer'
 import filterReducer from './search/filter_reducer'
 import selectionReducer from './selection/selection_reducer'
 import messageReducer from './messaging/messaging_reducer'
+import intelReducer from './intel/intel_reducer'
 import appReducer from './app/app_reducer'
 
 // takes all your seperate reducers into one giant reducer
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
 	search: searchReducer,
 	filter: filterReducer,
 	selection: selectionReducer,
+	intel: intelReducer,
 })
 
 export default rootReducer

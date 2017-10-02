@@ -18,6 +18,8 @@ import {
 } from '../../../api/general/general_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
+import { collectIntel } from '../../../actions/intel/intel_actions'
+import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 
 class BuildingCard extends Component {
 
@@ -26,12 +28,25 @@ class BuildingCard extends Component {
     window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
   }
 
+  cardOnHover(building) {
+    this.props.selectPinToRedux(building.building_id)
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'CREATED_AT': new Date().getTime(),
+        'BUILDING_ID': building.building_id,
+        'ADDRESS': building.building_address,
+        'USER_ID': this.props.tenant_profile.id || 'NONE'
+      }
+    })
+  }
+
 	render() {
 		return (
       <Card
         onClick={() => this.selectThisBuilding(this.props.building)}
         raised
-        onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)}
+        onMouseEnter={() => this.cardOnHover(this.props.building)}
         style={comStyles().hardCard}
       >
         {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
@@ -62,6 +77,8 @@ BuildingCard.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -75,6 +92,7 @@ const RadiumHOC = Radium(BuildingCard)
 // Get access to state from the Redux store
 function mapStateToProps(state) {
 	return {
+    tenant_profile: state.auth.tenant_profile,
 	}
 }
 
@@ -82,6 +100,7 @@ function mapStateToProps(state) {
 export default withRouter(
 	connect(mapStateToProps, {
     selectPinToRedux,
+    collectIntel,
 	})(RadiumHOC)
 )
 

@@ -19,3 +19,5 @@ export const BUCKET_NAME = 'rentburrow3-images'
 export const staffPool = new CognitoUserPool(staffData);
 export const STAFF_USERPOOL_ID = `cognito-idp.${REGION}.amazonaws.com/${CORPORATION_USER_POOL_ID}`
 export const STAFF_IDENTITY_POOL_ID = 'us-east-1:1f1f24e4-d3bb-44f1-92e8-7855f261640e'
+
+export const STUDENT_IDENTITY_POOL_ID = 'xxxxx'
