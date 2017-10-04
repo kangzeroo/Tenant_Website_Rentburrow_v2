@@ -106,7 +106,7 @@ class AppRoot extends Component {
   }
 
   checkIfMobile() {
-    if (screen.width <= 600 || screen.height <= 740){
+    if (screen.width <= 505 && screen.height <= 805){
 			window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
 		}
   }

@@ -28,6 +28,8 @@ class HousingPanel extends Component {
 		super()
 		this.state = {
 			fb_posts: [],
+
+			running: true,
 		}
 	}
 
@@ -66,6 +68,29 @@ class HousingPanel extends Component {
 		)
 	}
 
+	renderTimeout() {
+		if (this.state.running) {
+			setTimeout(() => {
+				this.setState({
+					running: false,
+				})
+			}, 3000)
+			return (
+				<div style={comStyles().loading} >
+					<Image
+						src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
+					/>
+				</div>
+			)
+		} else {
+			return (
+				<div style={comStyles().loading} >
+					No Properties Found in this Area
+				</div>
+			)
+		}
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -95,11 +120,7 @@ class HousingPanel extends Component {
 									{
 										this.props.sublets.length === 0
 										?
-										<div style={comStyles().loading} >
-											<Image
-												src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
-											/>
-										</div>
+										this.renderTimeout()
 										:
 										<div style={comStyles().no_matches_container} >
 											<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
@@ -126,11 +147,7 @@ class HousingPanel extends Component {
 									{
 										this.props.buildings.length === 0
 										?
-										<div style={comStyles().loading} >
-											<Image
-												src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
-											/>
-										</div>
+										this.renderTimeout()
 										:
 										<div style={comStyles().no_matches_container} >
 											<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
