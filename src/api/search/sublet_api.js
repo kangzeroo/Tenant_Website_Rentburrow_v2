@@ -36,6 +36,23 @@ export const matchSubletsByPlaceId = ({ place_id }) => {
   return p
 }
 
+export const matchSubletsByAddress = ({ address }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets_by_address`, { address })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        // console.log(data)
+        res(data.data.map((sublet) => {
+          return convertToRegularSubletObj(sublet)
+        }))
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const convertToRegularSubletObj = (sublet) => {
   return {
     posted_date: sublet.POSTED_DATE,

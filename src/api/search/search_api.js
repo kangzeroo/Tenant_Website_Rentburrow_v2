@@ -74,6 +74,22 @@ export const searchBuildingByPlaceID = ({ place_id, }) => {
   return p
 }
 
+export const searchBuildingByAddress = (addr) => {
+  const p = new Promise((res, rej) => {
+    // search for a specific building from backend
+    // axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: building_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_building_by_address`, addr)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data[0])
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 
 export const getSpecificLandlord = ({ corporation_id }) => {
   const p = new Promise((res, rej) => {

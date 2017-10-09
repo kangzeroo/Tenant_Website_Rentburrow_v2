@@ -62,6 +62,8 @@ class Header extends Component {
           {
             this.props.rent_type === 'sublet' && this.props.force_signin
             ?
+            null
+            :
             <Button
               circular
               icon='close'
@@ -69,8 +71,6 @@ class Header extends Component {
               style={comStyles().close_login}
               onClick={() => this.toggleModal(false)}
             />
-            :
-            null
           }
           <Modal.Content>
             <LoginPopup
