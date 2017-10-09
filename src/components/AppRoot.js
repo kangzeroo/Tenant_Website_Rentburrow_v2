@@ -28,6 +28,9 @@ import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
 import SubletPage from './sublets/SubletPage'
+import TenantAccount from './tenant/TenantAccount'
+import TenantApplications from './tenant/TenantApplications'
+import TenantSettings from './tenant/TenantSettings'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -108,12 +111,12 @@ class AppRoot extends Component {
       // no facebook login, use AWS Cognito Unauth role
       unauthRoleStudent().then((unauthUser) => {
         // console.log(unauthUser)
-				this.props.saveTenantToRedux(unauthUser)
+				// this.props.saveTenantToRedux(unauthUser)
 			})
       // in X seconds, force login popup
       setTimeout(() => {
         this.props.triggerForcedSignin(true)
-      }, 120000)
+      }, 300000)
     })
   }
 
@@ -220,7 +223,13 @@ class AppRoot extends Component {
                 <Route exact path='/sublet' component={HousingPage} />
                 <Route exact path='/sublets' component={HousingPage} />
                 <Route path='/sublet' component={SubletPage} />
+
+                <Route exact path='/account' component={TenantAccount} />
+                <Route exact path='/applications' component={TenantApplications} />
+                <Route exact path='/settings' component={TenantSettings} />
+
                 <Route exact path='/:building_alias' component={BuildingPage} />
+
 
                 {/* Route Mobile Site to Here .... */}
               </Switch>

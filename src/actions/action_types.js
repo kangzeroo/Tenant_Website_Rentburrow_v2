@@ -22,6 +22,7 @@ export const UPDATE_SEARCH_RADIUS = 'UPDATE_SEARCH_RADIUS'
 
 // actions related to auth
 export const AUTHENTICATE_TENANT = 'AUTHENTICATE_TENANT'
+export const LOGOUT_TENANT = 'LOGOUT_TENANT'
 export const FORCE_SIGNIN = 'FORCE_SIGNIN'
 
 // actions related to selections

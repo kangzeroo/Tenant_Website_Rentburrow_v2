@@ -12,9 +12,8 @@ import {
   Divider,
   Form,
 } from 'semantic-ui-react'
-import { loginFacebook, convertTokenIntoLongLived } from '../../api/auth/facebook_auth'
+import { loginFacebook, convertTokenIntoLongLived, insertUser } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
-
 
 class LoginPopup extends Component {
 
@@ -23,6 +22,7 @@ class LoginPopup extends Component {
       this.props.saveTenantToRedux(fbProfile)
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
+      insertUser(fbProfile)
       return convertTokenIntoLongLived(fbProfile.fbToken)
     })
   }

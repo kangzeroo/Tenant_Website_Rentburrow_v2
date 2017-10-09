@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { FB_APP_ID, SEARCH_MICROSERVICE } from '../API_URLS'
 import { registerFacebookLoginWithCognito } from '../aws/aws-cognito'
+import { logoutTenant } from '../../actions/auth/auth_actions'
 
 // initialization of facebook api in order to get the 'FB' global variable
 export const initiateFacebook = () => {
@@ -113,6 +114,14 @@ const grabFacebookProfile = (fbToken) => {
 	return p
 }
 
+export const logoutFacebook = () => {
+	const p = new Promise((res, rej) => {
+		localStorage.removeItem('fbToken')
+		logoutTenant()
+		window.location.reload()
+	})
+}
+
 // use auth token to get facebook profile picture
 const grabFacebookImage = (profile) => {
 	const p = new Promise((res, rej) => {
@@ -148,4 +157,18 @@ export const convertTokenIntoLongLived = (accessToken) => {
 			})
 	})
 	return p
+}
+
+export const insertUser = (fbProfile) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SEARCH_MICROSERVICE}/insert_user`, fbProfile)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
 }

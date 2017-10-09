@@ -28,6 +28,7 @@ import { changeAppLanguage } from '../actions/app/app_actions'
 import SearchInput from './filter/SearchInput'
 import { queryBuildingsInArea } from '../api/building/building_api'
 import { saveBuildingsToRedux } from '../actions/search/search_actions'
+import { logoutFacebook } from '../api/auth/facebook_auth'
 
 class Header extends Component {
 
@@ -58,13 +59,19 @@ class Header extends Component {
   renderLoginSuite() {
     return (
         <div style={comStyles().login_modal}>
-          <Button
-            circular
-            icon='close'
-            size='big'
-            style={comStyles().close_login}
-            onClick={() => this.toggleModal(false)}
-          />
+          {
+            this.props.rent_type === 'sublet' && this.props.force_signin
+            ?
+            <Button
+              circular
+              icon='close'
+              size='big'
+              style={comStyles().close_login}
+              onClick={() => this.toggleModal(false)}
+            />
+            :
+            null
+          }
           <Modal.Content>
             <LoginPopup
               toggleModal={() => this.toggleModal()}
@@ -85,6 +92,47 @@ class Header extends Component {
     }
   }
 
+  handleTenantChange(e, value) {
+    if (value.value === 'account') {
+      this.props.history.push('/account')
+    } else if (value.value === 'applications') {
+      this.props.history.push('/applications')
+    } else if (value.value === 'settings') {
+      this.props.history.push('/settings')
+    } else if (value.value === 'logout') {
+      logoutFacebook()
+    }
+  }
+
+  renderProfileDropdown() {
+    const trigger = (
+      <span>
+        <Image
+          src={this.props.tenant_profile.picurl}
+          shape='circular'
+          bordered
+        />
+      </span>
+    )
+
+    const options = [
+      { key: 'user', value: 'account', text: 'Account', icon: 'user' },
+      { key: 'applications', value: 'applications', text: 'Applications', icon: 'file text' },
+      { key: 'settings', value: 'settings', text: 'Settings', icon: 'settings' },
+      { key: 'sign-out', value: 'logout', text: 'Sign Out', icon: 'sign out' }
+    ]
+
+    return (
+      <Dropdown
+        trigger={trigger}
+        options={options}
+        pointing='top right'
+        icon={null}
+        onChange={(e, value) => this.handleTenantChange(e, value)}
+      />
+    )
+  }
+
   render() {
     return (
         <div style={comStyles().header}>
@@ -103,11 +151,7 @@ class Header extends Component {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
-              <Image
-                src={this.props.tenant_profile.picurl}
-                shape='circular'
-                bordered
-              />
+              { this.renderProfileDropdown() }
             </div>
             :
             <div style={comStyles().rightFloat}>
