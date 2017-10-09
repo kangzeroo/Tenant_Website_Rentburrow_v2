@@ -23,6 +23,7 @@ import locale from 'browser-locale'
 import { Helmet } from 'react-helmet';
 import Header from './Header'
 import Chat from './chat/ChatPopup/Chat'
+import Feature from './misc/feature'
 import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
@@ -36,6 +37,9 @@ import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
 import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
 import { querySubletsInArea } from '../api/search/sublet_api'
 import UseChrome from './instructions/UseChrome'
+import { clearIntelList } from '../actions/intel/intel_actions'
+import { sendOffToDynamoDB } from '../api/intel/intel_api'
+import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 
 class AppRoot extends Component {
 
@@ -53,45 +57,16 @@ class AppRoot extends Component {
     this.autoSetLanguage()
     // detect browser and limit to chrome
     this.detectBrowser()
-    // grab the url that was given
-    const location = this.props.location.pathname
-    const onSublet = location === '/sublet' || location === '/sublets'
-    const onLease = location === '/lease' || location === '/leases'
+    // check if its a mobile device
     this.checkIfMobile()
-    initiateFacebook().then(() => {
-      // autologin to facebook if possible
-      return checkIfFacebookLoggedIn()
-    }).then((fbProfile) => {
-      this.props.saveTenantToRedux(fbProfile)
-      if (onSublet) {
-        scrapeFacebookSublets(fbProfile)
-      }
-    }).catch((err) => {
-      setTimeout(() => {
-        this.props.triggerForcedSignin(true)
-      }, 120000)
-    })
-    if (onSublet) {
-      this.props.changeRentType('sublet')
-      querySubletsInArea({
-        ...this.props.current_gps_center,
-        filterParams: this.props.sublet_filter_params,
-      }).then((data) => {
-        this.props.saveSubletsToRedux(data)
-      })
-    }
-    if (onLease) {
-      this.props.changeRentType('lease')
-    }
-    // take the path in the url and go directly to that page and save to redux any actions necessary
-    if (location !== '/') {
-      redirectPath(location).then(({ path, actions }) => {
-        // path = '/sage-5'
-        // actions = [ { type, payload }, { type, payload } ]
-        this.props.dispatchActionsToRedux(actions)
-        this.props.history.push(path)
-      })
-    }
+    // begin the facebook login process
+    this.initiateFacebookProcess()
+    // execute processes depending on if we're on sublet or lease
+    this.executeOnSubletOrLease()
+    // execute on url name
+    this.executeOnURL()
+    // being Intel collection
+    this.beginCollectingIntel()
   }
 
   detectBrowser() {
@@ -106,8 +81,8 @@ class AppRoot extends Component {
   }
 
   checkIfMobile() {
-    if (screen.width <= 505 && screen.height <= 805){
-			window.location.href = 'http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
+    if (screen.width <= 600 || screen.height <= 740){
+			window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
 		}
   }
 
@@ -116,6 +91,69 @@ class AppRoot extends Component {
     setLanguageFromLocale(country_code).then((language_code) => {
       this.props.changeAppLanguage(language_code)
     })
+  }
+
+  initiateFacebookProcess() {
+    initiateFacebook().then(() => {
+      // autologin to facebook if possible
+      return checkIfFacebookLoggedIn()
+    }).then((fbProfile) => {
+      // save tenant to redux
+      this.props.saveTenantToRedux(fbProfile)
+      const onSublet = this.props.location.pathname === '/sublet' || this.props.location.pathname === '/sublets'
+      if (onSublet) {
+        scrapeFacebookSublets(fbProfile)
+      }
+    }).catch((err) => {
+      // no facebook login, use AWS Cognito Unauth role
+      unauthRoleStudent().then((unauthUser) => {
+        // console.log(unauthUser)
+				this.props.saveTenantToRedux(unauthUser)
+			})
+      // in X seconds, force login popup
+      setTimeout(() => {
+        this.props.triggerForcedSignin(true)
+      }, 120000)
+    })
+  }
+
+  executeOnSubletOrLease() {
+    const location = this.props.location.pathname
+    const onSublet = location === '/sublet' || location === '/sublets'
+    const onLease = location === '/lease' || location === '/leases'
+    if (onSublet) {
+      this.props.changeRentType('sublet')
+      querySubletsInArea({
+        ...this.props.current_gps_center,
+        filterParams: this.props.sublet_filter_params,
+      }).then((data) => {
+        this.props.saveSubletsToRedux(data)
+      })
+    }
+    if (onLease) {
+      this.props.changeRentType('lease')
+    }
+  }
+
+  executeOnURL() {
+    // grab the url that was given
+    const location = this.props.location.pathname
+    // take the path in the url and go directly to that page and save to redux any actions necessary
+    if (location !== '/') {
+      redirectPath(location).then(({ path, actions }) => {
+        // path = '/sage-5'
+        // actions = [ { type, payload }, { type, payload } ]
+        this.props.dispatchActionsToRedux(actions)
+        this.props.history.push(path)
+      })
+    }
+  }
+
+  beginCollectingIntel() {
+    setInterval(() => {
+      sendOffToDynamoDB(this.props.collectedRawIntel)
+      this.props.clearIntelList()
+    }, 10000)
   }
 
   renderAppropriateModal(modal_name, context) {
@@ -174,6 +212,7 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
+                <Route exact path='/sandbox' component={Feature} />
                 <Route exact path='/community' component={CommunityPage} />
 
                 <Route exact path='/lease' component={HousingPage} />
@@ -217,12 +256,15 @@ AppRoot.propTypes = {
   saveSubletsToRedux: PropTypes.func.isRequired,
 	current_gps_center: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
+  collectedRawIntel: PropTypes.array,
+  clearIntelList: PropTypes.func.isRequired,
 }
 
 AppRoot.defaultProps = {
   children: {},
   location: {},
   selected_building: null,
+  collectedRawIntel: [],
 }
 
 const RadiumHOC = Radium(AppRoot)
@@ -233,6 +275,7 @@ const mapReduxToProps = (redux) => {
     language: redux.app.selected_language,
     current_gps_center: redux.filter.current_gps_center,
     sublet_filter_params: redux.filter.sublet_filter_params,
+    collectedRawIntel: redux.intel.collectedRawIntel,
 	}
 }
 
@@ -243,6 +286,7 @@ export default withRouter(connect(mapReduxToProps, {
   changeAppLanguage,
   changeRentType,
   saveSubletsToRedux,
+  clearIntelList,
 })(RadiumHOC))
 
 // =============================

@@ -37,3 +37,7 @@ export const SEND_MESSAGE = 'SEND_MESSAGE'
 export const ADD_MESSAGE = 'ADD_MESSAGE'
 export const SELECT_THREAD = 'SELECT_THREAD'
 export const REQUEST_NOTIFICATIONS_PERMISSION = 'REQUEST_NOTIFICATIONS_PERMISSION'
+
+// Actions related to collecting intel
+export const COLLECT_INTEL = 'COLLECT_INTEL'
+export const CLEAR_INTEL_LIST = 'CLEAR_INTEL_LIST'

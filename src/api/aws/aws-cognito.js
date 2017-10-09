@@ -4,14 +4,14 @@ import uuid from 'uuid'
 import AWS from 'aws-sdk/global'
 import 'amazon-cognito-js'
 import { CognitoUserPool, CognitoUserAttribute, CognitoUser, AuthenticationDetails, CognitoIdentityCredentials, WebIdentityCredentials } from 'amazon-cognito-identity-js';
-import { staffPool, STAFF_USERPOOL_ID, STAFF_IDENTITY_POOL_ID } from './aws-profile'
+import { studentPool, STUDENT_USERPOOL_ID, STUDENT_IDENTITY_POOL_ID } from './aws-profile'
 // import AWS_CognitoIdentity from 'aws-sdk/clients/cognitoidentity'
 // import AWS_CognitoSyncManager from 'aws-sdk/clients/cognitosync'
 
 // https://github.com/aws/amazon-cognito-js/
 // entire cognito sync
 
-export const RegisterLandlord = ({ email, password }) => {
+export const RegisterStudent = ({ email, password }) => {
 	const p = new Promise((res, rej) => {
 		const attributeList = []
 		const dataEmail = {
@@ -21,7 +21,7 @@ export const RegisterLandlord = ({ email, password }) => {
 		const attributeEmail = new CognitoUserAttribute(dataEmail)
 
 		attributeList.push(attributeEmail)
-		staffPool.signUp(email, password, attributeList, null, (err, result) => {
+		studentPool.signUp(email, password, attributeList, null, (err, result) => {
 		    if (err) {
 		        // console.log(err);
 		        rej(err)
@@ -36,19 +36,19 @@ export const RegisterLandlord = ({ email, password }) => {
 	return p
 }
 
-export const LoginLandlord = ({ email, password }) => {
-	const p = new Promise((res, rej)=>{
+export const LoginStudent = ({ email, password }) => {
+	const p = new Promise((res, rej) => {
 		const authenticationDetails = new AuthenticationDetails({
 			Username: email,
 			Password: password
 		})
 		const userData = {
 			Username: email,
-			Pool: staffPool
+			Pool: studentPool
 		}
 		const cognitoUser = new CognitoUser(userData)
 		let staffProfileObject
-		authenticateStaff(cognitoUser, authenticationDetails)
+		authenticateStudent(cognitoUser, authenticationDetails)
 			.then(() => {
 				return buildUserObject(cognitoUser)
 			})
@@ -67,24 +67,24 @@ export const LoginLandlord = ({ email, password }) => {
 	return p
 }
 
-const authenticateStaff = (cognitoUser, authenticationDetails) => {
+const authenticateStudent = (cognitoUser, authenticationDetails) => {
 	const p = new Promise((res, rej) => {
 		cognitoUser.authenticateUser(authenticationDetails, {
 	        onSuccess: (result) => {
 	            // console.log('access token + ' + result.getAccessToken().getJwtToken());
-	            // localStorage.setItem('cognito_staff_token', result.getAccessToken().getJwtToken());
-	            localStorage.setItem('cognito_staff_token', result.accessToken.jwtToken);
+	            // localStorage.setItem('cognito_student_token', result.getAccessToken().getJwtToken());
+	            localStorage.setItem('cognito_student_token', result.accessToken.jwtToken);
 	            // console.log('======== VIEW THE REFRESH TOKEN =========')
-	            // console.log(localStorage.getItem('cognito_staff_token'))
+	            // console.log(localStorage.getItem('cognito_student_token'))
 	            // console.log(result)
 
 			    		// Edge case, AWS Cognito does not allow for the Logins attr to be dynamically generated. So we must create the loginsObj beforehand
 	            const loginsObj = {
 	                // Change the key below according to the specific region your user pool is in.
-	                [STAFF_USERPOOL_ID]: result.getIdToken().getJwtToken()
+	                [STUDENT_USERPOOL_ID]: result.getIdToken().getJwtToken()
 	            }
 			    		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-	                IdentityPoolId: STAFF_IDENTITY_POOL_ID, // your identity pool id here
+	                IdentityPoolId: STUDENT_IDENTITY_POOL_ID, // your identity pool id here
 	                Logins: loginsObj
 	            })
 	            AWS.config.credentials.refresh(() => {
@@ -134,7 +134,7 @@ export const VerifyAccount = ({ email, pin }) => {
 	const p = new Promise((res, rej) => {
 		const userData = {
 			Username: email,
-			Pool: staffPool
+			Pool: studentPool
 		}
 		const cognitoUser = new CognitoUser(userData)
 		// console.log('Verifying account...')
@@ -159,7 +159,7 @@ export const VerifyAccount = ({ email, pin }) => {
 	return p
 }
 
-export function updateLandlordInfo(email, editedInfo) {
+export function updateStudentInfo(email, editedInfo) {
 	// console.log(editedInfo)
 	const p = new Promise((res, rej) => {
 		const attrs = ['custom:company_name', 'custom:company_logo', 'custom:default_email', 'custom:default_phone', 'custom:email_forward', 'website']
@@ -176,7 +176,7 @@ export function updateLandlordInfo(email, editedInfo) {
 			}
 		}
 		// console.log(attributeList)
-	    const cognitoUser = staffPool.getCurrentUser()
+	    const cognitoUser = studentPool.getCurrentUser()
 	    cognitoUser.getSession(function(err, result) {
             if (result) {
                 cognitoUser.updateAttributes(attributeList, function(err, result) {
@@ -208,10 +208,10 @@ export function updateLandlordInfo(email, editedInfo) {
 export function forgotPassword(email) {
 	const p = new Promise((res, rej) => {
 		// console.log(email)
-		// console.log(staffPool)
+		// console.log(studentPool)
 		const userData = {
 			Username: email,
-			Pool: staffPool
+			Pool: studentPool
 		}
 		const cognitoUser = new CognitoUser(userData)
 		// console.log(cognitoUser)
@@ -241,7 +241,7 @@ export const resetVerificationPIN = ({ email }) => {
 	const p = new Promise((res, rej) => {
 		const userData = {
 			Username: email,
-			Pool: staffPool,
+			Pool: studentPool,
 		}
 		const cognitoUser = new CognitoUser(userData)
 		cognitoUser.resendConfirmationCode((err, result) => {
@@ -258,7 +258,7 @@ export const resetVerificationPIN = ({ email }) => {
 
 export const retrieveStaffFromLocalStorage = () => {
 	const p = new Promise((res, rej) => {
-	    const cognitoUser = staffPool.getCurrentUser();
+	    const cognitoUser = studentPool.getCurrentUser();
 	    // console.log('Getting cognitoUser from local storage...')
 	    // console.log(cognitoUser)
 	    if (cognitoUser != null) {
@@ -269,15 +269,15 @@ export const retrieveStaffFromLocalStorage = () => {
             }
             // console.log('session validity: ' + session.isValid());
             // console.log(session);
-            localStorage.setItem('cognito_staff_token', session.getAccessToken().getJwtToken());
-            // console.log(localStorage.getItem('cognito_staff_token'))
+            localStorage.setItem('cognito_student_token', session.getAccessToken().getJwtToken());
+            // console.log(localStorage.getItem('cognito_student_token'))
             // Edge case, AWS Cognito does not allow for the Logins attr to be dynamically generated. So we must create the loginsObj beforehand
             const loginsObj = {
                 // Change the key below according to the specific region your user pool is in.
-                [STAFF_USERPOOL_ID]: session.getIdToken().getJwtToken()
+                [STUDENT_USERPOOL_ID]: session.getIdToken().getJwtToken()
             }
 				    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-		                IdentityPoolId: STAFF_IDENTITY_POOL_ID, // your identity pool id here
+		                IdentityPoolId: STUDENT_IDENTITY_POOL_ID, // your identity pool id here
 		                Logins: loginsObj
 		            })
 		            AWS.config.credentials.refresh(() => {
@@ -294,9 +294,9 @@ export const retrieveStaffFromLocalStorage = () => {
 	return p
 }
 
-export const signOutLandlord = () => {
+export const signOutStudent = () => {
 	const p = new Promise((res, rej) => {
-		const cognitoUser = staffPool.getCurrentUser()
+		const cognitoUser = studentPool.getCurrentUser()
 		if (cognitoUser) {
 			cognitoUser.signOut()
 		}
@@ -304,63 +304,66 @@ export const signOutLandlord = () => {
 	return p
 }
 
-export function registerFacebookLoginWithCognito(response){
+export const registerFacebookLoginWithCognito = (response) => {
 	// console.log('registerFacebookLoginWithCognito')
 	// console.log(response)
 	// Check if the user logged in successfully.
 	  if (response.authResponse) {
 
 	    // console.log('You are now logged in.');
-	    const cognitoidentity = new AWS.CognitoIdentity();
+	    const cognitoidentity = new AWS.CognitoIdentity()
 
 	    // Add the Facebook access token to the Cognito credentials login map.
 	    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-	      IdentityPoolId: STAFF_IDENTITY_POOL_ID,
+	      IdentityPoolId: STUDENT_IDENTITY_POOL_ID,
 	      Logins: {
 	         'graph.facebook.com': response.authResponse.accessToken
 	      }
 	    })
 
 	    // AWS Cognito Sync to sync Facebook
-	    AWS.config.credentials.get(function() {
-		    const client = new AWS.CognitoSyncManager();
+	    AWS.config.credentials.get(() => {
+		    const client = new AWS.CognitoSyncManager()
 		    // console.log(AWS.config.credentials)
-			});
+			})
 
 	  } else {
 	    // console.log('There was a problem logging you in.');
 	  }
 }
 
-export function corporationClaimViewIdentity(){
-	// Add the unauthenticated_staff user to the Cognito credentials login map.
-	AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-		IdentityPoolId: STAFF_IDENTITY_POOL_ID
-	})
+// export function corporationClaimViewIdentity(){
+// 	// Add the unauthenticated_staff user to the Cognito credentials login map.
+// 	AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+// 		IdentityPoolId: STUDENT_IDENTITY_POOL_ID
+// 	})
+//
+// 	// AWS Cognito Sync to sync Facebook
+// 	AWS.config.credentials.get(function() {
+// 		const client = new AWS.CognitoSyncManager();
+// 		// console.log(AWS.config.credentials)
+// 	});
+// }
 
-	// AWS Cognito Sync to sync Facebook
-	AWS.config.credentials.get(function() {
-		const client = new AWS.CognitoSyncManager();
-		// console.log(AWS.config.credentials)
-	});
-}
-
-export function unauthRoleLandlordLogin(){
-	const p = new Promise((res, rej)=>{
+export const unauthRoleStudent = () => {
+	const p = new Promise((res, rej) => {
 		// Add the unauthenticated_staff user to the Cognito credentials login map.
-		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-			IdentityPoolId: STAFF_IDENTITY_POOL_ID
+		// AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+		// 	IdentityPoolId: STUDENT_IDENTITY_POOL_ID
+		// })
+		// // AWS Cognito Sync to sync Facebook
+		// AWS.config.credentials.get(() => {
+		// 	const client = new AWS.CognitoSyncManager();
+		// 	// console.log(AWS.config.credentials)
+		// 	res({
+		// 		id: AWS.config.credentials.identityId,
+		// 		name: 'Student on RentBurrow',
+		// 		picurl: 'https://image.flaticon.com/icons/png/128/149/149071.png'
+		// 	})
+		// });
+		res({
+			id: 'COGNITO_UNAUTH_USER'
 		})
-		// AWS Cognito Sync to sync Facebook
-		AWS.config.credentials.get(function() {
-			const client = new AWS.CognitoSyncManager();
-			// console.log(AWS.config.credentials)
-			res({
-				id: AWS.config.credentials.identityId,
-				name: 'Student on RentBurrow',
-				picurl: 'https://image.flaticon.com/icons/png/128/149/149071.png'
-			})
-		});
 	})
 	return p
 }

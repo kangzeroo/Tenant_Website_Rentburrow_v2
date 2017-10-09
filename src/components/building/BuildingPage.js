@@ -441,7 +441,7 @@ const comStyles = () => {
       position: 'absolute',
       zIndex: 10,
       width: '100%',
-      height: '100%',
+			height: '70vh',
     },
 		action_sticker: {
       position: 'absolute',

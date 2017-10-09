@@ -8,23 +8,16 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-	Button,
+
 } from 'semantic-ui-react'
-import { collectIntel } from '../../actions/intel/intel_actions'
 
 
 class Feature extends Component {
 
-	track() {
-		console.log('tracking...')
-		this.props.collectIntel({ tableName: 'TEST', item: new Date() })
-	}
-
 	render() {
 		return (
 			<div style={comStyles().container}>
-				FEATURE X Y Z
-				<Button onClick={() => this.track()} content='track this click' />
+				Feature
 			</div>
 		)
 	}
@@ -33,7 +26,6 @@ class Feature extends Component {
 // defines the types of variables in this.props
 Feature.propTypes = {
 	history: PropTypes.object.isRequired,
-	collectIntel: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -54,7 +46,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-		collectIntel,
+
 	})(RadiumHOC)
 )
 

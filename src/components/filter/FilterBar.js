@@ -31,6 +31,7 @@ import {
 } from '../../api/search/sublet_api'
 import LeaseFilterCard from './LeaseFilterCard'
 import SubletFilterCard from './SubletFilterCard'
+import { collectIntel } from '../../actions/intel/intel_actions'
 
 
 class FilterBar extends Component {
@@ -186,6 +187,15 @@ class FilterBar extends Component {
       this.props.history.push('/lease')
       this.props.changeRentType('lease')
     }
+    // this.props.collectIntel({
+    //   'TableName': BUILDING_INTERACTIONS,
+    //   'Item': {
+    //     'CREATED_AT': new Date().getTime(),
+    //     'BUILDING_ID': building.building_id,
+    //     'ADDRESS': building.building_address,
+    //     'USER_ID': this.props.tenant_profile.id || 'NONE'
+    //   }
+    // })
   }
 
   renderFilterCard(rent_type) {
@@ -221,12 +231,11 @@ class FilterBar extends Component {
                 content='FILTER'
               />
               <Dropdown
-                placeholder='Rental Type'
+                placeholder='Leases or Sublets'
                 floating
-                selection
                 options={[
-                  { key: 'sublet', value: 'sublet', text: 'Sublets' },
                   { key: 'lease', value: 'lease', text: 'Leases' },
+                  { key: 'sublet', value: 'sublet', text: 'Sublets' },
                 ]}
                 onChange={(e, value) => this.handleRentalLengthChange(e, value)}
               />
@@ -277,6 +286,7 @@ FilterBar.propTypes = {
 	rent_type: PropTypes.string.isRequired,
 	saveBuildingsToRedux: PropTypes.func.isRequired,
 	saveSubletsToRedux: PropTypes.func.isRequired,
+  collectIntel: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -307,6 +317,7 @@ export default withRouter(
     changeRentType,
   	saveBuildingsToRedux,
   	saveSubletsToRedux,
+    collectIntel,
 	})(RadiumHOC)
 )
 

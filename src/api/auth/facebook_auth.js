@@ -1,6 +1,7 @@
 // import { FB } from 'fb'
 import axios from 'axios'
 import { FB_APP_ID, SEARCH_MICROSERVICE } from '../API_URLS'
+import { registerFacebookLoginWithCognito } from '../aws/aws-cognito'
 
 // initialization of facebook api in order to get the 'FB' global variable
 export const initiateFacebook = () => {
@@ -35,11 +36,6 @@ export const loginFacebook = () => {
     .then((fbProfile) => {
       return grabFacebookImage(fbProfile)
     })
-    // registerFacebookLoginWithCognito({
-		// 			authResponse: {
-		// 				accessToken: longLiveToken
-		// 			}
-		// 		})
 }
 
 // check if logged into facebook and get auth token
@@ -47,6 +43,8 @@ export const checkIfFacebookLoggedIn = () => {
   const p = new Promise((res, rej) => {
 		FB.getLoginStatus((response) => {
 		  if (response.status === 'connected') {
+	      // save successful facebook login to cognito
+	      registerFacebookLoginWithCognito(response)
 		    const fbToken = response.authResponse.accessToken
 				grabFacebookProfile(fbToken)
 			    .then((fbProfile) => {
@@ -67,6 +65,7 @@ const requestFacebookLogin = () => {
 	const p = new Promise((res, rej) => {
 		FB.login((response) => {
      	if (response.status === 'connected') {
+				registerFacebookLoginWithCognito(response)
   	    // get access token
   	    const fbToken = response.authResponse.accessToken
 				res(fbToken)
