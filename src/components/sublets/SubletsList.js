@@ -13,7 +13,7 @@ import {
 import SubletDetailed from './SubletDetailed'
 import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
 import MapComponent from '../map/MapComponent'
-import { searchBuildingByPlaceID, } from '../../api/search/search_api'
+import { searchBuildingByPlaceID, searchBuildingByAddress, } from '../../api/search/search_api'
 import { aliasToURL, shortenAddress, } from '../../api/general/general_api'
 
 class SubletsList extends Component {
@@ -36,16 +36,40 @@ class SubletsList extends Component {
 	}
 
 	getBuilding(place_id) {
-		searchBuildingByPlaceID({
-			place_id,
-		})
-		.then((building) => {
-			if (building) {
-				this.setState({
-					building: JSON.parse(building),
-					exists: true,
-				}, () => console.log(this.state))
+		const geocoder = new google.maps.Geocoder()
+		geocoder.geocode({ 'placeId': place_id }, (results, status) => {
+			const addr = results[0]
+			console.log(addr)
+			let addrObj
+			if (addr.address_components.length === 7) {
+				addrObj = {
+					street_code: addr.address_components[0].long_name,
+					street_name: addr.address_components[1].long_name,
+					city: addr.address_components[2].long_name,
+					province: addr.address_components[4].long_name,
+					country: addr.address_components[5].long_name,
+					postal_code: addr.address_components[6].long_name,
+				}
+			} else if (addr.address_components.length === 8) {
+				addrObj = {
+					street_code: addr.address_components[1].long_name,
+					street_name: addr.address_components[2].long_name,
+					city: addr.address_components[3].long_name,
+					province: addr.address_components[5].long_name,
+					country: addr.address_components[6].long_name,
+					postal_code: addr.address_components[7].long_name,
+				}
 			}
+			searchBuildingByAddress(addrObj)
+			.then((building) => {
+				if (building) {
+					this.setState({
+						building: JSON.parse(building),
+						exists: true,
+					}, () => console.log(this.state))
+				}
+				console.log(this.state.building)
+			})
 		})
 	}
 
