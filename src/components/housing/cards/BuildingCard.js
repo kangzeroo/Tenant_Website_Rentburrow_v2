@@ -33,10 +33,11 @@ class BuildingCard extends Component {
     this.props.collectIntel({
       'TableName': BUILDING_INTERACTIONS,
       'Item': {
-        'CREATED_AT': new Date().getTime(),
+        'ACTION': 'BUILDING_CARD_HOVER',
+        'DATE': new Date().getTime(),
         'BUILDING_ID': building.building_id,
         'ADDRESS': building.building_address,
-        'USER_ID': this.props.tenant_profile.id || 'NONE'
+        'USER_ID': this.props.tenant_profile.id || 'NONE',
       }
     })
   }

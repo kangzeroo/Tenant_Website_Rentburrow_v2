@@ -32,6 +32,7 @@ import {
 import LeaseFilterCard from './LeaseFilterCard'
 import SubletFilterCard from './SubletFilterCard'
 import { collectIntel } from '../../actions/intel/intel_actions'
+import { STUDENT_PREFERENCES } from '../../api/intel/dynamodb_tablenames'
 
 
 class FilterBar extends Component {
@@ -187,15 +188,15 @@ class FilterBar extends Component {
       this.props.history.push('/lease')
       this.props.changeRentType('lease')
     }
-    // this.props.collectIntel({
-    //   'TableName': BUILDING_INTERACTIONS,
-    //   'Item': {
-    //     'CREATED_AT': new Date().getTime(),
-    //     'BUILDING_ID': building.building_id,
-    //     'ADDRESS': building.building_address,
-    //     'USER_ID': this.props.tenant_profile.id || 'NONE'
-    //   }
-    // })
+    this.props.collectIntel({
+      'TableName': STUDENT_PREFERENCES,
+      'Item': {
+        'ACTION': 'CHANGED_RENT_TYPE',
+        'DATE': new Date().getTime(),
+        'RENT_TYPE': value.value,
+        'USER_ID': this.props.tenant_profile.id || 'NONE'
+      }
+    })
   }
 
   renderFilterCard(rent_type) {
@@ -283,10 +284,8 @@ FilterBar.propTypes = {
 	current_gps_center: PropTypes.object.isRequired,
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
-	rent_type: PropTypes.string.isRequired,
-	saveBuildingsToRedux: PropTypes.func.isRequired,
-	saveSubletsToRedux: PropTypes.func.isRequired,
   collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -306,6 +305,7 @@ const mapReduxToProps = (redux) => {
 		current_gps_center: redux.filter.current_gps_center,
     lease_filter_params: redux.filter.lease_filter_params,
     sublet_filter_params: redux.filter.sublet_filter_params,
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
@@ -315,8 +315,6 @@ export default withRouter(
     saveBuildingsToRedux,
     saveSubletsToRedux,
     changeRentType,
-  	saveBuildingsToRedux,
-  	saveSubletsToRedux,
     collectIntel,
 	})(RadiumHOC)
 )

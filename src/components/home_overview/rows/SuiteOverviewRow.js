@@ -26,6 +26,8 @@ import SuiteBedSummary from '../../home_explorer/canvases/summary/SuiteBedSummar
 import SuiteCommonAreaSummary from '../../home_explorer/canvases/summary/SuiteCommonAreaSummary'
 import SuiteFreeUtilitiesSummary from '../../home_explorer/canvases/summary/SuiteFreeUtilitiesSummary'
 import { renameSuite } from '../../../api/general/renaming_api'
+import { collectIntel } from '../../../actions/intel/intel_actions'
+import { SUITE_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 
 
 class SuiteOverviewRow extends Component {
@@ -152,12 +154,28 @@ class SuiteOverviewRow extends Component {
     )
   }
 
+  rowOnHover(suite) {
+    this.props.collectIntel({
+      'TableName': SUITE_INTERACTIONS,
+      'Item': {
+        'ACTION': 'SUITE_OVERVIEW_HOVER',
+        'DATE': new Date().getTime(),
+        'SUITE_ID': suite.suite_id,
+        'SUITE_NAME': suite.suite_alias,
+        'USER_ID': this.props.tenant_profile.id || 'NONE',
+        'BUILDING_ID': this.props.building.building_id,
+        'BUILDING_NAME': this.props.building.building_address,
+      }
+    })
+  }
+
 	render() {
     const suite = this.props.suite
 		return (
       <Card
 				key={suite.suite_id}
 				raised
+        onMouseEnter={() => this.rowOnHover(this.props.suite)}
 				style={comStyles().hardCard}
 			>
 				<div style={comStyles().left}>
@@ -203,6 +221,8 @@ SuiteOverviewRow.propTypes = {
   building: PropTypes.object.isRequired,  // passed in
   suite: PropTypes.object.isRequired,    // passed in
   toggleModal: PropTypes.func.isRequired,   // passed in
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -216,14 +236,14 @@ const RadiumHOC = Radium(SuiteOverviewRow)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    collectIntel,
 	})(RadiumHOC)
 )
 
