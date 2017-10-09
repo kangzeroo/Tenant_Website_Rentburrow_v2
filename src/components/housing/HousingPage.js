@@ -44,7 +44,8 @@ class HousingPage extends Component {
 		})
 		.then((data) => {
 			const buildings = data.map(s => JSON.parse(s))
-			this.props.saveBuildingsToRedux(buildings)
+			// Sort the buildings randomly
+			this.props.saveBuildingsToRedux(buildings.sort((a, b) => { return 0.5 - Math.random() }))
 			this.setState({
 				buildings,
 			})
