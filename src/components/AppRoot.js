@@ -198,11 +198,11 @@ class AppRoot extends Component {
         <StyleRoot>
           <div style={comStyles().main}>
 
-          <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+        <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
             {
               this.renderAppropriateModal(this.state.modal_name, this.state.context)
             }
-          </Modal>
+        </Modal>
 
             <div id='language_tag' value={this.props.language} />
 
@@ -211,7 +211,6 @@ class AppRoot extends Component {
             <div style={comStyles().content}>
 
               <Switch>
-
                 <Route exact path='/' component={HousingPage} />
                 <Route exact path='/sandbox' component={Feature} />
                 <Route exact path='/community' component={CommunityPage} />
@@ -223,6 +222,7 @@ class AppRoot extends Component {
                 <Route path='/sublet' component={SubletPage} />
                 <Route exact path='/:building_alias' component={BuildingPage} />
 
+                {/* Route Mobile Site to Here .... */}
               </Switch>
 
             </div>
