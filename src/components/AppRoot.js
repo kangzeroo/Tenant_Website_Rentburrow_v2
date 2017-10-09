@@ -160,11 +160,11 @@ class AppRoot extends Component {
         <StyleRoot>
           <div style={comStyles().main}>
 
-        {/*  <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>*/}
+        <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
             {
               this.renderAppropriateModal(this.state.modal_name, this.state.context)
             }
-
+        </Modal>
 
             <div id='language_tag' value={this.props.language} />
 
