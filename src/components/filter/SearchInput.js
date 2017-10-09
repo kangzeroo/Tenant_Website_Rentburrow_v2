@@ -28,7 +28,8 @@ class SearchInput extends Component {
           placeholder='Search Building...'
           action={
             <Dropdown
-              selection={(<span>
+              selection
+              trigger={(<span>
                           <Icon name='world' /> Waterloo, ON
                         </span>)}
               button

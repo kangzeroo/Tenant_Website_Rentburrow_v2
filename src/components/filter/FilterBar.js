@@ -231,6 +231,7 @@ class FilterBar extends Component {
                 content='FILTER'
               />
               <Dropdown
+                selection
                 placeholder='Leases or Sublets'
                 floating
                 options={[

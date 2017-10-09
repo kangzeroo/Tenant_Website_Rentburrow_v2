@@ -1,6 +1,7 @@
 import {
   AUTHENTICATE_TENANT,
   FORCE_SIGNIN,
+  LOGOUT_TENANT,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
@@ -16,6 +17,11 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         tenant_profile: action.payload,
         authenticated: true,
+      }
+    case LOGOUT_TENANT:
+      return {
+        ...state,
+        authenticated: false,
       }
     case FORCE_SIGNIN:
       return {

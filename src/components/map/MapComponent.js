@@ -140,7 +140,7 @@ class MapComponent extends Component {
 				...currentCenterCoords,
 				filterParams: this.props.lease_filter_params,
 			}).then((buildings) => {
-				this.props.saveBuildingsToRedux(buildings.map(s => JSON.parse(s)))
+				this.props.saveBuildingsToRedux(buildings.map(s => JSON.parse(s)).sort((a, b) => { return 0.5 - Math.random() }))
 			})
 		}
 	}

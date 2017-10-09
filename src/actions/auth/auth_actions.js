@@ -1,6 +1,7 @@
 import {
   AUTHENTICATE_TENANT,
   FORCE_SIGNIN,
+  LOGOUT_TENANT,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -10,6 +11,15 @@ export const saveTenantToRedux = (tenantProfile) => {
     dispatch({
       type: AUTHENTICATE_TENANT,
       payload: tenantProfile,
+    })
+  }
+}
+
+export const logoutTenant = () => {
+  return (dispatch) => {
+    dispatch({
+      type: LOGOUT_TENANT,
+
     })
   }
 }
