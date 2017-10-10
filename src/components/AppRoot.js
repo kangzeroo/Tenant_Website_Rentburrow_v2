@@ -7,8 +7,8 @@
 // and why we use 'exact' (eg. <Route exact path='/properties'>) so that we can load this Compt when the url is exactly '/properties' and not '/properties/123'
 
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Radium, { StyleRoot } from 'radium'
 import PropTypes from 'prop-types'
 import {
@@ -20,7 +20,7 @@ import {
   Modal,
 } from 'semantic-ui-react'
 import locale from 'browser-locale'
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet'
 import Header from './Header'
 import Chat from './chat/ChatPopup/Chat'
 import Feature from './misc/feature'

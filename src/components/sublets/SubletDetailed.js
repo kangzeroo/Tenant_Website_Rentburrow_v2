@@ -44,6 +44,14 @@ class SubletDetailed extends Component {
     window.open(`https://www.facebook.com/${fb_user_id}`, '_blank')
   }
 
+  goToOnlineSubletSigning(e, post_id) {
+    if (e) {
+      e.stopPropagation()
+    }
+    // console.log(window.location.origin)
+    window.open(`https://localhost:8082/sublet/${post_id}?user_id=${this.props.tenant_profile.id}`, '_blank')
+  }
+
 	render() {
 		return (
       <Card key={this.props.sublet.post_id} raised style={comStyles().hardCard}>
@@ -108,7 +116,10 @@ class SubletDetailed extends Component {
 
         <div style={comStyles().right}>
           <div style={comStyles().desc}>{ this.props.sublet.description }</div>
-  				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+          <div style={comStyles().buttons}>
+    				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+    				<Button primary content='Sign Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+          </div>
         </div>
 
 			</Card>
@@ -121,6 +132,7 @@ SubletDetailed.propTypes = {
 	history: PropTypes.object.isRequired,
   sublet: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -134,6 +146,7 @@ const RadiumHOC = Radium(SubletDetailed)
 // Get access to state from the Redux store
 function mapStateToProps(state) {
 	return {
+    tenant_profile: state.auth.tenant_profile,
 	}
 }
 
@@ -335,6 +348,11 @@ const comStyles = () => {
       justifyContent: 'center',
       padding: '20px',
       minWidth: '360px',
+    },
+    buttons: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
     }
 	}
 }
