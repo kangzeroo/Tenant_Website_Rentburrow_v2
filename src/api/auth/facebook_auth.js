@@ -45,7 +45,6 @@ export const checkIfFacebookLoggedIn = () => {
 		FB.getLoginStatus((response) => {
 		  if (response.status === 'connected') {
 	      // save successful facebook login to cognito
-	      registerFacebookLoginWithCognito(response)
 		    const fbToken = response.authResponse.accessToken
 				grabFacebookProfile(fbToken)
 			    .then((fbProfile) => {
@@ -53,6 +52,11 @@ export const checkIfFacebookLoggedIn = () => {
 			    }).then((fbProfile) => {
 						res(fbProfile)
 					})
+		    // registerFacebookLoginWithCognito({
+				// 	authResponse: {
+				// 		accessToken: fbToken
+				// 	}
+				// })
 		  } else {
 	    	rej()
 		  }
@@ -66,9 +70,13 @@ const requestFacebookLogin = () => {
 	const p = new Promise((res, rej) => {
 		FB.login((response) => {
      	if (response.status === 'connected') {
-				registerFacebookLoginWithCognito(response)
   	    // get access token
   	    const fbToken = response.authResponse.accessToken
+		    // registerFacebookLoginWithCognito({
+				// 	authResponse: {
+				// 		accessToken: fbToken
+				// 	}
+				// })
 				res(fbToken)
   		} else if (response.status === 'not_authorized') {
 		    // The person is logged into Facebook, but not your app.
@@ -92,7 +100,6 @@ const grabFacebookProfile = (fbToken) => {
       (profile) => {
 				if (profile.id) {
 					convertTokenIntoLongLived(fbToken).then((longToken) => {
-						localStorage.setItem('fbToken', longToken)
 		        res({
 	            ...profile,
 	            fbToken: longToken
@@ -146,12 +153,18 @@ const grabFacebookImage = (profile) => {
 
 export const convertTokenIntoLongLived = (accessToken) => {
 	const p = new Promise((res, rej)=>{
-		axios.post(SEARCH_MICROSERVICE+'/longlivetoken', {accessToken})
-			.then((longToken)=>{
+		axios.post(SEARCH_MICROSERVICE+'/longlivetoken', { accessToken })
+			.then((longToken) => {
 				// console.log(longToken)
+				localStorage.setItem('fbToken', longToken)
+		    registerFacebookLoginWithCognito({
+					authResponse: {
+						accessToken: longToken
+					}
+				})
 				res(longToken.data.longLiveToken.access_token)
 			})
-			.catch((err)=>{
+			.catch((err) => {
 				// console.log(err)
 				rej(err)
 			})
