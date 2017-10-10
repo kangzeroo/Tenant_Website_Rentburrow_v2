@@ -14,11 +14,13 @@ import {
 } from 'semantic-ui-react'
 import { loginFacebook, insertUser } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
+import { saveStudentProfile, } from '../../api/auth/auth_api'
 
 class LoginPopup extends Component {
 
   loginWithFacebook() {
     loginFacebook().then((fbProfile) => {
+      saveStudentProfile(fbProfile)
       this.props.saveTenantToRedux(fbProfile)
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
