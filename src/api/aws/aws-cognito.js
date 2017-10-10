@@ -308,7 +308,6 @@ export const registerFacebookLoginWithCognito = (response) => {
 	// console.log('registerFacebookLoginWithCognito')
 	// console.log(response)
 	// Check if the user logged in successfully.
-		console.log('registerFacebookLoginWithCognito')
 	  if (response.authResponse) {
 
 	    // console.log('You are now logged in.');

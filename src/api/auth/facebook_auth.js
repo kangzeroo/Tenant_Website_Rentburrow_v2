@@ -152,16 +152,16 @@ const grabFacebookImage = (profile) => {
 }
 
 export const convertTokenIntoLongLived = (accessToken) => {
+	registerFacebookLoginWithCognito({
+		authResponse: {
+			accessToken: accessToken
+		}
+	})
 	const p = new Promise((res, rej)=>{
 		axios.post(SEARCH_MICROSERVICE+'/longlivetoken', { accessToken })
 			.then((longToken) => {
 				// console.log(longToken)
 				localStorage.setItem('fbToken', longToken)
-		    registerFacebookLoginWithCognito({
-					authResponse: {
-						accessToken: longToken
-					}
-				})
 				res(longToken.data.longLiveToken.access_token)
 			})
 			.catch((err) => {
