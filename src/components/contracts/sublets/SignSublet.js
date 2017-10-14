@@ -223,11 +223,12 @@ class SignSublet extends Component {
 			})
 			.then((data) => {
 				console.log(data)
-				console.log(JSON.parse(data))
 				generateContract(this.state.subletee_contract.contract_id)
 				return getSubletorContractForReview(data.contract_id)
 			})
 			.then((data) => {
+				console.log(data)
+				console.log(JSON.parse(data))
 				this.setState({
 					current_form: 'subletor',
 					subletee_done: false,
