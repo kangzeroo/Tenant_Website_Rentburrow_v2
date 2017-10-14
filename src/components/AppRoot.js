@@ -44,6 +44,7 @@ import UseChrome from './instructions/UseChrome'
 import { clearIntelList } from '../actions/intel/intel_actions'
 import { sendOffToDynamoDB } from '../api/intel/intel_api'
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
+import { saveStudentProfile, getStudentProfile } from '../api/signing/sublet_contract_api'
 
 class AppRoot extends Component {
 
@@ -102,8 +103,16 @@ class AppRoot extends Component {
       // autologin to facebook if possible
       return checkIfFacebookLoggedIn()
     }).then((fbProfile) => {
-      // save tenant to redux
-      this.props.saveTenantToRedux(fbProfile)
+      saveStudentProfile(fbProfile)
+      .then((data) => {
+        return getStudentProfile({ student_id: data.student_id, })
+      })
+      .then((data) => {
+        this.props.saveTenantToRedux({
+          ...fbProfile,
+          ...JSON.parse(data),
+        })
+      })
       const onSublet = this.props.location.pathname === '/sublet' || this.props.location.pathname === '/sublets'
       if (onSublet) {
         scrapeFacebookSublets(fbProfile)
