@@ -61,15 +61,26 @@ class SignSublet extends Component {
 		let subletor_id = ''
 		if (pathname.indexOf('/apply/') > -1) {
 			subletor_id = pathname.slice(pathname.indexOf('/apply/') > -1 ? pathname.indexOf('/apply/') + '/apply/'.length : '')
-
+			if (pathname.indexOf('/contract/') > -1 && pathname.indexOf('/done') > -1) {
+				this.initiateSubleteeDone(sublet_post_id, pathname.slice(
+					pathname.indexOf('/contract/') + '/contract/'.length,
+					pathname.indexOf('/done')
+				))
+			}
 		}
 		let application_contract_id = ''
 		if (pathname.indexOf('/applications/') > -1) {
-			pathname.slice(pathname.indexOf('/applications/') > -1 ? pathname.indexOf('/applications/') + '/applications/'.length : 0)
+			application_contract_id = pathname.slice(pathname.indexOf('/applications/') + '/applications/'.length)
+			if (pathname.indexOf('/done') > -1) {
+				this.initiateSubletorDone(pathname.slice(
+					pathname.indexOf('/applications/') + '/applications/'.length,
+					pathname.indexOf('/done')
+				))
+			}
 		}
 		let receipt_contract_id = ''
 		if (pathname.indexOf('/receipt/') > -1) {
-			pathname.slice(pathname.indexOf('/receipt/') > -1 ? pathname.indexOf('/receipt/') + '/receipt/'.length : 0)
+			receipt_contract_id = pathname.slice(pathname.indexOf('/receipt/') > -1 ? pathname.indexOf('/receipt/') + '/receipt/'.length : 0)
 		}
 		// '/signing/sublet/:post_id/initiate/apply/:subletor_id'
 		// '/signing/sublet/:post_id/initiate/applications/:contract_id'
@@ -107,22 +118,37 @@ class SignSublet extends Component {
 	}
 
 	// for when you load a page immediately onto Subletee Done
-	// initiateSubletDone(post_id, contract_id) {
-	// 	getSubletPostById(post_id).then((data) => {
-	// 			this.setState({
-	// 				sublet_post: data
-	// 			})
-	// 			return getSubleteeContractForSubletor(contract_id)
-	// 		})
-	// 		.then((data) => {
-	// 			this.setState({
-	// 				current_form: 'subletee',
-	// 				subletee_done: true,
-	// 				subletor_done: false,
-	// 				subletee_contract: JSON.parse(data),
-	// 			})
-	// 		})
-	// }
+	initiateSubleteeDone(post_id, contract_id) {
+		getSubletPostById(post_id).then((data) => {
+				this.setState({
+					sublet_post: data
+				})
+				return getSubleteeContractForSubletor(contract_id)
+			})
+			.then((data) => {
+				this.setState({
+					current_form: 'subletee',
+					subletee_done: true,
+					subletee_student_card: '',
+					subletor_done: false,
+					subletee_contract: JSON.parse(data),
+				})
+			})
+	}
+
+	// for when you load a page immediately onto Subletee Done
+	initiateSubletorDone(contract_id) {
+		console.log(contract_id)
+		getSubletorContractForReview(contract_id)
+			.then((data) => {
+				this.setState({
+					current_form: 'subletor',
+					subletee_done: false,
+					subletor_done: true,
+					subletor_contract: JSON.parse(data),
+				})
+			})
+	}
 
 	initiateSubletApplication(post_id, contract_id) {
 		getSubletPostById(post_id)
@@ -140,7 +166,7 @@ class SignSublet extends Component {
 			})
 			.then((data) => {
 				this.setState({
-					subletee_contract: JSON.parse(data),
+					subletor_contract: JSON.parse(data),
 					current_form: 'subletor',
 					subletee_done: true,
 					subletor_done: false,
@@ -165,7 +191,7 @@ class SignSublet extends Component {
 				})
 			})
 			.then((data) => {
-				this.props.history.push(`${this.props.location.pathname}?contract_id=${data.contract_id}`)
+				this.props.history.push(`${this.props.location.pathname}/contract/${data.contract_id}/done`)
 				return getSubleteeContractForSubletor(data.contract_id)
 			})
 			.then((data) => {
@@ -182,7 +208,7 @@ class SignSublet extends Component {
 			})
 	}
 
-	saveSubletorForm(formObj) {
+	saveSubletApplication(formObj) {
 		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.id}/`, 'student_card-')
 			.then((S3Obj) => {
 				return saveSubletorFormToDb({
@@ -205,71 +231,12 @@ class SignSublet extends Component {
 					subletor_done: true,
 					subletor_contract: JSON.parse(data),
 				})
-				alert('completed')
+				this.props.history.push(`${this.props.location.pathname}/done`)
 			})
 			.catch((err) => {
 				console.log(err)
 			})
 	}
-
-	// renderSubleteeForm() {
-	// 	if (this.state.sublet_post.POST_ID) {
-	// 		if (this.state.subletee_done && this.state.subletee_contract && this.state.subletee_contract.contract_id) {
-	// 			return (
-	// 				<SubleteeDone
-	// 					sublet_post={this.state.sublet_post}
-	// 					subletee_contract={this.state.subletee_contract}
-	// 				/>
-	// 			)
-	// 		} else if (this.state.subletee_done && this.state.subletee_contract && !this.state.subletee_contract.contract_id) {
-	// 			return (
-	// 				<div>Failed to get contract</div>
-	// 			)
-	// 		} else {
-	// 			return (
-	// 				<SubleteeForm
-	// 					sublet_post={this.state.sublet_post}
-	// 					saveSubletApply={(formObj) => this.saveSubletApply(formObj)}
-	// 				/>
-	// 			)
-	// 		}
-	// 	} else {
-	// 		return (
-	// 			<div>Loading Subletee Form...</div>
-	// 		)
-	// 	}
-	// }
-	//
-	// renderSubletorForm() {
-	// 	if (this.state.sublet_post.POST_ID && this.state.subletee_contract && this.state.subletee_contract.contract_id) {
-	// 		if (this.state.subletor_done && this.state.subletor_contract && this.state.subletor_contract.contract_id) {
-	// 			return (
-	// 				<SubletorDone
-	// 					sublet_post={this.state.sublet_post}
-	// 					subletor_contract={this.state.subletor_contract}
-	// 				/>
-	// 			)
-	// 		} else {
-	// 			return (
-	// 				<SubletorForm
-	// 					sublet_post={this.state.sublet_post}
-	// 					subletee_contract={this.state.subletee_contract}
-	// 					saveSubletorForm={(formObj) => this.saveSubletorForm(formObj)}
-	// 				/>
-	// 			)
-	// 		}
-	// 	} else {
-	// 		return (
-	// 			<div>Loading Subletor Form...</div>
-	// 		)
-	// 	}
-	// }
-	//
-	// renderInvalidSubletor() {
-	// 	return (
-	// 		<div>INVALID SUBLETOR, YOU ARE NOT THE ORIGINAL POSTER</div>
-	// 	)
-	// }
 
 	render() {
 		return (
@@ -286,13 +253,13 @@ class SignSublet extends Component {
 						null
 					}
 				</Route>
-				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletee_id/done'>
+				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletee_id/contract/:contract_id/done'>
 					{
 						this.state.current_form === 'subletee' && this.state.subletee_done
 						?
 						<ApplyDone
 							sublet_post={this.state.sublet_post}
-							subletor_contract={this.state.subletor_contract}
+							subletee_contract={this.state.subletee_contract}
 						/>
 						:
 						null
@@ -305,7 +272,19 @@ class SignSublet extends Component {
 						<SubletApplication
 							sublet_post={this.state.sublet_post}
 							subletee_contract={this.state.subletee_contract}
-							saveSubletorForm={(formObj) => this.saveSubletorForm(formObj)}
+							saveSubletApplication={(formObj) => this.saveSubletApplication(formObj)}
+						/>
+						:
+						null
+					}
+				</Route>
+				<Route exact path='/signing/sublet/:post_id/initiate/applications/:contract_id/done'>
+					{
+						this.state.current_form === 'subletor' && this.state.subletor_done
+						?
+						<ApplicationDone
+							sublet_post={this.state.sublet_post}
+							subletor_contract={this.state.subletor_contract}
 						/>
 						:
 						null
