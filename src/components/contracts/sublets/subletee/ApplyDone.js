@@ -11,7 +11,7 @@ import {
   Card,
 } from 'semantic-ui-react'
 
-class SubleteeDone extends Component {
+class ApplyDone extends Component {
 
   openFacebookUser(url) {
     const win = window.open(url, '_blank')
@@ -26,26 +26,26 @@ class SubleteeDone extends Component {
           <br /><br /><br />
           Share this link with { this.props.sublet_post.FB_USER_NAME }
         </div>
-        <input value={`${window.location.origin}/sublet/${this.props.sublet_post.POST_ID}?contract_id=${this.props.subletee_contract.contract_id}&subletor_id=${this.props.subletee_contract.subletor_id}`} />
+        <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} />
 			</Card>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-SubleteeDone.propTypes = {
+ApplyDone.propTypes = {
 	history: PropTypes.object.isRequired,
   sublet_post: PropTypes.object.isRequired,   // passed in
   subletee_contract: PropTypes.object.isRequired,   // passed in
 }
 
 // for all optional props, define a default value
-SubleteeDone.defaultProps = {
+ApplyDone.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SubleteeDone)
+const RadiumHOC = Radium(ApplyDone)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

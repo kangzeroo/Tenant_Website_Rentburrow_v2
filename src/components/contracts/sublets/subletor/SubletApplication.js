@@ -283,8 +283,8 @@ SubletApplication.propTypes = {
 	history: PropTypes.object.isRequired,
 	sublet_post: PropTypes.object.isRequired,		// passed in
 	subletee_contract: PropTypes.object.isRequired,	// passed in
-	saveSubletorForm: PropTypes.func.isRequired,	// passed in
 	tenant_profile: PropTypes.object.isRequired,
+	saveSubletApplication: PropTypes.func.isRequired,	// passed in
 }
 
 // for all optional props, define a default value

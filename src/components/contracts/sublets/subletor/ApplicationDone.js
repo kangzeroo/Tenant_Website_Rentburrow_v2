@@ -27,9 +27,6 @@ class SubletorDone extends Component {
     win.focus()
   }
 
-  componentWillMount() {
-  }
-
   viewContract() {
     console.log(this.props.subletor_contract.contract_id)
     getContractLink(this.props.subletor_contract.contract_id)
@@ -40,7 +37,6 @@ class SubletorDone extends Component {
   }
 
 	render() {
-    console.log(this.props.subletor_contract)
 		return (
 			<Card style={comStyles().container}>
 				'DONE! All recipients must sign online via their email'
