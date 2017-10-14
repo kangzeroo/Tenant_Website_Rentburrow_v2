@@ -2,7 +2,7 @@
 import Rx from 'rxjs'
 import AWS from 'aws-sdk/global'
 import AWS_S3 from 'aws-sdk/clients/s3'
-import { BUCKET_NAME } from './aws-profile'
+import { BUCKET_NAME, ENCRYPTED_BUCKET_NAME } from './aws-profile'
 
 
 export const createUserS3Album = ({ corp_id }) => {
@@ -150,7 +150,7 @@ export const uploadImageToS3WithEncryption = (image, s3_corporation, prefix) => 
 		const imageKey = s3_corporation + prefix + fileName
 		AWS.config.credentials.refresh(() => {
 			S3.upload({
-					Bucket: BUCKET_NAME,
+					Bucket: ENCRYPTED_BUCKET_NAME,
 			    Key: imageKey,
 			    Body: image,
 			    ACL: 'authenticated-read',

@@ -277,7 +277,7 @@ class SignSublet extends Component {
 			<div style={comStyles().container}>
 				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletor_id'>
 					{
-						this.state.current_form === 'subletee'
+						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID
 						?
 						<SubletApply
 							sublet_post={this.state.sublet_post}
@@ -289,7 +289,7 @@ class SignSublet extends Component {
 				</Route>
 				<Route exact path='/signing/sublet/:post_id/initiate/applications/:contract_id'>
 					{
-						this.state.current_form === 'subletor'
+						this.state.current_form === 'subletor' && this.state.sublet_post.POST_ID
 						?
 						<SubletApplication
 							sublet_post={this.state.sublet_post}
