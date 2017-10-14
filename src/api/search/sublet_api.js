@@ -72,7 +72,7 @@ export const convertToRegularSubletObj = (sublet) => {
     female_only: sublet.FEMALE_ONLY,
     rooms_left: sublet.ROOMS_LEFT,
     phone: sublet.PHONE,
-    images: JSON.parse(sublet.IMAGES) || [],
+    images: sublet.IMAGES ? JSON.parse(sublet.IMAGES) : [],
     scrapped_at: sublet.SCRAPPED_AT,
   }
 }

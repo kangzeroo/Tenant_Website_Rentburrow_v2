@@ -57,6 +57,7 @@
     "prop-types": "15.5.10",
     "radium": "0.19.1",
     "react": "15.5.4",
+    "react-datepicker": "0.55.0",
     "react-dom": "15.5.4",
     "react-dropzone": "3.13.3",
     "react-helmet": "5.1.3",

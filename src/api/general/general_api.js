@@ -117,3 +117,8 @@ export const aliasToURL = (building_alias) => {
 export const URLToAlias = (building_alias) => {
 	return building_alias.replace(/-/g, ' ').toLowerCase()
 }
+
+export const validateEmail = (email) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	return re.test(email)
+}

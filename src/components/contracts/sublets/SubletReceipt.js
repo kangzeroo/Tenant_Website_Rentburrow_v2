@@ -12,29 +12,29 @@ import {
 } from 'semantic-ui-react'
 
 
-class Template extends Component {
+class SubletReceipt extends Component {
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				Template
+				SubletReceipt
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-Template.propTypes = {
+SubletReceipt.propTypes = {
 	history: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-Template.defaultProps = {
+SubletReceipt.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(Template)
+const RadiumHOC = Radium(SubletReceipt)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
