@@ -23,7 +23,7 @@ import { convertToRegularSubletObj, getSubleteeProfile, } from '../../../../api/
 import SubletDetailed from '../../../sublets/SubletDetailed'
 import SubletCard from '../../../housing/cards/SubletCard'
 import { validateEmail } from '../../../../api/general/general_api'
-// require('../../../../styles/react-datepicker.css')
+require('../../../../styles/react-datepicker.css')
 
 
 class SubletApplication extends Component {

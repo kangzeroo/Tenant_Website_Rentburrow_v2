@@ -18,7 +18,7 @@ import {
 	Message,
 } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
-// import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import { filterNonImages } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj } from '../../../../api/search/sublet_api'
 import SubletDetailed from '../../../sublets/SubletDetailed'
