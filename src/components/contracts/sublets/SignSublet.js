@@ -145,7 +145,7 @@ class SignSublet extends Component {
 					current_form: 'subletor',
 					subletee_done: false,
 					subletor_done: true,
-					subletor_contract: JSON.parse(data),
+					subletee_contract: JSON.parse(data),
 				})
 			})
 	}
@@ -166,7 +166,7 @@ class SignSublet extends Component {
 			})
 			.then((data) => {
 				this.setState({
-					subletor_contract: JSON.parse(data),
+					subletee_contract: JSON.parse(data),
 					current_form: 'subletor',
 					subletee_done: true,
 					subletor_done: false,
@@ -202,6 +202,7 @@ class SignSublet extends Component {
 					subletor_done: false,
 					subletee_contract: JSON.parse(data),
 				})
+				console.log(this.state.subletee_contract)
 			})
 			.catch((err) => {
 				console.log(err)
