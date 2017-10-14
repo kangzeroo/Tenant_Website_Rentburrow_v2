@@ -15,7 +15,7 @@ import ApplyDone from './subletee/ApplyDone'
 import SubletApplication from './subletor/SubletApplication'
 import ApplicationDone from './subletor/ApplicationDone'
 import SubletReceipt from './SubletReceipt'
-import { getSubletPostById, saveSubletApplyToDb, getSubleteeContractForSubletor, getSubletorContractForReview } from '../../../api/signing/sublet_contract_api'
+import { getSubletPostById, saveSubletorFormToDb, getSubleteeContractForSubletor, getSubletorContractForReview, saveSubleteeFormToDb } from '../../../api/signing/sublet_contract_api'
 import { uploadImageToS3WithEncryption } from '../../../api/aws/aws-S3'
 import { generateContract } from '../../../api/pandadoc/pandadoc_api'
 
@@ -61,6 +61,7 @@ class SignSublet extends Component {
 		let subletor_id = ''
 		if (pathname.indexOf('/apply/') > -1) {
 			subletor_id = pathname.slice(pathname.indexOf('/apply/') > -1 ? pathname.indexOf('/apply/') + '/apply/'.length : '')
+
 		}
 		let application_contract_id = ''
 		if (pathname.indexOf('/applications/') > -1) {
@@ -155,7 +156,7 @@ class SignSublet extends Component {
 	saveSubletApply(formObj) {
 		uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.id}/`, 'student_card-')
 			.then((S3Obj) => {
-				return saveSubletApplyToDb({
+				return saveSubleteeFormToDb({
 					...formObj,
 					subletee_student_card: S3Obj.Location,
           fb_post_id: this.state.fb_post_id,
@@ -184,7 +185,7 @@ class SignSublet extends Component {
 	saveSubletorForm(formObj) {
 		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.id}/`, 'student_card-')
 			.then((S3Obj) => {
-				return saveSubletApplyToDb({
+				return saveSubletorFormToDb({
 					...formObj,
 					subletor_student_card: S3Obj.Location,
 					fb_post_id: this.state.fb_post_id,
@@ -204,6 +205,7 @@ class SignSublet extends Component {
 					subletor_done: true,
 					subletor_contract: JSON.parse(data),
 				})
+				alert('completed')
 			})
 			.catch((err) => {
 				console.log(err)
@@ -272,13 +274,25 @@ class SignSublet extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletor_id'>
+				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletee_id'>
 					{
 						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID
 						?
 						<SubletApply
 							sublet_post={this.state.sublet_post}
 							saveSubletApply={(formObj) => this.saveSubletApply(formObj)}
+						/>
+						:
+						null
+					}
+				</Route>
+				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletee_id/done'>
+					{
+						this.state.current_form === 'subletee' && this.state.subletee_done
+						?
+						<ApplyDone
+							sublet_post={this.state.sublet_post}
+							subletor_contract={this.state.subletor_contract}
 						/>
 						:
 						null

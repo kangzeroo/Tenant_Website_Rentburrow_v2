@@ -61,7 +61,7 @@ export const saveSubleteeFormToDb = (form) => {
 }
 
 // save subletor form to database
-export const saveSubletApplyToDb = (form) => {
+export const saveSubletorFormToDb = (form) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SUBLETTING_MICROSERVICE}/save_subletor_form`, form)
       .then((data) => {
