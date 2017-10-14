@@ -2,7 +2,7 @@
 import Rx from 'rxjs'
 import AWS from 'aws-sdk/global'
 import AWS_S3 from 'aws-sdk/clients/s3'
-import { BUCKET_NAME } from './aws-profile'
+import { BUCKET_NAME, ENCRYPTED_BUCKET_NAME } from './aws-profile'
 
 
 export const createUserS3Album = ({ corp_id }) => {
@@ -129,6 +129,42 @@ export const uploadImageToS3 = (image, s3_corporation, prefix) => {
 		    }
 				const msg = `Successfully uploaded original photo ${fileName}`
 				res(S3Object)
+		})
+	})
+	return p
+}
+
+
+// S3 upload function
+// the prefixes are very important for S3 folder structure
+// we group S3 assets from folders such as so:
+// corporation > building > main_photos > img.png
+// corporation > corporation_assets > thumbnail > img.png
+export const uploadImageToS3WithEncryption = (image, s3_corporation, prefix) => {
+	const p = new Promise((res, rej) => {
+		const S3 = new AWS_S3()
+		const fileName = `${image.name}`;
+		const timestamp = new Date().getTime()/1000
+
+		// S3 Folder-File syntax: corp_id/building_id/asset_type/file_name.png
+		const imageKey = s3_corporation + prefix + fileName
+		AWS.config.credentials.refresh(() => {
+			S3.upload({
+					Bucket: ENCRYPTED_BUCKET_NAME,
+			    Key: imageKey,
+			    Body: image,
+			    ACL: 'authenticated-read',
+					ServerSideEncryption: 'AES256',
+			}, (err, S3Object) => {
+			    if (err) {
+			      	const msg = `There was an error uploading your photo: ${err.message}`
+			      	// console.log(msg)
+			      	rej(msg)
+			      	return
+			    }
+					const msg = `Successfully uploaded original photo ${fileName}`
+					res(S3Object)
+			})
 		})
 	})
 	return p
