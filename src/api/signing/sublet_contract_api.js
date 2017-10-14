@@ -7,7 +7,6 @@ export const getSubletPostById = (post_id) => {
     axios.post(`${SUBLETTING_MICROSERVICE}/get_sublet_by_post_id`, { post_id })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
-        console.log(data)
         res(data.data.data)
       })
       .catch((err) => {

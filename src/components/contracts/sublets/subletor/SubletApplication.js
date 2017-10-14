@@ -163,6 +163,7 @@ class SubletApplication extends Component {
 				<SubletDetailed
 					key={this.props.sublet_post.POST_ID}
 					sublet={convertToRegularSubletObj(this.props.sublet_post)}
+					onlyForShow
 				/>
 				<Form style={comStyles().form}>
 					<h1>Subletor Form</h1>

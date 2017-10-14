@@ -44,12 +44,11 @@ class SubletDetailed extends Component {
     window.open(`https://www.facebook.com/${fb_user_id}`, '_blank')
   }
 
-  goToOnlineSubletSigning(e, post_id) {
+  goToOnlineSubletSigning(e, post) {
     if (e) {
       e.stopPropagation()
     }
-    // console.log(window.location.origin)
-    window.open(`https://localhost:8082/sublet/${post_id}?user_id=${this.props.tenant_profile.id}`, '_blank')
+    window.open(`${window.location.origin}/signing/sublet/${post.post_id}/initiate/apply/${post.fb_user_id}`, '_blank')
   }
 
 	render() {
@@ -118,7 +117,13 @@ class SubletDetailed extends Component {
           <div style={comStyles().desc}>{ this.props.sublet.description }</div>
           <div style={comStyles().buttons}>
     				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
-    				<Button primary content='Sign Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+            {
+              this.props.onlyForShow
+              ?
+              null
+              :
+      				<Button primary content='Sign Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+            }
           </div>
         </div>
 
@@ -133,11 +138,12 @@ SubletDetailed.propTypes = {
   sublet: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  onlyForShow: PropTypes.bool,            // passed in
 }
 
 // for all optional props, define a default value
 SubletDetailed.defaultProps = {
-
+  onlyForShow: false,
 }
 
 // Wrap the prop in Radium to allow JS styling

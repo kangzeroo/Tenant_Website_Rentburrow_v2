@@ -93,14 +93,12 @@ class SignSublet extends Component {
 	}
 
 	initiateSubletApply(post_id) {
-		console.log('initiateSubletApply', post_id)
 		this.setState({
 			current_form: 'subletee',
 			subletee_done: false,
 			subletor_done: false,
 		})
 		getSubletPostById(post_id).then((data) => {
-			console.log(data)
 			this.setState({
 				sublet_post: data
 			})
@@ -196,7 +194,6 @@ class SignSublet extends Component {
 				})
 			})
 			.then((data) => {
-				console.log(this.state.subletee_contract.contract_id)
 				generateContract(this.state.subletee_contract.contract_id)
 				return getSubletorContractForReview(data.contract_id)
 			})

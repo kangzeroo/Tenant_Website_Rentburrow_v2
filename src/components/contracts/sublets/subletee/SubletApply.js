@@ -119,12 +119,12 @@ class SubletApply extends Component {
 	}
 
 	render() {
-		console.log(this.props.sublet_post)
 		return (
 			<div style={comStyles().container}>
 				<SubletDetailed
 					key={this.props.sublet_post.POST_ID}
 					sublet={convertToRegularSubletObj(this.props.sublet_post)}
+					onlyForShow
 				/>
 				<Form style={comStyles().form}>
 					<h1>Subletee Form</h1>
