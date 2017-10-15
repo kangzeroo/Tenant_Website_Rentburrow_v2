@@ -31,6 +31,20 @@ export const saveStudentProfile = (fbProfile) => {
   return p
 }
 
+export const updateStudentProfile = (profile) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_student_profile`, profile)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const getStudentProfile = ({ student_id, }) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SUBLETTING_MICROSERVICE}/get_student_profile`, { student_id, })

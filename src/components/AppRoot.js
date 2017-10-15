@@ -108,10 +108,7 @@ class AppRoot extends Component {
         return getStudentProfile({ student_id: data.student_id, })
       })
       .then((data) => {
-        this.props.saveTenantToRedux({
-          ...fbProfile,
-          ...JSON.parse(data),
-        })
+        this.props.saveTenantToRedux(JSON.parse(data))
       })
       const onSublet = this.props.location.pathname === '/sublet' || this.props.location.pathname === '/sublets'
       if (onSublet) {
@@ -236,11 +233,6 @@ class AppRoot extends Component {
 
                 <Route exact path='/sublet/:sublet_id' component={SubletPage} />
 
-                <Switch>
-                  <Route path='/signing/sublet' component={SubletApplication} />
-                  <Route path='/signing/lease' component={SubletApplication} />
-                </Switch>
-
                 <Route exact path='/account' component={TenantAccount} />
                 <Route exact path='/applications' component={TenantApplications} />
                 <Route exact path='/settings' component={TenantSettings} />
@@ -248,8 +240,8 @@ class AppRoot extends Component {
                 <Route exact path='/:building_alias' component={BuildingPage} />
 
                 <Switch>
-                  <Route path='/signing/sublet' component={SignSublet} />
-                  <Route path='/signing/lease' component={SignSublet} />
+                  <Route path='/signing/sublet' component={SubletApplication} />
+                  <Route path='/signing/lease' component={SubletApplication} />
                 </Switch>
 
                 {/* Route Mobile Site to Here .... */}

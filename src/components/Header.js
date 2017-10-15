@@ -108,7 +108,7 @@ class Header extends Component {
     const trigger = (
       <span>
         <Image
-          src={this.props.tenant_profile.picurl}
+          src={this.props.tenant_profile.thumbnail}
           shape='circular'
           bordered
         />
@@ -116,7 +116,7 @@ class Header extends Component {
     )
 
     const options = [
-      { key: 'user', value: 'account', text: 'Account', icon: 'user' },
+      { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
       { key: 'applications', value: 'applications', text: 'Applications', icon: 'file text' },
       { key: 'settings', value: 'settings', text: 'Settings', icon: 'settings' },
       { key: 'sign-out', value: 'logout', text: 'Sign Out', icon: 'sign out' }
