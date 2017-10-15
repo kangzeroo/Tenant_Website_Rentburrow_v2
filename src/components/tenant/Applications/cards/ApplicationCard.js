@@ -16,7 +16,7 @@ import {
   shortenAddress,
   shortenTimestamp,
 } from '../../../../api/general/general_api'
-import ApplicationPage from '../ApplicationPage'
+import SentApplicationPage from '../SentApplicationPage'
 
 class ApplicationCard extends Component {
 
