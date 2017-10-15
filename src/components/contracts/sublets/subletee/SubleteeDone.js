@@ -31,6 +31,7 @@ class SubleteeDone extends Component {
           </Button>
           <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} style={comStyles().subletor_url} />
         </div>
+        <Button basic primary content='View All Applications' onClick={() => this.props.history.push('/applications?tab=where-i-want-to-live')} />
 			</div>
 		)
 	}
