@@ -37,7 +37,7 @@ class ApplicationCard extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Card onClick={}>
+				<Card>
           <Card.Content>
             <Card.Header>
               {shortenAddress(this.props.details.building_address)}
