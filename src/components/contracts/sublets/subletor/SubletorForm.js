@@ -285,7 +285,7 @@ class SubletorForm extends Component {
 
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
-										Step 1: Subletee Profile
+										Step 1: Subletor Profile
 									</Card.Header>
 									<div style={comStyles().student_div}>
 										<div style={comStyles().student_form}>
