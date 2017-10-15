@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import authReducer from './auth/auth_reducer'
 import communityReducer from './community/community_reducer'
+import contractReducer from './contract/contract_reducer'
 import searchReducer from './search/search_reducer'
 import filterReducer from './search/filter_reducer'
 import selectionReducer from './selection/selection_reducer'
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	filter: filterReducer,
 	selection: selectionReducer,
 	intel: intelReducer,
+	contract: contractReducer,
 })
 
 export default rootReducer

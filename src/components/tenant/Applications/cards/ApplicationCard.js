@@ -16,7 +16,7 @@ import {
 import {
   shortenAddress,
 } from '../../../../api/general/general_api'
-import SentApplicationPage from '../SentApplicationPage'
+import SentApplicationPage from '../sublets/SentApplicationPage'
 
 class ApplicationCard extends Component {
 
@@ -34,10 +34,14 @@ class ApplicationCard extends Component {
     window.open(`https://www.facebook.com/${fb_user_id}`, '_blank')
   }
 
+  goToPage(contract_id) {
+    this.props.history.push(`/applications/subletee/${contract_id}`)
+  }
+
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Card>
+				<Card raised onClick={() => this.goToPage(this.props.details.contract_id)}>
           <Card.Content>
             <Card.Header>
               {shortenAddress(this.props.details.building_address)}

@@ -17,7 +17,22 @@ export const getSentApplications = (student_id) => {
 
 export const getReceivedApplications = (student_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/get_receieved_applications`, { student_id, })
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_received_applications`, { student_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+
+export const getQuickSubletorContractLink = (contract_id, student_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_quick_subletor_contract_link`, { contract_id, student_id, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
