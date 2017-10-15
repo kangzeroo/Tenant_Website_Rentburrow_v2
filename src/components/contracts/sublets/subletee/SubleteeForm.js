@@ -30,7 +30,8 @@ class SubleteeForm extends Component {
 	constructor() {
 		super()
 		this.state = {
-			subletee_full_legal_name: '',
+			subletee_first_name: '',
+			subletee_last_name: '',
 			subletee_phone_number: '',
 			subletee_email: '',
 			subletee_student_card: '',
@@ -47,8 +48,10 @@ class SubleteeForm extends Component {
 	}
 
 	componentWillMount() {
+		console.log(this.props.tenant_profile)
 		this.setState({
-			subletee_full_legal_name: this.props.tenant_profile.name ? this.props.tenant_profile.name : '',
+			subletee_first_name: this.props.tenant_profile.first_name,
+			subletee_last_name: this.props.tenant_profile.last_name,
 			subletee_phone_number: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
 			subletee_email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
 			price: this.props.sublet_post.PRICE,
@@ -88,7 +91,7 @@ class SubleteeForm extends Component {
 	formValidation() {
 		let submittable = true
 		const errors = []
-		if (this.state.subletee_full_legal_name.length === 0 || this.state.subletee_phone_number.length === 0 || !this.state.subletee_email.length === 0) {
+		if (this.state.subletee_first_name.length === 0 || this.state.subletee_last_name.length === 0 || this.state.subletee_phone_number.length === 0 || !this.state.subletee_email.length === 0) {
 			errors.push('You must include your name, phone number and email')
 		}
 		if (!validateEmail(this.state.subletee_email) || !validateEmail(this.state.subletee_witness_email)) {
@@ -129,11 +132,18 @@ class SubleteeForm extends Component {
 				<Form style={comStyles().form}>
 					<h1>Subletee Form</h1>
 			    <Form.Field>
-			      <label>Full Legal Name</label>
+			      <label>First Name</label>
 			      <input
-							placeholder='Full Legal Name'
-							onChange={(e) => this.updateAttr(e, 'subletee_full_legal_name')}
-							value={this.state.subletee_full_legal_name} />
+							placeholder='First Name'
+							onChange={(e) => this.updateAttr(e, 'subletee_first_name')}
+							value={this.state.subletee_first_name} />
+			    </Form.Field>
+					<Form.Field>
+			      <label>Last Name</label>
+			      <input
+							placeholder='Last Name'
+							onChange={(e) => this.updateAttr(e, 'subletee_last_name')}
+							value={this.state.subletee_last_name} />
 			    </Form.Field>
 			    <Form.Field>
 			      <label>Phone</label>

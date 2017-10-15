@@ -12,29 +12,29 @@ import {
 } from 'semantic-ui-react'
 
 
-class TenantApplications extends Component {
+class ReceivedApplications extends Component {
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				TenantApplications
+				ReceivedApplications
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-TenantApplications.propTypes = {
+ReceivedApplications.propTypes = {
 	history: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-TenantApplications.defaultProps = {
+ReceivedApplications.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(TenantApplications)
+const RadiumHOC = Radium(ReceivedApplications)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
