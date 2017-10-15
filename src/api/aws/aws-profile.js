@@ -15,7 +15,7 @@ const studentData = {
 }
 
 export const BUCKET_NAME = 'rentburrow3-images'
-export const ENCRYPTED_BUCKET_NAME = 'rentburrow3-sublet-contracts'
+export const ENCRYPTED_BUCKET_NAME = 'rentburrow3-tenant-images'
 
 export const studentPool = new CognitoUserPool(studentData);
 export const STUDENT_USERPOOL_ID = `cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}`

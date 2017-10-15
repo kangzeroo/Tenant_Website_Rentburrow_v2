@@ -18,7 +18,9 @@ import {
 } from 'semantic-ui-react'
 import {
   updateStudentProfile,
+  getStudentProfile,
 } from '../../api/signing/sublet_contract_api'
+import { saveTenantToRedux } from '../../actions/auth/auth_actions'
 import { filterNonImages, uploadImageToS3WithEncryption } from '../../api/aws/aws-S3'
 
 class TenantAccount extends Component {
@@ -44,6 +46,7 @@ class TenantAccount extends Component {
       last_name: this.props.tenant_profile.last_name,
       email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
       phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
+      student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
     })
   }
 
@@ -73,6 +76,10 @@ class TenantAccount extends Component {
           this.setState({
             profile_saved: true,
           })
+          return getStudentProfile({ student_id: this.props.tenant_profile.student_id, })
+        })
+        .then((data) => {
+          this.props.saveTenantToRedux(JSON.parse(data))
         })
     })
   }
@@ -180,6 +187,7 @@ class TenantAccount extends Component {
 TenantAccount.propTypes = {
 	history: PropTypes.object.isRequired,
   tenant_profile: PropTypes.object,
+  saveTenantToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -200,7 +208,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    saveTenantToRedux,
 	})(RadiumHOC)
 )
 

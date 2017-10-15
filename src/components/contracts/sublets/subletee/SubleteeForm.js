@@ -372,7 +372,6 @@ class SubleteeForm extends Component {
 									</Form.Field>
 								</Card>
 
-
 								<Form.Field>
 									{
 										this.state.error_messages.map((err, index) => {
