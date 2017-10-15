@@ -37,7 +37,8 @@ class SubleteeForm extends Component {
 	constructor() {
 		super()
 		this.state = {
-			subletee_full_legal_name: '',
+			subletee_first_name: '',
+			subletee_last_name: '',
 			subletee_phone_number: '',
 			subletee_email: '',
 			subletee_student_card: '',
@@ -51,7 +52,7 @@ class SubleteeForm extends Component {
 			agree_to_terms: false,
 			submitted: false,
 			error_messages: [],
-			current_active_field: 'subletee_full_legal_name',
+			current_active_field: 'subletee_first_name',
 			activeIndex: 1,
 		}
 		this.steps = [
@@ -75,7 +76,8 @@ class SubleteeForm extends Component {
 
 	componentWillMount() {
 		this.setState({
-			subletee_full_legal_name: this.props.tenant_profile.name ? this.props.tenant_profile.name : '',
+			subletee_first_name: this.props.tenant_profile.first_name ? this.props.tenant_profile.first_name : '',
+			subletee_last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
 			subletee_phone_number: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
 			subletee_email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
 			price: this.props.sublet_post.PRICE,
@@ -116,7 +118,7 @@ class SubleteeForm extends Component {
 	formValidation() {
 		let submittable = true
 		const errors = []
-		if (this.state.subletee_full_legal_name.length === 0 || this.state.subletee_phone_number.length === 0 || !this.state.subletee_email.length === 0) {
+		if (this.state.subletee_first_name.length === 0 || this.state.subletee_last_name === 0 || this.state.subletee_phone_number.length === 0 || !this.state.subletee_email.length === 0) {
 			errors.push('You must include your name, phone number and email')
 		}
 		if (!validateEmail(this.state.subletee_email) || !validateEmail(this.state.subletee_witness_email)) {
@@ -152,7 +154,7 @@ class SubleteeForm extends Component {
 	checkIfStepActive(step_number) {
 		let active = false
 		if (step_number === '1') {
-			if (this.state.current_active_field === 'subletee_full_legal_name' || this.state.current_active_field === 'subletee_phone_number' || this.state.current_active_field === 'subletee_email' || this.state.current_active_field === 'subletee_student_card') {
+			if (this.state.current_active_field === 'subletee_first_name' || this.state.current_active_field === 'subletee_last_name' || this.state.current_active_field === 'subletee_phone_number' || this.state.current_active_field === 'subletee_email' || this.state.current_active_field === 'subletee_student_card') {
 				active = true
 			}
 		} else if (step_number === '2') {
@@ -170,7 +172,7 @@ class SubleteeForm extends Component {
 	checkIfStepComplete(step_number) {
 		let complete = false
 		if (step_number === '1') {
-			if (this.state.subletee_full_legal_name.length > 0 && this.state.subletee_phone_number.length > 0 && this.state.subletee_email.length > 0 && this.state.subletee_student_card && this.state.subletee_student_card.name && this.state.subletee_student_card.name.length > 0) {
+			if (this.state.subletee_first_name.length > 0 && this.state.subletee_last_name.length > 0 && this.state.subletee_phone_number.length > 0 && this.state.subletee_email.length > 0 && this.state.subletee_student_card && this.state.subletee_student_card.name && this.state.subletee_student_card.name.length > 0) {
 				complete = true
 			}
 		} else if (step_number === '2') {
@@ -205,19 +207,40 @@ class SubleteeForm extends Component {
 									<div style={comStyles().student_div}>
 										<div style={comStyles().student_form}>
 											<Form.Field>
-												<label>Full Legal Name</label>
+												<label>First Name</label>
 												<input
-													placeholder='Full Legal Name'
-													onChange={(e) => this.updateAttr(e, 'subletee_full_legal_name')}
-													value={this.state.subletee_full_legal_name} />
+													placeholder='First Name'
+													onChange={(e) => this.updateAttr(e, 'subletee_first_name')}
+													value={this.state.subletee_first_name}
+													disabled={this.props.tenant_profile.first_name !== ''}
+												/>
+											</Form.Field>
+											<Form.Field>
+												<label>Last Name</label>
+												<input
+													placeholder='Last Name'
+													onChange={(e) => this.updateAttr(e, 'subletee_last_name')}
+													value={this.state.subletee_last_name}
+													disabled={this.props.tenant_profile.last_name !== ''}
+												/>
 											</Form.Field>
 											<Form.Field>
 												<label>Phone</label>
-												<input placeholder='Phone Number' onChange={(e) => this.updateAttr(e, 'subletee_phone_number')} value={this.state.subletee_phone_number} />
+												<input
+													placeholder='Phone Number'
+													onChange={(e) => this.updateAttr(e, 'subletee_phone_number')}
+													value={this.state.subletee_phone_number}
+													disabled={this.props.tenant_profile.phone !== '' }
+												/>
 											</Form.Field>
 											<Form.Field>
 												<label>Email</label>
-												<input placeholder='Email' onChange={(e) => this.updateAttr(e, 'subletee_email')} value={this.state.subletee_email} />
+												<input
+													placeholder='Email'
+													onChange={(e) => this.updateAttr(e, 'subletee_email')}
+													value={this.state.subletee_email}
+													disabled={this.props.tenant_profile.email !== ''}
+												/>
 											</Form.Field>
 										</div>
 										<div style={comStyles().student_card}>
@@ -242,7 +265,7 @@ class SubleteeForm extends Component {
 									</Card.Header>
 									<Form.Field>
 										<label>Building Address</label>
-										<input placeholder='Address of Subletted Room' onChange={(e) => this.updateAttr(e, 'address')} value={this.state.address} />
+										<input placeholder='Address of Subletted Room' onChange={(e) => this.updateAttr(e, 'address')} value={this.state.address} disabled />
 									</Form.Field>
 									<Form.Field>
 										<label>Rent per month</label>
@@ -371,7 +394,7 @@ SubleteeForm.propTypes = {
 
 // for all optional props, define a default value
 SubleteeForm.defaultProps = {
-	tenant_profile: {},
+	 tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
