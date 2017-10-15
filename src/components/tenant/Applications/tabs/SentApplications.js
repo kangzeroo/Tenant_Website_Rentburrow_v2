@@ -17,7 +17,7 @@ class SentApplications extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				SentApplications
+        SentApplications
 			</div>
 		)
 	}
