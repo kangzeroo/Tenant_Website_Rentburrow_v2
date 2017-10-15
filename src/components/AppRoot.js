@@ -247,6 +247,10 @@ class AppRoot extends Component {
 
                 <Route exact path='/:building_alias' component={BuildingPage} />
 
+                <Switch>
+                  <Route path='/signing/sublet' component={SignSublet} />
+                  <Route path='/signing/lease' component={SignSublet} />
+                </Switch>
 
                 {/* Route Mobile Site to Here .... */}
               </Switch>
