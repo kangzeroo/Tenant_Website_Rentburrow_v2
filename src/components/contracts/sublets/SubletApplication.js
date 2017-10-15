@@ -86,10 +86,6 @@ class SubletApplication extends Component {
 		// '/signing/sublet/:post_id/initiate/applications/:contract_id'
 		// '/signing/sublet/:post_id/initiate/receipt/:contract_id'
 
-		console.log('sublet_post_id', sublet_post_id)
-		console.log('subletor_id', subletor_id)
-		console.log('application_contract_id', application_contract_id)
-		console.log('receipt_contract_id', receipt_contract_id)
 		this.setState({
 			fb_post_id: sublet_post_id
 		})
@@ -138,7 +134,6 @@ class SubletApplication extends Component {
 
 	// for when you load a page immediately onto Subletee Done
 	initiateSubletorDone(contract_id) {
-		console.log(contract_id)
 		getSubletorContractForReview(contract_id)
 			.then((data) => {
 				this.setState({
@@ -202,7 +197,6 @@ class SubletApplication extends Component {
 					subletor_done: false,
 					subletee_contract: JSON.parse(data),
 				})
-				console.log(this.state.subletee_contract)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -233,7 +227,7 @@ class SubletApplication extends Component {
 					subletor_done: true,
 					subletor_contract: JSON.parse(data),
 				})
-				this.props.history.push(`${this.props.location.pathname}/done`)
+				this.props.history.push(`/applications?tab=people-want-to-live-at-mine`)
 			})
 			.catch((err) => {
 				console.log(err)
