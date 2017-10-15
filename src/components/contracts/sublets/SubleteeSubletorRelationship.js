@@ -36,11 +36,11 @@ class SubleteeSubletorRelationship extends Component {
   }
 
 	render() {
-    console.log(this.props.subletee)
 		return (
 			<div style={comStyles().container}>
         <SubletDetailed
           onlyForShow
+          iAmTheSubletee={this.props.iAmTheSubletee}
           sublet={this.props.sublet_post}
         />
         <div style={comStyles().subletting_to}>

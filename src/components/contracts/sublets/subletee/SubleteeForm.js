@@ -20,6 +20,7 @@ import {
 	Step,
 	Accordion,
 	Icon,
+	Modal,
 } from 'semantic-ui-react'
 import {
 	xMidBlue,
@@ -54,6 +55,10 @@ class SubleteeForm extends Component {
 			error_messages: [],
 			current_active_field: 'subletee_first_name',
 			activeIndex: 1,
+
+			toggle_modal: false,
+      modal_name: '',
+      context: {},
 		}
 		this.steps = [
 		  { icon: 'user', title: 'Profile', description: 'Subletee Profile', step_number: '1' },
@@ -69,9 +74,10 @@ class SubleteeForm extends Component {
 			{ index: 6, icon: 'user', title: 'Why do I need to upload my student card?', description: 'For safety purposes. Because you are renting student housing, we require that you be a student. You do not necessarily need to be a student of the University of Waterloo or Wilfrid Laurier University, as long as you are a student. The other person will be able to see your student card, and you will be able to see theirs. That way, everyone feels safe. We keep all sensitive information secure and encrypted on bank level AES-256 bit encryption.' },
 			{ index: 7, icon: 'privacy', title: 'How do I pay rent and get my keys?', description: 'You will still need to meet up in person to exchange keys and payment. It is up to you to determine how you will pay the other person. Please remember that when you pay for a sublet, you are paying the current tenant who will in turn pay the landlord.' },
 			{ index: 8, icon: 'user cancel', title: 'What if the other person backs out?', description: 'First of all, check with the person to see if the sublet is still available. You can simply message them on Facebook. If the other person agreed to sublet to you but later gave it to someone else, then legally the first person who signed a sublet contract has rights to the room. If the other person does not sublet at all, you will have to work things out with them by yourself. Rentburrow cannot enforce a sublet contract for you, so be sure that the other person has integrity to uphold the contract. In the rare event that the other person does not pay rent to the original landlord, you must go directly to the landlord and explain to them the situation.' },
-			{ index: 9, icon: 'legal', title: 'What are the terms and conditions?', description: 'We keep the terms and conditions very simple. Rentburrow provides you the means to sign a sublet contract online but we do not guarantee that the sublet contract is legally valid in every situation. We also do not guarantee that signing a sublet contract via Rentburrow will guarantee that you actually get the sublet - that is up to you and the other person. By using this service, you agree to take all responsibility for this sublet contract. You also release Rentburrow (and its parent company Bytenectar Inc) from all legal responsibility related to this sublet contract.' },
+			{ index: 9, icon: 'legal', title: 'What are the terms and conditions?', description: this.terms_and_conditions },
 			{ index: 10, icon: 'heart', title: 'This is awesome, how can I show some love?', description: 'We\'re glad you like this! Rentburrow is made with love by a group of students from the University of Waterloo and Wilfrid Laurier University. We welcome any and all feedback! Message or like us on Facebook at https://www.facebook.com/rentburrow/' },
 		]
+		this.terms_and_conditions = 'We keep the terms and conditions very simple. Rentburrow provides you the means to sign a sublet contract online but we do not guarantee that the sublet contract is legally valid in every situation. We also do not guarantee that signing a sublet contract via Rentburrow will guarantee that you actually get the sublet - that is up to you and the other person. By using this service, you agree to take all responsibility for this sublet contract. You also release Rentburrow (and its parent company Bytenectar Inc) from all legal responsibility related to this sublet contract.'
 	}
 
 	componentWillMount() {
@@ -98,6 +104,14 @@ class SubleteeForm extends Component {
 			current_active_field: attr,
 		})
 	}
+
+	toggleModal(bool, attr, context) {
+		this.setState({
+      toggle_modal: bool,
+      modal_name: attr,
+      context,
+    })
+  }
 
 	submit() {
 		if (this.formValidation()) {
@@ -192,6 +206,26 @@ class SubleteeForm extends Component {
 			}
 		}
 		return complete
+	}
+
+	renderAppropriateModal(modal_name, context) {
+		if (modal_name === 'terms') {
+			return (
+	      <Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='fullscreen'
+				>
+	        <Modal.Content style={comStyles().terms_and_conditions}>
+						{
+							this.terms_and_conditions
+						}
+	        </Modal.Content>
+	      </Modal>
+	    )
+		}
 	}
 
 	render() {
@@ -324,7 +358,7 @@ class SubleteeForm extends Component {
 									<Form.Field>
 										<Checkbox label='I agree to the Terms and Conditions' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'agree_to_terms')} checked={this.state.agree_to_terms} />
 										&nbsp; &nbsp; &nbsp;
-										<span onClick={() => console.log('view terms and conditions')} style={comStyles().viewTerms}>View</span>
+										<span onClick={() => this.toggleModal(true, 'terms')} style={comStyles().viewTerms}>View</span>
 									</Form.Field>
 								</Card>
 
@@ -393,6 +427,9 @@ class SubleteeForm extends Component {
 						}
 					</Step.Group>
 				</div>
+				{
+          this.renderAppropriateModal(this.state.modal_name, this.state.context)
+        }
 			</div>
 		)
 	}
@@ -545,6 +582,11 @@ const comStyles = () => {
 		},
 		edit_profile: {
 			margin: '10px auto',
+		},
+		terms_and_conditions: {
+			padding: '30px',
+			fontSize: '1.3rem',
+			fontWeight: 'bold',
 		}
 	}
 }
