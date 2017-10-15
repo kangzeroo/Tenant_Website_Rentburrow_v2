@@ -43,3 +43,17 @@ export const getQuickSubletorContractLink = (contract_id, student_id) => {
   })
   return p
 }
+
+export const getQuickSubleteeContractLink = (contract_id, student_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_quick_subletee_contract_link`, { contract_id, student_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
