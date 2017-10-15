@@ -38,7 +38,8 @@ class SubletorForm extends Component {
 	constructor() {
 		super()
 		this.state = {
-			subletor_full_legal_name: '',
+			subletor_first_name: '',
+			subletor_last_name: '',
 			subletor_phone_number: '',
 			subletor_email: '',
 			subletor_student_card: '',
@@ -81,7 +82,8 @@ class SubletorForm extends Component {
 
 	componentWillMount() {
 		this.setState({
-			subletor_full_legal_name: this.props.tenant_profile.name ? this.props.tenant_profile.name : '',
+			subletor_first_name: this.props.tenant_profile.first_name ? this.props.tenant_profile.first_name : '',
+			subletor_last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
 			subletor_phone_number: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
 			subletor_email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
 			price: this.props.subletee_contract.rent_price,
@@ -130,7 +132,7 @@ class SubletorForm extends Component {
 	formValidation() {
 		let submittable = true
 		const errors = []
-		if (this.state.subletor_full_legal_name.length === 0 || this.state.subletor_phone_number.length === 0 || !this.state.subletor_email.length === 0) {
+		if (this.state.subletor_first_name.length === 0 || this.state.subletor_last_name.length === 0 || this.state.subletor_phone_number.length === 0 || !this.state.subletor_email.length === 0) {
 			errors.push('You must include your name, phone number and email')
 		}
 		if (this.state.suite_id.length === 0 || this.state.room_id.length === 0) {
@@ -174,6 +176,42 @@ class SubletorForm extends Component {
 		return submittable
 	}
 
+	checkIfStepActive(step_number) {
+		let active = false
+		if (step_number === '1') {
+			if (this.state.current_active_field === 'subletor_first_name' || this.state.current_active_field === 'subletor_last_name' || this.state.current_active_field === 'subletor_phone_number' || this.state.current_active_field === 'subletor_email' || this.state.current_active_field === 'subletor_student_card') {
+				active = true
+			}
+		} else if (step_number === '2') {
+			if (this.state.current_active_field === 'official_begin_date' || this.state.current_active_field === 'official_end_date' || this.state.current_active_field === 'price' || this.state.current_active_field === 'address') {
+				active = true
+			}
+		} else if (step_number === '3') {
+			if (this.state.current_active_field === 'subletor_witness_full_legal_name' || this.state.current_active_field === 'subletor_witness_email') {
+				active = true
+			}
+		}
+		return active
+	}
+
+	checkIfStepComplete(step_number) {
+		let complete = false
+		if (step_number === '1') {
+			if (this.state.subletor_full_legal_name.length > 0 && this.state.subletor_phone_number.length > 0 && this.state.subletor_email.length > 0 && this.state.subletor_student_card && this.state.subletor_student_card.name && this.state.subletor_student_card.name.length > 0) {
+				complete = true
+			}
+		} else if (step_number === '2') {
+			if (this.state.address.length > 1 && this.state.price > 0 && this.state.auto_sublet_terms_verified) {
+				complete = true
+			}
+		} else if (step_number === '3') {
+			if (this.state.subletor_witness_full_legal_name.length > 0 && this.state.subletor_witness_email.length > 0) {
+				complete = true
+			}
+		}
+		return complete
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -182,7 +220,7 @@ class SubletorForm extends Component {
 						key='subletee'
 						sublet={{
 							fb_user_id: this.state.subletee.fb_user_id,
-							fb_user_name: this.state.subletee.full_name,
+							fb_user_name: `${this.state.subletee_first_name} ${this.state.subletee_last_name}`,
 							fb_user_pic: this.state.subletee.thumbnail
 						}}
 					/>
@@ -197,11 +235,19 @@ class SubletorForm extends Component {
 							<Form style={comStyles().form}>
 									<h1>Subletor Form</h1>
 							    <Form.Field>
-							      <label>Full Legal Name</label>
+							      <label>First Name</label>
 							      <input
-											placeholder='Full Legal Name'
-											onChange={(e) => this.updateAttr(e, 'subletor_full_legal_name')}
-											value={this.state.subletor_full_legal_name}
+											placeholder='First Name'
+											onChange={(e) => this.updateAttr(e, 'subletor_first_name')}
+											value={this.state.subletor_first_name}
+										/>
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Last Name</label>
+							      <input
+											placeholder='Last Name'
+											onChange={(e) => this.updateAttr(e, 'subletor_last_name')}
+											value={this.state.subletor_last_name}
 										/>
 							    </Form.Field>
 							    <Form.Field>
