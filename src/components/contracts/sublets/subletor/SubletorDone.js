@@ -86,6 +86,9 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      width: '600px',
+      height: '350px',
+      margin: '100px auto',
 		},
     cover_photo: {
       minHeight: '93vh',

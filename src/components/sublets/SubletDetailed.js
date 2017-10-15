@@ -130,6 +130,7 @@ class SubletDetailed extends Component {
             ?
             <div style={comStyles().buttons}>
       				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+              <br />
               {
                 this.props.onlyForShow
                 ?
@@ -141,6 +142,7 @@ class SubletDetailed extends Component {
             :
             <div style={comStyles().buttons}>
               <Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+              <br />
               {
                 this.props.onlyForShow
                 ?
@@ -410,7 +412,7 @@ const comStyles = () => {
     buttons: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
     },
     you: {
       margin: '0px 0px 0px 30px',
