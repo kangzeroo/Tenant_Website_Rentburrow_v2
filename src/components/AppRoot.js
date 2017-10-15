@@ -108,10 +108,7 @@ class AppRoot extends Component {
         return getStudentProfile({ student_id: data.student_id, })
       })
       .then((data) => {
-        this.props.saveTenantToRedux({
-          ...fbProfile,
-          ...JSON.parse(data),
-        })
+        this.props.saveTenantToRedux(JSON.parse(data))
       })
       const onSublet = this.props.location.pathname === '/sublet' || this.props.location.pathname === '/sublets'
       if (onSublet) {
