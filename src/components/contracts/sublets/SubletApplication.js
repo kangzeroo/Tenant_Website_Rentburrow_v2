@@ -180,7 +180,7 @@ class SubletApplication extends Component {
 	}
 
 	saveSubleteeForm(formObj) {
-		uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.id}/`, 'student_card-')
+		uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.student_id}/`, 'student_card-')
 			.then((S3Obj) => {
 				return saveSubleteeFormToDb({
 					...formObj,
@@ -210,7 +210,7 @@ class SubletApplication extends Component {
 	}
 
 	saveSubletorForm(formObj) {
-		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.id}/`, 'student_card-')
+		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.student_id}/`, 'student_card-')
 			.then((S3Obj) => {
 				return saveSubletorFormToDb({
 					...formObj,
@@ -269,7 +269,7 @@ class SubletApplication extends Component {
 				</Route>
 				<Route exact path='/signing/sublet/:post_id/initiate/applications/:contract_id'>
 					{
-						this.state.current_form === 'subletor' && this.state.sublet_post.POST_ID
+						this.state.current_form === 'subletor' && this.state.sublet_post.POST_ID && this.props.tenant_profile && this.props.tenant_profile.student_id
 						?
 						<SubletorForm
 							sublet_post={this.state.sublet_post}
