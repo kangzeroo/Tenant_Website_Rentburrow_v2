@@ -7,21 +7,16 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
+import axios from 'axios'
 import {
 	Button,
 } from 'semantic-ui-react'
 import {
 	getQuickSubletorContractLink,
 } from '../../../../api/application/application_api'
-
-/* b.contract_link, b.session_expires_at,
-   d.contract_id, d.fb_post_id, d.created_at, d.completed_date,
-   c.subletee_id, c.subletor_id,
-   c.begin_date, c.end_date, c.rent_price, c.doc_id,
-   e.building_address, e.suite_num, e.room_num,
-   f.full_name AS subletor_witness_name, f.email AS subletor_witness_email,
-   g.first_name AS subletee_first_name, g.last_name AS subletee_last_name,
-   g.fb_user_id AS subletee_fb_id, g.thumbnail AS subletee_fb_pic*/
+import {
+	generateNewTokens,
+} from '../../../../api/pandadoc/pandadoc_api'
 
 class ReceivedSentApplicationPage extends Component {
 
@@ -52,7 +47,6 @@ class ReceivedSentApplicationPage extends Component {
 		// }
 		getQuickSubletorContractLink(contract_id,	application.student_id)
 		.then((data) => {
-			console.log(JSON.parse(data))
 			this.setState({
 				link: JSON.parse(data).contract_link
 			})
@@ -64,7 +58,18 @@ class ReceivedSentApplicationPage extends Component {
 	}
 
 	downloadContract() {
-
+		generateNewTokens()
+		.then((data) => {
+			console.log(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`)
+			//window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
+			//					{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
+			// axios.get(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
+			// 					{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
+			// .then((data) => {
+			// 	console.log(data)
+			// 	window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`)
+			// })
+		})
 	}
 
 	render() {
@@ -78,21 +83,32 @@ class ReceivedSentApplicationPage extends Component {
 						content='back'
 						onClick={() => this.goBack()}
 					/>
-					<Button
-						primary
-						icon='cloud download'
-						content='Download Contract'
-						onClick={() => this.downloadContract()}
-					/>
+					{
+						this.state.link !== null
+						?
+						<Button
+							primary
+							icon='cloud download'
+							content='Download Contract'
+							onClick={() => this.downloadContract()}
+						/>
+						:
+						null
+					}
 				</div>
 				<div style={comStyles().contractContainer} >
-					{ console.log(this.state.application.contract_link)}
+				{
+					this.state.link !== null
+					?
 					<iframe
 						src={this.state.link}
 						height={`900px`}
 						width={`100%`}
 					>
 					</iframe>
+					:
+					<h2>Contract Not Available</h2>
+				}
 				</div>
 			</div>
 		)
