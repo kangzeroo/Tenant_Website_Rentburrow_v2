@@ -326,7 +326,7 @@ class SubleteeForm extends Component {
 								{
 									this.why_sign_online.map((why) => {
 										return (
-											<div>
+											<div key={why.index}>
 								        <Accordion.Title active={this.state.activeIndex === why.index} index={why.index} onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
 								          <Icon name={why.icon} />
 													&nbsp; &nbsp;
@@ -350,7 +350,7 @@ class SubleteeForm extends Component {
 						{
 							this.steps.map((step) => {
 								return (
-									<Step active={this.checkIfStepActive(step.step_number)} completed={this.checkIfStepComplete(step.step_number)} title={step.title} description={step.description} icon={step.icon} />
+									<Step key={step.step_number} active={this.checkIfStepActive(step.step_number)} completed={this.checkIfStepComplete(step.step_number)} title={step.title} description={step.description} icon={step.icon} />
 								)
 							})
 						}
