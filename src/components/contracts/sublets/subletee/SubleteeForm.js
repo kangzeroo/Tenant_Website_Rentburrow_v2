@@ -155,9 +155,9 @@ class SubleteeForm extends Component {
 		if (this.state.price <= 0) {
 			errors.push('Monthly sublet rent cannot be zero or less')
 		}
-		if (!this.state.subletee_student_card || !this.state.subletee_student_card.name || !this.state.subletee_student_card.name.length > 0) {
-			errors.push('You must upload a picture of your student card')
-		}
+		// if (!this.state.subletee_student_card || !this.state.subletee_student_card.name || !this.state.subletee_student_card.name.length > 0) {
+		// 	errors.push('You must upload a picture of your student card')
+		// }
 		if (!this.state.agree_to_terms) {
 			errors.push('You must agree to the terms and conditions of this online service')
 		}
@@ -194,7 +194,7 @@ class SubleteeForm extends Component {
 	checkIfStepComplete(step_number) {
 		let complete = false
 		if (step_number === '1') {
-			if (this.state.subletee_first_name.length > 0 && this.state.subletee_last_name.length > 0 && this.state.subletee_phone_number.length > 0 && this.state.subletee_email.length > 0 && this.state.subletee_student_card && this.state.subletee_student_card.name && this.state.subletee_student_card.name.length > 0) {
+			if (this.state.subletee_first_name.length > 0 && this.state.subletee_last_name.length > 0 && this.state.subletee_phone_number.length > 0 && this.state.subletee_email.length > 0) {
 				complete = true
 			}
 		} else if (step_number === '2') {
@@ -233,18 +233,20 @@ class SubleteeForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().subletee_subletor_relationship}>
-						<SubleteeSubletorRelationship
-							subletee={{
-								fb_user_id: this.props.tenant_profile.fb_user_id,
-								fb_user_name: `${this.props.tenant_profile.first_name} ${this.props.tenant_profile.last_name}`,
-								fb_user_pic: this.props.tenant_profile.thumbnail,
-							}}
-							sublet_post={convertToRegularSubletObj(this.props.sublet_post)}
-							iAmTheSubletee
-						/>
-					</div>
 					<div style={comStyles().sign_header}>Sign This Sublet Online</div>
+
+						<div style={comStyles().subletee_subletor_relationship}>
+							<SubleteeSubletorRelationship
+								subletee={{
+									fb_user_id: this.props.tenant_profile.fb_user_id,
+									fb_user_name: `${this.props.tenant_profile.first_name} ${this.props.tenant_profile.last_name}`,
+									fb_user_pic: this.props.tenant_profile.thumbnail,
+								}}
+								sublet_post={convertToRegularSubletObj(this.props.sublet_post)}
+								iAmTheSubletee
+							/>
+						</div>
+
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
@@ -291,7 +293,7 @@ class SubleteeForm extends Component {
 												/>
 											</Form.Field>
 										</div>
-										<div style={comStyles().student_card}>
+										{/*<div style={comStyles().student_card}>
 											<Form.Field>
 												<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'subletee_student_card')} style={comStyles().dropzone} multiple={false}>
 													{
@@ -304,7 +306,7 @@ class SubleteeForm extends Component {
 												</Dropzone>
 											</Form.Field>
 											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
-										</div>
+										</div>*/}
 									</div>
 								</Card>
 
@@ -519,7 +521,7 @@ const comStyles = () => {
 		student_form: {
 			display: 'flex',
 			flexDirection: 'column',
-			width: '75%',
+			width: '100%',
 		},
 		student_card: {
 			display: 'flex',

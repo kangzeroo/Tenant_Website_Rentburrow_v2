@@ -17,6 +17,7 @@ import {
   xBootstrapRed,
 } from '../../../styles/base_colors'
 import SubletDetailed from '../../sublets/SubletDetailed'
+import SubletCard from '../../housing/cards/SubletCard'
 
 
 class SubleteeSubletorRelationship extends Component {
@@ -38,48 +39,55 @@ class SubleteeSubletorRelationship extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <SubletDetailed
+        {/*<SubletDetailed
           onlyForShow
           iAmTheSubletee={this.props.iAmTheSubletee}
           sublet={this.props.sublet_post}
-        />
+        />*/}
+        <div style={comStyles().subletor}>
+          <SubletCard
+    				key={this.props.sublet_post.post_id}
+    				sublet={this.props.sublet_post}
+          />
+        </div>
         <div style={comStyles().subletting_to}>
           <Icon name='arrow right' size='huge' />
           <div style={comStyles().subletting_to_text}>Subletting to</div>
         </div>
-        <Card raised style={comStyles().subletee}>
+        <div style={comStyles().subletee}>
+          <Card raised style={comStyles().subletee_card}>
+    				<div id='infobar' style={comStyles().infobar}>
+    					{/* Profile Picture */}
+              <Image
+                shape='circular'
+                src={this.props.subletee.fb_user_pic}
+                size='tiny'
+                bordered
+                onClick={(e) => this.goToFacebookUser(e, this.props.subletee.fb_user_id)}
+              />
 
-  				<div id='infobar' style={comStyles().infobar}>
-  					{/* Profile Picture */}
-            <Image
-              shape='circular'
-              src={this.props.subletee.fb_user_pic}
-              size='tiny'
-              bordered
-              onClick={(e) => this.goToFacebookUser(e, this.props.subletee.fb_user_id)}
-            />
+    					<div id='infobadge' style={comStyles().infobadge}>
+    						{/* User Name */}
+    						<div style={comStyles().userinfo}>
+    							<a href={`http://www.facebook.com/${this.props.subletee.fb_user_id}`} target='_blank'>{this.props.subletee.fb_user_name}</a>
+    						</div>
+    					</div>
+    				</div>
 
-  					<div id='infobadge' style={comStyles().infobadge}>
-  						{/* User Name */}
-  						<div style={comStyles().userinfo}>
-  							<a href={`http://www.facebook.com/${this.props.subletee.fb_user_id}`} target='_blank'>{this.props.subletee.fb_user_name}</a>
-  						</div>
-  					</div>
-  				</div>
+            {
+              this.props.iAmTheSubletee
+              ?
+              <div style={comStyles().pricediv}>
+                <div style={comStyles().price}>You</div>
+              </div>
+              :
+              <div style={comStyles().pricediv}>
+                <div style={comStyles().price}>Student Card</div>
+              </div>
+            }
 
-          {
-            this.props.iAmTheSubletee
-            ?
-            <div style={comStyles().pricediv}>
-              <div style={comStyles().price}>You</div>
-            </div>
-            :
-            <div style={comStyles().pricediv}>
-              <div style={comStyles().price}>Student Card</div>
-            </div>
-          }
-
-  			</Card>
+    			</Card>
+        </div>
 			</div>
 		)
 	}
@@ -123,22 +131,33 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
-      margin: '0px 0px 50px 0px',
+      margin: '50px auto',
+      justifyContent: 'space-between',
 		},
-    subletting_to: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '20vw',
-    },
     subletting_to_text: {
       fontSize: '2rem',
       fontWeight: 'bold',
       padding: '20px',
     },
+    subletor: {
+      width: '40%',
+    },
+    subletting_to: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '20%',
+    },
     subletee: {
-      width: '30vw',
+      width: '40%',
+    },
+    subletee_card: {
+      minWidth: '360px',
+      maxWidth: '360px',
+      minHeight: '250px',
+      maxHeight: '250px',
+      margin: '10px auto',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',

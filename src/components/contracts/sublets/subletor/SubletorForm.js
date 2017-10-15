@@ -174,9 +174,9 @@ class SubletorForm extends Component {
 		if (this.state.price <= 0) {
 			errors.push('Monthly sublet rent cannot be zero or less')
 		}
-		if (!this.state.subletor_student_card ) {//|| !this.state.subletor_student_card.name || !this.state.subletor_student_card.name.length > 0) {
-			errors.push('You must upload a picture of your student card')
-		}
+		// if (!this.state.subletor_student_card ) {//|| !this.state.subletor_student_card.name || !this.state.subletor_student_card.name.length > 0) {
+		// 	errors.push('You must upload a picture of your student card')
+		// }
 		if (this.state.landlord_full_legal_name.length === 0) {
 			errors.push('You must include the landlords name')
 		}
@@ -203,7 +203,7 @@ class SubletorForm extends Component {
 	checkIfStepActive(step_number) {
 		let active = false
 		if (step_number === '1') {
-			if (this.state.current_active_field === 'subletor_first_name' || this.state.current_active_field === 'subletor_last_name' || this.state.current_active_field === 'subletor_phone_number' || this.state.current_active_field === 'subletor_email' || this.state.current_active_field === 'subletor_student_card') {
+			if (this.state.current_active_field === 'subletor_first_name' || this.state.current_active_field === 'subletor_last_name' || this.state.current_active_field === 'subletor_phone_number' || this.state.current_active_field === 'subletor_email') {
 				active = true
 			}
 		} else if (step_number === '2') {

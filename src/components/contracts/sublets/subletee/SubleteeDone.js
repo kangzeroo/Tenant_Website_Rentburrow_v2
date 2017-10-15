@@ -21,18 +21,20 @@ class SubleteeDone extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<Card style={comStyles().container}>
         <div style={comStyles().done_message}>
 				    You are done! Please send this link to your subletor on Facebook to fill the remainder of the lease. Once complete, you and your witnesses will all recieve an email to sign online.
         </div>
-        <div style={comStyles().share_link}>
+        <div style={comStyles().buttonsRow}>
           <Button positive onClick={() => this.openFacebookUser(`https://facebook.com/${this.props.sublet_post.FB_USER_ID}`)} style={comStyles().facebook_user}>
             Share this link with { this.props.sublet_post.FB_USER_NAME }
           </Button>
+          <Button basic primary content='View All Applications' onClick={() => this.props.history.push('/applications?tab=where-i-want-to-live')} style={comStyles().facebook_user} />
+        </div>
+        <div style={comStyles().share_link}>
           <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} style={comStyles().subletor_url} />
         </div>
-        <Button basic primary content='View All Applications' onClick={() => this.props.history.push('/applications?tab=where-i-want-to-live')} />
-			</div>
+			</Card>
 		)
 	}
 }
@@ -74,20 +76,26 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '100%',
-      height: '100%',
+      width: '600px',
+      height: '350px',
+      margin: '100px auto',
 		},
     done_message: {
-      width: '80%',
-      padding: '50px',
-      fontSize: '1.5rem',
-      fontWeight: 'bold',
+      width: '100%',
+      padding: '30px',
+      fontSize: '1.3rem',
+      // fontWeight: 'bold',
+      textAlign: 'center',
     },
     share_link: {
-      width: '80%',
+      width: '100%',
       padding: '20px',
-      fontSize: '1.5rem',
+      fontSize: '1rem',
       fontWeight: 'bold',
+    },
+    buttonsRow: {
+      display: 'flex',
+      flexDirection: 'row',
     },
     facebook_user: {
       margin: '30px auto',
@@ -95,7 +103,7 @@ const comStyles = () => {
     subletor_url: {
       width: '100%',
       padding: '20px',
-      fontSize: '1.5rem',
+      fontSize: '1.2rem',
       fontWeight: 'bold',
     }
 	}
