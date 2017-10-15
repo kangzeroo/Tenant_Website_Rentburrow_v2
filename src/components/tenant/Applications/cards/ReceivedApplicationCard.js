@@ -47,30 +47,30 @@ class ReceivedApplicationCard extends Component {
 	}
 
 	newSession(contract_id) {
-		const time = moment.duration('06:00:00');
+		const time = moment.duration('03:00:00');
 		const expiry_date = moment(this.props.details.session_expires_at).subtract(time).format()
 		const cur_date = moment().format()
 		console.log(expiry_date)
 		console.log(cur_date)
 
+		if (cur_date >= expiry_date) {
 			generateNewSubletorSession({
 				subletor_id: this.props.details.subletor_id,
 				doc_id: this.props.details.doc_id,
 				email: this.props.details.my_email,
 			})
 			.then(() => {
-				console.log('step 2')
 				getReceivedApplications({ student_id: this.props.details.student_id })
 				.then((data) => {
 					saveReceivedApplicationsToRedux(data.map(s => JSON.parse(s)))
 				})
 			})
 			.then(() => {
-				console.log('step 4')
-					this.props.history.push(`/applications/subletor/${contract_id}`)
-
-
+				this.props.history.push(`/applications/subletor/${contract_id}`)
 			})
+		} else {
+			this.props.history.push(`/applications/subletor/${contract_id}`)
+		}
 	}
 
 	render() {
