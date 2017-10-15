@@ -20,14 +20,16 @@ class SubleteeDone extends Component {
 
 	render() {
 		return (
-			<Card style={comStyles().container}>
-				'You are done! Please send this link to your subletor on Facebook to fill the remainder of the lease. Once complete, you and your witnesses will all recieve an email to sign online.'
-        <div onClick={() => this.openFacebookUser(`https://facebook.com/${this.props.sublet_post.FB_USER_ID}`)}>
-          <br /><br /><br />
-          Share this link with { this.props.sublet_post.FB_USER_NAME }
-        </div>
-        <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} />
-			</Card>
+      <div style={comStyles().container}>
+  			<Card style={comStyles().card}>
+  				'You are done! Please send this link to your subletor on Facebook to fill the remainder of the lease. Once complete, you and your witnesses will all recieve an email to sign online.'
+          <div onClick={() => this.openFacebookUser(`https://facebook.com/${this.props.sublet_post.FB_USER_ID}`)}>
+            <br /><br /><br />
+            Share this link with { this.props.sublet_post.FB_USER_NAME }
+          </div>
+          <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} />
+  			</Card>
+      </div>
 		)
 	}
 }
@@ -69,6 +71,11 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+		},
+    card: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
 	}
 }
