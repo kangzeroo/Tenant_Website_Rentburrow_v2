@@ -236,17 +236,16 @@ class AppRoot extends Component {
 
                 <Route exact path='/sublet/:sublet_id' component={SubletPage} />
 
-                <Switch>
-                  <Route path='/signing/sublet' component={SignSublet} />
-                  <Route path='/signing/lease' component={SignSublet} />
-                </Switch>
-
                 <Route exact path='/account' component={TenantAccount} />
                 <Route exact path='/applications' component={TenantApplications} />
                 <Route exact path='/settings' component={TenantSettings} />
 
                 <Route exact path='/:building_alias' component={BuildingPage} />
 
+                <Switch>
+                  <Route path='/signing/sublet' component={SignSublet} />
+                  <Route path='/signing/lease' component={SignSublet} />
+                </Switch>
 
                 {/* Route Mobile Site to Here .... */}
               </Switch>
