@@ -46,6 +46,8 @@ import { sendOffToDynamoDB } from '../api/intel/intel_api'
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 import { saveStudentProfile, getStudentProfile } from '../api/signing/sublet_contract_api'
 
+import BasicLeaseForm from './contracts/leases/basics/BasicLeaseForm'
+
 class AppRoot extends Component {
 
   constructor() {
@@ -232,7 +234,7 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={Feature} />
+                <Route exact path='/sandbox' component={BasicLeaseForm} />
                 <Route exact path='/community' component={CommunityPage} />
 
                 <Route exact path='/lease' component={HousingPage} />
