@@ -12,29 +12,29 @@ import {
 } from 'semantic-ui-react'
 
 
-class ApplicationPage extends Component {
+class SentApplicationPage extends Component {
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				ApplicationPage
+				SentApplicationPage
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-ApplicationPage.propTypes = {
+SentApplicationPage.propTypes = {
 	history: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-ApplicationPage.defaultProps = {
+SentApplicationPage.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(ApplicationPage)
+const RadiumHOC = Radium(SentApplicationPage)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
