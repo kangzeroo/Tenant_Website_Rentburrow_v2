@@ -28,10 +28,30 @@ class PeopleWhoWantToSubletMine extends Component {
 	componentWillMount() {
 		getReceivedApplications(this.props.tenant_profile.student_id)
 		.then((data) => {
-			const applications = data.map(s => JSON.parse(s))
-			this.props.saveReceivedApplicationsToRedux(applications)
+			const existsAlready = (app, unique_apps) => {
+        let exists = false
+        unique_apps.forEach((uqa) => {
+          if (uqa.subletee_fb_id === app.subletee_fb_id) {
+            exists = true
+          }
+        })
+        return exists
+      }
+      const applications = data.map(s => JSON.parse(s))
+      const unique_apps = []
+      applications.forEach((app) => {
+        console.log(app)
+        let unique = true
+        if (existsAlready(app, unique_apps)) {
+          unique = false
+        }
+        if (unique) {
+          unique_apps.push(app)
+        }
+      })
+			this.props.saveReceivedApplicationsToRedux(unique_apps)
 			this.setState({
-				applications,
+				applications: unique_apps,
 			})
 		})
 	}

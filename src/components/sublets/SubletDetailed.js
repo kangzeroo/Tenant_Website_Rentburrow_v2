@@ -112,19 +112,18 @@ class SubletDetailed extends Component {
           null
           :
           <div style={comStyles().center}>
-            <div style={comStyles().imageGallery}>
-              <SingularImageGallery
-                list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/no-image-available.jpg']}
-              />
-            </div>
-          </div>
-        }
-
-        <div style={this.props.onlyForShow ? comStyles().rest : comStyles().right}>
-
             <TextArea style={comStyles().desc}>
               { this.props.sublet.description }
             </TextArea>
+            {/*<div style={comStyles().imageGallery}>
+              <SingularImageGallery
+                list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/no-image-available.jpg']}
+              />
+            </div>*/}
+          </div>
+        }
+
+        <div style={this.props.onlyForShow ? comStyles().rest : comStyles().rest}>
 
           {
             this.props.iAmTheSubletee
@@ -307,7 +306,7 @@ const comStyles = () => {
 			fontWeight: 'bold'
 		},
     desc: {
-      height: '80%',
+      height: '100%',
       width: '100%',
       textAlign: 'center',
       display: 'flex',
@@ -315,7 +314,7 @@ const comStyles = () => {
       alignItems: 'center',
       justifyContent: 'center',
       margin: '0px 0px 10px 0px',
-      padding: '0px 5px 0px 5px',
+      padding: '10px',
       border: '0px solid black',
     },
 		seeOriginalAhref: {
@@ -373,7 +372,7 @@ const comStyles = () => {
       minWidth: '360px',
     },
     center: {
-      width: '30%',
+      width: '70%',
       minWidth: '360px',
       minHeight: '100%',
     },
@@ -396,7 +395,7 @@ const comStyles = () => {
       minWidth: '360px',
     },
     rest: {
-      width: '70%',
+      width: '30%',
       color: xGreyText,
       minHeight: '100%',
       maxHeight: '100%',
@@ -410,7 +409,7 @@ const comStyles = () => {
     },
     buttons: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'center',
     },
     you: {

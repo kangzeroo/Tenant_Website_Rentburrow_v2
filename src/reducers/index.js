@@ -8,6 +8,8 @@ import selectionReducer from './selection/selection_reducer'
 import messageReducer from './messaging/messaging_reducer'
 import intelReducer from './intel/intel_reducer'
 import appReducer from './app/app_reducer'
+import leaseAppReducer from './contract/lease_application_reducer'
+import leasePaymentReducer from './contract/lease_payment_reducer'
 
 // takes all your seperate reducers into one giant reducer
 // each Redux action will flow through each middleware and then reach the reducers
@@ -22,6 +24,8 @@ const rootReducer = combineReducers({
 	selection: selectionReducer,
 	intel: intelReducer,
 	contract: contractReducer,
+	leaseApp: leaseAppReducer,
+	leasePay: leasePaymentReducer,
 })
 
 export default rootReducer

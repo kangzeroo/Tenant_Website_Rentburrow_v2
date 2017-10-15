@@ -210,7 +210,8 @@ class BasicLeaseForm extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<div style={comStyles().main_contents}>
+				BASIC LEASE FORM
+				{/*<div style={comStyles().main_contents}>
 					<div style={comStyles().subletee_subletor_relationship}>
 						<SubleteeSubletorRelationship
 							subletee={{
@@ -405,7 +406,7 @@ class BasicLeaseForm extends Component {
 							})
 						}
 					</Step.Group>
-				</div>
+				</div>*/}
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
