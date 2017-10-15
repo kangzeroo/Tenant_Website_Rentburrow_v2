@@ -9,6 +9,7 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
   Card,
+  Button,
 } from 'semantic-ui-react'
 
 class SubleteeDone extends Component {
@@ -20,14 +21,17 @@ class SubleteeDone extends Component {
 
 	render() {
 		return (
-			<Card style={comStyles().container}>
-				'You are done! Please send this link to your subletor on Facebook to fill the remainder of the lease. Once complete, you and your witnesses will all recieve an email to sign online.'
-        <div onClick={() => this.openFacebookUser(`https://facebook.com/${this.props.sublet_post.FB_USER_ID}`)}>
-          <br /><br /><br />
-          Share this link with { this.props.sublet_post.FB_USER_NAME }
+			<div style={comStyles().container}>
+        <div style={comStyles().done_message}>
+				    You are done! Please send this link to your subletor on Facebook to fill the remainder of the lease. Once complete, you and your witnesses will all recieve an email to sign online.
         </div>
-        <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} />
-			</Card>
+        <div style={comStyles().share_link}>
+          <Button positive onClick={() => this.openFacebookUser(`https://facebook.com/${this.props.sublet_post.FB_USER_ID}`)} style={comStyles().facebook_user}>
+            Share this link with { this.props.sublet_post.FB_USER_NAME }
+          </Button>
+          <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} style={comStyles().subletor_url} />
+        </div>
+			</div>
 		)
 	}
 }
@@ -69,6 +73,29 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+      width: '100%',
+      height: '100%',
+		},
+    done_message: {
+      width: '80%',
+      padding: '50px',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+    },
+    share_link: {
+      width: '80%',
+      padding: '20px',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+    },
+    facebook_user: {
+      margin: '30px auto',
+    },
+    subletor_url: {
+      width: '100%',
+      padding: '20px',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+    }
 	}
 }
