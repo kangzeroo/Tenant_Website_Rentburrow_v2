@@ -501,6 +501,13 @@ const comStyles = () => {
 		},
 		why_content: {
 			fontSize: '1.2rem',
+		},
+		hidden_loading: {
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+			padding: '20px',
 		}
 	}
 }
