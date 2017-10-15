@@ -53,7 +53,7 @@ class SubletDetailed extends Component {
 
 	render() {
 		return (
-      <Card key={this.props.sublet.post_id} raised style={comStyles().hardCard}>
+      <Card key={this.props.sublet.post_id} raised style={this.props.onlyForShow ? comStyles().softCard : comStyles().hardCard}>
 
         <div style={comStyles().left}>
   				<div id='infobar' style={comStyles().infobar}>
@@ -105,22 +105,28 @@ class SubletDetailed extends Component {
   				</div>
         </div>
 
-        <div style={comStyles().center}>
-          <div style={comStyles().imageGallery}>
-            <SingularImageGallery
-              list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/no-image-available.jpg']}
-            />
+        {
+          this.props.onlyForShow
+          ?
+          null
+          :
+          <div style={comStyles().center}>
+            <div style={comStyles().imageGallery}>
+              <SingularImageGallery
+                list_of_images={JSON.parse(this.props.sublet.images).length > 0 ? JSON.parse(this.props.sublet.images) : ['https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/no-image-available.jpg']}
+              />
+            </div>
           </div>
-        </div>
+        }
 
-        <div style={comStyles().right}>
+        <div style={this.props.onlyForShow ? comStyles().rest : comStyles().right}>
           <div style={comStyles().desc}>{ this.props.sublet.description }</div>
           <div style={comStyles().buttons}>
     				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
             {
               this.props.onlyForShow
               ?
-              null
+              <Button basic primary content='Message Student' onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)} style={comStyles().originalButton} />
               :
       				<Button primary content='Sign Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
             }
@@ -171,6 +177,14 @@ const comStyles = () => {
     hardCard: {
       minWidth: '600px',
       width: '100%',
+      minHeight: '250px',
+      maxHeight: '250px',
+      margin: '10px auto',
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    softCard: {
+      width: '750px',
       minHeight: '250px',
       maxHeight: '250px',
       margin: '10px auto',
@@ -344,6 +358,19 @@ const comStyles = () => {
     },
     right: {
       width: '40%',
+      color: xGreyText,
+      minHeight: '100%',
+      maxHeight: '100%',
+      textAlign: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+      padding: '20px',
+      minWidth: '360px',
+    },
+    rest: {
+      width: '70%',
       color: xGreyText,
       minHeight: '100%',
       maxHeight: '100%',
