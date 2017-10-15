@@ -28,7 +28,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { filterNonImages } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj } from '../../../../api/search/sublet_api'
-import SubletDetailed from '../../../sublets/SubletDetailed'
+import SubleteeSubletorRelationship from '../SubleteeSubletorRelationship'
 import { validateEmail } from '../../../../api/general/general_api'
 
 
@@ -198,11 +198,17 @@ class SubleteeForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<SubletDetailed
-						key={this.props.sublet_post.POST_ID}
-						sublet={convertToRegularSubletObj(this.props.sublet_post)}
-						onlyForShow
-					/>
+					<div style={comStyles().subletee_subletor_relationship}>
+						<SubleteeSubletorRelationship
+							subletee={{
+								fb_user_id: this.props.tenant_profile.fb_user_id,
+								fb_user_name: `${this.props.tenant_profile.first_name} ${this.props.tenant_profile.last_name}`,
+								fb_user_pic: this.props.tenant_profile.thumbnail,
+							}}
+							sublet_post={convertToRegularSubletObj(this.props.sublet_post)}
+							iAmTheSubletee
+						/>
+					</div>
 					<div style={comStyles().sign_header}>Sign This Sublet Online</div>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>

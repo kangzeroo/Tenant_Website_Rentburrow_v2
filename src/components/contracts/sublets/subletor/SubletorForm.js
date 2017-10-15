@@ -27,8 +27,7 @@ import {
 import DatePicker from 'react-datepicker'
 import { filterNonImages } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj, getSubleteeProfile, } from '../../../../api/signing/sublet_contract_api'
-import SubletDetailed from '../../../sublets/SubletDetailed'
-import SubletCard from '../../../housing/cards/SubletCard'
+import SubleteeSubletorRelationship from '../SubleteeSubletorRelationship'
 import { validateEmail } from '../../../../api/general/general_api'
 require('../../../../styles/react-datepicker.css')
 
@@ -234,19 +233,16 @@ class SubletorForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<SubletCard
-						key='subletee'
-						sublet={{
-							fb_user_id: this.state.subletee.fb_user_id,
-							fb_user_name: `${this.state.subletee_first_name} ${this.state.subletee_last_name}`,
-							fb_user_pic: this.state.subletee.thumbnail
-						}}
-					/>
-					<SubletDetailed
-						key={this.props.sublet_post.POST_ID}
-						sublet={convertToRegularSubletObj(this.props.sublet_post)}
-						onlyForShow
-					/>
+					<div style={comStyles().subletee_subletor_relationship}>
+						<SubleteeSubletorRelationship
+							subletee={{
+								fb_user_id: this.state.subletee.fb_user_id,
+								fb_user_name: `${this.state.subletee.first_name} ${this.state.subletee.last_name}`,
+								fb_user_pic: this.state.subletee.thumbnail
+							}}
+							sublet_post={convertToRegularSubletObj(this.props.sublet_post)}
+						/>
+					</div>
 					<div style={comStyles().sign_header}>Approve This Subletee</div>
 
 					<div style={comStyles().contents}>
@@ -498,6 +494,9 @@ const comStyles = () => {
 		viewTerms: {
 			color: 'blue',
 			cursor: 'pointer',
+		},
+		subletee_subletor_relationship: {
+
 		},
 		contents: {
 			display: 'flex',
