@@ -295,6 +295,7 @@ class SubletorForm extends Component {
 													placeholder='First Name'
 													onChange={(e) => this.updateAttr(e, 'subletor_first_name')}
 													value={this.state.subletor_first_name}
+													disabled={this.props.tenant_profile.first_name !== ''}
 												/>
 									    </Form.Field>
 									    <Form.Field>
@@ -303,15 +304,26 @@ class SubletorForm extends Component {
 													placeholder='Last Name'
 													onChange={(e) => this.updateAttr(e, 'subletor_last_name')}
 													value={this.state.subletor_last_name}
+													disabled={this.props.tenant_profile.last_name !== ''}
 												/>
 									    </Form.Field>
 									    <Form.Field>
 									      <label>Phone</label>
-									      <input placeholder='Phone Number' onChange={(e) => this.updateAttr(e, 'subletor_phone_number')} value={this.state.subletor_phone_number} />
+									      <input
+													placeholder='Phone Number'
+													onChange={(e) => this.updateAttr(e, 'subletor_phone_number')}
+													value={this.state.subletor_phone_number}
+													disabled={this.props.tenant_profile.phone !== ''}
+												/>
 									    </Form.Field>
 									    <Form.Field>
 									      <label>Email</label>
-									      <input placeholder='Email' onChange={(e) => this.updateAttr(e, 'subletor_email')} value={this.state.subletor_email} />
+									      <input
+													placeholder='Email'
+													onChange={(e) => this.updateAttr(e, 'subletor_email')}
+													value={this.state.subletor_email}
+													disabled={this.props.tenant_profile.email !== ''}
+												/>
 									    </Form.Field>
 										</div>
 										<div style={comStyles().student_card}>
