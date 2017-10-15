@@ -21,7 +21,7 @@ import {
   getStudentProfile,
 } from '../../api/signing/sublet_contract_api'
 import { saveTenantToRedux } from '../../actions/auth/auth_actions'
-import { filterNonImages, uploadImageToS3WithEncryption } from '../../api/aws/aws-S3'
+import { filterNonImages, uploadImageToS3WithEncryption, getEncryptedS3Image } from '../../api/aws/aws-S3'
 
 class TenantAccount extends Component {
 
@@ -48,6 +48,7 @@ class TenantAccount extends Component {
       phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
       student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
     })
+    getEncryptedS3Image(this.props.tenant_profile.student_card, this.props.tenant_profile.student_id)
   }
 
   updateAttr(e, attr) {
