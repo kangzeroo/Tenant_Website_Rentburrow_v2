@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import Dropzone from 'react-dropzone'
 import { withRouter } from 'react-router-dom'
 import {
   Image,
@@ -18,6 +19,7 @@ import {
 import {
   updateStudentProfile,
 } from '../../api/signing/sublet_contract_api'
+import { filterNonImages, uploadImageToS3WithEncryption } from '../../api/aws/aws-S3'
 
 class TenantAccount extends Component {
 
@@ -28,6 +30,8 @@ class TenantAccount extends Component {
       last_name: '',
       email: '',
       phone: '',
+
+      student_card: '',
 
       saving: false,
       profile_saved: false,
@@ -53,18 +57,31 @@ class TenantAccount extends Component {
     this.setState({
       saving: true
     }, () => {
-      updateStudentProfile({
-        student_id: this.props.tenant_profile.student_id,
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
-        email: this.state.email,
-        phone: this.state.phone,
-      })
-      .then(() => {
-        this.setState({
-          profile_saved: true,
+      uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.student_id}/`, 'student_card-')
+  			.then((S3Obj) => {
+          console.log(S3Obj)
+  				return updateStudentProfile({
+            student_id: this.props.tenant_profile.student_id,
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
+            email: this.state.email,
+            phone: this.state.phone,
+            student_card: S3Obj.Location,
+          })
+  			})
+        .then(() => {
+          this.setState({
+            profile_saved: true,
+          })
         })
-      })
+    })
+  }
+
+  // upload just 1 photo
+  uploadPhoto(acceptedFiles, rejectedFiles, attr) {
+    const filteredFiles = filterNonImages(acceptedFiles)
+    this.setState({
+      [attr]: filteredFiles[0]
     })
   }
 
@@ -75,32 +92,15 @@ class TenantAccount extends Component {
           this.state.saving
           ?
           <Progress
+            color='blue'
             percent={this.state.profile_saved ? 100 : 50}
             active
             success={this.state.profile_saved}
-          >
-            {
-              this.state.profile_saved
-              ?
-              <div style={comStyles().success}>
-                <Button
-                  primary
-                  basic
-                  content='Back to Dashboard'
-                  onClick={() => this.props.history.push('/')}
-                />
-                Profile Updated
-              </div>
-              :
-              <div>
-              Saving Profile...
-              </div>
-            }
-          </Progress>
+          />
           :
           null
         }
-        <div style={comStyles().formContainer} >
+        <div style={comStyles().formContainer}>
           <Header as='h2'>
             <Image
               shape='circular'
@@ -108,41 +108,68 @@ class TenantAccount extends Component {
             />
             Update Profile
           </Header>
-          <Form>
-            <Form.Field>
-              <Form.Input
-                label='First Name'
-                placeholder='First name'
-                value={this.state.first_name}
-                onChange={(e) => this.updateAttr(e, 'first_name')}
-              />
-              <Form.Input
-                label='Last Name'
-                placeholder='Last Name'
-                value={this.state.last_name}
-                onChange={(e) => this.updateAttr(e, 'last_name')}
-              />
-              <Form.Input
-                label='Email'
-                placeholder='Email'
-                value={this.state.email}
-                onChange={(e) => this.updateAttr(e, 'email')}
-              />
-              <Form.Input
-                label='Phone Number'
-                placeholder='Phone Number'
-                value={this.state.phone}
-                onChange={(e) => this.updateAttr(e, 'phone')}
-              />
-            </Form.Field>
-          </Form>
-          <div style={comStyles().buttons_container} >
-            <Button
-              primary
-              content='Save Profile'
-              onClick={() => this.saveProfile()}
-            />
+          <div style={comStyles().horizontal_form}>
+            <Form style={comStyles().basic_form}>
+              <Form.Field>
+                <Form.Input
+                  label='First Name'
+                  placeholder='First name'
+                  value={this.state.first_name}
+                  onChange={(e) => this.updateAttr(e, 'first_name')}
+                />
+                <Form.Input
+                  label='Last Name'
+                  placeholder='Last Name'
+                  value={this.state.last_name}
+                  onChange={(e) => this.updateAttr(e, 'last_name')}
+                />
+                <Form.Input
+                  label='Email'
+                  placeholder='Email'
+                  value={this.state.email}
+                  onChange={(e) => this.updateAttr(e, 'email')}
+                />
+                <Form.Input
+                  label='Phone Number'
+                  placeholder='Phone Number'
+                  value={this.state.phone}
+                  onChange={(e) => this.updateAttr(e, 'phone')}
+                />
+              </Form.Field>
+            </Form>
+            <div style={comStyles().student_card}>
+              <Form.Field>
+                <Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'student_card')} style={comStyles().bannerDropzone} multiple={false}>
+                  {
+                    this.state.student_card
+                    ?
+                    <div>
+                      {
+                        this.state.student_card && this.state.student_card.name
+                        ?
+                        <Image key={this.state.student_card.name} src={this.state.student_card.preview} style={comStyles().uploadImagesQueue} />
+                        :
+                        <Image key='student_card' src={this.state.student_card} style={comStyles().uploadImagesQueue} />
+                      }
+                    </div>
+                    :
+                    <div style={comStyles().upload_student_card_placeholder}>
+                      <Icon name='user' size='huge' />
+                      <div style={comStyles().upload_student_card_text}>Upload Student Card</div>
+                    </div>
+                  }
+                </Dropzone>
+                <div style={comStyles().click_image_to_change}>Click on image to change</div>
+              </Form.Field>
+            </div>
           </div>
+        </div>
+        <div style={comStyles().buttons_container} >
+          <Button
+            primary
+            content='Save Profile'
+            onClick={() => this.saveProfile()}
+          />
         </div>
 			</div>
 		)
@@ -197,11 +224,44 @@ const comStyles = () => {
       flexDirection: 'column',
       margin: '30px',
     },
-    buttonsContainer: {
+    buttons_container: {
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      margin: '30px 0px 0px 0px'
+      justifyContent: 'flex-start',
+      margin: '30px 0px 0px 30px'
     },
+    horizontal_form: {
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+    },
+    basic_form: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '50%',
+    },
+    student_card: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '50%',
+      padding: '30px',
+    },
+    upload_student_card_placeholder: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100%',
+      width: '100%',
+    },
+    upload_student_card_text: {
+      margin: '15px auto',
+      fontSize: '1.1rem',
+      fontWeight: 'bold',
+    },
+    click_image_to_change: {
+      margin: '10px auto',
+      width: '100%',
+    }
 	}
 }
