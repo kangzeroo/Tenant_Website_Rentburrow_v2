@@ -20,6 +20,10 @@ export const shortenAddress = (address) => {
 	}
 }
 
+export const shortenTimestamp = (timestamp) => {
+	return timestamp.split('T')[0]
+}
+
 export const redirectPath = (urlPath) => {
 	const p = new Promise((res, rej) => {
 		searchForSpecificBuildingByAlias(URLToAlias(urlPath)).then((building) => {
