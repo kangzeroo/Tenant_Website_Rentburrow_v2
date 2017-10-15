@@ -12,21 +12,57 @@ import {
 	Label,
 	Menu,
 } from 'semantic-ui-react'
-import SentApplications from './tabs/SentApplications'
-import ReceivedApplications from './tabs/ReceivedApplications'
+import PlacesIAppliedToLive from './tabs/PlacesIAppliedToLive'
+import PeopleWhoWantToSubletMine from './tabs/PeopleWhoWantToSubletMine'
 
 class TenantApplications extends Component {
 
+	constructor() {
+		super()
+		this.state = {
+			fully_loaded: false,
+			defaultActiveIndex: 0,
+		}
+	}
+
+	componentWillMount() {
+    const chosenTab_loc = this.props.location.search.indexOf('?tab=')
+    const chosenTab = this.props.location.search.slice(chosenTab_loc + '?tab='.length)
+		this.setState({
+			defaultActiveIndex: this.determineWhichTabOpen(chosenTab),
+			fully_loaded: true,
+		})
+	}
+
+	determineWhichTabOpen(chosenTab) {
+    let activeIndex = 0
+    this.renderTabs().forEach((tab) => {
+      if (tab.code === chosenTab) {
+        activeIndex = tab.index
+      }
+    })
+    return activeIndex
+  }
+
+	redirectToTab(identifier) {
+    // set the url to a different one
+    history.pushState(null, null, `${this.props.location.pathname}?${identifier}`)
+  }
+
+	tabChanged(e, data) {
+    this.redirectToTab(`tab=${data.panes[data.activeIndex].code}`)
+  }
+
 	renderTabs() {
 		return [
-			{ menuItem: 'Sent Applications', render: () => <Tab.Pane attached={false}>{ this.renderSentApplications() }</Tab.Pane> },
-			{ menuItem: 'Received Applications', render: () => <Tab.Pane attached={false}>{ this.renderReceivedApplications() }</Tab.Pane> },
+			{ index: 0, code: 'where-i-want-to-live', menuItem: 'Places I have applied to live', render: () => <Tab.Pane attached={false}>{ this.renderPlacesIAppliedToLive() }</Tab.Pane> },
+			{ index: 1, code: 'people-want-to-live-at-mine', menuItem: 'People who want to sublet my place', render: () => <Tab.Pane attached={false}>{ this.renderReceivedApplications() }</Tab.Pane> },
 		]
 	}
 
-	renderSentApplications() {
+	renderPlacesIAppliedToLive() {
 		return (
-			<SentApplications
+			<PlacesIAppliedToLive
 
 			/>
 		)
@@ -34,7 +70,7 @@ class TenantApplications extends Component {
 
 	renderReceivedApplications() {
 		return (
-			<ReceivedApplications
+			<PeopleWhoWantToSubletMine
 
 			/>
 		)
@@ -44,10 +80,18 @@ class TenantApplications extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().tabsContainer} >
-					<Tab
-						menu={{ secondary: true, pointing: true }}
-						panes={this.renderTabs()}
-					/>
+					{
+						this.state.fully_loaded
+						?
+						<Tab
+							menu={{ secondary: true, pointing: true }}
+	            defaultActiveIndex={this.state.defaultActiveIndex}
+							panes={this.renderTabs()}
+							onTabChange={(e, d) => this.tabChanged(e, d)}
+						/>
+						:
+						null
+					}
 				</div>
 			</div>
 		)

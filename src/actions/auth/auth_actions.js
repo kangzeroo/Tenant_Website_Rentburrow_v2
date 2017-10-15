@@ -2,6 +2,7 @@ import {
   AUTHENTICATE_TENANT,
   FORCE_SIGNIN,
   LOGOUT_TENANT,
+  LOCATION_FORWARDING,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -31,6 +32,16 @@ export const triggerForcedSignin = (bool) => {
     dispatch({
       type: FORCE_SIGNIN,
       payload: bool,
+    })
+  }
+}
+
+// forward url
+export const forwardUrlLocation = (url) => {
+  return (dispatch) => {
+    dispatch({
+      type: LOCATION_FORWARDING,
+      payload: url,
     })
   }
 }

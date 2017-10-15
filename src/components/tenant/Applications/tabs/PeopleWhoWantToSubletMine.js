@@ -8,39 +8,44 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-  Header,
-  Icon,
-  Button,
+	Header,
+	Button,
+	Icon,
 } from 'semantic-ui-react'
-import ApplicationCard from '../cards/ApplicationCard'
-import {
-  getSentApplications,
-} from '../../../../api/application/application_api'
+import ReceivedApplicationCard from '../cards/ReceivedApplicationCard'
+import { getReceivedApplications, } from '../../../../api/application/application_api'
 
-class SentApplications extends Component {
+class PeopleWhoWantToSubletMine extends Component {
 
-  constructor() {
-    super()
-    this.state = {
-      applications: []
-    }
-  }
+	constructor() {
+		super()
+		this.state = {
+			applications: []
+		}
+	}
 
-  componentWillMount() {
-    getSentApplications(this.props.tenant_profile.student_id)
-    .then((data) => {
-      this.setState({
-        applications: data.map(s => JSON.parse(s))
-      })
-    })
-  }
+	componentWillMount() {
+		getReceivedApplications(this.props.tenant_profile.student_id)
+		.then((data) => {
+			this.setState({
+				applications: data.map(s => JSON.parse(s))
+			})
+		})
+	}
+
+	goToFBGroup(e) {
+		if (e) {
+			e.stopPropagation()
+		}
+		window.open(`https://www.facebook.com//groups/WaterlooSublet/`, '_blank')
+	}
 
 	render() {
 		return (
 			<div style={comStyles().container}>
         <Header as='h3'>
-          <Icon name='external' />
-          Active Applications
+          <Icon name='archive' />
+          Received Applications
         </Header>
         {
           this.state.applications.length === 0
@@ -48,23 +53,14 @@ class SentApplications extends Component {
           <div style={comStyles().no_applications_container} >
             <Header
               as='h2'
-              content='You currently have no applications :('
-              subheader='Apply to a sublet/lease today!'
+              content='You currently have no received applications :('
+              subheader='To upload a sublet, post it on Facebook and it will automatically appear on Rentburrow'
             />
             <div style={comStyles().button_text}>
-              <div>Search for a sublet:</div>
               <Button
-                content='Sublets'
+                content='Post a sublet on Facebook'
                 primary
-                onClick={() => this.props.history.push('/sublet')}
-              />
-            </div>
-            <div style={comStyles().button_text}>
-              <div>Search for a lease:</div>
-              <Button
-                content='Leases'
-                primary
-                onClick={() => this.props.history.push('/lease')}
+              	onClick={() => this.goToFBGroup()}
               />
             </div>
           </div>
@@ -73,8 +69,8 @@ class SentApplications extends Component {
           {
             this.state.applications.map((card) => {
               return (
-                <ApplicationCard
-                  key={card.subletee_id}
+                <ReceivedApplicationCard
+                  key={card.subletor_id}
                   details={card}
                 />
               )
@@ -88,23 +84,23 @@ class SentApplications extends Component {
 }
 
 // defines the types of variables in this.props
-SentApplications.propTypes = {
+PeopleWhoWantToSubletMine.propTypes = {
 	history: PropTypes.object.isRequired,
-  tenant_profile: PropTypes.object,
+	tenant_profile: PropTypes.object,
 }
 
 // for all optional props, define a default value
-SentApplications.defaultProps = {
-  tenant_profile: {}
+PeopleWhoWantToSubletMine.defaultProps = {
+	tenant_profile: {}
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SentApplications)
+const RadiumHOC = Radium(PeopleWhoWantToSubletMine)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-    tenant_profile: redux.auth.tenant_profile
+		tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
@@ -130,7 +126,7 @@ const comStyles = () => {
     no_applications_container: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       alignItems: 'center',
       minHeight: '150px',
       maxHeight: '150px',
@@ -140,8 +136,8 @@ const comStyles = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      minWidth: '250px',
-      maxWidth: '250px',
+      minWidth: '400px',
+      maxWidth: '400px',
     }
 	}
 }

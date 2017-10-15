@@ -42,7 +42,7 @@ class SubletorDone extends Component {
 				'DONE! All recipients must sign online via their email'
         <Button
           content='View Contract'
-          onClick={() => this.viewContract()}
+          onClick={() => this.props.history.push('/applications?tab=people-want-to-live-at-mine')}
         />
 			</Card>
 		)

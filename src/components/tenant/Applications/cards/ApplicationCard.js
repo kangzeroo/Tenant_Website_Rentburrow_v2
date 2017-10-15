@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import {
   Card,
@@ -14,7 +15,6 @@ import {
 } from 'semantic-ui-react'
 import {
   shortenAddress,
-  shortenTimestamp,
 } from '../../../../api/general/general_api'
 import SentApplicationPage from '../SentApplicationPage'
 
@@ -52,9 +52,9 @@ class ApplicationCard extends Component {
             </Card.Header>
             <Card.Meta>{this.props.details.suite ? 'Suite ' + this.props.details.suite : ''}</Card.Meta>
             <Card.Meta>{this.props.details.room ? 'Room ' + this.props.details.room : ''}</Card.Meta>
-            <Card.Meta>{'Applied On ' + shortenTimestamp(this.props.details.created_at)}</Card.Meta>
-            <Card.Description>{'Begin Date:  ' + shortenTimestamp(this.props.details.begin_date)}</Card.Description>
-            <Card.Description>{'End Date:  ' + shortenTimestamp(this.props.details.end_date)}</Card.Description>
+            <Card.Meta>{'Applied On ' + moment(this.props.details.created_at).format('MMM Do YYYY')}</Card.Meta>
+            <Card.Description>{'Begin Date:  ' + moment(this.props.details.begin_date).format('MMM Do YYYY')}</Card.Description>
+            <Card.Description>{'End Date:  ' + moment(this.props.details.end_date).format('MMM Do YYYY')}</Card.Description>
             <Card.Description>{'Monthly Rent:  $' + this.props.details.rent_price}</Card.Description>
             <div style={comStyles().buttons_container}>
               <Button
@@ -119,6 +119,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       minHeight: '200px',
+      margin: '10px auto',
 		},
     buttons_container: {
       display: 'flex',

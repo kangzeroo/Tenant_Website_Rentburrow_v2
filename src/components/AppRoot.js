@@ -35,7 +35,7 @@ import SubletApplication from './contracts/sublets/SubletApplication'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
-import { saveTenantToRedux, triggerForcedSignin } from '../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSignin, forwardUrlLocation } from '../actions/auth/auth_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
 import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
@@ -102,19 +102,24 @@ class AppRoot extends Component {
     initiateFacebook().then(() => {
       // autologin to facebook if possible
       return checkIfFacebookLoggedIn()
-    }).then((fbProfile) => {
-      saveStudentProfile(fbProfile)
-      .then((data) => {
-        return getStudentProfile({ student_id: data.student_id, })
-      })
-      .then((data) => {
-        this.props.saveTenantToRedux(JSON.parse(data))
-      })
+    })
+    .then((fbProfile) => {
       const onSublet = this.props.location.pathname === '/sublet' || this.props.location.pathname === '/sublets'
       if (onSublet) {
         scrapeFacebookSublets(fbProfile)
       }
-    }).catch((err) => {
+      return saveStudentProfile(fbProfile)
+    })
+    .then((data) => {
+      return getStudentProfile({ student_id: data.student_id, })
+    })
+    .then((data) => {
+      this.props.saveTenantToRedux(JSON.parse(data))
+        // use location_forwarding when you have a path that requires a login first (privately available)
+        // use PossibleRoutes.js when you have a path that is publically available
+      this.props.history.push(this.props.location_forwarding)
+    })
+    .catch((err) => {
       // no facebook login, use AWS Cognito Unauth role
       unauthRoleStudent().then((unauthUser) => {
         // console.log(unauthUser)
@@ -147,10 +152,15 @@ class AppRoot extends Component {
 
   executeOnURL() {
     // grab the url that was given
-    const location = this.props.location.pathname
+    const pathname = this.props.location.pathname
+    const search = this.props.location.search
     // take the path in the url and go directly to that page and save to redux any actions necessary
-    if (location !== '/') {
-      redirectPath(location).then(({ path, actions }) => {
+    if (pathname !== '/') {
+      // use forwardUrlLocation when you have a path that requires a login first (privately available)
+      // use PossibleRoutes.js when you have a path that is publically available
+      this.props.forwardUrlLocation(pathname + search)
+      // if not, then we do nothing
+      redirectPath(pathname).then(({ path, actions }) => {
         // path = '/sage-5'
         // actions = [ { type, payload }, { type, payload } ]
         this.props.dispatchActionsToRedux(actions)
@@ -280,6 +290,8 @@ AppRoot.propTypes = {
   sublet_filter_params: PropTypes.object.isRequired,
   collectedRawIntel: PropTypes.array,
   clearIntelList: PropTypes.func.isRequired,
+  forwardUrlLocation: PropTypes.func.isRequired,
+  location_forwarding: PropTypes.string.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -298,6 +310,7 @@ const mapReduxToProps = (redux) => {
     current_gps_center: redux.filter.current_gps_center,
     sublet_filter_params: redux.filter.sublet_filter_params,
     collectedRawIntel: redux.intel.collectedRawIntel,
+    location_forwarding: redux.auth.location_forwarding,
 	}
 }
 
@@ -309,6 +322,7 @@ export default withRouter(connect(mapReduxToProps, {
   changeRentType,
   saveSubletsToRedux,
   clearIntelList,
+  forwardUrlLocation,
 })(RadiumHOC))
 
 // =============================
