@@ -72,7 +72,6 @@ class SentApplications extends Component {
           <div style={comStyles().activeContainer} >
           {
             this.state.applications.map((card) => {
-              console.log(card)
               return (
                 <ApplicationCard
                   key={card.subletee_id}
