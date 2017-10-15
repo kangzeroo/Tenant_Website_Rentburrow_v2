@@ -246,7 +246,7 @@ class SubletApplication extends Component {
 			<div style={comStyles().container}>
 				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletee_id'>
 					{
-						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID
+						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID && this.props.tenant_profile && this.props.tenant_profile.student_id
 						?
 						<SubleteeForm
 							sublet_post={this.state.sublet_post}
@@ -309,7 +309,7 @@ SubletApplication.propTypes = {
 
 // for all optional props, define a default value
 SubletApplication.defaultProps = {
-	tenant_profile: {},
+	 tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
