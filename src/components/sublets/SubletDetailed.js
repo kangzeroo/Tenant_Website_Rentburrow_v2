@@ -121,16 +121,31 @@ class SubletDetailed extends Component {
 
         <div style={this.props.onlyForShow ? comStyles().rest : comStyles().right}>
           <div style={comStyles().desc}>{ this.props.sublet.description }</div>
-          <div style={comStyles().buttons}>
-    				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
-            {
-              this.props.onlyForShow
-              ?
-              <Button basic primary content='Message Student' onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)} style={comStyles().originalButton} />
-              :
-      				<Button primary content='Sign Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
-            }
-          </div>
+          {
+            this.props.iAmTheSubletee
+            ?
+            <div style={comStyles().buttons}>
+      				<Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+              {
+                this.props.onlyForShow
+                ?
+                <Button basic primary content='Message Student' onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)} style={comStyles().originalButton} />
+                :
+        				<Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+              }
+            </div>
+            :
+            <div style={comStyles().buttons}>
+              <Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
+              {
+                this.props.onlyForShow
+                ?
+                null
+                :
+                <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+              }
+            </div>
+          }
         </div>
 
 			</Card>
@@ -145,11 +160,13 @@ SubletDetailed.propTypes = {
   selectPinToRedux: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   onlyForShow: PropTypes.bool,            // passed in
+  iAmTheSubletee: PropTypes.bool,         // passed in
 }
 
 // for all optional props, define a default value
 SubletDetailed.defaultProps = {
   onlyForShow: false,
+  iAmTheSubletee: false,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -386,6 +403,11 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',
+    },
+    you: {
+      margin: '0px 0px 0px 30px',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
     }
 	}
 }

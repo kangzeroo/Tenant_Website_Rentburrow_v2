@@ -48,12 +48,11 @@ class HomeOverview extends Component {
 	}
 
 	toggleModal(bool, attr, context) {
-		console.log('toggleModal')
 		this.setState({
       toggle_modal: bool,
       modal_name: attr,
       context,
-    }, () => console.log(this.state))
+    })
   }
 
 	renderAppropriateModal(modal_name, context) {
