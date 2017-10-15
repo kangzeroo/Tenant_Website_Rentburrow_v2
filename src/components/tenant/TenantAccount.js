@@ -145,7 +145,7 @@ class TenantAccount extends Component {
                 />
               </Form.Field>
             </Form>
-            <div style={comStyles().student_card}>
+            {/*<div style={comStyles().student_card}>
               <Form.Field>
                 <Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'student_card')} style={comStyles().bannerDropzone} multiple={false}>
                   {
@@ -170,7 +170,7 @@ class TenantAccount extends Component {
                 <div style={comStyles().click_image_to_change}>Click on image to change</div>
               </Form.Field>
             </div>
-          </div>
+          </div>*/}
         </div>
         <div style={comStyles().buttons_container} >
           <Button
