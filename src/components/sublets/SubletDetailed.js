@@ -315,7 +315,8 @@ const comStyles = () => {
       alignItems: 'center',
       justifyContent: 'center',
       margin: '0px 0px 10px 0px',
-      padding: '0px 5px 0px 5px'
+      padding: '0px 5px 0px 5px',
+      border: '0px solid black',
     },
 		seeOriginalAhref: {
 			flexGrow: 3
