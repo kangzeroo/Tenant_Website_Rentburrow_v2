@@ -12,6 +12,7 @@ import {
   Card,
   Image,
   Button,
+  TextArea,
 } from 'semantic-ui-react'
 import {
   renderProcessedThumbnail,
@@ -120,7 +121,11 @@ class SubletDetailed extends Component {
         }
 
         <div style={this.props.onlyForShow ? comStyles().rest : comStyles().right}>
-          <div style={comStyles().desc}>{ this.props.sublet.description }</div>
+
+            <TextArea style={comStyles().desc}>
+              { this.props.sublet.description }
+            </TextArea>
+
           {
             this.props.iAmTheSubletee
             ?
@@ -303,11 +308,14 @@ const comStyles = () => {
 		},
     desc: {
       height: '80%',
+      width: '100%',
       textAlign: 'center',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
+      margin: '0px 0px 10px 0px',
+      padding: '0px 5px 0px 5px'
     },
 		seeOriginalAhref: {
 			flexGrow: 3
