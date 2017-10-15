@@ -14,6 +14,7 @@ import {
 } from 'semantic-ui-react'
 import ReceivedApplicationCard from '../cards/ReceivedApplicationCard'
 import { getReceivedApplications, } from '../../../../api/application/application_api'
+import { saveReceivedApplicationsToRedux, } from '../../../../actions/contract/contract_actions'
 
 class PeopleWhoWantToSubletMine extends Component {
 
@@ -27,8 +28,10 @@ class PeopleWhoWantToSubletMine extends Component {
 	componentWillMount() {
 		getReceivedApplications(this.props.tenant_profile.student_id)
 		.then((data) => {
+			const applications = data.map(s => JSON.parse(s))
+			this.props.saveReceivedApplicationsToRedux(applications)
 			this.setState({
-				applications: data.map(s => JSON.parse(s))
+				applications,
 			})
 		})
 	}
@@ -87,6 +90,7 @@ class PeopleWhoWantToSubletMine extends Component {
 PeopleWhoWantToSubletMine.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object,
+	saveReceivedApplicationsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -107,7 +111,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+		saveReceivedApplicationsToRedux,
 	})(RadiumHOC)
 )
 
@@ -122,6 +126,9 @@ const comStyles = () => {
 		},
     activeContainer: {
       display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'space-around',
+			flexWrap: 'wrap',
     },
     no_applications_container: {
       display: 'flex',

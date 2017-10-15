@@ -16,6 +16,7 @@ import ApplicationCard from '../cards/ApplicationCard'
 import {
   getSentApplications,
 } from '../../../../api/application/application_api'
+import { saveSentApplicationsToRedux, } from '../../../../actions/contract/contract_actions'
 
 class PlacesIAppliedToLive extends Component {
 
@@ -29,8 +30,10 @@ class PlacesIAppliedToLive extends Component {
   componentWillMount() {
     getSentApplications(this.props.tenant_profile.student_id)
     .then((data) => {
+      const applications = data.map(s => JSON.parse(s))
+      this.props.saveSentApplicationsToRedux(applications)
       this.setState({
-        applications: data.map(s => JSON.parse(s))
+        applications,
       })
     })
   }
@@ -91,6 +94,7 @@ class PlacesIAppliedToLive extends Component {
 PlacesIAppliedToLive.propTypes = {
 	history: PropTypes.object.isRequired,
   tenant_profile: PropTypes.object,
+  saveSentApplicationsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -111,7 +115,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    saveSentApplicationsToRedux,
 	})(RadiumHOC)
 )
 
