@@ -61,10 +61,10 @@ class ReceivedSentApplicationPage extends Component {
 		generateNewTokens()
 		.then((data) => {
 			console.log(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`)
-			//window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
+			// window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
 			//					{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
-			// axios.get(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
-			// 					{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
+			 axios.get(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
+			 					{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
 			// .then((data) => {
 			// 	console.log(data)
 			// 	window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`)
