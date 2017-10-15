@@ -26,7 +26,7 @@ import { validateEmail } from '../../../../api/general/general_api'
 require('../../../../styles/react-datepicker.css')
 
 
-class SubletApplication extends Component {
+class SubletorForm extends Component {
 
 	constructor() {
 		super()
@@ -87,7 +87,7 @@ class SubletApplication extends Component {
 
 	submit() {
 		if (this.formValidation()) {
-			this.props.saveSubletApplication(this.state)
+			this.props.saveSubletorForm(this.state)
 			this.setState({
 				submitted: true,
 			})
@@ -279,21 +279,21 @@ class SubletApplication extends Component {
 }
 
 // defines the types of variables in this.props
-SubletApplication.propTypes = {
+SubletorForm.propTypes = {
 	history: PropTypes.object.isRequired,
 	sublet_post: PropTypes.object.isRequired,		// passed in
 	subletee_contract: PropTypes.object.isRequired,	// passed in
 	tenant_profile: PropTypes.object.isRequired,
-	saveSubletApplication: PropTypes.func.isRequired,	// passed in
+	saveSubletorForm: PropTypes.func.isRequired,	// passed in
 }
 
 // for all optional props, define a default value
-SubletApplication.defaultProps = {
+SubletorForm.defaultProps = {
 	tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SubletApplication)
+const RadiumHOC = Radium(SubletorForm)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

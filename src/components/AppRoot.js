@@ -31,7 +31,7 @@ import SubletPage from './sublets/SubletPage'
 import TenantAccount from './tenant/TenantAccount'
 import TenantApplications from './tenant/TenantApplications'
 import TenantSettings from './tenant/TenantSettings'
-import SignSublet from './contracts/sublets/SignSublet'
+import SubletApplication from './contracts/sublets/SubletApplication'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -237,8 +237,8 @@ class AppRoot extends Component {
                 <Route exact path='/sublet/:sublet_id' component={SubletPage} />
 
                 <Switch>
-                  <Route path='/signing/sublet' component={SignSublet} />
-                  <Route path='/signing/lease' component={SignSublet} />
+                  <Route path='/signing/sublet' component={SubletApplication} />
+                  <Route path='/signing/lease' component={SubletApplication} />
                 </Switch>
 
                 <Route exact path='/account' component={TenantAccount} />
