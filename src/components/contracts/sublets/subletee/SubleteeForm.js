@@ -86,7 +86,7 @@ class SubleteeForm extends Component {
 			subletee_last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
 			subletee_phone_number: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
 			subletee_email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
-			subletee_student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
+			// subletee_student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
 			price: this.props.sublet_post.PRICE,
 			address: this.props.sublet_post.ADDRESS,
 		})
@@ -293,24 +293,15 @@ class SubleteeForm extends Component {
 										</div>
 										<div style={comStyles().student_card}>
 											<Form.Field>
-												{
-													this.props.tenant_profile.student_card === ''
-													?
-													<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'subletee_student_card')} style={comStyles().dropzone} multiple={false}>
-														{
-															this.state.subletee_student_card
-															?
-															<Image key={this.state.subletee_student_card.name} src={this.state.subletee_student_card.preview} style={comStyles().uploadImagesQueue} />
-															:
-															<div style={comStyles().dropzone_text}>Upload Student Card</div>
-														}
-													</Dropzone>
-													:
-													<Image
-														style={comStyles().dropzone}
-														src={this.props.tenant_profile.student_card}
-													/>
-												}
+												<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'subletee_student_card')} style={comStyles().dropzone} multiple={false}>
+													{
+														this.state.subletee_student_card
+														?
+														<Image key={this.state.subletee_student_card.name} src={this.state.subletee_student_card.preview} style={comStyles().uploadImagesQueue} />
+														:
+														<div style={comStyles().dropzone_text}>Upload Student Card</div>
+													}
+												</Dropzone>
 											</Form.Field>
 											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
 										</div>

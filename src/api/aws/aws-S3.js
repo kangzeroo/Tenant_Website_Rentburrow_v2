@@ -169,3 +169,29 @@ export const uploadImageToS3WithEncryption = (image, s3_corporation, prefix) => 
 	})
 	return p
 }
+
+export const getEncryptedS3Image = (url, cognito_user_id) => {
+	const p = new Promise((res, rej) => {
+		const S3 = new AWS_S3()
+		// https://rentburrow3-tenant-images.s3.amazonaws.com/8f24fead-afa4-4598-9e3b-90a4d1809bde/student_card-181575fb8a8651eea950686533241f0a.jpeg
+		const imageKeyLoc = url.indexOf(cognito_user_id)
+		const imageKey = url.slice(imageKeyLoc + cognito_user_id.length + 1)
+		console.log(imageKey)
+		AWS.config.credentials.refresh(() => {
+			S3.getObject({
+					Bucket: ENCRYPTED_BUCKET_NAME,
+			    Key: imageKey,
+			}, (err, S3Object) => {
+			    if (err) {
+			      	const msg = `There was an error reading your photo: ${err.message}`
+			      	// console.log(msg)
+			      	rej(msg)
+			      	return
+			    }
+					const msg = `Successfully got original photo ${imageKey}`
+					res(S3Object)
+			})
+		})
+	})
+	return p
+}
