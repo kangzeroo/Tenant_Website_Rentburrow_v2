@@ -124,7 +124,7 @@ class ReceivedApplicationCard extends Component {
 // defines the types of variables in this.props
 ReceivedApplicationCard.propTypes = {
 	history: PropTypes.object.isRequired,
-	details: PropTypes.object.isRequired, // passed in
+	details: PropTypes.object.isRequired, 												// passed in
 	saveReceivedApplicationsToRedux: PropTypes.func.isRequired,
 }
 

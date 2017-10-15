@@ -16,7 +16,15 @@ import {
 import {
   shortenAddress,
 } from '../../../../api/general/general_api'
-import SentApplicationPage from '../sublets/SentApplicationPage'
+import {
+	generateNewSubleteeSession,
+} from '../../../../api/pandadoc/pandadoc_api'
+import {
+	saveSentApplicationsToRedux,
+} from '../../../../actions/contract/contract_actions'
+import {
+	getSentApplications,
+} from '../../../../api/application/application_api'
 
 class ApplicationCard extends Component {
 
@@ -37,6 +45,33 @@ class ApplicationCard extends Component {
   goToPage(contract_id) {
     this.props.history.push(`/applications/subletee/${contract_id}`)
   }
+
+  newSession(contract_id) {
+		const time = moment.duration('03:00:00');
+		const expiry_date = moment(this.props.details.session_expires_at).subtract(time).format()
+		const cur_date = moment().format()
+		console.log(expiry_date)
+		console.log(cur_date)
+
+		if (cur_date >= expiry_date) {
+			generateNewSubleteeSession({
+				subletor_id: this.props.details.subletee_id,
+				doc_id: this.props.details.doc_id,
+				email: this.props.details.my_email,
+			})
+			.then(() => {
+				getSentApplications({ student_id: this.props.details.student_id })
+				.then((data) => {
+					saveSentApplicationsToRedux(data.map(s => JSON.parse(s)))
+				})
+			})
+			.then(() => {
+				this.props.history.push(`/applications/subletee/${contract_id}`)
+			})
+		} else {
+			this.props.history.push(`/applications/subletee/${contract_id}`)
+		}
+	}
 
 	render() {
 		return (
@@ -90,6 +125,7 @@ class ApplicationCard extends Component {
 ApplicationCard.propTypes = {
 	history: PropTypes.object.isRequired,
   details: PropTypes.object.isRequired, // passed in
+  saveSentApplicationsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -110,7 +146,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    saveSentApplicationsToRedux
 	})(RadiumHOC)
 )
 

@@ -42,7 +42,6 @@ class PlacesIAppliedToLive extends Component {
       const applications = data.map(s => JSON.parse(s))
       const unique_apps = []
       applications.forEach((app) => {
-        console.log(app)
         let unique = true
         if (existsAlready(app, unique_apps)) {
           unique = false
