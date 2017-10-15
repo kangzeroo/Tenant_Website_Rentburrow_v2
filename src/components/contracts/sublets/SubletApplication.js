@@ -10,16 +10,16 @@ import { withRouter, Route } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
-import SubletApply from './subletee/SubletApply'
-import ApplyDone from './subletee/ApplyDone'
-import SubletApplication from './subletor/SubletApplication'
-import ApplicationDone from './subletor/ApplicationDone'
+import SubleteeForm from './subletee/SubleteeForm'
+import SubleteeDone from './subletee/SubleteeDone'
+import SubletorForm from './subletor/SubletorForm'
+import SubletorDone from './subletor/SubletorDone'
 import SubletReceipt from './SubletReceipt'
 import { getSubletPostById, saveSubletorFormToDb, getSubleteeContractForSubletor, getSubletorContractForReview, saveSubleteeFormToDb } from '../../../api/signing/sublet_contract_api'
 import { uploadImageToS3WithEncryption } from '../../../api/aws/aws-S3'
 import { generateContract } from '../../../api/pandadoc/pandadoc_api'
 
-class SignSublet extends Component {
+class SubletApplication extends Component {
 
 	constructor() {
 		super()
@@ -96,15 +96,15 @@ class SignSublet extends Component {
 		//	the start of the sublet signing process. provides only the post_id of the facebook sublet for the subletee to fill form
 
 		if (sublet_post_id && subletor_id && !application_contract_id) {
-		  this.initiateSubletApply(sublet_post_id)
+		  this.initiateSubleteeForm(sublet_post_id)
 		}
 		//	the url the subletor receives to fill form
 		if (sublet_post_id && !subletor_id && application_contract_id) {
-			this.initiateSubletApplication(sublet_post_id, application_contract_id)
+			this.initiateSubletorForm(sublet_post_id, application_contract_id)
 		}
 	}
 
-	initiateSubletApply(post_id) {
+	initiateSubleteeForm(post_id) {
 		this.setState({
 			current_form: 'subletee',
 			subletee_done: false,
@@ -150,7 +150,7 @@ class SignSublet extends Component {
 			})
 	}
 
-	initiateSubletApplication(post_id, contract_id) {
+	initiateSubletorForm(post_id, contract_id) {
 		getSubletPostById(post_id)
 			.then((data) => {
 				this.setState({
@@ -179,7 +179,7 @@ class SignSublet extends Component {
 			})
 	}
 
-	saveSubletApply(formObj) {
+	saveSubleteeForm(formObj) {
 		uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.id}/`, 'student_card-')
 			.then((S3Obj) => {
 				return saveSubleteeFormToDb({
@@ -209,7 +209,7 @@ class SignSublet extends Component {
 			})
 	}
 
-	saveSubletApplication(formObj) {
+	saveSubletorForm(formObj) {
 		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.id}/`, 'student_card-')
 			.then((S3Obj) => {
 				return saveSubletorFormToDb({
@@ -223,12 +223,11 @@ class SignSublet extends Component {
 			})
 			.then((data) => {
 				console.log(data)
+				console.log(JSON.parse(data))
 				generateContract(this.state.subletee_contract.contract_id)
 				return getSubletorContractForReview(data.contract_id)
 			})
 			.then((data) => {
-				console.log(data)
-				console.log(JSON.parse(data))
 				this.setState({
 					current_form: 'subletor',
 					subletee_done: false,
@@ -249,9 +248,9 @@ class SignSublet extends Component {
 					{
 						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID
 						?
-						<SubletApply
+						<SubleteeForm
 							sublet_post={this.state.sublet_post}
-							saveSubletApply={(formObj) => this.saveSubletApply(formObj)}
+							saveSubleteeForm={(formObj) => this.saveSubleteeForm(formObj)}
 						/>
 						:
 						null
@@ -261,7 +260,7 @@ class SignSublet extends Component {
 					{
 						this.state.current_form === 'subletee' && this.state.subletee_done
 						?
-						<ApplyDone
+						<SubleteeDone
 							sublet_post={this.state.sublet_post}
 							subletee_contract={this.state.subletee_contract}
 						/>
@@ -273,10 +272,10 @@ class SignSublet extends Component {
 					{
 						this.state.current_form === 'subletor' && this.state.sublet_post.POST_ID
 						?
-						<SubletApplication
+						<SubletorForm
 							sublet_post={this.state.sublet_post}
 							subletee_contract={this.state.subletee_contract}
-							saveSubletApplication={(formObj) => this.saveSubletApplication(formObj)}
+							saveSubletorForm={(formObj) => this.saveSubletorForm(formObj)}
 						/>
 						:
 						null
@@ -286,7 +285,7 @@ class SignSublet extends Component {
 					{
 						this.state.current_form === 'subletor' && this.state.subletor_done
 						?
-						<ApplicationDone
+						<SubletorDone
 							sublet_post={this.state.sublet_post}
 							subletor_contract={this.state.subletor_contract}
 						/>
@@ -303,18 +302,18 @@ class SignSublet extends Component {
 }
 
 // defines the types of variables in this.props
-SignSublet.propTypes = {
+SubletApplication.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object,
 }
 
 // for all optional props, define a default value
-SignSublet.defaultProps = {
+SubletApplication.defaultProps = {
 	tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SignSublet)
+const RadiumHOC = Radium(SubletApplication)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

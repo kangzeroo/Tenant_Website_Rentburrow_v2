@@ -25,7 +25,7 @@ import SubletDetailed from '../../../sublets/SubletDetailed'
 import { validateEmail } from '../../../../api/general/general_api'
 
 
-class SubletApply extends Component {
+class SubleteeForm extends Component {
 
 	constructor() {
 		super()
@@ -70,7 +70,7 @@ class SubletApply extends Component {
 
 	submit() {
 		if (this.formValidation()) {
-			this.props.saveSubletApply(this.state)
+			this.props.saveSubleteeForm(this.state)
 			this.setState({
 				submitted: true,
 			})
@@ -219,20 +219,20 @@ class SubletApply extends Component {
 }
 
 // defines the types of variables in this.props
-SubletApply.propTypes = {
+SubleteeForm.propTypes = {
 	history: PropTypes.object.isRequired,
 	sublet_post: PropTypes.object.isRequired,		// passed in
-	saveSubletApply: PropTypes.func.isRequired,	// passed in
+	saveSubleteeForm: PropTypes.func.isRequired,	// passed in
 	tenant_profile: PropTypes.object,
 }
 
 // for all optional props, define a default value
-SubletApply.defaultProps = {
+SubleteeForm.defaultProps = {
 	tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SubletApply)
+const RadiumHOC = Radium(SubleteeForm)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
