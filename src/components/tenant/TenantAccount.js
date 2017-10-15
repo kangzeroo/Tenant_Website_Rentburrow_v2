@@ -169,8 +169,8 @@ class TenantAccount extends Component {
                 </Dropzone>
                 <div style={comStyles().click_image_to_change}>Click on image to change</div>
               </Form.Field>
-            </div>
-          </div>*/}
+            </div>*/}
+          </div>
         </div>
         <div style={comStyles().buttons_container} >
           <Button
