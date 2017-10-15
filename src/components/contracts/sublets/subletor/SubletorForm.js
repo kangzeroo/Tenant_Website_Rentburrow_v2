@@ -21,6 +21,9 @@ import {
 	Accordion,
 	Icon,
 } from 'semantic-ui-react'
+import {
+	xMidBlue,
+} from '../../../../styles/base_colors'
 import DatePicker from 'react-datepicker'
 import { filterNonImages } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj, getSubleteeProfile, } from '../../../../api/signing/sublet_contract_api'
@@ -192,114 +195,116 @@ class SubletorForm extends Component {
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
-								<h1>Subletor Form</h1>
-						    <Form.Field>
-						      <label>Full Legal Name</label>
-						      <input
-										placeholder='Full Legal Name'
-										onChange={(e) => this.updateAttr(e, 'subletor_full_legal_name')}
-										value={this.state.subletor_full_legal_name}
-									/>
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Phone</label>
-						      <input placeholder='Phone Number' onChange={(e) => this.updateAttr(e, 'subletor_phone_number')} value={this.state.subletor_phone_number} />
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Email</label>
-						      <input placeholder='Email' onChange={(e) => this.updateAttr(e, 'subletor_email')} value={this.state.subletor_email} />
-						    </Form.Field>
-								<Form.Field>
-						      <label>Building Address</label>
-						      <input placeholder='Address of Subletted Room' onChange={(e) => this.updateAttr(e, 'address')} value={this.state.address} />
-						    </Form.Field>
-								<Form.Field>
-						      <label>Suite Number</label>
-						      <input placeholder='Suite of Subletted Room' onChange={(e) => this.updateAttr(e, 'suite_id')} value={this.state.suite_id} />
-						    </Form.Field>
-								<Form.Field>
-						      <label>Room Number</label>
-						      <input placeholder='Subletted Room' onChange={(e) => this.updateAttr(e, 'room_id')} value={this.state.room_id} />
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Price</label>
-									<Input icon='dollar' iconPosition='left' type='number' placeholder='Sublet Price' onChange={(e) => this.updateAttr(e, 'price')} value={this.state.price} />
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Requested Sublet Start Date</label>
-									<DatePicker
-										selected={this.state.official_begin_date}
-										onChange={(d) => this.updateDate(d, 'official_begin_date')}
-									/>
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Requested Sublet End Date</label>
-									<DatePicker
-										selected={this.state.official_end_date}
-										onChange={(d) => this.updateDate(d, 'official_end_date')}
-									/>
-						    </Form.Field>
-								<Form.Field>
-									<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'subletor_student_card')} style={comStyles().bannerDropzone} multiple={false}>
+									<h1>Subletor Form</h1>
+							    <Form.Field>
+							      <label>Full Legal Name</label>
+							      <input
+											placeholder='Full Legal Name'
+											onChange={(e) => this.updateAttr(e, 'subletor_full_legal_name')}
+											value={this.state.subletor_full_legal_name}
+										/>
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Phone</label>
+							      <input placeholder='Phone Number' onChange={(e) => this.updateAttr(e, 'subletor_phone_number')} value={this.state.subletor_phone_number} />
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Email</label>
+							      <input placeholder='Email' onChange={(e) => this.updateAttr(e, 'subletor_email')} value={this.state.subletor_email} />
+							    </Form.Field>
+									<Form.Field>
+							      <label>Building Address</label>
+							      <input placeholder='Address of Subletted Room' onChange={(e) => this.updateAttr(e, 'address')} value={this.state.address} />
+							    </Form.Field>
+									<Form.Field>
+							      <label>Suite Number</label>
+							      <input placeholder='Suite of Subletted Room' onChange={(e) => this.updateAttr(e, 'suite_id')} value={this.state.suite_id} />
+							    </Form.Field>
+									<Form.Field>
+							      <label>Room Number</label>
+							      <input placeholder='Subletted Room' onChange={(e) => this.updateAttr(e, 'room_id')} value={this.state.room_id} />
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Price</label>
+										<Input icon='dollar' iconPosition='left' type='number' placeholder='Sublet Price' onChange={(e) => this.updateAttr(e, 'price')} value={this.state.price} />
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Requested Sublet Start Date</label>
+										<DatePicker
+											selected={this.state.official_begin_date}
+											onChange={(d) => this.updateDate(d, 'official_begin_date')}
+										/>
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Requested Sublet End Date</label>
+										<DatePicker
+											selected={this.state.official_end_date}
+											onChange={(d) => this.updateDate(d, 'official_end_date')}
+										/>
+							    </Form.Field>
+									<Form.Field>
+										<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'subletor_student_card')} style={comStyles().bannerDropzone} multiple={false}>
+											{
+												this.state.subletor_student_card
+												?
+												<Image key={this.state.subletor_student_card.name} src={this.state.subletor_student_card.preview} style={comStyles().uploadImagesQueue} />
+												:
+												<div>Upload Student Card</div>
+											}
+										</Dropzone>
+									</Form.Field>
+							    <Form.Field>
+							      <label>Landlord Name</label>
+							      <input placeholder='Landlord Name' onChange={(e) => this.updateAttr(e, 'landlord_full_legal_name')} value={this.state.landlord_full_legal_name} />
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Landlord Phone</label>
+							      <input placeholder='Landlord Phone' onChange={(e) => this.updateAttr(e, 'landlord_phone')} value={this.state.landlord_phone} />
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Landlord Email</label>
+							      <input placeholder='Landlord Email' onChange={(e) => this.updateAttr(e, 'landlord_email')} value={this.state.landlord_email} />
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Witness Name</label>
+							      <input placeholder='Witness Name' onChange={(e) => this.updateAttr(e, 'subletor_witness_full_legal_name')} value={this.state.subletor_witness_full_legal_name} />
+							    </Form.Field>
+							    <Form.Field>
+							      <label>Witness Email</label>
+							      <input placeholder='Witness Email' onChange={(e) => this.updateAttr(e, 'subletor_witness_email')} value={this.state.subletor_witness_email} />
+							    </Form.Field>
+							    <Form.Field>
+							      <Checkbox label='I agree to the Terms and Conditions' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'agree_to_terms')} checked={this.state.agree_to_terms} />
+										&nbsp;
+										<span onClick={() => console.log('view terms and conditions')} style={comStyles().viewTerms}>View</span>
+							    </Form.Field>
+									<Form.Field>
 										{
-											this.state.subletor_student_card
-											?
-											<Image key={this.state.subletor_student_card.name} src={this.state.subletor_student_card.preview} style={comStyles().uploadImagesQueue} />
-											:
-											<div>Upload Student Card</div>
+											this.state.error_messages.map((err, index) => {
+												return (
+													<Message
+														visible
+														key={index}
+														error
+														content={err}
+													/>
+												)
+											})
 										}
-									</Dropzone>
-								</Form.Field>
-						    <Form.Field>
-						      <label>Landlord Name</label>
-						      <input placeholder='Landlord Name' onChange={(e) => this.updateAttr(e, 'landlord_full_legal_name')} value={this.state.landlord_full_legal_name} />
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Landlord Phone</label>
-						      <input placeholder='Landlord Phone' onChange={(e) => this.updateAttr(e, 'landlord_phone')} value={this.state.landlord_phone} />
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Landlord Email</label>
-						      <input placeholder='Landlord Email' onChange={(e) => this.updateAttr(e, 'landlord_email')} value={this.state.landlord_email} />
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Witness Name</label>
-						      <input placeholder='Witness Name' onChange={(e) => this.updateAttr(e, 'subletor_witness_full_legal_name')} value={this.state.subletor_witness_full_legal_name} />
-						    </Form.Field>
-						    <Form.Field>
-						      <label>Witness Email</label>
-						      <input placeholder='Witness Email' onChange={(e) => this.updateAttr(e, 'subletor_witness_email')} value={this.state.subletor_witness_email} />
-						    </Form.Field>
-						    <Form.Field>
-						      <Checkbox label='I agree to the Terms and Conditions' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'agree_to_terms')} checked={this.state.agree_to_terms} />
-									&nbsp;
-									<span onClick={() => console.log('view terms and conditions')} style={comStyles().viewTerms}>View</span>
-						    </Form.Field>
-								<Form.Field>
+									</Form.Field>
 									{
-										this.state.error_messages.map((err, index) => {
-											return (
-												<Message
-													visible
-													key={index}
-													error
-													content={err}
-												/>
-											)
-										})
+										this.state.submitted
+										?
+										<div style={comStyles().hidden_loading}>
+											<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+										</div>
+										:
+								    <Button type='submit' onClick={() => this.submit()}>Submit</Button>
 									}
-								</Form.Field>
-								{
-									this.state.submitted
-									?
-									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-									</div>
-									:
-							    <Button type='submit' onClick={() => this.submit()}>Submit</Button>
-								}
-						  </Form>
+							  </Form>
+							</div>
 						</div>
+
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
 								<Accordion.Title active={this.stateactiveIndex === 0} index={0} style={comStyles().why_sign_online_title}>
@@ -308,7 +313,7 @@ class SubletorForm extends Component {
 								{
 									this.why_sign_online.map((why) => {
 										return (
-											<div>
+											<div key={why.index}>
 								        <Accordion.Title active={this.state.activeIndex === why.index} index={why.index} onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
 								          <Icon name={why.icon} />
 													&nbsp; &nbsp;
@@ -325,14 +330,14 @@ class SubletorForm extends Component {
 								}
 				      </Accordion>
 						</div>
-					</div>
+
 				</div>
 				<div style={comStyles().step_contents}>
 					<Step.Group style={comStyles().steps}>
 						{
 							this.steps.map((step) => {
 								return (
-									<Step active={this.checkIfStepActive(step.step_number)} completed={this.checkIfStepComplete(step.step_number)} title={step.title} description={step.description} icon={step.icon} />
+									<Step key={step.step_number} active={this.checkIfStepActive(step.step_number)} completed={this.checkIfStepComplete(step.step_number)} title={step.title} description={step.description} icon={step.icon} />
 								)
 							})
 						}
