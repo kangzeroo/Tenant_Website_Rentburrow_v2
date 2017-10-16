@@ -61,7 +61,7 @@ class ReceivedSentApplicationPage extends Component {
 		generateNewTokens()
 		.then((data) => {
 			console.log(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`)
-			
+
 			window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
 								{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
 			//  axios.get(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
@@ -161,7 +161,8 @@ const comStyles = () => {
 		contractContainer: {
 			padding: '10px 100px 10px 100px',
 			height: '90%',
-			width: '100%'
+			width: '100%',
+			background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
 		}
 	}
 }
