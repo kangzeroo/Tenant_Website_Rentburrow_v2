@@ -39,7 +39,7 @@ class PlacesIAppliedToLive extends Component {
         })
         return exists
       }
-      const applications = data.map(s => JSON.parse(s))
+      const applications = data
       const unique_apps = []
       applications.forEach((app) => {
         let unique = true

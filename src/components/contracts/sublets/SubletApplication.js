@@ -127,7 +127,7 @@ class SubletApplication extends Component {
 					subletee_done: true,
 					subletee_student_card: '',
 					subletor_done: false,
-					subletee_contract: JSON.parse(data),
+					subletee_contract: data,
 				})
 			})
 	}
@@ -140,7 +140,7 @@ class SubletApplication extends Component {
 					current_form: 'subletor',
 					subletee_done: false,
 					subletor_done: true,
-					subletee_contract: JSON.parse(data),
+					subletee_contract: data,
 				})
 			})
 	}
@@ -195,7 +195,7 @@ class SubletApplication extends Component {
 					subletee_done: true,
 					subletee_student_card: '',
 					subletor_done: false,
-					subletee_contract: JSON.parse(data),
+					subletee_contract: data,
 				})
 			})
 			.catch((err) => {
@@ -225,7 +225,7 @@ class SubletApplication extends Component {
 					current_form: 'subletor',
 					subletee_done: false,
 					subletor_done: true,
-					subletor_contract: JSON.parse(data),
+					subletor_contract: data,
 				})
 				this.props.history.push(`/applications?tab=people-want-to-live-at-mine`)
 			})

@@ -101,7 +101,7 @@ class SubletorForm extends Component {
 		})
 		getSubleteeProfile(this.props.subletee_contract.subletee_id)
 			.then((data) => {
-				const subletee = JSON.parse(data)
+				const subletee = data
 				this.setState({
 					subletee,
 				}, () => console.log(this.state))

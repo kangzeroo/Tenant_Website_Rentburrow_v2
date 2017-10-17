@@ -31,7 +31,6 @@ class SentApplicationPage extends Component {
 		componentWillMount() {
 			const pathname = this.props.location.pathname
 			const contract_id = pathname.slice(pathname.indexOf('/applications/subletee/') + '/applications/subletee/'.length)
-
 			console.log(this.props.sent_applications)
 			const application = this.props.sent_applications.filter((app) => {
 														return contract_id === app.contract_id
@@ -44,7 +43,7 @@ class SentApplicationPage extends Component {
 			getQuickSubleteeContractLink(contract_id,	application.student_id)
 			.then((data) => {
 				this.setState({
-					link: JSON.parse(data).contract_link
+					link: data[0].contract_link
 				})
 			})
 		}
@@ -146,7 +145,8 @@ const comStyles = () => {
 		contractContainer: {
 			padding: '10px 100px 10px 100px',
 			height: '90%',
-			width: '100%'
+			width: '100%',
+			background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
 		}
 	}
 }

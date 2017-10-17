@@ -25,7 +25,7 @@ class LoginPopup extends Component {
         return getStudentProfile({ student_id: data.student_id, })
       })
       .then((data) => {
-        saveTenantToRedux(JSON.parse(data))
+        saveTenantToRedux(data)
       })
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
