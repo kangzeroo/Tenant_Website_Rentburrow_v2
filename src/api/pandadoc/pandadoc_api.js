@@ -1,5 +1,7 @@
 import axios from 'axios'
+import FileDownload from 'react-file-download'
 import { SUBLETTING_MICROSERVICE } from '../API_URLS'
+
 
 export const generateContract = (contract_id) => {
   const p = new Promise((res, rej) => {
@@ -67,6 +69,29 @@ export const generateNewSubletorSession = (obj) => {
       .catch((err) => {
         rej(err)
       })
+  })
+  return p
+}
+
+export const downloadContract = (doc_id) => {
+  const p = new Promise((res, rej) => {
+    console.log('starting download...')
+    generateNewTokens()
+		.then((data) => {
+			axios({
+				method: 'get',
+				url: `https://api.pandadoc.com/public/v1/documents/${doc_id}/download`,
+				headers: { 'Authorization': `Bearer ${data.access_token}` }
+			})
+			.then((response) => {
+				console.log(response.data)
+				FileDownload(response.data, `contract${doc_id}.pdf`)
+        res()
+			})
+      .catch((err) => {
+        rej(err)
+      })
+		})
   })
   return p
 }

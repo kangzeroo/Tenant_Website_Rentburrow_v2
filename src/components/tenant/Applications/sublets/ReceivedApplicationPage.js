@@ -15,7 +15,7 @@ import {
 	getQuickSubletorContractLink,
 } from '../../../../api/application/application_api'
 import {
-	generateNewTokens,
+	downloadContract,
 } from '../../../../api/pandadoc/pandadoc_api'
 
 class ReceivedSentApplicationPage extends Component {
@@ -39,12 +39,7 @@ class ReceivedSentApplicationPage extends Component {
 		this.setState({
 			application,
 		})
-		// const time = moment.duration('00:03:00');
-		// const expiry_date = moment(this.props.details.session_expires_at).subtract(time).format()
-		// const cur_date = moment().format()
-		// if (cur_date >= expiry_date) {
-		//
-		// }
+
 		getQuickSubletorContractLink(contract_id,	application.student_id)
 		.then((data) => {
 			this.setState({
@@ -57,20 +52,8 @@ class ReceivedSentApplicationPage extends Component {
 		this.props.history.push('/applications/?tab=people-want-to-live-at-mine')
 	}
 
-	downloadContract() {
-		generateNewTokens()
-		.then((data) => {
-			console.log(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`)
-			
-			window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
-								{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
-			//  axios.get(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`,
-			//  					{ headers: { 'Authorization': `Bearer ${data.access_token}` } })
-			// .then((data) => {
-			// 	console.log(data)
-			// 	window.open(`https://api.pandadoc.com/public/v1/documents/${this.state.application.doc_id}/download`)
-			// })
-		})
+	downloadContractFromAPI() {
+		downloadContract(this.state.application.doc_id)
 	}
 
 	render() {
@@ -91,7 +74,7 @@ class ReceivedSentApplicationPage extends Component {
 							primary
 							icon='cloud download'
 							content='Download Contract'
-							onClick={() => this.downloadContract()}
+							onClick={() => this.downloadContractFromAPI()}
 						/>
 						:
 						null
@@ -161,7 +144,8 @@ const comStyles = () => {
 		contractContainer: {
 			padding: '10px 100px 10px 100px',
 			height: '90%',
-			width: '100%'
+			width: '100%',
+			background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
 		}
 	}
 }

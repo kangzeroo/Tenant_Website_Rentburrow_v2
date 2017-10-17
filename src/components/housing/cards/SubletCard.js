@@ -65,7 +65,7 @@ class SubletCard extends Component {
 						</div>
 						{/* User Name */}
 						<div style={comStyles().userinfo}>
-							<a href={`http://www.facebook.com/${this.props.sublet.fb_user_id}`} target='_blank'>{this.props.sublet.fb_user_name}</a> &nbsp;
+							<a href={`http://www.facebook.com/${this.props.sublet.fb_user_id}`} target='_blank'>{this.props.sublet.fb_user_name.split(' ')[0]}</a> &nbsp;
 							on &nbsp;
 							<b>{moment(this.props.sublet.posted_date).format('MMM Do')}</b>
 						</div>

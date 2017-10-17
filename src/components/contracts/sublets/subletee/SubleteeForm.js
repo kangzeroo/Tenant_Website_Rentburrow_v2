@@ -18,6 +18,7 @@ import {
 	Message,
 	Card,
 	Step,
+	Header,
 	Accordion,
 	Icon,
 	Modal,
@@ -233,7 +234,8 @@ class SubleteeForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<Card fluid color='blue' header='Sign This Sublet Online' style={comStyles().sign_header} />
+					{/*<Card fluid color='blue' header='Sign This Sublet Online' style={comStyles().sign_header} />*/}
+					<Header as='h1' content='Online Sublet Application' style={comStyles().sign_header} />
 
 					<div style={comStyles().subletee_subletor_relationship}>
 						<SubleteeSubletorRelationship
@@ -559,9 +561,10 @@ const comStyles = () => {
 			fontSize: '2.5rem',
 			fontWeight: 'bold',
 			textAlign: 'center',
-			backgroundColor: 'rgba(0,0,0,0.1)',
+			// borderBottom: 'black solid thin',
+			//backgroundColor: 'rgba(0,0,0,0.1)',
 			color: 'black',
-			borderRadius: '10px',
+			//borderRadius: '10px',
 		},
 		why_sign_online_title: {
 			fontSize: '2rem',

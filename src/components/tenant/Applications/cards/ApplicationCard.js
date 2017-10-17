@@ -47,13 +47,14 @@ class ApplicationCard extends Component {
   }
 
   newSession(contract_id) {
-		const time = moment.duration('03:00:00');
-		const expiry_date = moment(this.props.details.session_expires_at).subtract(time).format()
-		const cur_date = moment().format()
-		console.log(expiry_date)
-		console.log(cur_date)
+    // PandaDoc's time is in Zulu time (WTF). The time to live is indicated in the backend in seconds...
+    // Zulu time is 4 hours ahead of EDT time. We'll give a generous 4 Hr & 15 min to generate a new session.
+    const time = moment.duration('04:15:00');
+    const generated_expiry_date = moment(this.props.details.session_expires_at, 'YYYY-MM-DD HH:mm').subtract(time)
+    const cur_date = moment()
 
-		if (cur_date >= expiry_date) {
+    if (cur_date.isAfter(generated_expiry_date)) {
+      console.log('generating new session...')
 			generateNewSubleteeSession({
 				subletor_id: this.props.details.subletee_id,
 				doc_id: this.props.details.doc_id,
