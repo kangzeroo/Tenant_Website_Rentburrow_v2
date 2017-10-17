@@ -9,6 +9,7 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
 	Button,
+	Header,
 } from 'semantic-ui-react'
 import {
 	getQuickSubleteeContractLink,
@@ -60,42 +61,65 @@ class SentApplicationPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().headerContainer} >
-					<Button
-						primary
-						basic
-						icon='chevron left'
-						content='back'
-						onClick={() => this.goBack()}
-					/>
-					{
-						this.state.link === null || this.state.link === ''
-						?
-						null
-						:
+					<div style={comStyles().headerButtonsContainer} >
 						<Button
 							primary
-							icon='cloud download'
-							content='Download Contract'
-							onClick={() => this.downloadContractFromAPI()}
+							basic
+							icon='chevron left'
+							content='back'
+							onClick={() => this.goBack()}
 						/>
-					}
+						{
+							this.state.link === null || this.state.link === ''
+							?
+							null
+							:
+							<Button
+								primary
+								icon='cloud download'
+								content='Download Contract'
+								onClick={() => this.downloadContractFromAPI()}
+								disabled={this.state.application.doc_status !== 'complete'}
+							/>
+						}
+					</div>
+					<div style={comStyles().headerStatus}>
+						{
+							this.state.application.doc_status === 'complete'
+							?
+							<Header
+								as='h2'
+								icon='checkmark'
+								content='Status: COMPLETE'
+								subheader='All recipients have signed this contract'
+							/>
+							:
+							<Header
+								as='h2'
+								icon='wait'
+								content='Status: IN PROGRESS'
+								subheader='Waiting for signatures from all recipients'
+							/>
+						}
+					</div>
 				</div>
-				<div style={comStyles().contractContainer} >
 				{
 					this.state.link === null || this.state.link === ''
 					?
-					<h2>Contract Not Available</h2>
+					<div style={comStyles().contractContainerEmpty} >
+						<h2>Contract Not Available</h2>
+					</div>
 					:
-					<iframe
-						src={this.state.link}
-						height={`900px`}
-						width={`100%`}
-					>
-					</iframe>
-
+					<div style={comStyles().contractContainer} >
+						<iframe
+							src={this.state.link}
+							height={`900px`}
+							width={`100%`}
+						>
+						</iframe>
+					</div>
 				}
 				</div>
-			</div>
 		)
 	}
 }
@@ -140,6 +164,15 @@ const comStyles = () => {
 		headerContainer: {
 			display: 'flex',
 			flexDirection: 'row',
+			//margin: '30px',
+			justifyContent: 'space-between'
+		},
+		headerButtonsContainer: {
+			display: 'flex',
+			flexDirection: 'row',
+			margin: '30px',
+		},
+		headerStatus: {
 			margin: '30px',
 		},
 		contractContainer: {
@@ -147,6 +180,11 @@ const comStyles = () => {
 			height: '90%',
 			width: '100%',
 			background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
+		},
+		contractContainerEmpty: {
+			padding: '10px 100px 10px 100px',
+			height: '90%',
+			width: '100%',
 		}
 	}
 }

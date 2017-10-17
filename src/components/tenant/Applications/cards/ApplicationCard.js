@@ -96,6 +96,24 @@ class ApplicationCard extends Component {
             <Card.Description>{'Begin Date:  ' + moment(this.props.details.begin_date).format('MMM Do YYYY')}</Card.Description>
             <Card.Description>{'End Date:  ' + moment(this.props.details.end_date).format('MMM Do YYYY')}</Card.Description>
             <Card.Description>{'Monthly Rent:  $' + this.props.details.rent_price}</Card.Description>
+            <div>
+              <h2>STATUS: </h2>
+              {
+                this.props.details.doc_stats === 'complete'
+                ?
+                <h2> COMPLETE </h2>
+                :
+                <div>
+                  {
+                    this.props.details.doc_id !== null
+                    ?
+                    <h2>Waiting For Signatures</h2>
+                    :
+                    <h2>Waiting For subletor...</h2>
+                  }
+                </div>
+              }
+            </div>
             <div style={comStyles().buttons_container}>
               <Button
                 primary

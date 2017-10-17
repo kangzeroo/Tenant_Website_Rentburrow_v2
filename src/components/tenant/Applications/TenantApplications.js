@@ -58,7 +58,7 @@ class TenantApplications extends Component {
 		return [
 			{ index: 0, code: 'where-i-want-to-live', menuItem: 'Places I have applied to live', render: () => <Tab.Pane attached={false}>{ this.renderPlacesIAppliedToLive() }</Tab.Pane> },
 			{ index: 1, code: 'people-want-to-live-at-mine', menuItem: 'People who want to sublet my place', render: () => <Tab.Pane attached={false}>{ this.renderReceivedApplications() }</Tab.Pane> },
-			{ index: 2, code: 'completed-apps', menuItem: 'Completed Applications', render: () => <Tab.Pane attached={false}>{ this.renderCompletedApplications() }</Tab.Pane> },
+			// { index: 2, code: 'completed-apps', menuItem: 'Completed Applications', render: () => <Tab.Pane attached={false}>{ this.renderCompletedApplications() }</Tab.Pane> },
 		]
 	}
 

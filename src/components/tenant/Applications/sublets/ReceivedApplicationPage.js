@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import {
 	Button,
+	Header,
 } from 'semantic-ui-react'
 import {
 	getQuickSubletorContractLink,
@@ -60,25 +61,47 @@ class ReceivedSentApplicationPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().headerContainer} >
-					<Button
-						primary
-						basic
-						icon='chevron left'
-						content='back'
-						onClick={() => this.goBack()}
-					/>
-					{
-						this.state.link !== null
-						?
+					<div style={comStyles().headerButtonsContainer} >
 						<Button
 							primary
-							icon='cloud download'
-							content='Download Contract'
-							onClick={() => this.downloadContractFromAPI()}
+							basic
+							icon='chevron left'
+							content='back'
+							onClick={() => this.goBack()}
 						/>
-						:
-						null
-					}
+						{
+							this.state.link === null || this.state.link === ''
+							?
+							null
+							:
+							<Button
+								primary
+								icon='cloud download'
+								content='Download Contract'
+								onClick={() => this.downloadContractFromAPI()}
+								disabled={this.state.application.doc_status !== 'complete'}
+							/>
+						}
+					</div>
+					<div style={comStyles().headerStatus}>
+						{
+							this.state.application.doc_status === 'complete'
+							?
+							<Header
+								as='h2'
+								icon='checkmark'
+								content='Status: COMPLETE'
+								subheader='All recipients have signed this contract'
+							/>
+							:
+							<Header
+								as='h2'
+								icon='wait'
+								content='Status: WAIT'
+								subheader='Waiting for signatures from all recipients'
+							/>
+						}
+					</div>
 				</div>
 				<div style={comStyles().contractContainer} >
 				{
@@ -139,6 +162,15 @@ const comStyles = () => {
 		headerContainer: {
 			display: 'flex',
 			flexDirection: 'row',
+			//margin: '30px',
+			justifyContent: 'space-between'
+		},
+		headerButtonsContainer: {
+			display: 'flex',
+			flexDirection: 'row',
+			margin: '30px',
+		},
+		headerStatus: {
 			margin: '30px',
 		},
 		contractContainer: {
