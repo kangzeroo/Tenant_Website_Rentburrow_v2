@@ -80,7 +80,7 @@ class TenantAccount extends Component {
           return getStudentProfile({ student_id: this.props.tenant_profile.student_id, })
         })
         .then((data) => {
-          this.props.saveTenantToRedux(JSON.parse(data))
+          this.props.saveTenantToRedux(data)
         })
     })
   }
