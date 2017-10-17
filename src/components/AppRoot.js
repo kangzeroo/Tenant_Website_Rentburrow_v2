@@ -47,6 +47,7 @@ import { clearIntelList } from '../actions/intel/intel_actions'
 import { sendOffToDynamoDB } from '../api/intel/intel_api'
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 import { saveStudentProfile, getStudentProfile } from '../api/signing/sublet_contract_api'
+import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
 
 import BasicLeaseForm from './contracts/leases/basics/BasicLeaseForm'
 
@@ -102,6 +103,10 @@ class AppRoot extends Component {
     })
   }
 
+  documentStatus(student_id) {
+    updateDocumentStatus({ student_id, })
+  }
+
   initiateFacebookProcess() {
     initiateFacebook().then(() => {
       // autologin to facebook if possible
@@ -115,6 +120,7 @@ class AppRoot extends Component {
       return saveStudentProfile(fbProfile)
     })
     .then((data) => {
+      this.documentStatus(data.student_id)
       return getStudentProfile({ student_id: data.student_id, })
     })
     .then((data) => {

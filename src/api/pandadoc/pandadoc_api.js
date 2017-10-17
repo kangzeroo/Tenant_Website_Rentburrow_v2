@@ -73,6 +73,20 @@ export const generateNewSubletorSession = (obj) => {
   return p
 }
 
+export const updateDocumentStatus = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_document_status`, obj)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const downloadContract = (doc_id) => {
   const p = new Promise((res, rej) => {
     console.log('starting download...')
