@@ -114,7 +114,7 @@ class BuildingPage extends Component {
 	    })
 		})
 		.then((data) => {
-			const suites = data.map((s) => JSON.parse(s))
+			const suites = data
 			this.setState({
 				suites: suites,
 				promise_array_of_suite_amenities_with_id: suites.map((suite) => {
@@ -143,7 +143,7 @@ class BuildingPage extends Component {
 			building_id: this.state.building.building_id,
 		}).then((images) => {
 			this.setState({
-				images: images.map((s) => JSON.parse(s))
+				images: images
 			})
 		})
 	}
@@ -153,7 +153,7 @@ class BuildingPage extends Component {
 			building_id: this.state.building.building_id,
 		}).then((amenities) => {
 			this.setState({
-				amenities: amenities.map((s) => JSON.parse(s))
+				amenities: amenities
 			})
 		})
 	}
