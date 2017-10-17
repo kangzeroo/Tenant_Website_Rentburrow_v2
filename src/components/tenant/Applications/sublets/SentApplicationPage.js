@@ -14,8 +14,9 @@ import {
 	getQuickSubleteeContractLink,
 } from '../../../../api/application/application_api'
 import {
-	generateNewTokens,
+	downloadContract,
 } from '../../../../api/pandadoc/pandadoc_api'
+
 
 class SentApplicationPage extends Component {
 
@@ -39,12 +40,7 @@ class SentApplicationPage extends Component {
 			this.setState({
 				application,
 			})
-			// const time = moment.duration('00:03:00');
-			// const expiry_date = moment(this.props.details.session_expires_at).subtract(time).format()
-			// const cur_date = moment().format()
-			// if (cur_date >= expiry_date) {
-			//
-			// }
+
 			getQuickSubleteeContractLink(contract_id,	application.student_id)
 			.then((data) => {
 				this.setState({
@@ -56,6 +52,11 @@ class SentApplicationPage extends Component {
 		goBack() {
 			this.props.history.push('/applications/?tab=where-i-want-to-live')
 		}
+
+		downloadContractFromAPI() {
+			downloadContract(this.state.application.doc_id)
+		}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -76,7 +77,7 @@ class SentApplicationPage extends Component {
 							primary
 							icon='cloud download'
 							content='Download Contract'
-							onClick={() => this.downloadContract()}
+							onClick={() => this.downloadContractFromAPI()}
 						/>
 					}
 				</div>
