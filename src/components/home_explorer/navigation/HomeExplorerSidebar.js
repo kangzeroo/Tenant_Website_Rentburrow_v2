@@ -90,7 +90,7 @@ class HomeExplorerSidebar extends Component {
   			building_id: this.props.building.building_id,
   		}).then((images) => {
         // Step 2: Save those images to the bottomContext
-        buildingImages = JSON.stringify(images.map((s) => JSON.parse(s)))
+        buildingImages = JSON.stringify(images) // .map((s) => JSON.parse(s)))
         this.props.changeBottomContext({
           text: 'Common Area',
           value: buildingImages
@@ -105,9 +105,9 @@ class HomeExplorerSidebar extends Component {
           this.props.changeBottomContext({
             key: 'am',
             text: 'Building Amenities',
-            value: JSON.stringify(data.map((d) => {
-              return JSON.parse(d)
-            }))
+            value: JSON.stringify(data).map((d) => {
+               return d //JSON.parse(d)
+           })
           })
         }
         // Step 3b: Save those amenities to the list of bottomContext options
@@ -123,8 +123,8 @@ class HomeExplorerSidebar extends Component {
               key: 'am',
               text: 'Building Amenities',
               value: data.map((d) => {
-                return JSON.parse(d)
-              })
+                 return d //JSON.parse(d)
+               })
             }
           ])
         })
@@ -141,7 +141,7 @@ class HomeExplorerSidebar extends Component {
         // step 2: combine basic+additional suite info and save it to the bottomContext of parent (so that we can navigate around)
         suite = {
           ...suite,
-          ...JSON.parse(data),
+          ...data, //JSON.parse(data),
         }
         if (this.props.showVirtualTourFirst) {
           this.props.changeBottomContext({
@@ -175,7 +175,7 @@ class HomeExplorerSidebar extends Component {
               value: suite,
             },
           ].concat(data.map((d) => {
-            const x = JSON.parse(d)
+            const x = d //JSON.parse(d)
             return {
               key: x.room_code,
               text: x.room_alias ? renameRoom(x.room_alias) : renameRoom(x.room_code),
@@ -195,7 +195,7 @@ class HomeExplorerSidebar extends Component {
               key: 'am',
               text: 'Amenities',
               value: data.map((d) => {
-                const x = JSON.parse(d)
+                const x = d // JSON.parse(d)
                 return {
                   key: x.amenity_alias,
                   text: x.amenity_alias,

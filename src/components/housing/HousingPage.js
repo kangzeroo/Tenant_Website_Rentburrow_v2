@@ -43,7 +43,7 @@ class HousingPage extends Component {
 			filterParams: this.props.lease_filter_params,
 		})
 		.then((data) => {
-			const buildings = data.map(s => JSON.parse(s))
+			const buildings = data
 			// Sort the buildings randomly
 			this.props.saveBuildingsToRedux(buildings.sort((a, b) => { return 0.5 - Math.random() }))
 			this.setState({

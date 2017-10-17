@@ -46,7 +46,7 @@ class RoomCanvas extends Component {
 		})
 		.then((data) => {
 			this.setState({
-				room: JSON.parse(data)
+				room: data[0] // JSON.parse(data)
 			})
 			return getRoomAmenities({
   			building_id: this.props.bottomContextValue.building_id,
@@ -56,7 +56,7 @@ class RoomCanvas extends Component {
 		})
     .then((data) => {
       this.setState({
-        amenities: data.map(s => JSON.parse(s))
+        amenities: data //.map(s => JSON.parse(s))
       })
     })
   }

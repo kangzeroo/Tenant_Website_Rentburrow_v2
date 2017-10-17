@@ -80,15 +80,15 @@ class SuiteCommonAreaCanvas extends Component {
       building_id: this.props.building.building_id,
       suite_id: this.props.suite.suite_id,
     }).then((data) => {
-      const suite_amenities = data.map((am) => {
-        return JSON.parse(am)
-      })
+      const suite_amenities = data  //.map((am) => {
+      //   return JSON.parse(am)
+      // })
       this.setState({
         suite_amenities: suite_amenities,
         common_areas_summary: calculateSuiteCommonAreasSummary(suite_amenities),
-        baths_summary: calculateComplexSuiteBaths(this.props.suite, data.map((am) => {
-          return JSON.parse(am)
-        })),
+        baths_summary: calculateComplexSuiteBaths(this.props.suite, data), //.map((am) => {
+        //   return JSON.parse(am)
+        // })),
         free_utilities_summary: calculateFreeUtilitiesForSuite(suite_amenities),
       })
     })
@@ -97,9 +97,9 @@ class SuiteCommonAreaCanvas extends Component {
       building_id: this.props.building.building_id,
       suite_id: this.props.suite.suite_id,
     }).then((data) => {
-      const rooms = data.map((r) => {
-        return JSON.parse(r)
-      })
+      const rooms = data //.map((r) => {
+      //   return JSON.parse(r)
+      // })
       const promises = rooms.map((room) => {
         let getRoomPage_results
         let getRoomAmenities_results
@@ -109,16 +109,16 @@ class SuiteCommonAreaCanvas extends Component {
     			room_id: room.room_id,
         })
         .then((data) => {
-          getRoomPage_results = data.map(result => JSON.parse(result))[0]
+          getRoomPage_results = data[0] //.map(result => JSON.parse(result))[0]
           return getRoomAmenities({
       			building_id: this.props.building.building_id,
       			suite_id: this.props.suite.suite_id,
       			room_id: room.room_id,
       		})
         }).then((data) => {
-          getRoomAmenities_results = data.map((am) => {
-            return JSON.parse(am)
-          })
+          getRoomAmenities_results = data //.map((am) => {
+          //   return JSON.parse(am)
+          // })
           return Promise.resolve({
             getRoomPage_results,
             getRoomAmenities_results,
