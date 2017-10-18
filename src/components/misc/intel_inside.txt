@@ -1,0 +1,34 @@
+
+import { collectIntel } from '../../../actions/intel/intel_actions'
+
+
+this.props.collectIntel({
+  'TableName': BUILDING_INTERACTIONS,
+  'Item': {
+    'ACTION': 'BUILDING_CARD_HOVER',
+    'DATE': new Date().getTime(),
+    'BUILDING_ID': building.building_id,
+    'ADDRESS': building.building_address,
+    'USER_ID': this.props.tenant_profile.id || 'NONE',
+  }
+})
+
+
+BuildingCard.propTypes = {
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+}
+
+// Get access to state from the Redux store
+function mapStateToProps(state) {
+	return {
+    tenant_profile: state.auth.tenant_profile,
+	}
+}
+
+export default withRouter(
+	connect(mapStateToProps, {
+    selectPinToRedux,
+    collectIntel,
+	})(RadiumHOC)
+)
