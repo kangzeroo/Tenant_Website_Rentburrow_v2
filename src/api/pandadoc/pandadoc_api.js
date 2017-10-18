@@ -98,7 +98,6 @@ export const downloadContract = (doc_id) => {
 				headers: { 'Authorization': `Bearer ${data.access_token}` }
 			})
 			.then((response) => {
-				console.log(response.data)
 				FileDownload(response.data, `contract${doc_id}.pdf`)
         res()
 			})
