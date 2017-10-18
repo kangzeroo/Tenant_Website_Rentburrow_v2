@@ -15,6 +15,7 @@ import {
 import PlacesIAppliedToLive from './tabs/PlacesIAppliedToLive'
 import PeopleWhoWantToSubletMine from './tabs/PeopleWhoWantToSubletMine'
 import CompletedApplications from './tabs/CompletedApplications'
+import { authenticateTenant, } from '../../../api/general/general_api'
 
 class TenantApplications extends Component {
 
@@ -27,12 +28,16 @@ class TenantApplications extends Component {
 	}
 
 	componentWillMount() {
-    const chosenTab_loc = this.props.location.search.indexOf('?tab=')
-    const chosenTab = this.props.location.search.slice(chosenTab_loc + '?tab='.length)
-		this.setState({
-			defaultActiveIndex: this.determineWhichTabOpen(chosenTab),
-			fully_loaded: true,
-		})
+		if (authenticateTenant(this.props.tenant_profile)) {
+	    const chosenTab_loc = this.props.location.search.indexOf('?tab=')
+	    const chosenTab = this.props.location.search.slice(chosenTab_loc + '?tab='.length)
+			this.setState({
+				defaultActiveIndex: this.determineWhichTabOpen(chosenTab),
+				fully_loaded: true,
+			})
+		} else {
+			this.props.history.push('/')
+		}
 	}
 
 	determineWhichTabOpen(chosenTab) {
@@ -111,11 +116,12 @@ class TenantApplications extends Component {
 // defines the types of variables in this.props
 TenantApplications.propTypes = {
 	history: PropTypes.object.isRequired,
+	tenant_profile: PropTypes.object,
 }
 
 // for all optional props, define a default value
 TenantApplications.defaultProps = {
-
+	tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -124,7 +130,7 @@ const RadiumHOC = Radium(TenantApplications)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+		tenant_profile: redux.auth.tenant_profile,
 	}
 }
 

@@ -22,6 +22,7 @@ import {
 } from '../../api/signing/sublet_contract_api'
 import { saveTenantToRedux } from '../../actions/auth/auth_actions'
 import { filterNonImages, uploadImageToS3WithEncryption, getEncryptedS3Image } from '../../api/aws/aws-S3'
+import { authenticateTenant } from '../../api/general/general_api'
 
 class TenantAccount extends Component {
 
@@ -41,14 +42,18 @@ class TenantAccount extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      first_name: this.props.tenant_profile.first_name,
-      last_name: this.props.tenant_profile.last_name,
-      email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
-      phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
-      student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
-    })
-    getEncryptedS3Image(this.props.tenant_profile.student_card, this.props.tenant_profile.student_id)
+    if (authenticateTenant(this.props.tenant_profile)) {
+      this.setState({
+        first_name: this.props.tenant_profile.first_name,
+        last_name: this.props.tenant_profile.last_name,
+        email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
+        phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
+        student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
+      })
+      getEncryptedS3Image(this.props.tenant_profile.student_card, this.props.tenant_profile.student_id)
+    } else {
+      this.props.history.push('/')
+    }
   }
 
   updateAttr(e, attr) {

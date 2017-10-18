@@ -34,6 +34,8 @@ import TenantSettings from './tenant/TenantSettings'
 import SubletApplication from './contracts/sublets/SubletApplication'
 import SentApplicationPage from './tenant/Applications/sublets/SentApplicationPage'
 import ReceivedApplicationPage from './tenant/Applications/sublets/ReceivedApplicationPage'
+import Authenticate from './pandadoc/Authenticate'
+import Authenticated from './pandadoc/Authenticated'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -120,7 +122,7 @@ class AppRoot extends Component {
       return saveStudentProfile(fbProfile)
     })
     .then((data) => {
-      this.documentStatus(data.student_id)
+      // this.documentStatus(data.student_id)
       return getStudentProfile({ student_id: data.student_id, })
     })
     .then((data) => {
@@ -250,6 +252,9 @@ class AppRoot extends Component {
 
                 <Route exact path='/sublet' component={HousingPage} />
                 <Route exact path='/sublets' component={HousingPage} />
+
+                <Route exact path='/authenticate' component={Authenticate} />
+                <Route exact path='/authenticated' component={Authenticated} />
 
                 <Route exact path='/sublet/:sublet_id' component={SubletPage} />
 
