@@ -25,7 +25,7 @@ class SubletApplication extends Component {
 	constructor() {
 		super()
 		this.state = {
-			current_form: 'subletee',
+			current_form: 'loading',
 			subletee_done: false,
 			subletor_done: false,
 			sublet_post: {},
@@ -102,12 +102,12 @@ class SubletApplication extends Component {
 
 	initiateSubleteeForm(post_id) {
 		this.setState({
-			current_form: 'subletee',
 			subletee_done: false,
 			subletor_done: false,
 		})
 		getSubletPostById(post_id).then((data) => {
 			this.setState({
+				current_form: 'subletee',
 				sublet_post: data
 			})
 		})
@@ -236,6 +236,15 @@ class SubletApplication extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+				{
+					this.state.current_form === 'loading' && !this.props.tenant_profile.student_id
+					?
+					<div style={comStyles().hidden_loading}>
+						<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+					</div>
+					:
+					null
+				}
 				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletee_id'>
 					{
 						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID && this.props.tenant_profile && this.props.tenant_profile.student_id
@@ -338,6 +347,16 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-		}
+		},
+    hidden_loading: {
+      position: 'absolute',
+      zIndex: 5,
+      minWidth: '100%',
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 	}
 }
