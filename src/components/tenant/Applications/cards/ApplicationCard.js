@@ -96,7 +96,7 @@ class ApplicationCard extends Component {
             <Card.Description>{'Begin Date:  ' + moment(this.props.details.begin_date).format('MMM Do YYYY')}</Card.Description>
             <Card.Description>{'End Date:  ' + moment(this.props.details.end_date).format('MMM Do YYYY')}</Card.Description>
             <Card.Description>{'Monthly Rent:  $' + this.props.details.rent_price}</Card.Description>
-            <div>
+            <div style={comStyles().status}>
               <h2>STATUS: </h2>
               {
                 this.props.details.doc_status === 'complete'
@@ -109,7 +109,7 @@ class ApplicationCard extends Component {
                     ?
                     <h2>Waiting For Signatures</h2>
                     :
-                    <h2>Waiting For subletor...</h2>
+                    <h2>Waiting For Subletor</h2>
                   }
                 </div>
               }
@@ -190,6 +190,9 @@ const comStyles = () => {
       position: 'absolute',
       top: '5px',
       right: '5px'
+    },
+    status: {
+      padding: '20px',
     }
 	}
 }

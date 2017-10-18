@@ -35,7 +35,7 @@ class SentApplicationPage extends Component {
 			console.log(this.props.sent_applications)
 			const application = this.props.sent_applications.filter((app) => {
 														return contract_id === app.contract_id
-													})[0]
+													})[0] || {}
 
 			this.setState({
 				application,
@@ -107,7 +107,7 @@ class SentApplicationPage extends Component {
 					this.state.link === null || this.state.link === ''
 					?
 					<div style={comStyles().contractContainerEmpty} >
-						<h2>Contract Not Available</h2>
+						<h2>Waiting on everyone else to sign the contract. Check back again later.</h2>
 					</div>
 					:
 					<div style={comStyles().contractContainer} >
