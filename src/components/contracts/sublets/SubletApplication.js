@@ -15,6 +15,7 @@ import SubleteeDone from './subletee/SubleteeDone'
 import SubletorForm from './subletor/SubletorForm'
 import SubletorDone from './subletor/SubletorDone'
 import SubletReceipt from './SubletReceipt'
+import InvalidSubletor from './InvalidSubletor'
 import { getSubletPostById, saveSubletorFormToDb, getSubleteeContractForSubletor, getSubletorContractForReview, saveSubleteeFormToDb } from '../../../api/signing/sublet_contract_api'
 import { uploadImageToS3WithEncryption } from '../../../api/aws/aws-S3'
 import { generateContract } from '../../../api/pandadoc/pandadoc_api'
@@ -154,8 +155,8 @@ class SubletApplication extends Component {
 					return getSubleteeContractForSubletor(contract_id)
 				} else {
 					// do not allow progress
-					// return Promise.reject()
-					return getSubleteeContractForSubletor(contract_id)
+					return Promise.reject()
+					// return getSubleteeContractForSubletor(contract_id)
 				}
 			})
 			.then((data) => {
@@ -215,7 +216,6 @@ class SubletApplication extends Component {
 				})
 			})
 			.then((data) => {
-				console.log(data)
 				generateContract(this.state.subletee_contract.contract_id)
 				return getSubletorContractForReview(data.contract_id)
 			})
@@ -288,6 +288,15 @@ class SubletApplication extends Component {
 				<Route exact path='/signing/sublet/:post_id/initiate/receipt/:contract_id'>
 					<SubletReceipt />
 				</Route>
+				{
+					this.state.current_form === 'invalid_subletor'
+					?
+					<InvalidSubletor
+						sublet_post={this.state.sublet_post}
+					/>
+					:
+					null
+				}
 			</div>
 		)
 	}
