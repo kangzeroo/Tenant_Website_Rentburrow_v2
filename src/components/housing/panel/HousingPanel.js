@@ -62,7 +62,7 @@ class HousingPanel extends Component {
 	renderSubletCard(sublet, index) {
 		return (
 			<SubletCard
-				key={sublet.post_id}
+				key={`${sublet.post_id}${index}`}
 				sublet={sublet}
 			/>
 		)

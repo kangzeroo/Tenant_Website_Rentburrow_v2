@@ -52,7 +52,6 @@ class SubletApplication extends Component {
 		// the changed url when the subletor completes form. provides the unique payment link to subletee
 		// 'https://localhost:8082/sublet/142679255268_10155449809875269?user_id=94875275204720&contract_id=jofoalsjf8334our0fdsa&subletor_id=8759432534058430&payment_required=true'
 		const pathname = this.props.location.pathname
-
 		const sublet_post_id = pathname.slice(
 			pathname.indexOf('/signing/sublet/') + '/signing/sublet/'.length,
 			pathname.indexOf('/initiate/')
@@ -122,6 +121,7 @@ class SubletApplication extends Component {
 				return getSubleteeContractForSubletor(contract_id)
 			})
 			.then((data) => {
+				console.log(data)
 				this.setState({
 					current_form: 'subletee',
 					subletee_done: true,
@@ -161,7 +161,7 @@ class SubletApplication extends Component {
 			})
 			.then((data) => {
 				this.setState({
-					subletee_contract: JSON.parse(data),
+					subletee_contract: data,
 					current_form: 'subletor',
 					subletee_done: true,
 					subletor_done: false,
@@ -187,9 +187,11 @@ class SubletApplication extends Component {
 			})
 			.then((data) => {
 				this.props.history.push(`${this.props.location.pathname}/contract/${data.contract_id}/done`)
+				console.log(data)
 				return getSubleteeContractForSubletor(data.contract_id)
 			})
 			.then((data) => {
+				console.log(data)
 				this.setState({
 					current_form: 'subletee',
 					subletee_done: true,
