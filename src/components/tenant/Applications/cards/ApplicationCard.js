@@ -63,7 +63,7 @@ class ApplicationCard extends Component {
 			.then(() => {
 				getSentApplications({ student_id: this.props.details.student_id })
 				.then((data) => {
-					saveSentApplicationsToRedux(data.map(s => JSON.parse(s)))
+					saveSentApplicationsToRedux(data) //.map(s => JSON.parse(s)))
 				})
 			})
 			.then(() => {
@@ -99,7 +99,7 @@ class ApplicationCard extends Component {
             <div>
               <h2>STATUS: </h2>
               {
-                this.props.details.doc_stats === 'complete'
+                this.props.details.doc_status === 'complete'
                 ?
                 <h2> COMPLETE </h2>
                 :

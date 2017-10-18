@@ -104,7 +104,7 @@ class SubletorForm extends Component {
 				const subletee = data
 				this.setState({
 					subletee,
-				}, () => console.log(this.state))
+				})
 			})
 	}
 

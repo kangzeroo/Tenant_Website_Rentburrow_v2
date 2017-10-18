@@ -30,29 +30,30 @@ class PlacesIAppliedToLive extends Component {
   componentWillMount() {
     getSentApplications(this.props.tenant_profile.student_id)
     .then((data) => {
-      const existsAlready = (app, unique_apps) => {
-        let exists = false
-        unique_apps.forEach((uqa) => {
-          if (uqa.subletor_fb_id === app.subletor_fb_id) {
-            exists = true
-          }
-        })
-        return exists
-      }
+      // const existsAlready = (app, unique_apps) => {
+      //   let exists = false
+      //   unique_apps.forEach((uqa) => {
+      //     if (uqa.subletor_fb_id === app.subletor_fb_id) {
+      //       exists = true
+      //     }
+      //   })
+      //   return exists
+      // }
+      console.log(data)
       const applications = data
-      const unique_apps = []
-      applications.forEach((app) => {
-        let unique = true
-        if (existsAlready(app, unique_apps)) {
-          unique = false
-        }
-        if (unique) {
-          unique_apps.push(app)
-        }
-      })
-      this.props.saveSentApplicationsToRedux(unique_apps)
+      // const unique_apps = []
+      // applications.forEach((app) => {
+      //   let unique = true
+      //   if (existsAlready(app, unique_apps)) {
+      //     unique = false
+      //   }
+      //   if (unique) {
+      //     unique_apps.push(app)
+      //   }
+      // })
+      this.props.saveSentApplicationsToRedux(applications)
       this.setState({
-        applications: unique_apps,
+        applications: applications,
       })
     })
   }
