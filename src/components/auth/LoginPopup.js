@@ -12,14 +12,18 @@ import {
   Divider,
   Form,
 } from 'semantic-ui-react'
-import { loginFacebook, insertUser } from '../../api/auth/facebook_auth'
+import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
 import { saveStudentProfile, getStudentProfile } from '../../api/signing/sublet_contract_api'
 
 class LoginPopup extends Component {
 
   loginWithFacebook() {
-    loginFacebook().then((fbProfile) => {
+    initiateFacebook()
+    .then(() => {
+      return loginFacebook()
+    })
+    .then((fbProfile) => {
       saveStudentProfile(fbProfile)
       .then((data) => {
         return getStudentProfile({ student_id: data.student_id, })

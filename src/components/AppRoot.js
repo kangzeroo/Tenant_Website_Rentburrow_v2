@@ -110,38 +110,41 @@ class AppRoot extends Component {
   }
 
   initiateFacebookProcess() {
-    initiateFacebook().then(() => {
-      // autologin to facebook if possible
-      return checkIfFacebookLoggedIn()
-    })
-    .then((fbProfile) => {
-      const onSublet = this.props.location.pathname === '/sublet' || this.props.location.pathname === '/sublets'
-      if (onSublet) {
-        scrapeFacebookSublets(fbProfile)
-      }
-      return saveStudentProfile(fbProfile)
-    })
-    .then((data) => {
-      this.documentStatus(data.student_id)
-      return getStudentProfile({ student_id: data.student_id, })
-    })
-    .then((data) => {
-      this.props.saveTenantToRedux(data)
-        // use location_forwarding when you have a path that requires a login first (privately available)
-        // use PossibleRoutes.js when you have a path that is publically available
-      this.props.history.push(this.props.location_forwarding)
-    })
-    .catch((err) => {
-      // no facebook login, use AWS Cognito Unauth role
-      unauthRoleStudent().then((unauthUser) => {
-        // console.log(unauthUser)
-				// this.props.saveTenantToRedux(unauthUser)
-			})
-      // in X seconds, force login popup
-      setTimeout(() => {
-        this.props.triggerForcedSignin(true)
-      }, 300000)
-    })
+    console.log(localStorage.getItem('fbToken'))
+    if (localStorage.getItem('fbToken') !== null) {
+      initiateFacebook().then(() => {
+        // autologin to facebook if possible
+        return checkIfFacebookLoggedIn()
+      })
+      .then((fbProfile) => {
+        const onSublet = this.props.location.pathname === '/sublet' || this.props.location.pathname === '/sublets'
+        if (onSublet) {
+          scrapeFacebookSublets(fbProfile)
+        }
+        return saveStudentProfile(fbProfile)
+      })
+      .then((data) => {
+        this.documentStatus(data.student_id)
+        return getStudentProfile({ student_id: data.student_id, })
+      })
+      .then((data) => {
+        this.props.saveTenantToRedux(data)
+          // use location_forwarding when you have a path that requires a login first (privately available)
+          // use PossibleRoutes.js when you have a path that is publically available
+        this.props.history.push(this.props.location_forwarding)
+      })
+      .catch((err) => {
+        // no facebook login, use AWS Cognito Unauth role
+        unauthRoleStudent().then((unauthUser) => {
+          // console.log(unauthUser)
+          // this.props.saveTenantToRedux(unauthUser)
+        })
+        // in X seconds, force login popup
+        setTimeout(() => {
+          this.props.triggerForcedSignin(true)
+        }, 300000)
+      })
+    }
   }
 
   executeOnSubletOrLease() {
