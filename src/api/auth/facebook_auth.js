@@ -124,7 +124,7 @@ const grabFacebookProfile = (fbToken) => {
 export const logoutFacebook = () => {
 	const p = new Promise((res, rej) => {
 		localStorage.removeItem('fbToken')
-		logoutTenant()
+		FB.logout()
 		window.location.reload()
 	})
 }

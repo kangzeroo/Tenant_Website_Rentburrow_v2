@@ -28,7 +28,6 @@ import { changeAppLanguage } from '../actions/app/app_actions'
 import SearchInput from './filter/SearchInput'
 import { queryBuildingsInArea } from '../api/building/building_api'
 import { saveBuildingsToRedux } from '../actions/search/search_actions'
-import { logoutFacebook } from '../api/auth/facebook_auth'
 
 class Header extends Component {
 
@@ -100,7 +99,7 @@ class Header extends Component {
     } else if (value.value === 'settings') {
       this.props.history.push('/settings')
     } else if (value.value === 'logout') {
-      logoutFacebook()
+      this.props.history.push('/logout')
     }
   }
 
