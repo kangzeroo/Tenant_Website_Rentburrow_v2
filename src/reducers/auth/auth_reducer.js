@@ -23,6 +23,7 @@ export default (state = INITIAL_STATE, action) => {
     case LOGOUT_TENANT:
       return {
         ...state,
+        tenant_profile: {},
         authenticated: false,
       }
     case FORCE_SIGNIN:
