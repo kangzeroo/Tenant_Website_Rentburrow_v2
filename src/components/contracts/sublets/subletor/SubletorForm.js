@@ -45,6 +45,7 @@ class SubletorForm extends Component {
 			subletor_student_card: '',
 			official_begin_date: moment(),
 			official_end_date: moment(),
+			original_lease_signing_date: moment(),
 			price: 0,
 			address: '',
 			suite_id: '',
@@ -73,7 +74,7 @@ class SubletorForm extends Component {
 		  { icon: 'eye', title: 'Contract Witness', description: 'Verification', step_number: '4' },
 		]
 		this.why_sign_online = [
-			{ index: 1, icon: 'protect', title: 'It\'s Safe', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' },
+			{ index: 1, icon: 'protect', title: 'It\'s Safe', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. Your signature is completely safe using our service provider PandaDoc. You must be 18 or older to sign a contract.' },
 			{ index: 2, icon: 'lightning', title: 'It\'s Simple and Fast', description: 'The traditional method requires a printer or PDF software, but online signing only requires a web browser. If you wanted, you could print out a contract to sign in person or send it as an email PDF to be signed with random software, but how tedious is that? Rentburrow allows you to complete the entire process online within minutes - way easier than the old way.' },
 			{ index: 3, icon: 'question circle', title: 'How does it work?', description: 'Good question. The person who sent you this URL link most likely already discussed sublet contract terms with you. They have filled out their portion, now you must fill out the form on the left. When you are done, click submit. After a successful submission, everyone including witnesses will get an email where you can sign the sublet contract online. Be sure to read over the sublet contract one last time before signing! Once signed, the contract is complete and you will arrange a time to meet the other person to exchange keys and payment.' },
 			{ index: 4, icon: 'dollar', title: 'Is there any cost?', description: 'Nope, its completely free :)' },
@@ -171,6 +172,9 @@ class SubletorForm extends Component {
 		if (!this.state.official_end_date.isAfter(this.state.official_start_date)) {
 			errors.push('The contract end date cannot be before the start date')
 		}
+		if (!this.state.original_lease_signing_date.isAfter(moment())) {
+			errors.push('The original lease signing date must be in the past')
+		}
 		if (this.state.price <= 0) {
 			errors.push('Monthly sublet rent cannot be zero or less')
 		}
@@ -207,7 +211,7 @@ class SubletorForm extends Component {
 				active = true
 			}
 		} else if (step_number === '2') {
-			if (this.state.current_active_field === 'official_begin_date' || this.state.current_active_field === 'official_end_date' || this.state.current_active_field === 'price' || this.state.current_active_field === 'address' || this.state.current_active_field === 'suite_id' || this.state.current_active_field === 'room_id') {
+			if (this.state.current_active_field === 'official_begin_date' || this.state.current_active_field === 'official_end_date' || this.state.current_active_field === 'price' || this.state.current_active_field === 'address' || this.state.current_active_field === 'suite_id' || this.state.current_active_field === 'room_id' || this.state.current_active_field === 'original_lease_signing_date') {
 				active = true
 			}
 		} else if (step_number === '3') {
@@ -229,7 +233,7 @@ class SubletorForm extends Component {
 				complete = true
 			}
 		} else if (step_number === '2') {
-			if (this.state.address.length > 1 && this.state.price > 0 && this.state.official_begin_date && this.state.official_end_date && this.state.suite_id.length > 0 && this.state.room_id.length > 0 && this.state.auto_sublet_terms_verified) {
+			if (this.state.address.length > 1 && this.state.price > 0 && this.state.official_begin_date && this.state.official_end_date && this.state.original_lease_signing_date && this.state.suite_id.length > 0 && this.state.room_id.length > 0 && this.state.auto_sublet_terms_verified) {
 				complete = true
 			}
 		} else if (step_number === '3') {
@@ -379,6 +383,13 @@ class SubletorForm extends Component {
 											<DatePicker
 												selected={this.state.official_end_date}
 												onChange={(d) => this.updateDate(d, 'official_end_date')}
+											/>
+								    </Form.Field>
+								    <Form.Field>
+								      <label>Original Lease Signing Date</label>
+											<DatePicker
+												selected={this.state.original_lease_signing_date}
+												onChange={(d) => this.updateDate(d, 'original_lease_signing_date')}
 											/>
 								    </Form.Field>
 									</div>

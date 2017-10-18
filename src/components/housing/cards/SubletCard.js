@@ -65,7 +65,7 @@ class SubletCard extends Component {
 						</div>
 						{/* User Name */}
 						<div style={comStyles().userinfo}>
-							<a href={`http://www.facebook.com/${this.props.sublet.fb_user_id}`} target='_blank'>{this.props.sublet.fb_user_name.split(' ')[0]}</a> &nbsp;
+							<div onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)}>{this.props.sublet.fb_user_name.split(' ')[0]}</div> &nbsp;
 							on &nbsp;
 							<b>{moment(this.props.sublet.posted_date).format('MMM Do')}</b>
 						</div>
@@ -197,7 +197,9 @@ const comStyles = () => {
 			height: '35%',
 			color: xGreyText,
 			fontSize: '1.1rem',
-			margin: '5px 0px 0px 0px'
+			margin: '5px 0px 0px 0px',
+      display: 'flex',
+      flexDirection: 'row',
 		},
 		pricediv: {
 			textAlign:'center',
