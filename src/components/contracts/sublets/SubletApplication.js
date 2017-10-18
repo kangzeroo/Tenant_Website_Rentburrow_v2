@@ -121,7 +121,6 @@ class SubletApplication extends Component {
 				return getSubleteeContractForSubletor(contract_id)
 			})
 			.then((data) => {
-				console.log(data)
 				this.setState({
 					current_form: 'subletee',
 					subletee_done: true,
@@ -187,11 +186,9 @@ class SubletApplication extends Component {
 			})
 			.then((data) => {
 				this.props.history.push(`${this.props.location.pathname}/contract/${data.contract_id}/done`)
-				console.log(data)
 				return getSubleteeContractForSubletor(data.contract_id)
 			})
 			.then((data) => {
-				console.log(data)
 				this.setState({
 					current_form: 'subletee',
 					subletee_done: true,
