@@ -122,7 +122,7 @@ class AppRoot extends Component {
       return saveStudentProfile(fbProfile)
     })
     .then((data) => {
-      // this.documentStatus(data.student_id)
+      this.documentStatus(data.student_id)
       return getStudentProfile({ student_id: data.student_id, })
     })
     .then((data) => {
