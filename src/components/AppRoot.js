@@ -127,7 +127,8 @@ class AppRoot extends Component {
       return getStudentProfile({ student_id: data.student_id, })
     })
     .then((data) => {
-      this.props.saveTenantToRedux(data)
+      console.log(data)
+      saveTenantToRedux(data)
         // use location_forwarding when you have a path that requires a login first (privately available)
         // use PossibleRoutes.js when you have a path that is publically available
       this.props.history.push(this.props.location_forwarding)
