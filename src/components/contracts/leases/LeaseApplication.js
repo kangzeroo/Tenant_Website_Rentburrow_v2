@@ -30,7 +30,6 @@ import { applyToLiveAtThisBuilding } from '../../../actions/contract/contract_ac
 import { getBuildingById } from '../../../api/building/building_api'
 
 
-
 class LeaseApplication extends Component {
 
   constructor() {
@@ -76,7 +75,6 @@ class LeaseApplication extends Component {
           const obj = data[key]
           forms.push(obj)
         }
-        console.log(current_form)
         this.setState({
           required_forms: forms,
           current_form: current_form,
@@ -96,9 +94,7 @@ class LeaseApplication extends Component {
               group_id: group_id,
             })
           } else {
-            console.log('addMeToTheGroup')
             addMeToTheGroup(this.props.tenant_profile.tenant_id, group_id).then((data) => {
-              console.log(data)
               this.setState({
                 group_id: data.group_id,
               })
@@ -110,7 +106,6 @@ class LeaseApplication extends Component {
           console.log(err)
         })
     } else {
-      console.log('autoGenerateGroup')
       autoGenerateGroup().then((data) => {
         this.setState({
           group_id: data.group_id
@@ -138,30 +133,30 @@ class LeaseApplication extends Component {
         next_form_key = this.state.required_forms[index + 1].key
       }
     })
-    this.setState({
-      current_form: next_form_key
-    })
+    this.clickedFormStep(next_form_key)
+  }
+
+  isActiveStep(form_key) {
+    return form_key === this.state.current_form
   }
 
   generateSteps() {
     return (
-      <div style={comStyles().steps}>
-        <Step.Group vertical>
-          {
-            this.state.required_forms.map((form) => {
-              return (
-                <Step key={form.key} active={false} completed={false} onClick={() => this.clickedFormStep(form.key)}>
-                  <Icon name={form.icon} />
-                  <Step.Content>
-                    <Step.Title>{ form.title }</Step.Title>
-                    <Step.Description>{ form.desc }</Step.Description>
-                  </Step.Content>
-                </Step>
-              )
-            })
-          }
-        </Step.Group>
-      </div>
+      <Step.Group vertical>
+        {
+          this.state.required_forms.map((form) => {
+            return (
+              <Step key={form.key} active={this.isActiveStep(form.key)} completed={false} onClick={() => this.clickedFormStep(form.key)}>
+                <Icon name={form.icon} />
+                <Step.Content>
+                  <Step.Title>{ form.title }</Step.Title>
+                  <Step.Description>{ form.desc }</Step.Description>
+                </Step.Content>
+              </Step>
+            )
+          })
+        }
+      </Step.Group>
     )
   }
 
@@ -201,6 +196,7 @@ class LeaseApplication extends Component {
       return (
         <SuitePreferencesForm
           goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          building={this.props.applied_building}
         />
       )
     } else if (this.state.current_form === 'witness') {
@@ -249,12 +245,16 @@ class LeaseApplication extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				{
-          this.generateSteps()
-        }
-        {
-          this.generateForm()
-        }
+        <div style={comStyles().steps}>
+  				{
+            this.generateSteps()
+          }
+        </div>
+        <div style={comStyles().form_output}>
+          {
+            this.generateForm()
+          }
+        </div>
 			</div>
 		)
 	}
@@ -306,6 +306,10 @@ const comStyles = () => {
     steps: {
       minWidth: '200px',
       maxWidth: '200px',
+      height: '90vh',
+      overflowY: 'scroll',
+    },
+    form_output: {
       height: '90vh',
       overflowY: 'scroll',
     }
