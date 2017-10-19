@@ -22,6 +22,7 @@ import {
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { getGroupInfo, saveGroupNameToDb } from '../../../../api/group/group_api'
+import GroupMembers from '../group/GroupMembers'
 
 class RoommateGroupForm extends Component {
 
@@ -163,7 +164,9 @@ class RoommateGroupForm extends Component {
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
-
+								<GroupMembers
+									group_id={this.props.group_id}
+								/>
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
 										Share this link with anyone you want as a roommate

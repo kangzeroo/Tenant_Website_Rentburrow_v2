@@ -10,6 +10,7 @@ import intelReducer from './intel/intel_reducer'
 import appReducer from './app/app_reducer'
 import leaseAppReducer from './contract/lease_application_reducer'
 import leasePaymentReducer from './contract/lease_payment_reducer'
+import groupReducer from './group/group_reducer'
 
 // takes all your seperate reducers into one giant reducer
 // each Redux action will flow through each middleware and then reach the reducers
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
 	contract: contractReducer,
 	leaseApp: leaseAppReducer,
 	leasePay: leasePaymentReducer,
+	group: groupReducer,
 })
 
 export default rootReducer
