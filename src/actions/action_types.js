@@ -48,3 +48,6 @@ export const CLEAR_INTEL_LIST = 'CLEAR_INTEL_LIST'
 export const I_APPLIED = 'I_APPLIED'
 export const APPLIED_TO_ME = 'APPLIED_TO_ME'
 export const APPLY_FOR_THIS_BUILDING = 'APPLY_FOR_THIS_BUILDING'
+
+// actions related to group applications
+export const GROUP_MEMBERS = 'GROUP_MEMBERS'
