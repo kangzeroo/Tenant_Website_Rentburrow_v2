@@ -37,7 +37,6 @@ class GuarantorForm extends Component {
 	    relationship: '',
 	    date_of_birth: '',
 	    address: '',
-	    home_phone: '',
 	    cell_phone: '',
 	    email: '',
 	    primary_language: '',
@@ -46,6 +45,8 @@ class GuarantorForm extends Component {
 	    citizenship: '',
 	    permanent_resident: false,
 
+			guarantor_is_in_canada: false,
+			guarantor_not_possible: false,
 			submitted: false,
 			error_messages: [],
 			activeIndex: 1,
@@ -56,7 +57,10 @@ class GuarantorForm extends Component {
 	  }
 
 		this.why_sign_online = [
-			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' },
+			{ index: 1, icon: 'money', title: 'In case you cannot pay rent', description: 'The landlord needs to be able to collect your rent debt from someone. Your guarantor is the person who the landlord has a legal right to collect your missing rent payments from. That means if your mom is your guarantor, than failure to pay rent will result in the landlord contacting and collecting rent from her.' },
+			{ index: 2, icon: 'flag', title: 'Why does my guarantor have to be Canadian?', description: 'Landlords require that your guarantor be Canadian because it is too difficult to collect rent debt internationally. Your guarantor does not need to be Canadian citizen, they just need to be residing in Canada.' },
+			{ index: 3, icon: 'user', title: 'Why do I need to upload a photo of my guarantors Government ID?', description: 'For the same reason why you need to upload a piece of Government ID. So that the landlord can verify that the name provided matches a real official record.' },
+			{ index: 4, icon: 'user x', title: 'What if I do not have a Canadian guarantor?', description: 'If you do not have a Canadian guarantor, then the landlord will deem you a risky tenant. In order to compensate for this risk, the landlord may require you to provide additional months rent. You do not have to provide this additional rent deposit, but the landlord also does not have to take the risk of renting out to you.' },
 		]
 	}
 
@@ -90,6 +94,19 @@ class GuarantorForm extends Component {
     })
   }
 
+	toggleGuarantorNotPossible(event, data) {
+		if (data.checked) {
+			this.setState({
+				guarantor_not_possible: !this.state.guarantor_not_possible,
+				guarantor_is_in_canada: false,
+			})
+		} else {
+			this.setState({
+				guarantor_not_possible: !this.state.guarantor_not_possible,
+			})
+		}
+	}
+
 	renderAppropriateModal(modal_name, context) {
 		if (modal_name === 'terms') {
 			return (
@@ -108,6 +125,34 @@ class GuarantorForm extends Component {
 	      </Modal>
 	    )
 		}
+	}
+
+	renderGuarantorAvailable() {
+		return (
+			<Card raised fluid style={comStyles().card_style}>
+				<div style={comStyles().student_div}>
+					<div style={comStyles().student_form}>
+						<Form.Field>
+							<Checkbox
+								onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'guarantor_is_in_canada')}
+								checked={this.state.guarantor_is_in_canada}
+								label='I verify that my guarantor lives in Canada'
+							/>
+						</Form.Field>
+						<Form.Field>
+							<Checkbox
+								onChange={(e, d) => this.toggleGuarantorNotPossible(e, { checked: !d.checked })}
+								checked={this.state.guarantor_not_possible}
+								label='I do not have a Canadian guarantor'
+							/>
+						</Form.Field>
+					</div>
+					{/*<div style={comStyles().student_card}>
+						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
+					</div>*/}
+				</div>
+			</Card>
+		)
 	}
 
 	renderBasicProfile() {
@@ -169,14 +214,6 @@ class GuarantorForm extends Component {
 								placeholder='Address'
 								onChange={(e) => this.updateAttr(e, 'address')}
 								value={this.state.address}
-							/>
-						</Form.Field>
-						<Form.Field>
-							<label>Home Phone</label>
-							<input
-								placeholder='Home Phone'
-								onChange={(e) => this.updateAttr(e, 'home_phone')}
-								value={this.state.home_phone}
 							/>
 						</Form.Field>
 						<Form.Field>
@@ -246,7 +283,7 @@ class GuarantorForm extends Component {
 						<br />
 						<Form.Field>
 							<label>Photo ID</label>
-							<label>(Drivers License, Health Card or Passport)</label>
+							<label>(Drivers License or Health Card)</label>
 							<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'government_id')} style={comStyles().dropzone} multiple={false}>
 								{
 									this.state.government_id
@@ -281,48 +318,67 @@ class GuarantorForm extends Component {
 					<div style={comStyles().sign_header}>Guarantors</div>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
-							<Form style={comStyles().form}>
-
-								{
-									this.renderBasicProfile()
-								}
-								{
-									this.renderContactInfo()
-								}
-								{
-									this.renderGovtInfo()
-								}
-
-								<Form.Field>
+							{
+								this.state.guarantor_not_possible
+								?
+								<Card raised fluid style={comStyles().card_style}>
+									<Card.Header style={comStyles().no_guarantor_message}>
+										If you do not have a Canadian guarantor, the landlord will likely require some other form of security from you. Most often this will be a few extra months of rent in advance. Click next to continue.
+									</Card.Header>
+									<br />
+									<Form.Field>
+										<Checkbox
+											onChange={(e, d) => this.toggleGuarantorNotPossible(e, d)}
+											checked={!this.state.guarantor_not_possible}
+											label='I do have a Canadian guarantor'
+										/>
+									</Form.Field>
+								</Card>
+								:
+								<Form style={comStyles().form}>
 									{
-										this.state.error_messages.map((err, index) => {
-											return (
-												<Message
-													visible
-													key={index}
-													error
-													content={err}
-												/>
-											)
-										})
+										this.renderGuarantorAvailable()
 									}
-								</Form.Field>
+									{
+										this.renderBasicProfile()
+									}
+									{
+										this.renderContactInfo()
+									}
+									{
+										this.renderGovtInfo()
+									}
 
-								{
-									this.state.submitted
-									?
-									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-									</div>
-									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
-								}
-							</Form>
+									<Form.Field>
+										{
+											this.state.error_messages.map((err, index) => {
+												return (
+													<Message
+														visible
+														key={index}
+														error
+														content={err}
+													/>
+												)
+											})
+										}
+									</Form.Field>
+								</Form>
+							}
+							{
+								this.state.submitted
+								?
+								<div style={comStyles().hidden_loading}>
+									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+								</div>
+								:
+								<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+							}
 						</div>
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
 								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
-									Why Sign Contracts Online?
+									Why do I need a guarantor?
 								</Accordion.Title>
 								{
 									this.why_sign_online.map((why) => {
@@ -411,7 +467,7 @@ const comStyles = () => {
       flexDirection: 'column',
 			minWidth: '600px',
 			width: '60vw',
-			height: '90vh',
+			height: '100%',
 			padding: '20px',
 		},
 		tips_contents: {
@@ -461,9 +517,6 @@ const comStyles = () => {
 			minHeight: '10vh',
 			maxHeight: '10vh',
 		},
-		dropzone_text: {
-			margin: 'auto',
-		},
 		card_header: {
 			padding: '30px 0px 40px 0px',
 			fontWeight: 'bold',
@@ -507,6 +560,17 @@ const comStyles = () => {
 			padding: '30px',
 			fontSize: '1.3rem',
 			fontWeight: 'bold',
+		},
+		dropzone_text: {
+			width: '100%',
+			height: '100%',
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		no_guarantor_message: {
+			lineHeight: '20px',
 		}
 	}
 }
