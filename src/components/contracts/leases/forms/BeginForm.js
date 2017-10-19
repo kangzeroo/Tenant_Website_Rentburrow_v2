@@ -26,6 +26,7 @@ class BeginForm extends Component {
 // defines the types of variables in this.props
 BeginForm.propTypes = {
 	history: PropTypes.object.isRequired,
+	goToNextForm: PropTypes.func.isRequired,			// passed in
 }
 
 // for all optional props, define a default value

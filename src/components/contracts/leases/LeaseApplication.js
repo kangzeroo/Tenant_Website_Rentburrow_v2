@@ -25,6 +25,7 @@ import PersonalityForm from './forms/PersonalityForm'
 import EmploymentForm from './forms/EmploymentForm'
 import RoommateGroupForm from './forms/RoommateGroupForm'
 import JoinedGroup from './forms/JoinedGroup'
+import SubmitLeaseApplication from './forms/SubmitLeaseApplication'
 import { applyToLiveAtThisBuilding } from '../../../actions/contract/contract_actions'
 import { getBuildingById } from '../../../api/building/building_api'
 
@@ -51,6 +52,7 @@ class LeaseApplication extends Component {
       //   medical: true,
       //   personality: true,
       //   employment: true
+      //   submit: true,
       // }
     }
   }
@@ -117,15 +119,27 @@ class LeaseApplication extends Component {
     }
   }
 
-  updateUrlToForm(form_name) {
+  updateUrlToForm(form_key) {
     // set the url to a different one
-    history.pushState(null, null, `${this.props.location.pathname}?form=${form_name}`)
+    history.pushState(null, null, `${this.props.location.pathname}?form=${form_key}`)
   }
 
-  clickedFormStep(form_name) {
-    this.updateUrlToForm(form_name)
+  clickedFormStep(form_key) {
+    this.updateUrlToForm(form_key)
     this.setState({
-      current_form: form_name
+      current_form: form_key
+    })
+  }
+
+  goToNextForm(form_key) {
+    let next_form_key = 'begin'
+    this.state.required_forms.forEach((form, index) => {
+      if (form.key === form_key) {
+        next_form_key = this.state.required_forms[index + 1].key
+      }
+    })
+    this.setState({
+      current_form: next_form_key
     })
   }
 
@@ -154,53 +168,80 @@ class LeaseApplication extends Component {
   generateForm() {
     if (this.state.current_form === 'begin') {
       return (
-        <BeginForm />
+        <BeginForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'joined_group') {
       return (
-        <JoinedGroup />
+        <JoinedGroup
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     }else if (this.state.current_form === 'about_tenant') {
       return (
-        <AboutTenantForm />
+        <AboutTenantForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'roommates' && this.state.group_id) {
       return (
         <RoommateGroupForm
           group_id={this.state.group_id}
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
         />
       )
     } else if (this.state.current_form === 'about_student') {
       return (
-        <AboutStudentForm />
+        <AboutStudentForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'suite_room_preferences') {
       return (
-        <SuitePreferencesForm />
+        <SuitePreferencesForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'witness') {
       return (
-        <WitnessForm />
+        <WitnessForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'guarantor') {
       return (
-        <GuarantorForm />
+        <GuarantorForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'medical_history') {
       return (
-        <MedicalHistoryForm />
+        <MedicalHistoryForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'emergancy_contact') {
       return (
-        <EmergancyContactForm />
+        <EmergancyContactForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'personality') {
       return (
-        <PersonalityForm />
+        <PersonalityForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
       )
     } else if (this.state.current_form === 'employment') {
       return (
-        <EmploymentForm />
+        <EmploymentForm
+          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+        />
+      )
+    } else if (this.state.current_form === 'submit') {
+      return (
+        <SubmitLeaseApplication />
       )
     }
   }

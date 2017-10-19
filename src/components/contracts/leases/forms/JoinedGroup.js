@@ -154,7 +154,7 @@ class JoinedGroup extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.submit()}>Submit</Button>
+									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
 								}
 							</Form>
 						</div>
@@ -211,6 +211,7 @@ const RadiumHOC = Radium(JoinedGroup)
 const mapReduxToProps = (redux) => {
 	return {
 		tenant_profile: redux.auth.tenant_profile,
+		goToNextForm: PropTypes.func.isRequired,			// passed in
 	}
 }
 

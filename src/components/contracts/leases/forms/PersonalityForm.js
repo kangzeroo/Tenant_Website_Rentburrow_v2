@@ -154,7 +154,7 @@ class PersonalityForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.submit()}>Submit</Button>
+									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
 								}
 							</Form>
 						</div>
@@ -197,6 +197,7 @@ class PersonalityForm extends Component {
 PersonalityForm.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
+	goToNextForm: PropTypes.func.isRequired,			// passed in
 }
 
 // for all optional props, define a default value
