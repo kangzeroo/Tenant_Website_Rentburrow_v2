@@ -20,7 +20,7 @@ const config = require('../../../credentials/pandadoc_config')
 class Authenticate extends Component {
 
   componentWillMount() {
-    if (this.props.tenant_profile.tenant_id !== '2d644a3e-0d29-4ae0-9b56-5694484f22da') {
+    if (this.props.tenant_profile.tenant_id !== 'b7248b14-560f-4d99-a464-3ea46d977e49') {
       this.props.history.push('/')
     }
   }

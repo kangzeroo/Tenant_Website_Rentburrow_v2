@@ -14,7 +14,7 @@ import {
 } from 'semantic-ui-react'
 import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
-import { saveTenantProfile, getTenantProfile } from '../../api/signing/sublet_contract_api'
+import { saveTenantProfile, getTenantProfile } from '../../api/auth/tenant_api'
 
 class LoginPopup extends Component {
 

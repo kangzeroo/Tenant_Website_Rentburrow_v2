@@ -21,12 +21,14 @@ import {
 	Dropdown,
 	Image,
 	Radio,
+	Header,
 } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
 import { filterNonImages } from '../../../../api/aws/aws-S3'
+import { saveTenantDetails, } from '../../../../api/auth/tenant_api'
 
 class AboutStudentForm extends Component {
 
@@ -39,8 +41,8 @@ class AboutStudentForm extends Component {
 	    gender: '',
 
 	    address: '',
-	    contact_number_home: '',
-	    contact_number_cell: '',
+	    // contact_number_home: '',
+	    phone: '',
 	    email: '',
 
 	    primary_language: '',
@@ -67,6 +69,16 @@ class AboutStudentForm extends Component {
 		]
 	}
 
+	componentWillMount() {
+		const tenant = this.props.tenant_profile
+		this.setState({
+			first_name: tenant.first_name,
+			last_name: tenant.last_name,
+			phone: tenant.phone,
+			email: tenant.email,
+		})
+	}
+
 	updateAttr(e, attr) {
 		this.setState({
 			[attr]: e.target.value,
@@ -88,6 +100,38 @@ class AboutStudentForm extends Component {
       [attr]: filteredFiles[0]
     })
   }
+
+	saveTenantDetailsToDb() {
+		console.log({
+			tenant_id: this.props.tenant_profile.tenant_id,
+			first_name: this.state.first_name,
+			last_name: this.state.last_name,
+			address: this.state.address,
+			date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
+			gender: this.state.gender,
+			primary_language: this.state.primary_language,
+			secondary_languages: this.state.secondary_languages,
+			citizenship: this.state.citizenship,
+			permanent_resident: this.state.permanent_resident,
+			government_id: this.state.government_id,
+		})
+		saveTenantDetails({
+			tenant_id: this.props.tenant_profile.tenant_id,
+			first_name: this.state.first_name,
+			last_name: this.state.last_name,
+			address: this.state.address,
+			date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
+			gender: this.state.gender,
+			primary_language: this.state.primary_language,
+			secondary_languages: this.state.secondary_languages,
+			citizenship: this.state.citizenship,
+			permanent_resident: this.state.permanent_resident,
+			government_id: this.state.government_id,
+		})
+		.then((data) => {
+			this.props.goToNextForm()
+		})
+	}
 
 	toggleModal(bool, attr, context) {
 		this.setState({
@@ -131,6 +175,7 @@ class AboutStudentForm extends Component {
 								placeholder='Legal First Name'
 								onChange={(e) => this.updateAttr(e, 'first_name')}
 								value={this.state.first_name}
+								disabled={this.props.tenant_profile.first_name !== ''}
 							/>
 						</Form.Field>
 						<Form.Field>
@@ -139,16 +184,17 @@ class AboutStudentForm extends Component {
 								placeholder='Legal Last Name'
 								onChange={(e) => this.updateAttr(e, 'last_name')}
 								value={this.state.last_name}
+								disabled={this.props.tenant_profile.last_name !== ''}
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label>Date of Birth</label>
 							<DatePicker
 								selected={this.state.date_of_birth}
 								onChange={(d) => this.updateDate(d, 'date_of_birth')}
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label>Gender</label>
 							<Dropdown
 								placeholder='Gender'
@@ -178,7 +224,7 @@ class AboutStudentForm extends Component {
 				</Card.Header>
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
-						<Form.Field>
+						<Form.Field required>
 							<label>Permanent Address</label>
 							<input
 								placeholder='Permanent Address'
@@ -187,19 +233,12 @@ class AboutStudentForm extends Component {
 							/>
 						</Form.Field>
 						<Form.Field>
-							<label>Home Phone</label>
+							<label>Primary Phone</label>
 							<input
-								placeholder='Home Phone'
-								onChange={(e) => this.updateAttr(e, 'contact_number_home')}
-								value={this.state.contact_number_home}
-							/>
-						</Form.Field>
-						<Form.Field>
-							<label>Cell Phone</label>
-							<input
-								placeholder='Cell Phone'
-								onChange={(e) => this.updateAttr(e, 'contact_number_cell')}
-								value={this.state.contact_number_cell}
+								placeholder='Primary Phone'
+								onChange={(e) => this.updateAttr(e, 'phone')}
+								value={this.state.phone}
+								disabled={this.props.tenant_profile.phone !== ''}
 							/>
 						</Form.Field>
 						<Form.Field>
@@ -208,6 +247,7 @@ class AboutStudentForm extends Component {
 								placeholder='Email'
 								onChange={(e) => this.updateAttr(e, 'email')}
 								value={this.state.email}
+								disabled={this.props.tenant_profile.email !== ''}
 							/>
 						</Form.Field>
 					</div>
@@ -227,7 +267,7 @@ class AboutStudentForm extends Component {
 				</Card.Header>
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
-						<Form.Field>
+						<Form.Field required>
 							<label>Primary Language</label>
 							<Dropdown
 								placeholder='English'
@@ -236,7 +276,7 @@ class AboutStudentForm extends Component {
 								options={languageOptions}
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label>Secondary Languages</label>
 							<input
 								placeholder='List secondary languages here'
@@ -244,7 +284,7 @@ class AboutStudentForm extends Component {
 								value={this.state.secondary_languages}
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label>Citizenship</label>
 							<Dropdown
 								placeholder='Select Country'
@@ -254,7 +294,7 @@ class AboutStudentForm extends Component {
 								options={countryOptions}
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<Checkbox
 								onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'permanent_resident')}
 								checked={this.state.permanent_resident}
@@ -262,7 +302,7 @@ class AboutStudentForm extends Component {
 							/>
 						</Form.Field>
 						<br />
-						<Form.Field>
+						<Form.Field required>
 							<label>Photo ID</label>
 							<label>(Drivers License, Health Card or Passport)</label>
 							<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'government_id')} style={comStyles().dropzone} multiple={false}>
@@ -296,7 +336,12 @@ class AboutStudentForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>About Me</div>
+					<Header
+						as='h1'
+						icon='user'
+						content='Tenant Profile'
+						subheader='Tell the landlord a bit more about you'
+					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
@@ -333,7 +378,12 @@ class AboutStudentForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+									<Button
+										primary
+										size='large'
+										content='Save'
+										onClick={() => this.saveTenantDetailsToDb()}
+									/>
 								}
 							</Form>
 						</div>
@@ -467,8 +517,8 @@ const comStyles = () => {
 		main_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '100%',
-			maxHeight: '100%',
+			minHeight: '85vh',
+			maxHeight: '85vh',
 			padding: '20px',
 			overflow: 'scroll',
 			width: '85vw',
