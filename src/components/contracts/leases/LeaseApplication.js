@@ -84,8 +84,14 @@ class LeaseApplication extends Component {
   }
 
   autoAssociateGroup() {
-    if (this.props.location_forwarding.indexOf('group=') > -1) {
-      const group_id = this.props.location.search.slice(this.props.location.search.indexOf('group=') + 'group='.length)
+    if (this.props.location_forwarding.indexOf('group=') > -1 || localStorage.getItem('leasing_group_id')) {
+      let group_id = ''
+      if (localStorage.getItem('leasing_group_id')) {
+        group_id = localStorage.getItem('leasing_group_id')
+      }
+      if (this.props.location_forwarding.indexOf('group=') > -1) {
+        group_id = this.props.location.search.slice(this.props.location.search.indexOf('group=') + 'group='.length)
+      }
       checkIfUserAlreadyPartGroup(group_id, this.props.tenant_profile.tenant_id)
         .then((data) => {
           if (data.already_joined) {
@@ -100,6 +106,7 @@ class LeaseApplication extends Component {
               this.setState({
                 group_id: data.group_id,
               })
+              localStorage.setItem('leasing_group_id', data.group_id)
               this.clickedFormStep('joined_group')
             })
           }
@@ -113,6 +120,7 @@ class LeaseApplication extends Component {
         this.setState({
           group_id: data.group_id
         })
+        localStorage.setItem('leasing_group_id', data.group_id)
       })
     }
   }
