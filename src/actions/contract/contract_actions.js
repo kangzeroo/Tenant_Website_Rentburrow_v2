@@ -1,6 +1,7 @@
 import {
   I_APPLIED,
   APPLIED_TO_ME,
+  APPLY_FOR_THIS_BUILDING,
 } from '../action_types'
 
 
@@ -28,6 +29,15 @@ export const saveReceivedApplicationsToRedux = (apps) => {
           ...x,
         }
       }),
+    })
+  }
+}
+
+export const applyToLiveAtThisBuilding = (building) => {
+  return (dispatch) => {
+    dispatch({
+      type: APPLY_FOR_THIS_BUILDING,
+      payload: building,
     })
   }
 }
