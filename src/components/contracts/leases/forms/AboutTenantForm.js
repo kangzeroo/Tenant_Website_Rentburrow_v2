@@ -39,13 +39,13 @@ class AboutStudentForm extends Component {
 	    last_name: '',
 	    date_of_birth: '',
 	    gender: '',
-      
+
 			building_address_components: {},
 			building_address: '',					  // the building_address typed in
       building_lat: 0,                // the building lat according to google
       building_long: 0,               // the building lng according to google
       building_place_id: '',          // the building place_id according to google
-      
+
       phone: '',
 	    email: '',
 
@@ -82,7 +82,7 @@ class AboutStudentForm extends Component {
 			email: tenant.email,
     })
   }
-  
+
 	componentDidMount() {
 		// google address autocomplete
     // restricted to only show addresses and in canada
@@ -137,24 +137,11 @@ class AboutStudentForm extends Component {
   }
 
 	saveTenantDetailsToDb() {
-		console.log({
-			tenant_id: this.props.tenant_profile.tenant_id,
-			first_name: this.state.first_name,
-			last_name: this.state.last_name,
-			address: this.state.address,
-			date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
-			gender: this.state.gender,
-			primary_language: this.state.primary_language,
-			secondary_languages: this.state.secondary_languages,
-			citizenship: this.state.citizenship,
-			permanent_resident: this.state.permanent_resident,
-			government_id: this.state.government_id,
-		})
 		saveTenantDetails({
 			tenant_id: this.props.tenant_profile.tenant_id,
 			first_name: this.state.first_name,
 			last_name: this.state.last_name,
-			address: this.state.address,
+			address: this.state.building_address,
 			date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
 			gender: this.state.gender,
 			primary_language: this.state.primary_language,
@@ -325,6 +312,7 @@ class AboutStudentForm extends Component {
 							<Dropdown
 								placeholder='Select Country'
 								fluid
+								search
 								selection
 								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'citizenship')}
 								options={countryOptions}

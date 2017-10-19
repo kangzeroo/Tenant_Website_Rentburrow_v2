@@ -25,9 +25,11 @@ import RoommateGroupForm from './forms/RoommateGroupForm'
 import JoinedGroup from './forms/JoinedGroup'
 import SubmitLeaseApplication from './forms/SubmitLeaseApplication'
 import { applyToLiveAtThisBuilding } from '../../../actions/contract/contract_actions'
+import { saveMyApplicationToRedux, saveGroupApplicationToRedux } from '../../../actions/group/group_actions'
 import { getBuildingById } from '../../../api/building/building_api'
 import { checkWhatLandlordWantsFromTenant } from '../../../api/leasing/leasing_api'
-import { checkIfUserAlreadyPartGroup, addMeToTheGroup, autoGenerateGroup, createGroup, } from '../../../api/group/group_api'
+import { checkIfUserAlreadyPartGroup, addMeToTheGroup, createGroup, getGroupMembers, } from '../../../api/group/group_api'
+import { getMyApplication, } from '../../../api/application/lease_application_api'
 
 class LeaseApplication extends Component {
 
@@ -37,6 +39,8 @@ class LeaseApplication extends Component {
       current_form: 'begin',
       group_id: '',
       required_forms: [],
+
+      building: {},
       // {
       //   joined_group: true,
       //   begin: true,
@@ -65,6 +69,9 @@ class LeaseApplication extends Component {
     }
     getBuildingById(building_id)
       .then((data) => {
+        this.setState({
+          building: data,
+        })
         this.props.applyToLiveAtThisBuilding(data)
         return checkWhatLandlordWantsFromTenant(building_id)
       })
@@ -99,13 +106,22 @@ class LeaseApplication extends Component {
             this.setState({
               group_id: group_id,
             })
+            getGroupMembers(group_id)
+            .then((data) => {
+              this.props.saveGroupApplicationToRedux(data)
+              return getMyApplication({ group_id, tenant_id: this.props.tenant_profile.tenant_id })
+            })
+            .then((data) => {
+              this.props.saveMyApplicationToRedux(data.application_id)
+            })
           } else if (data.user_does_not_exist) {
             console.log('User does not exist in the group!')
-            createGroup(this.props.tenant_profile.tenant_id)
+            createGroup(this.props.tenant_profile.tenant_id, this.state.building.building_id)
               .then((data) => {
                 this.setState({
                   group_id: data.group_id
                 })
+                this.props.saveMyApplicationToRedux(data.application_id)
                 localStorage.setItem('leasing_group_id', data.group_id)
               })
           } else {
@@ -115,6 +131,7 @@ class LeaseApplication extends Component {
               this.setState({
                 group_id: data.group_id,
               })
+              this.props.saveMyApplicationToRedux(data.application_id)
               localStorage.setItem('leasing_group_id', data.group_id)
               this.clickedFormStep('joined_group')
             })
@@ -124,7 +141,7 @@ class LeaseApplication extends Component {
           console.log(err)
         })
     } else {
-      createGroup(this.props.tenant_profile.tenant_id)
+      createGroup(this.props.tenant_profile.tenant_id, this.state.building.building_id)
       .then((data) => {
         this.setState({
           group_id: data.group_id
@@ -289,6 +306,8 @@ LeaseApplication.propTypes = {
   applied_building: PropTypes.object.isRequired,
   applyToLiveAtThisBuilding: PropTypes.func.isRequired,
   location_forwarding: PropTypes.string.isRequired,
+  saveMyApplicationToRedux: PropTypes.func.isRequired,
+  saveGroupApplicationToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -312,6 +331,8 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
     applyToLiveAtThisBuilding,
+    saveMyApplicationToRedux,
+    saveGroupApplicationToRedux,
 	})(RadiumHOC)
 )
 
