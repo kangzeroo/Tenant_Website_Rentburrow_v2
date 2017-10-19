@@ -25,7 +25,7 @@ import RoommateGroupForm from './forms/RoommateGroupForm'
 import JoinedGroup from './forms/JoinedGroup'
 import SubmitLeaseApplication from './forms/SubmitLeaseApplication'
 import { applyToLiveAtThisBuilding } from '../../../actions/contract/contract_actions'
-import { saveMyApplicationToRedux, saveGroupApplicationToRedux } from '../../../actions/group/group_actions'
+import { saveMyApplicationToRedux, saveGroupApplicationToRedux, saveAppliedBuildingToRedux, } from '../../../actions/group/group_actions'
 import { getBuildingById } from '../../../api/building/building_api'
 import { checkWhatLandlordWantsFromTenant } from '../../../api/leasing/leasing_api'
 import { checkIfUserAlreadyPartGroup, addMeToTheGroup, createGroup, getGroupMembers, } from '../../../api/group/group_api'
@@ -72,6 +72,7 @@ class LeaseApplication extends Component {
         this.setState({
           building: data,
         })
+        this.props.saveAppliedBuildingToRedux(data)
         this.props.applyToLiveAtThisBuilding(data)
         return checkWhatLandlordWantsFromTenant(building_id)
       })
@@ -116,7 +117,7 @@ class LeaseApplication extends Component {
             })
           } else if (data.user_does_not_exist) {
             console.log('User does not exist in the group!')
-            createGroup(this.props.tenant_profile.tenant_id, this.state.building.building_id)
+            createGroup(this.props.tenant_profile.tenant_id, this.state.building.corporation_id, this.state.building.building_id)
               .then((data) => {
                 this.setState({
                   group_id: data.group_id
@@ -141,7 +142,7 @@ class LeaseApplication extends Component {
           console.log(err)
         })
     } else {
-      createGroup(this.props.tenant_profile.tenant_id, this.state.building.building_id)
+      createGroup(this.props.tenant_profile.tenant_id, this.state.building.corporation_id, this.state.building.building_id)
       .then((data) => {
         this.setState({
           group_id: data.group_id
@@ -308,6 +309,7 @@ LeaseApplication.propTypes = {
   location_forwarding: PropTypes.string.isRequired,
   saveMyApplicationToRedux: PropTypes.func.isRequired,
   saveGroupApplicationToRedux: PropTypes.func.isRequired,
+  saveAppliedBuildingToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -333,6 +335,7 @@ export default withRouter(
     applyToLiveAtThisBuilding,
     saveMyApplicationToRedux,
     saveGroupApplicationToRedux,
+    saveAppliedBuildingToRedux,
 	})(RadiumHOC)
 )
 
