@@ -15,6 +15,7 @@ import {
   Image,
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
+import { applyToLiveAtThisBuilding } from '../../actions/contract/contract_actions'
 
 
 class StepByStepCard extends Component {
@@ -26,6 +27,12 @@ class StepByStepCard extends Component {
       context: {},
 		}
 	}
+
+  signAndPayOnline() {
+    this.toggleModal(true, 'sign_pay_online')
+    this.props.applyToLiveAtThisBuilding(this.props.building)
+    this.props.history.push(`/signing/lease/${this.props.building.building_id}`)
+  }
 
   toggleModal(bool, attr, context) {
 		this.setState({
@@ -218,7 +225,7 @@ class StepByStepCard extends Component {
               Share With Roomates
             </div>
           </Card.Content>
-          <Card.Content onClick={() => this.toggleModal(true, 'sign_pay_online')} style={comStyles().step}>
+          <Card.Content onClick={() => this.signAndPayOnline()} style={comStyles().step}>
             {/*<i className='ion-cash' style={comStyles().icon}></i>
             <i className='ion-card' style={comStyles().icon}></i>*/}
 
@@ -243,6 +250,7 @@ StepByStepCard.propTypes = {
 	history: PropTypes.object.isRequired,
   all_suites: PropTypes.array.isRequired,    // passed in
   building: PropTypes.object.isRequired,     // passed in
+  applyToLiveAtThisBuilding: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -263,7 +271,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    applyToLiveAtThisBuilding,
 	})(RadiumHOC)
 )
 

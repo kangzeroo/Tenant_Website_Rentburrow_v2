@@ -172,7 +172,7 @@ class SubletorForm extends Component {
 		if (!this.state.official_end_date.isAfter(this.state.official_start_date)) {
 			errors.push('The contract end date cannot be before the start date')
 		}
-		if (!this.state.original_lease_signing_date.isAfter(moment())) {
+		if (this.state.original_lease_signing_date.isAfter(moment())) {
 			errors.push('The original lease signing date must be in the past')
 		}
 		if (this.state.price <= 0) {

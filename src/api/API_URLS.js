@@ -12,6 +12,7 @@ export const GENERIC_MICROSERVICE = 'https://localhost:3001'
 export const FB_PARSER_MICROSERVICE = 'https://localhost:3001'
 export const INTEL_MICROSERVICE = 'https://localhost:3004'
 export const SUBLETTING_MICROSERVICE = 'https://localhost:3005'
+export const CONTRACTING_MICROSERVICE = 'https://localhost:3005'
 
 // // PROD
 export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
@@ -23,3 +24,4 @@ export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
 // export const GENERIC_MICROSERVICE = 'https://rentburrow.com:3001'
 // export const FB_PARSER_MICROSERVICE = 'https://rentburrow.com:3001'
 // export const INTEL_MICROSERVICE = 'https://rentburrow.com:3004'
+// export const CONTRACTING_MICROSERVICE = 'https://rentburrow.com:3005'
