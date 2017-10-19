@@ -164,9 +164,6 @@ class RoommateGroupForm extends Component {
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
-								<GroupMembers
-									group_id={this.props.group_id}
-								/>
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
 										Share this link with anyone you want as a roommate
@@ -180,16 +177,20 @@ class RoommateGroupForm extends Component {
 										</Form.Field>
 									</div>
 								</Card>
-								{
-									this.state.submitted
-									?
-									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-									</div>
-									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
-								}
+								<GroupMembers
+									group_id={this.props.group_id}
+								/>
 							</Form>
+
+							{
+								this.state.submitted
+								?
+								<div style={comStyles().hidden_loading}>
+									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+								</div>
+								:
+								<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+							}
 						</div>
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
@@ -276,6 +277,7 @@ const comStyles = () => {
 		form: {
       display: 'flex',
       flexDirection: 'column',
+			margin: '10px',
 		},
 		viewTerms: {
 			color: 'blue',
@@ -304,7 +306,7 @@ const comStyles = () => {
 		},
 		card_style: {
 			padding: '20px',
-			height: '400px',
+			height: '250px',
 		},
 		dates: {
 			display: 'flex',

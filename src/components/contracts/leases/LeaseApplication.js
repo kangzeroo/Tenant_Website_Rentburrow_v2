@@ -99,6 +99,15 @@ class LeaseApplication extends Component {
             this.setState({
               group_id: group_id,
             })
+          } else if (data.user_does_not_exist) {
+            console.log('User does not exist in the group!')
+            createGroup(this.props.tenant_profile.tenant_id)
+              .then((data) => {
+                this.setState({
+                  group_id: data.group_id
+                })
+                localStorage.setItem('leasing_group_id', data.group_id)
+              })
           } else {
             console.log('Add User To the Group!')
             addMeToTheGroup(this.props.tenant_profile.tenant_id, group_id)
