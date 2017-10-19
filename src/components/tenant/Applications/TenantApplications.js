@@ -15,6 +15,7 @@ import {
 import PlacesIAppliedToLive from './tabs/PlacesIAppliedToLive'
 import PeopleWhoWantToSubletMine from './tabs/PeopleWhoWantToSubletMine'
 import CompletedApplications from './tabs/CompletedApplications'
+import LeaseApplications from './tabs/LeaseApplications'
 import { authenticateTenant, } from '../../../api/general/general_api'
 
 class TenantApplications extends Component {
@@ -61,10 +62,19 @@ class TenantApplications extends Component {
 
 	renderTabs() {
 		return [
-			{ index: 0, code: 'where-i-want-to-live', menuItem: 'Places I have applied to live', render: () => <Tab.Pane attached={false}>{ this.renderPlacesIAppliedToLive() }</Tab.Pane> },
-			{ index: 1, code: 'people-want-to-live-at-mine', menuItem: 'People who want to sublet my place', render: () => <Tab.Pane attached={false}>{ this.renderReceivedApplications() }</Tab.Pane> },
+			{ index: 0, code: 'lease-applications', menuItem: 'Lease Applications', render: () => <Tab.Pane attached={false}>{ this.renderMyLeaseApplications() }</Tab.Pane> },
+			{ index: 1, code: 'where-i-want-to-live', menuItem: 'Places I have applied to live', render: () => <Tab.Pane attached={false}>{ this.renderPlacesIAppliedToLive() }</Tab.Pane> },
+			{ index: 2, code: 'people-want-to-live-at-mine', menuItem: 'People who want to sublet my place', render: () => <Tab.Pane attached={false}>{ this.renderReceivedApplications() }</Tab.Pane> },
 			// { index: 2, code: 'completed-apps', menuItem: 'Completed Applications', render: () => <Tab.Pane attached={false}>{ this.renderCompletedApplications() }</Tab.Pane> },
 		]
+	}
+
+	renderMyLeaseApplications() {
+		return (
+			<LeaseApplications
+
+			/>
+		)
 	}
 
 	renderPlacesIAppliedToLive() {

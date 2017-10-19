@@ -42,3 +42,17 @@ export const insertGuarantorProfile = (obj) => {
   })
   return p
 }
+
+export const getAllMyLeaseApplications = (tenant_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_all_my_applications`, { tenant_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
