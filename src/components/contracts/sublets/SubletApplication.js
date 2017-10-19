@@ -175,14 +175,14 @@ class SubletApplication extends Component {
 	}
 
 	saveSubleteeForm(formObj) {
-		uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.student_id}/`, 'student_card-')
+		uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
 			.then((S3Obj) => {
 				return saveSubleteeFormToDb({
 					...formObj,
 					subletee_student_card: S3Obj.Location,
           fb_post_id: this.state.fb_post_id,
 			    fb_user_id: this.props.tenant_profile.id,
-					student_id: this.props.tenant_profile.student_id,
+					tenant_id: this.props.tenant_profile.tenant_id,
 				})
 			})
 			.then((data) => {
@@ -204,14 +204,14 @@ class SubletApplication extends Component {
 	}
 
 	saveSubletorForm(formObj) {
-		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.student_id}/`, 'student_card-')
+		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
 			.then((S3Obj) => {
 				return saveSubletorFormToDb({
 					...formObj,
 					subletor_student_card: S3Obj.Location,
 					fb_post_id: this.state.fb_post_id,
 			    fb_user_id: this.props.tenant_profile.id,
-					student_id: this.props.tenant_profile.student_id,
+					tenant_id: this.props.tenant_profile.tenant_id,
 					contract_id: this.state.subletee_contract.contract_id,
 				})
 			})
@@ -237,7 +237,7 @@ class SubletApplication extends Component {
 		return (
 			<div style={comStyles().container}>
 				{
-					this.state.current_form === 'loading' && !this.props.tenant_profile.student_id
+					this.state.current_form === 'loading' && !this.props.tenant_profile.tenant_id
 					?
 					<div style={comStyles().hidden_loading}>
 						<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
@@ -247,7 +247,7 @@ class SubletApplication extends Component {
 				}
 				<Route exact path='/signing/sublet/:post_id/initiate/apply/:subletee_id'>
 					{
-						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID && this.props.tenant_profile && this.props.tenant_profile.student_id
+						this.state.current_form === 'subletee' && this.state.sublet_post.POST_ID && this.props.tenant_profile && this.props.tenant_profile.tenant_id
 						?
 						<SubleteeForm
 							sublet_post={this.state.sublet_post}
@@ -271,7 +271,7 @@ class SubletApplication extends Component {
 				</Route>
 				<Route exact path='/signing/sublet/:post_id/initiate/applications/:contract_id'>
 					{
-						this.state.current_form === 'subletor' && this.state.sublet_post.POST_ID && this.props.tenant_profile && this.props.tenant_profile.student_id
+						this.state.current_form === 'subletor' && this.state.sublet_post.POST_ID && this.props.tenant_profile && this.props.tenant_profile.tenant_id
 						?
 						<SubletorForm
 							sublet_post={this.state.sublet_post}

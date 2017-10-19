@@ -31,7 +31,6 @@ import TenantAccount from './tenant/TenantAccount'
 import TenantApplications from './tenant/Applications/TenantApplications'
 import TenantSettings from './tenant/TenantSettings'
 import SubletApplication from './contracts/sublets/SubletApplication'
-import LeaseApplication from './contracts/leases/LeaseApplication'
 import SentApplicationPage from './tenant/Applications/sublets/SentApplicationPage'
 import ReceivedApplicationPage from './tenant/Applications/sublets/ReceivedApplicationPage'
 import Authenticate from './pandadoc/Authenticate'
@@ -49,9 +48,10 @@ import UseChrome from './instructions/UseChrome'
 import { clearIntelList } from '../actions/intel/intel_actions'
 import { sendOffToDynamoDB } from '../api/intel/intel_api'
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
-import { saveStudentProfile, getStudentProfile } from '../api/signing/sublet_contract_api'
+import { saveTenantProfile, getTenantProfile } from '../api/signing/sublet_contract_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
 
+ import BasicLeaseForm from './contracts/leases/basics/BasicLeaseForm'
 
 class AppRoot extends Component {
 
@@ -105,12 +105,11 @@ class AppRoot extends Component {
     })
   }
 
-  documentStatus(student_id) {
-    updateDocumentStatus({ student_id, })
+  documentStatus(tenant_id) {
+    updateDocumentStatus({ tenant_id, })
   }
 
   initiateFacebookProcess() {
-    console.log(localStorage.getItem('fbToken'))
     if (localStorage.getItem('fbToken') !== null) {
       initiateFacebook().then(() => {
         // autologin to facebook if possible
@@ -121,11 +120,11 @@ class AppRoot extends Component {
         if (onSublet) {
           scrapeFacebookSublets(fbProfile)
         }
-        return saveStudentProfile(fbProfile)
+        return saveTenantProfile(fbProfile)
       })
       .then((data) => {
-        this.documentStatus(data.student_id)
-        return getStudentProfile({ student_id: data.student_id, })
+        this.documentStatus(data.tenant_id)
+        return getTenantProfile({ tenant_id: data.tenant_id, })
       })
       .then((data) => {
         this.props.saveTenantToRedux(data)
@@ -247,7 +246,7 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={LeaseApplication} />
+                <Route exact path='/sandbox' component={BasicLeaseForm} />
                 <Route exact path='/community' component={CommunityPage} />
                 <Route exact path='/logout' component={Logout} />
 
@@ -272,7 +271,7 @@ class AppRoot extends Component {
 
                 <Switch>
                   <Route path='/signing/sublet' component={SubletApplication} />
-                  <Route path='/signing/lease/:building_id' component={LeaseApplication} />
+                  <Route path='/signing/lease' component={SubletApplication} />
                 </Switch>
 
                 {/* Route Mobile Site to Here .... */}

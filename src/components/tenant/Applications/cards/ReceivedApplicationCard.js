@@ -61,7 +61,7 @@ class ReceivedApplicationCard extends Component {
 				email: this.props.details.my_email,
 			})
 			.then(() => {
-				getReceivedApplications({ student_id: this.props.details.student_id })
+				getReceivedApplications({ tenant_id: this.props.details.tenant_id })
 				.then((data) => {
 					saveReceivedApplicationsToRedux(data) //.map(s => JSON.parse(s)))
 				})

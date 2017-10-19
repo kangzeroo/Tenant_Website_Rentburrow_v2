@@ -14,7 +14,7 @@ import {
 } from 'semantic-ui-react'
 import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
-import { saveStudentProfile, getStudentProfile } from '../../api/signing/sublet_contract_api'
+import { saveTenantProfile, getTenantProfile } from '../../api/signing/sublet_contract_api'
 
 class LoginPopup extends Component {
 
@@ -24,9 +24,9 @@ class LoginPopup extends Component {
       return loginFacebook()
     })
     .then((fbProfile) => {
-      saveStudentProfile(fbProfile)
+      saveTenantProfile(fbProfile)
       .then((data) => {
-        return getStudentProfile({ student_id: data.student_id, })
+        return getTenantProfile({ tenant_id: data.tenant_id, })
       })
       .then((data) => {
         this.props.saveTenantToRedux(data)
