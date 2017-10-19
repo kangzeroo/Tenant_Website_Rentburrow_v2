@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
+import moment from 'moment'
 import {
 	Form,
 	Card,
@@ -35,7 +36,7 @@ class AboutStudentForm extends Component {
 		this.state = {
 	    first_name: '',
 	    last_name: '',
-	    date_of_birth: '',
+	    date_of_birth: moment('1/1/1997'),
 	    gender: '',
 
 			building_address_components: {},
