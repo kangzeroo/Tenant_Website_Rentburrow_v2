@@ -36,6 +36,22 @@ export const searchForSpecificBuilding = (urlPath) => {
   return p
 }
 
+export const getBuildingById = (id) => {
+  const p = new Promise((res, rej) => {
+    // search for a specific building from backend
+    // axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: building_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: id })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data[0])
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 // this should search for a specific building
 // and if not found, throw an error
 // currently just mocks a return

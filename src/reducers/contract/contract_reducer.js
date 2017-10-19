@@ -2,6 +2,7 @@ import {
   I_APPLIED,
   APPLIED_TO_ME,
   APPLY_FOR_THIS_BUILDING,
+  APPLIED_LEASES,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
@@ -21,6 +22,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         received_applications: action.payload,
+      }
+    case APPLIED_LEASES:
+      return {
+        ...state,
+        lease_applications: action.payload,
       }
     case APPLY_FOR_THIS_BUILDING:
       return {
