@@ -18,6 +18,18 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
         icon: 'sign in',
         key: 'begin',
       },
+      group: {
+        title: 'Group',
+        desc: 'Pick your roommates',
+        icon: 'users',
+        key: 'roommates',
+      },
+      suite_room_preferences: {
+        title: 'Suite Preferences',
+        desc: 'Choose your suite and room',
+        icon: 'bed',
+        key: 'suite_room_preferences',
+      },
       about_tenant: {
         title: 'About Me',
         desc: 'Basic info for lease',
@@ -29,24 +41,6 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
         desc: 'Verification of student status',
         icon: 'student',
         key: 'about_student',
-      },
-      suite_room_preferences: {
-        title: 'Suite Preferences',
-        desc: 'Choose your suite and room',
-        icon: 'bed',
-        key: 'suite_room_preferences',
-      },
-      witness: {
-        title: 'Witness',
-        desc: 'To be used later',
-        icon: 'eye',
-        key: 'witness',
-      },
-      guarantor: {
-        title: 'Guarantor',
-        desc: 'In case of missed payment',
-        icon: 'money',
-        key: 'guarantor',
       },
       medical: {
         title: 'Medical History',
@@ -71,6 +65,18 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
         desc: 'For approval of credit worthiness',
         icon: 'briefcase',
         key: 'employment',
+      },
+      witness: {
+        title: 'Witness',
+        desc: 'To be used later',
+        icon: 'eye',
+        key: 'witness',
+      },
+      guarantor: {
+        title: 'Guarantor',
+        desc: 'In case of missed payment',
+        icon: 'money',
+        key: 'guarantor',
       },
     })
   })

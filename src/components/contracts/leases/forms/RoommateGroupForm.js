@@ -17,10 +17,11 @@ import {
 	Step,
 	Modal,
 	Message,
+	Input,
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
 
-class MedicalHistoryForm extends Component {
+class RoommateGroupForm extends Component {
 
 	constructor() {
 		super()
@@ -97,56 +98,24 @@ class MedicalHistoryForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Medical History</div>
+					<div style={comStyles().sign_header}>Add Roommates To Your Group</div>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
 
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
-										Step 1: Subletee Profile
+										Share this link with anyone you want as a roommate
 									</Card.Header>
 									<div style={comStyles().student_div}>
-										<div style={comStyles().student_form}>
-											<Form.Field>
-												<label>Legal First Name</label>
-												<input
-													placeholder='First Name'
-													onChange={(e) => this.updateAttr(e, 'first_name')}
-													value={this.state.first_name}
-													disabled={this.props.tenant_profile.first_name !== ''}
-												/>
-											</Form.Field>
-										</div>
-										<div style={comStyles().student_card}>
-											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
-										</div>
+										<Form.Field>
+											<input
+												value={`${window.location.origin}${window.location.pathname}?group=${this.props.group_id}`}
+												style={comStyles().share_link}
+											/>
+										</Form.Field>
 									</div>
 								</Card>
-
-								<Card fluid style={comStyles().card_style}>
-									<Form.Field>
-										<Checkbox label='I agree to the Terms and Conditions' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'agree_to_terms')} checked={this.state.agree_to_terms} />
-										&nbsp; &nbsp; &nbsp;
-										<span onClick={() => this.toggleModal(true, 'terms')} style={comStyles().viewTerms}>View</span>
-									</Form.Field>
-								</Card>
-
-								<Form.Field>
-									{
-										this.state.error_messages.map((err, index) => {
-											return (
-												<Message
-													visible
-													key={index}
-													error
-													content={err}
-												/>
-											)
-										})
-									}
-								</Form.Field>
-
 								{
 									this.state.submitted
 									?
@@ -154,7 +123,7 @@ class MedicalHistoryForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.submit()}>Submit</Button>
+									<Button type='submit' primary size='large' onClick={() => console.log('next')}>Next</Button>
 								}
 							</Form>
 						</div>
@@ -194,18 +163,19 @@ class MedicalHistoryForm extends Component {
 }
 
 // defines the types of variables in this.props
-MedicalHistoryForm.propTypes = {
+RoommateGroupForm.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
+	group_id: PropTypes.string.isRequired,				// passed in
 }
 
 // for all optional props, define a default value
-MedicalHistoryForm.defaultProps = {
+RoommateGroupForm.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(MedicalHistoryForm)
+const RadiumHOC = Radium(RoommateGroupForm)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -345,6 +315,10 @@ const comStyles = () => {
 			padding: '30px',
 			fontSize: '1.3rem',
 			fontWeight: 'bold',
+		},
+		share_link: {
+			minWidth: '500px',
+			maxWidth: '100%',
 		}
 	}
 }

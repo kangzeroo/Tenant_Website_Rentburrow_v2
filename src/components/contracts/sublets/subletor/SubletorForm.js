@@ -466,14 +466,14 @@ class SubletorForm extends Component {
 
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
-								<Accordion.Title active={this.stateactiveIndex === 0} index={0} style={comStyles().why_sign_online_title}>
+								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
 									Why Sign Contracts Online?
 								</Accordion.Title>
 								{
 									this.why_sign_online.map((why) => {
 										return (
 											<div key={why.index}>
-								        <Accordion.Title active={this.state.activeIndex === why.index} index={why.index} onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
+								        <Accordion.Title active={this.state.activeIndex === why.index}  onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
 								          <Icon name={why.icon} />
 													&nbsp; &nbsp;
 								          { why.title }

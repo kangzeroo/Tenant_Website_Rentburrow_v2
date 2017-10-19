@@ -15,7 +15,6 @@ import {
   Image,
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
-import { applyToLiveAtThisBuilding } from '../../actions/contract/contract_actions'
 
 
 class StepByStepCard extends Component {
@@ -30,8 +29,7 @@ class StepByStepCard extends Component {
 
   signAndPayOnline() {
     this.toggleModal(true, 'sign_pay_online')
-    this.props.applyToLiveAtThisBuilding(this.props.building)
-    this.props.history.push(`/signing/lease/${this.props.building.building_id}`)
+    window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
   }
 
   toggleModal(bool, attr, context) {
@@ -271,7 +269,6 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-    applyToLiveAtThisBuilding,
 	})(RadiumHOC)
 )
 

@@ -58,7 +58,7 @@ export const searchForSpecificBuildingByAlias = (urlPath) => {
 
 
 // searches for buildings based on Google's place ID
-export const searchBuildingByPlaceID = ({ place_id, }) => {
+export const searchBuildingByPlaceID = ({ place_id }) => {
   const p = new Promise((res, rej) => {
     // search for a specific building from backend
     // axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: building_id })

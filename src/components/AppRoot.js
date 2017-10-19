@@ -49,7 +49,7 @@ import UseChrome from './instructions/UseChrome'
 import { clearIntelList } from '../actions/intel/intel_actions'
 import { sendOffToDynamoDB } from '../api/intel/intel_api'
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
-import { saveStudentProfile, getStudentProfile } from '../api/signing/sublet_contract_api'
+import { saveTenantProfile, getTenantProfile } from '../api/signing/sublet_contract_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
 
 
@@ -105,12 +105,11 @@ class AppRoot extends Component {
     })
   }
 
-  documentStatus(student_id) {
-    updateDocumentStatus({ student_id, })
+  documentStatus(tenant_id) {
+    updateDocumentStatus({ tenant_id, })
   }
 
   initiateFacebookProcess() {
-    console.log(localStorage.getItem('fbToken'))
     if (localStorage.getItem('fbToken') !== null) {
       initiateFacebook().then(() => {
         // autologin to facebook if possible
@@ -121,11 +120,11 @@ class AppRoot extends Component {
         if (onSublet) {
           scrapeFacebookSublets(fbProfile)
         }
-        return saveStudentProfile(fbProfile)
+        return saveTenantProfile(fbProfile)
       })
       .then((data) => {
-        this.documentStatus(data.student_id)
-        return getStudentProfile({ student_id: data.student_id, })
+        this.documentStatus(data.tenant_id)
+        return getTenantProfile({ tenant_id: data.tenant_id, })
       })
       .then((data) => {
         this.props.saveTenantToRedux(data)
@@ -270,10 +269,16 @@ class AppRoot extends Component {
 
                 <Route exact path='/:building_alias' component={BuildingPage} />
 
-                <Switch>
-                  <Route path='/signing/sublet' component={SubletApplication} />
-                  <Route path='/signing/lease/:building_id' component={LeaseApplication} />
-                </Switch>
+                {
+                  this.props.tenant_profile.tenant_id
+                  ?
+                  <Switch>
+                    <Route path='/signing/sublet' component={SubletApplication} />
+                    <Route path='/signing/lease/:building_id' component={LeaseApplication} />
+                  </Switch>
+                  :
+                  null
+                }
 
                 {/* Route Mobile Site to Here .... */}
               </Switch>
@@ -313,6 +318,7 @@ AppRoot.propTypes = {
   clearIntelList: PropTypes.func.isRequired,
   forwardUrlLocation: PropTypes.func.isRequired,
   location_forwarding: PropTypes.string.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -332,6 +338,7 @@ const mapReduxToProps = (redux) => {
     sublet_filter_params: redux.filter.sublet_filter_params,
     collectedRawIntel: redux.intel.collectedRawIntel,
     location_forwarding: redux.auth.location_forwarding,
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 

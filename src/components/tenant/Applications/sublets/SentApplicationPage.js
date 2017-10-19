@@ -41,7 +41,7 @@ class SentApplicationPage extends Component {
 				application,
 			})
 
-			getQuickSubleteeContractLink(contract_id,	application.student_id)
+			getQuickSubleteeContractLink(contract_id,	application.tenant_id)
 			.then((data) => {
 				this.setState({
 					link: data[0].contract_link

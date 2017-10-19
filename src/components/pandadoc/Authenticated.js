@@ -17,7 +17,7 @@ class Authenticated extends Component {
 
   componentWillMount() {
     setTimeout(() => {
-      if (this.props.tenant_profile.student_id === '2d644a3e-0d29-4ae0-9b56-5694484f22da') {
+      if (this.props.tenant_profile.tenant_id === '2d644a3e-0d29-4ae0-9b56-5694484f22da') {
         const url_arguments = this.props.location.search
         const code_id_position = url_arguments.toLowerCase().indexOf('code=')
         const code_id = url_arguments.slice(code_id_position + 'code='.length)

@@ -128,5 +128,5 @@ export const validateEmail = (email) => {
 }
 
 export const authenticateTenant = (tenant) => {
-	return tenant && tenant !== null && tenant !== {} && tenant.student_id
+	return tenant && tenant !== null && tenant !== {} && tenant.tenant_id
 }
