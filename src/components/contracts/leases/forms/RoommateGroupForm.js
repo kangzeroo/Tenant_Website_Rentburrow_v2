@@ -17,15 +17,19 @@ import {
 	Step,
 	Modal,
 	Message,
+	Header,
 	Input,
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
+import { getGroupInfo, saveGroupNameToDb } from '../../../../api/group/group_api'
 
 class RoommateGroupForm extends Component {
 
 	constructor() {
 		super()
 		this.state = {
+			group_name: '',
+			new_group_name: '',
 	    first_name: '',
 
 			submitted: false,
@@ -35,6 +39,8 @@ class RoommateGroupForm extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+
+			edit: false,
 	  }
 
 		this.why_sign_online = [
@@ -43,6 +49,21 @@ class RoommateGroupForm extends Component {
 			{ index: 3, icon: 'exclamation triangle', title: 'How many roommates max?', description: 'You can have as many roommates as you want, but the building you are applying to may not necessarily have enough bedrooms in one suite to hold you all. Later when you reach the Notes To The Landlord form, you can request that the landlord put all your friends in suites near eachother.' },
 			{ index: 4, icon: 'remove user', title: 'Removing roommates', description: 'To remove a user, go to your account at the top-right hand corner of the screen and from the dropdown menu, select Roommates. You can manage your roommates from there. Note that only the group leader can remove roommates.' },
 		]
+	}
+
+	componentWillMount() {
+		getGroupInfo(this.props.group_id)
+		.then((data) => {
+			if (data.group_name !== null) {
+				this.setState({
+					group_name: data.group_name
+				})
+			} else {
+				this.setState({
+					group_name: 'Group Name'
+				})
+			}
+		})
 	}
 
 	updateAttr(e, attr) {
@@ -66,6 +87,15 @@ class RoommateGroupForm extends Component {
       context,
     })
   }
+
+	saveGroupName(new_group_name) {
+		saveGroupNameToDb(this.props.group_id, new_group_name)
+		this.setState({
+			group_name: new_group_name,
+			new_group_name: '',
+			edit: false,
+		})
+	}
 
 	renderAppropriateModal(modal_name, context) {
 		if (modal_name === 'terms') {
@@ -91,7 +121,45 @@ class RoommateGroupForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Add Roommates To Your Group</div>
+					{
+						this.state.edit
+						?
+						<div style={comStyles().header_container} >
+							<Input
+								placeholder='Enter A Group Name'
+								value={this.state.new_group_name}
+								onChange={(e) => this.updateAttr(e, 'new_group_name')}
+							/>
+							<div style={comStyles().buttons_container} >
+								<Button
+									primary
+									basic
+									content='Cancel'
+									onClick={() => this.setState({ edit: false, new_group_name: '' })}
+								/>
+								<Button
+									primary
+									content='Save'
+									onClick={() => this.saveGroupName(this.state.new_group_name)}
+								/>
+							</div>
+						</div>
+						:
+						<div style={comStyles().header_container} >
+							<Header
+								as='h1'
+								content={this.state.group_name}
+								subheader='Add roommates to your group'
+								icon='add user'
+							/>
+							<Button
+								primary
+								basic
+								content='Edit'
+								onClick={() => this.setState({ edit: true, })}
+							/>
+						</div>
+					}
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
@@ -193,6 +261,14 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+		},
+		header_container: {
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'space-between'
+		},
+		buttons_container: {
+
 		},
 		form: {
       display: 'flex',

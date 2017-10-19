@@ -15,16 +15,20 @@ import {
 	Checkbox,
 	Icon,
 	Step,
+	Header,
 	Modal,
 	Message,
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
+import { getGroupInfo, saveGroupNameToDb } from '../../../../api/group/group_api'
+
 
 class JoinedGroup extends Component {
 
 	constructor() {
 		super()
 		this.state = {
+			group_name: '',
 	    first_name: '',
 
 			submitted: false,
@@ -34,6 +38,8 @@ class JoinedGroup extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+
+			group_id: '',
 	  }
 
 		this.why_sign_online = [
@@ -49,6 +55,19 @@ class JoinedGroup extends Component {
 			{ index: 10, icon: 'heart', title: 'This is awesome, how can I show some love?', description: 'We\'re glad you like this! Rentburrow is made with love by a group of students from the University of Waterloo and Wilfrid Laurier University. We welcome any and all feedback! Message or like us on Facebook at https://www.facebook.com/rentburrow/' },
 		]
 		this.terms_and_conditions = 'We keep the terms and conditions very simple. Rentburrow provides you the means to sign a sublet contract online but we do not guarantee that the sublet contract is legally valid in every situation. We also do not guarantee that signing a sublet contract via Rentburrow will guarantee that you actually get the sublet - that is up to you and the other person. By using this service, you agree to take all responsibility for this sublet contract. You also release Rentburrow (and its parent company Bytenectar Inc) from all legal responsibility related to this sublet contract.'
+	}
+
+	componentWillMount() {
+		// const group_id = this.props.location_forwarding.slice(this.props.location_forwarding.indexOf('group=') + 'group='.length)
+		// console.log(group_id)
+		console.log(this.props.group_id)
+		getGroupInfo(this.props.group_id)
+		.then((data) => {
+			this.setState({
+				group_name: data.group_name,
+				group_id: this.props.group_id,
+			})
+		})
 	}
 
 	updateAttr(e, attr) {
@@ -97,7 +116,12 @@ class JoinedGroup extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Joined Group</div>
+					<Header
+						as='h1'
+						icon='group'
+						content={this.state.group_name}
+						subheader='Group application lobby'
+					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
@@ -197,6 +221,8 @@ class JoinedGroup extends Component {
 JoinedGroup.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
+	location_forwarding: PropTypes.string.isRequired,
+	group_id: PropTypes.string.isRequired, // passed in
 }
 
 // for all optional props, define a default value
@@ -212,6 +238,9 @@ const mapReduxToProps = (redux) => {
 	return {
 		tenant_profile: redux.auth.tenant_profile,
 		goToNextForm: PropTypes.func.isRequired,			// passed in
+
+    location_forwarding: redux.auth.location_forwarding,
+
 	}
 }
 
