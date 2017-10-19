@@ -78,6 +78,12 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
         icon: 'money',
         key: 'guarantor',
       },
+      review: {
+        title: 'Submit',
+        desc: 'Send to landlord',
+        icon: 'send',
+        key: 'submit',
+      },
     })
   })
   return p
