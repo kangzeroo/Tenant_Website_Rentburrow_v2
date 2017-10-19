@@ -17,7 +17,10 @@ import {
 	Step,
 	Modal,
 	Message,
+	Dropdown,
 } from 'semantic-ui-react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
 
 class AboutStudentForm extends Component {
@@ -26,6 +29,20 @@ class AboutStudentForm extends Component {
 		super()
 		this.state = {
 	    first_name: '',
+	    last_name: '',
+	    date_of_birth: '',
+	    gender: '',
+
+	    address: '',
+	    contact_number_home: '',
+	    contact_number_cell: '',
+	    email: '',
+
+	    primary_language: '',
+	    secondary_languages: '',
+	    citizenship: '',
+	    permanent_resident: false,
+	    govt_id: '',
 
 			submitted: false,
 			error_messages: [],
@@ -37,18 +54,8 @@ class AboutStudentForm extends Component {
 	  }
 
 		this.why_sign_online = [
-			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' },
-			{ index: 2, icon: 'lightning', title: 'It\'s Simple and Fast', description: 'The traditional method requires a printer or PDF software, but online signing only requires a web browser. If you wanted, you could print out a contract to sign in person or send it as an email PDF to be signed with random software, but how tedious is that? Rentburrow allows you to complete the entire process online within minutes - way easier than the old way.' },
-			{ index: 3, icon: 'question circle', title: 'How does it work?', description: 'Good question. First message the person subletting on Facebook to work out the details such as price and the sublet start/end date. When you two have reached an agreement, you must fill out the form on the left and click submit. After submitting, you will get a URL link that you must send to the other person. They will open the link and fill out another form that will verify the sublet details. They will also provide the landlords contact info for you. When they submit their form, everyone including witnesses will get an email where you can sign the sublet contract online. Be sure to read over the sublet contract one last time before signing! Once signed, the contract is complete and you will arrange a time to meet the other person to exchange keys and payment.' },
-			{ index: 4, icon: 'dollar', title: 'Is there any cost?', description: 'Nope, its completely free :)' },
-			{ index: 5, icon: 'eye', title: 'Why do I need a witness?', description: 'Most contracts require a contract as backup proof that the contract was indeed signed by the stated parties. Don\'t worry, witnesses can be anyone who saw you sign the contract. So you can put your roommate, friend or a parent/guardian. They will get an email and be able to sign from within the email without any extra hassle.' },
-			{ index: 6, icon: 'user', title: 'Why do I need to upload my student card?', description: 'For safety purposes. Because you are renting student housing, we require that you be a student. You do not necessarily need to be a student of the University of Waterloo or Wilfrid Laurier University, as long as you are a student. The other person will be able to see your student card, and you will be able to see theirs. That way, everyone feels safe. We keep all sensitive information secure and encrypted on bank level AES-256 bit encryption.' },
-			{ index: 7, icon: 'privacy', title: 'How do I pay rent and get my keys?', description: 'You will still need to meet up in person to exchange keys and payment. It is up to you to determine how you will pay the other person. Please remember that when you pay for a sublet, you are paying the current tenant who will in turn pay the landlord.' },
-			{ index: 8, icon: 'user cancel', title: 'What if the other person backs out?', description: 'First of all, check with the person to see if the sublet is still available. You can simply message them on Facebook. If the other person agreed to sublet to you but later gave it to someone else, then legally the first person who signed a sublet contract has rights to the room. If the other person does not sublet at all, you will have to work things out with them by yourself. Rentburrow cannot enforce a sublet contract for you, so be sure that the other person has integrity to uphold the contract. In the rare event that the other person does not pay rent to the original landlord, you must go directly to the landlord and explain to them the situation.' },
-			{ index: 9, icon: 'legal', title: 'What are the terms and conditions?', description: this.terms_and_conditions },
-			{ index: 10, icon: 'heart', title: 'This is awesome, how can I show some love?', description: 'We\'re glad you like this! Rentburrow is made with love by a group of students from the University of Waterloo and Wilfrid Laurier University. We welcome any and all feedback! Message or like us on Facebook at https://www.facebook.com/rentburrow/' },
+			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' }
 		]
-		this.terms_and_conditions = 'We keep the terms and conditions very simple. Rentburrow provides you the means to sign a sublet contract online but we do not guarantee that the sublet contract is legally valid in every situation. We also do not guarantee that signing a sublet contract via Rentburrow will guarantee that you actually get the sublet - that is up to you and the other person. By using this service, you agree to take all responsibility for this sublet contract. You also release Rentburrow (and its parent company Bytenectar Inc) from all legal responsibility related to this sublet contract.'
 	}
 
 	updateAttr(e, attr) {
@@ -93,6 +100,184 @@ class AboutStudentForm extends Component {
 		}
 	}
 
+	renderBasicProfileCard() {
+		return (
+			<Card raised fluid style={comStyles().card_style}>
+				<Card.Header style={comStyles().card_header}>
+					About Me
+				</Card.Header>
+				<div style={comStyles().student_div}>
+					<div style={comStyles().student_form}>
+						<Form.Field>
+							<label>Legal First Name</label>
+							<input
+								placeholder='Legal First Name'
+								onChange={(e) => this.updateAttr(e, 'first_name')}
+								value={this.state.first_name}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Legal Last Name</label>
+							<input
+								placeholder='Legal Last Name'
+								onChange={(e) => this.updateAttr(e, 'last_name')}
+								value={this.state.last_name}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Date of Birth</label>
+							<DatePicker
+								selected={this.state.date_of_birth}
+								onChange={(d) => this.updateDate(d, 'date_of_birth')}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Gender</label>
+							<Dropdown
+								placeholder='Gender'
+								selection
+								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'gender')}
+								options={[
+									{ key: 'male', value: 'male', text: 'Male' },
+									{ key: 'female', value: 'female', text: 'Female' },
+									{ key: 'other', value: 'other', text: 'Other' },
+								]}
+							/>
+						</Form.Field>
+					</div>
+					{/*<div style={comStyles().student_card}>
+						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
+					</div>*/}
+				</div>
+			</Card>
+		)
+	}
+
+	renderContactProfileCard() {
+		return (
+			<Card raised fluid style={comStyles().card_style}>
+				<Card.Header style={comStyles().card_header}>
+					Contact Info
+				</Card.Header>
+				<div style={comStyles().student_div}>
+					<div style={comStyles().student_form}>
+						<Form.Field>
+							<label>Permanent Address</label>
+							<input
+								placeholder='Permanent Address'
+								onChange={(e) => this.updateAttr(e, 'address')}
+								value={this.state.address}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Home Phone</label>
+							<input
+								placeholder='Home Phone'
+								onChange={(e) => this.updateAttr(e, 'contact_number_home')}
+								value={this.state.contact_number_home}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Cell Phone</label>
+							<input
+								placeholder='Cell Phone'
+								onChange={(e) => this.updateAttr(e, 'contact_number_cell')}
+								value={this.state.contact_number_cell}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Email</label>
+							<input
+								placeholder='Email'
+								onChange={(e) => this.updateAttr(e, 'email')}
+								value={this.state.email}
+							/>
+						</Form.Field>
+					</div>
+					{/*<div style={comStyles().student_card}>
+						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
+					</div>*/}
+				</div>
+			</Card>
+		)
+	}
+
+	renderGovtAndLanguageCard() {
+		return (
+			<Card raised fluid style={comStyles().card_style}>
+				<Card.Header style={comStyles().card_header}>
+					Language and Government
+				</Card.Header>
+				<div style={comStyles().student_div}>
+					<div style={comStyles().student_form}>
+						<Form.Field>
+							<label>Primary Language</label>
+							<Dropdown
+								placeholder='English'
+								selection
+								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'gender')}
+								options={[
+									{ key: 'en', value: 'English', text: 'English' },
+									{ key: 'zh', value: 'Chinese', text: 'Chinese' },
+									{ key: 'ar', value: 'Arabic', text: 'Arabic' },
+									{ key: 'es', value: 'Spanish', text: 'Spanish' },
+									{ key: 'hi', value: 'Hindi', text: 'Hindi' },
+									{ key: 'ur', value: 'Urdu', text: 'Urdu' },
+									{ key: 'sw', value: 'Swahili', text: 'Swahili' },
+									{ key: 'kr', value: 'Korean', text: 'Korean' },
+									{ key: 'ru', value: 'Russian', text: 'Russian' },
+									{ key: 'uk', value: 'Ukrainian', text: 'Ukrainian' },
+									{ key: 'fa', value: 'Farsi', text: 'Farsi' },
+									{ key: 'bn', value: 'Bengali', text: 'Bengali' },
+									{ key: 'pt', value: 'Portuguese', text: 'Portuguese' },
+									{ key: 'ta', value: 'Tamil', text: 'Tamil' },
+									{ key: 'ms', value: 'Malay', text: 'Malay' },
+									{ key: 'fil', value: 'Filipino', text: 'Filipino' },
+									{ key: 'other', value: 'Other', text: 'Other' },
+								]}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Secondary Languages</label>
+							<input
+								placeholder='List secondary languages here'
+								onChange={(e) => this.updateAttr(e, 'contact_number_home')}
+								value={this.state.contact_number_home}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Citizenship</label>
+							<input
+								placeholder='Citizenship'
+								onChange={(e) => this.updateAttr(e, 'contact_number_cell')}
+								value={this.state.contact_number_cell}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Are you a Canadian Permenant Resident?</label>
+							<input
+								placeholder='Email'
+								onChange={(e) => this.updateAttr(e, 'email')}
+								value={this.state.email}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Upload Govt ID</label>
+							<input
+								placeholder='govt_id'
+								onChange={(e) => this.updateAttr(e, 'govt_id')}
+								value={this.state.email}
+							/>
+						</Form.Field>
+					</div>
+					{/*<div style={comStyles().student_card}>
+						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
+					</div>*/}
+				</div>
+			</Card>
+		)
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -102,35 +287,15 @@ class AboutStudentForm extends Component {
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
 
-								<Card raised fluid style={comStyles().card_style}>
-									<Card.Header style={comStyles().card_header}>
-										Step 1: Subletee Profile
-									</Card.Header>
-									<div style={comStyles().student_div}>
-										<div style={comStyles().student_form}>
-											<Form.Field>
-												<label>Legal First Name</label>
-												<input
-													placeholder='First Name'
-													onChange={(e) => this.updateAttr(e, 'first_name')}
-													value={this.state.first_name}
-													disabled={this.props.tenant_profile.first_name !== ''}
-												/>
-											</Form.Field>
-										</div>
-										<div style={comStyles().student_card}>
-											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
-										</div>
-									</div>
-								</Card>
-
-								<Card fluid style={comStyles().card_style}>
-									<Form.Field>
-										<Checkbox label='I agree to the Terms and Conditions' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'agree_to_terms')} checked={this.state.agree_to_terms} />
-										&nbsp; &nbsp; &nbsp;
-										<span onClick={() => this.toggleModal(true, 'terms')} style={comStyles().viewTerms}>View</span>
-									</Form.Field>
-								</Card>
+								{
+									this.renderBasicProfileCard()
+								}
+								{
+									this.renderContactProfileCard()
+								}
+								{
+									this.renderGovtAndLanguageCard()
+								}
 
 								<Form.Field>
 									{
@@ -288,8 +453,8 @@ const comStyles = () => {
 		main_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '85vh',
-			maxHeight: '85vh',
+			minHeight: '100%',
+			maxHeight: '100%',
 			padding: '20px',
 			overflow: 'scroll',
 			width: '85vw',
