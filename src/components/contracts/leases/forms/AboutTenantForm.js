@@ -39,10 +39,14 @@ class AboutStudentForm extends Component {
 	    last_name: '',
 	    date_of_birth: '',
 	    gender: '',
-
-	    address: '',
-	    // contact_number_home: '',
-	    phone: '',
+      
+			building_address_components: {},
+			building_address: '',					  // the building_address typed in
+      building_lat: 0,                // the building lat according to google
+      building_long: 0,               // the building lng according to google
+      building_place_id: '',          // the building place_id according to google
+      
+      phone: '',
 	    email: '',
 
 	    primary_language: '',
@@ -76,6 +80,37 @@ class AboutStudentForm extends Component {
 			last_name: tenant.last_name,
 			phone: tenant.phone,
 			email: tenant.email,
+    })
+  }
+  
+	componentDidMount() {
+		// google address autocomplete
+    // restricted to only show addresses and in canada
+    this.autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('building_address')),
+            {
+              types: ['address'],
+              componentRestrictions: { country: 'ca' },
+              // bounds: new google.maps.LatLngBounds(
+              //   new google.maps.LatLng(-80.671519, 43.522913),
+              //   new google.maps.LatLng(-80.344067, 43.436979)
+              // )
+            }
+          );
+    // When the user selects an address from the dropdown, populate the address
+    // fields in the form.
+    this.autocomplete.addListener('place_changed', this.fillInAddress.bind(this));
+	}
+
+  // fill in address from google autocomplete dropdown
+  fillInAddress() {
+		const place = this.autocomplete.getPlace()
+		this.setState({
+      building_address_components: place.address_components,
+      building_address: place.formatted_address,
+			building_lat: place.geometry.location.lat().toFixed(7),
+      building_long: place.geometry.location.lng().toFixed(7),
+			building_place_id: place.place_id,
 		})
 	}
 
@@ -227,9 +262,10 @@ class AboutStudentForm extends Component {
 						<Form.Field required>
 							<label>Permanent Address</label>
 							<input
+								id='building_address'
 								placeholder='Permanent Address'
-								onChange={(e) => this.updateAttr(e, 'address')}
-								value={this.state.address}
+								onChange={(e) => this.updateAttr(e, 'building_address')}
+								value={this.state.building_address}
 							/>
 						</Form.Field>
 						<Form.Field>
