@@ -49,7 +49,7 @@ import UseChrome from './instructions/UseChrome'
 import { clearIntelList } from '../actions/intel/intel_actions'
 import { sendOffToDynamoDB } from '../api/intel/intel_api'
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
-import { saveTenantProfile, getTenantProfile } from '../api/signing/sublet_contract_api'
+import { saveTenantProfile, getTenantProfile } from '../api/auth/tenant_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
 
 

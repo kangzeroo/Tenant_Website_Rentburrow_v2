@@ -19,7 +19,7 @@ import {
 import {
   updateTenantProfile,
   getTenantProfile,
-} from '../../api/signing/sublet_contract_api'
+} from '../../api/auth/tenant_api'
 import { saveTenantToRedux } from '../../actions/auth/auth_actions'
 import { filterNonImages, uploadImageToS3WithEncryption, getEncryptedS3Image } from '../../api/aws/aws-S3'
 import { authenticateTenant } from '../../api/general/general_api'
