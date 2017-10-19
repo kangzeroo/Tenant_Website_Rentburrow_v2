@@ -36,7 +36,11 @@ class GuarantorForm extends Component {
 	    last_name: '',
 	    relationship: '',
 	    date_of_birth: '',
-	    address: '',
+			building_address_components: {},
+			building_address: '',					  // the building_address typed in
+      building_lat: 0,                // the building lat according to google
+      building_long: 0,               // the building lng according to google
+      building_place_id: '',          // the building place_id according to google
 	    cell_phone: '',
 	    email: '',
 	    primary_language: '',
@@ -62,6 +66,37 @@ class GuarantorForm extends Component {
 			{ index: 3, icon: 'user', title: 'Why do I need to upload a photo of my guarantors Government ID?', description: 'For the same reason why you need to upload a piece of Government ID. So that the landlord can verify that the name provided matches a real official record.' },
 			{ index: 4, icon: 'user x', title: 'What if I do not have a Canadian guarantor?', description: 'If you do not have a Canadian guarantor, then the landlord will deem you a risky tenant. In order to compensate for this risk, the landlord may require you to provide additional months rent. You do not have to provide this additional rent deposit, but the landlord also does not have to take the risk of renting out to you.' },
 		]
+	}
+
+	componentDidMount() {
+		// google address autocomplete
+    // restricted to only show addresses and in canada
+    this.autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('building_address')),
+            {
+              types: ['address'],
+              componentRestrictions: { country: 'ca' },
+              // bounds: new google.maps.LatLngBounds(
+              //   new google.maps.LatLng(-80.671519, 43.522913),
+              //   new google.maps.LatLng(-80.344067, 43.436979)
+              // )
+            }
+          );
+    // When the user selects an address from the dropdown, populate the address
+    // fields in the form.
+    this.autocomplete.addListener('place_changed', this.fillInAddress.bind(this));
+	}
+
+  // fill in address from google autocomplete dropdown
+  fillInAddress() {
+		const place = this.autocomplete.getPlace()
+		this.setState({
+      building_address_components: place.address_components,
+      building_address: place.formatted_address,
+			building_lat: place.geometry.location.lat().toFixed(7),
+      building_long: place.geometry.location.lng().toFixed(7),
+			building_place_id: place.place_id,
+		})
 	}
 
 	updateAttr(e, attr) {
@@ -211,9 +246,10 @@ class GuarantorForm extends Component {
 						<Form.Field>
 							<label>Address</label>
 							<input
+								id='building_address'
 								placeholder='Address'
-								onChange={(e) => this.updateAttr(e, 'address')}
-								value={this.state.address}
+								onChange={(e) => this.updateAttr(e, 'building_address')}
+								value={this.state.building_address}
 							/>
 						</Form.Field>
 						<Form.Field>

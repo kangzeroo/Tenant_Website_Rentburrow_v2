@@ -38,7 +38,11 @@ class AboutStudentForm extends Component {
 	    date_of_birth: '',
 	    gender: '',
 
-	    address: '',
+			building_address_components: {},
+			building_address: '',					  // the building_address typed in
+      building_lat: 0,                // the building lat according to google
+      building_long: 0,               // the building lng according to google
+      building_place_id: '',          // the building place_id according to google
 	    contact_number_home: '',
 	    contact_number_cell: '',
 	    email: '',
@@ -65,6 +69,37 @@ class AboutStudentForm extends Component {
 			{ index: 3, icon: 'eye', title: 'Who will see my information?', description: 'Only the landlord will be able to see your information. Like a regular lease application, the landlord will only use this information to do their job.' },
 			{ index: 4, icon: 'expeditedssl', title: 'Is my information safe?', description: 'Yes. Rentburrow secures your information using Amazon Web Services and only allows your landlord to access it. Third parties do not have access to your information. Uploaded photos are encrypted using bank-level AES-256 bit encryption.' },
 		]
+	}
+
+	componentDidMount() {
+		// google address autocomplete
+    // restricted to only show addresses and in canada
+    this.autocomplete = new google.maps.places.Autocomplete(
+            /** @type {!HTMLInputElement} */(document.getElementById('building_address')),
+            {
+              types: ['address'],
+              componentRestrictions: { country: 'ca' },
+              // bounds: new google.maps.LatLngBounds(
+              //   new google.maps.LatLng(-80.671519, 43.522913),
+              //   new google.maps.LatLng(-80.344067, 43.436979)
+              // )
+            }
+          );
+    // When the user selects an address from the dropdown, populate the address
+    // fields in the form.
+    this.autocomplete.addListener('place_changed', this.fillInAddress.bind(this));
+	}
+
+  // fill in address from google autocomplete dropdown
+  fillInAddress() {
+		const place = this.autocomplete.getPlace()
+		this.setState({
+      building_address_components: place.address_components,
+      building_address: place.formatted_address,
+			building_lat: place.geometry.location.lat().toFixed(7),
+      building_long: place.geometry.location.lng().toFixed(7),
+			building_place_id: place.place_id,
+		})
 	}
 
 	updateAttr(e, attr) {
@@ -181,9 +216,10 @@ class AboutStudentForm extends Component {
 						<Form.Field>
 							<label>Permanent Address</label>
 							<input
+								id='building_address'
 								placeholder='Permanent Address'
-								onChange={(e) => this.updateAttr(e, 'address')}
-								value={this.state.address}
+								onChange={(e) => this.updateAttr(e, 'building_address')}
+								value={this.state.building_address}
 							/>
 						</Form.Field>
 						<Form.Field>
