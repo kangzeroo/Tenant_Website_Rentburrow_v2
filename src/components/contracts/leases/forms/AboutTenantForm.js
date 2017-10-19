@@ -7,6 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
 import {
 	Form,
 	Card,
@@ -18,11 +19,14 @@ import {
 	Modal,
 	Message,
 	Dropdown,
+	Image,
+	Radio,
 } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
-import { countryOptions } from '../../../../api/leasing/leasing_options'
+import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
+import { filterNonImages } from '../../../../api/aws/aws-S3'
 
 class AboutStudentForm extends Component {
 
@@ -43,8 +47,9 @@ class AboutStudentForm extends Component {
 	    secondary_languages: '',
 	    citizenship: '',
 	    permanent_resident: false,
-	    govt_id: '',
+	    government_id: '',
 
+			understand_uncertainty: false,
 			submitted: false,
 			error_messages: [],
 			activeIndex: 1,
@@ -55,7 +60,10 @@ class AboutStudentForm extends Component {
 	  }
 
 		this.why_sign_online = [
-			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' }
+			{ index: 1, icon: 'book', title: 'It\'s required to lease', description: 'Landlords require you to provide identifying information about yourself in order to complete the lease application and live in their building. It is mandatory to provide this information so that the landlord can do background checks and other security and legal requirements. You would want your neighbors to go through these checks too - everyone has to provide this information to the landlord.' },
+			{ index: 2, icon: 'user', title: 'Why do I have to upload a piece of Government ID?', description: 'Government ID is needed in order to verify that the name you provided is real. All landlords require this official record. You would want your neighbor to have to prove their real name too, so Government ID helps ensure safety for all tenants.' },
+			{ index: 3, icon: 'eye', title: 'Who will see my information?', description: 'Only the landlord will be able to see your information. Like a regular lease application, the landlord will only use this information to do their job.' },
+			{ index: 4, icon: 'expeditedssl', title: 'Is my information safe?', description: 'Yes. Rentburrow secures your information using Amazon Web Services and only allows your landlord to access it. Third parties do not have access to your information. Uploaded photos are encrypted using bank-level AES-256 bit encryption.' },
 		]
 	}
 
@@ -72,6 +80,14 @@ class AboutStudentForm extends Component {
 			current_active_field: attr,
 		})
 	}
+
+	// upload just 1 photo
+  uploadPhoto(acceptedFiles, rejectedFiles, attr) {
+    const filteredFiles = filterNonImages(acceptedFiles)
+    this.setState({
+      [attr]: filteredFiles[0]
+    })
+  }
 
 	toggleModal(bool, attr, context) {
 		this.setState({
@@ -105,7 +121,7 @@ class AboutStudentForm extends Component {
 		return (
 			<Card raised fluid style={comStyles().card_style}>
 				<Card.Header style={comStyles().card_header}>
-					About Me
+					The Basics
 				</Card.Header>
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
@@ -216,34 +232,16 @@ class AboutStudentForm extends Component {
 							<Dropdown
 								placeholder='English'
 								selection
-								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'gender')}
-								options={[
-									{ key: 'en', value: 'English', text: 'English' },
-									{ key: 'zh', value: 'Chinese', text: 'Chinese' },
-									{ key: 'ar', value: 'Arabic', text: 'Arabic' },
-									{ key: 'es', value: 'Spanish', text: 'Spanish' },
-									{ key: 'hi', value: 'Hindi', text: 'Hindi' },
-									{ key: 'ur', value: 'Urdu', text: 'Urdu' },
-									{ key: 'sw', value: 'Swahili', text: 'Swahili' },
-									{ key: 'kr', value: 'Korean', text: 'Korean' },
-									{ key: 'ru', value: 'Russian', text: 'Russian' },
-									{ key: 'uk', value: 'Ukrainian', text: 'Ukrainian' },
-									{ key: 'fa', value: 'Farsi', text: 'Farsi' },
-									{ key: 'bn', value: 'Bengali', text: 'Bengali' },
-									{ key: 'pt', value: 'Portuguese', text: 'Portuguese' },
-									{ key: 'ta', value: 'Tamil', text: 'Tamil' },
-									{ key: 'ms', value: 'Malay', text: 'Malay' },
-									{ key: 'fil', value: 'Filipino', text: 'Filipino' },
-									{ key: 'other', value: 'Other', text: 'Other' },
-								]}
+								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'primary_language')}
+								options={languageOptions}
 							/>
 						</Form.Field>
 						<Form.Field>
 							<label>Secondary Languages</label>
 							<input
 								placeholder='List secondary languages here'
-								onChange={(e) => this.updateAttr(e, 'contact_number_home')}
-								value={this.state.contact_number_home}
+								onChange={(e) => this.updateAttr(e, 'secondary_languages')}
+								value={this.state.secondary_languages}
 							/>
 						</Form.Field>
 						<Form.Field>
@@ -257,20 +255,33 @@ class AboutStudentForm extends Component {
 							/>
 						</Form.Field>
 						<Form.Field>
-							<label>Are you a Canadian Permenant Resident?</label>
-							<input
-								placeholder='Email'
-								onChange={(e) => this.updateAttr(e, 'email')}
-								value={this.state.email}
+							<Checkbox
+								onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'permanent_resident')}
+								checked={this.state.permanent_resident}
+								label='I am a Canadian Permanant Resident'
 							/>
 						</Form.Field>
+						<br />
 						<Form.Field>
-							<label>Upload Govt ID</label>
-							<input
-								placeholder='govt_id'
-								onChange={(e) => this.updateAttr(e, 'govt_id')}
-								value={this.state.email}
-							/>
+							<label>Photo ID</label>
+							<label>(Drivers License, Health Card or Passport)</label>
+							<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'government_id')} style={comStyles().dropzone} multiple={false}>
+								{
+									this.state.government_id
+									?
+									<div>
+										{
+											this.state.government_id.preview
+											?
+											<Image key={this.state.government_id.name} src={this.state.government_id.preview} style={comStyles().uploadImagesQueue} />
+											:
+											<Image key='government_id' src={this.state.government_id} style={comStyles().uploadImagesQueue} />
+										}
+									</div>
+									:
+									<div style={comStyles().dropzone_text}>Upload Government ID</div>
+								}
+							</Dropzone>
 						</Form.Field>
 					</div>
 					{/*<div style={comStyles().student_card}>
@@ -329,7 +340,7 @@ class AboutStudentForm extends Component {
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
 								<Accordion.Title active={this.stateactiveIndex === 0} style={comStyles().why_sign_online_title}>
-									Why Sign Contracts Online?
+									Why do I need to answer these questions?
 								</Accordion.Title>
 								{
 									this.why_sign_online.map((why) => {
@@ -468,9 +479,6 @@ const comStyles = () => {
 			minHeight: '10vh',
 			maxHeight: '10vh',
 		},
-		dropzone_text: {
-			margin: 'auto',
-		},
 		card_header: {
 			padding: '30px 0px 40px 0px',
 			fontWeight: 'bold',
@@ -514,6 +522,14 @@ const comStyles = () => {
 			padding: '30px',
 			fontSize: '1.3rem',
 			fontWeight: 'bold',
-		}
+		},
+		dropzone_text: {
+			width: '100%',
+			height: '100%',
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 	}
 }

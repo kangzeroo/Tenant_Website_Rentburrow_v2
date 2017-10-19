@@ -7,6 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
+import Dropzone from 'react-dropzone'
 import {
 	Form,
 	Card,
@@ -17,15 +18,33 @@ import {
 	Step,
 	Modal,
 	Message,
+	Image,
+	Dropdown,
 } from 'semantic-ui-react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
+import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
+import { filterNonImages } from '../../../../api/aws/aws-S3'
 
 class GuarantorForm extends Component {
 
 	constructor() {
 		super()
 		this.state = {
-	    first_name: '',
+			first_name: '',
+	    last_name: '',
+	    relationship: '',
+	    date_of_birth: '',
+	    address: '',
+	    home_phone: '',
+	    cell_phone: '',
+	    email: '',
+	    primary_language: '',
+	    secondary_languages: '',
+	    government_id: '',
+	    citizenship: '',
+	    permanent_resident: false,
 
 			submitted: false,
 			error_messages: [],
@@ -38,17 +57,7 @@ class GuarantorForm extends Component {
 
 		this.why_sign_online = [
 			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' },
-			{ index: 2, icon: 'lightning', title: 'It\'s Simple and Fast', description: 'The traditional method requires a printer or PDF software, but online signing only requires a web browser. If you wanted, you could print out a contract to sign in person or send it as an email PDF to be signed with random software, but how tedious is that? Rentburrow allows you to complete the entire process online within minutes - way easier than the old way.' },
-			{ index: 3, icon: 'question circle', title: 'How does it work?', description: 'Good question. First message the person subletting on Facebook to work out the details such as price and the sublet start/end date. When you two have reached an agreement, you must fill out the form on the left and click submit. After submitting, you will get a URL link that you must send to the other person. They will open the link and fill out another form that will verify the sublet details. They will also provide the landlords contact info for you. When they submit their form, everyone including witnesses will get an email where you can sign the sublet contract online. Be sure to read over the sublet contract one last time before signing! Once signed, the contract is complete and you will arrange a time to meet the other person to exchange keys and payment.' },
-			{ index: 4, icon: 'dollar', title: 'Is there any cost?', description: 'Nope, its completely free :)' },
-			{ index: 5, icon: 'eye', title: 'Why do I need a witness?', description: 'Most contracts require a contract as backup proof that the contract was indeed signed by the stated parties. Don\'t worry, witnesses can be anyone who saw you sign the contract. So you can put your roommate, friend or a parent/guardian. They will get an email and be able to sign from within the email without any extra hassle.' },
-			{ index: 6, icon: 'user', title: 'Why do I need to upload my student card?', description: 'For safety purposes. Because you are renting student housing, we require that you be a student. You do not necessarily need to be a student of the University of Waterloo or Wilfrid Laurier University, as long as you are a student. The other person will be able to see your student card, and you will be able to see theirs. That way, everyone feels safe. We keep all sensitive information secure and encrypted on bank level AES-256 bit encryption.' },
-			{ index: 7, icon: 'privacy', title: 'How do I pay rent and get my keys?', description: 'You will still need to meet up in person to exchange keys and payment. It is up to you to determine how you will pay the other person. Please remember that when you pay for a sublet, you are paying the current tenant who will in turn pay the landlord.' },
-			{ index: 8, icon: 'user cancel', title: 'What if the other person backs out?', description: 'First of all, check with the person to see if the sublet is still available. You can simply message them on Facebook. If the other person agreed to sublet to you but later gave it to someone else, then legally the first person who signed a sublet contract has rights to the room. If the other person does not sublet at all, you will have to work things out with them by yourself. Rentburrow cannot enforce a sublet contract for you, so be sure that the other person has integrity to uphold the contract. In the rare event that the other person does not pay rent to the original landlord, you must go directly to the landlord and explain to them the situation.' },
-			{ index: 9, icon: 'legal', title: 'What are the terms and conditions?', description: this.terms_and_conditions },
-			{ index: 10, icon: 'heart', title: 'This is awesome, how can I show some love?', description: 'We\'re glad you like this! Rentburrow is made with love by a group of students from the University of Waterloo and Wilfrid Laurier University. We welcome any and all feedback! Message or like us on Facebook at https://www.facebook.com/rentburrow/' },
 		]
-		this.terms_and_conditions = 'We keep the terms and conditions very simple. Rentburrow provides you the means to sign a sublet contract online but we do not guarantee that the sublet contract is legally valid in every situation. We also do not guarantee that signing a sublet contract via Rentburrow will guarantee that you actually get the sublet - that is up to you and the other person. By using this service, you agree to take all responsibility for this sublet contract. You also release Rentburrow (and its parent company Bytenectar Inc) from all legal responsibility related to this sublet contract.'
 	}
 
 	updateAttr(e, attr) {
@@ -73,6 +82,14 @@ class GuarantorForm extends Component {
     })
   }
 
+	// upload just 1 photo
+  uploadPhoto(acceptedFiles, rejectedFiles, attr) {
+    const filteredFiles = filterNonImages(acceptedFiles)
+    this.setState({
+      [attr]: filteredFiles[0]
+    })
+  }
+
 	renderAppropriateModal(modal_name, context) {
 		if (modal_name === 'terms') {
 			return (
@@ -93,6 +110,170 @@ class GuarantorForm extends Component {
 		}
 	}
 
+	renderBasicProfile() {
+		return (
+			<Card raised fluid style={comStyles().card_style}>
+				<Card.Header style={comStyles().card_header}>
+					Guarantor Profile
+				</Card.Header>
+				<div style={comStyles().student_div}>
+					<div style={comStyles().student_form}>
+						<Form.Field>
+							<label>Legal First Name</label>
+							<input
+								placeholder='Legal First Name'
+								onChange={(e) => this.updateAttr(e, 'first_name')}
+								value={this.state.first_name}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Legal Last Name</label>
+							<input
+								placeholder='Legal Last Name'
+								onChange={(e) => this.updateAttr(e, 'last_name')}
+								value={this.state.last_name}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Guarantor Relationship to Tenant</label>
+							<input
+								placeholder='Eg. Mother, Legal Guardian, Wealthy Uncle'
+								onChange={(e) => this.updateAttr(e, 'relationship')}
+								value={this.state.relationship}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Guarantor Date of Birth</label>
+							<DatePicker
+								selected={this.state.date_of_birth}
+								onChange={(d) => this.updateDate(d, 'date_of_birth')}
+							/>
+						</Form.Field>
+					</div>
+				</div>
+			</Card>
+		)
+	}
+
+	renderContactInfo() {
+		return (
+			<Card raised fluid style={comStyles().card_style}>
+				<Card.Header style={comStyles().card_header}>
+					Contact Information
+				</Card.Header>
+				<div style={comStyles().student_div}>
+					<div style={comStyles().student_form}>
+						<Form.Field>
+							<label>Address</label>
+							<input
+								placeholder='Address'
+								onChange={(e) => this.updateAttr(e, 'address')}
+								value={this.state.address}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Home Phone</label>
+							<input
+								placeholder='Home Phone'
+								onChange={(e) => this.updateAttr(e, 'home_phone')}
+								value={this.state.home_phone}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Cell Phone</label>
+							<input
+								placeholder='Cell Phone'
+								onChange={(e) => this.updateAttr(e, 'cell_phone')}
+								value={this.state.cell_phone}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Email</label>
+							<input
+								placeholder='Email'
+								onChange={(e) => this.updateAttr(e, 'email')}
+								value={this.state.email}
+							/>
+						</Form.Field>
+					</div>
+				</div>
+			</Card>
+		)
+	}
+
+	renderGovtInfo() {
+		return (
+			<Card raised fluid style={comStyles().card_style}>
+				<Card.Header style={comStyles().card_header}>
+					Language and Government
+				</Card.Header>
+				<div style={comStyles().student_div}>
+					<div style={comStyles().student_form}>
+						<Form.Field>
+							<label>Primary Language</label>
+							<Dropdown
+								placeholder='English'
+								selection
+								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'primary_language')}
+								options={languageOptions}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Secondary Languages</label>
+							<input
+								placeholder='List secondary languages here'
+								onChange={(e) => this.updateAttr(e, 'secondary_languages')}
+								value={this.state.secondary_languages}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Citizenship</label>
+							<Dropdown
+								placeholder='Select Country'
+								fluid
+								selection
+								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'citizenship')}
+								options={countryOptions}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<Checkbox
+								onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'permanent_resident')}
+								checked={this.state.permanent_resident}
+								label='The guarantor is a Canadian Permanant Resident'
+							/>
+						</Form.Field>
+						<br />
+						<Form.Field>
+							<label>Photo ID</label>
+							<label>(Drivers License, Health Card or Passport)</label>
+							<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'government_id')} style={comStyles().dropzone} multiple={false}>
+								{
+									this.state.government_id
+									?
+									<div>
+										{
+											this.state.government_id.preview
+											?
+											<Image key={this.state.government_id.name} src={this.state.government_id.preview} style={comStyles().uploadImagesQueue} />
+											:
+											<Image key='government_id' src={this.state.government_id} style={comStyles().uploadImagesQueue} />
+										}
+									</div>
+									:
+									<div style={comStyles().dropzone_text}>Upload Government ID</div>
+								}
+							</Dropzone>
+						</Form.Field>
+					</div>
+					{/*<div style={comStyles().student_card}>
+						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
+					</div>*/}
+				</div>
+			</Card>
+		)
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -102,35 +283,15 @@ class GuarantorForm extends Component {
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
 
-								<Card raised fluid style={comStyles().card_style}>
-									<Card.Header style={comStyles().card_header}>
-										Step 1: Subletee Profile
-									</Card.Header>
-									<div style={comStyles().student_div}>
-										<div style={comStyles().student_form}>
-											<Form.Field>
-												<label>Legal First Name</label>
-												<input
-													placeholder='First Name'
-													onChange={(e) => this.updateAttr(e, 'first_name')}
-													value={this.state.first_name}
-													disabled={this.props.tenant_profile.first_name !== ''}
-												/>
-											</Form.Field>
-										</div>
-										<div style={comStyles().student_card}>
-											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
-										</div>
-									</div>
-								</Card>
-
-								<Card fluid style={comStyles().card_style}>
-									<Form.Field>
-										<Checkbox label='I agree to the Terms and Conditions' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'agree_to_terms')} checked={this.state.agree_to_terms} />
-										&nbsp; &nbsp; &nbsp;
-										<span onClick={() => this.toggleModal(true, 'terms')} style={comStyles().viewTerms}>View</span>
-									</Form.Field>
-								</Card>
+								{
+									this.renderBasicProfile()
+								}
+								{
+									this.renderContactInfo()
+								}
+								{
+									this.renderGovtInfo()
+								}
 
 								<Form.Field>
 									{
@@ -250,7 +411,7 @@ const comStyles = () => {
       flexDirection: 'column',
 			minWidth: '600px',
 			width: '60vw',
-			height: '100%',
+			height: '90vh',
 			padding: '20px',
 		},
 		tips_contents: {
