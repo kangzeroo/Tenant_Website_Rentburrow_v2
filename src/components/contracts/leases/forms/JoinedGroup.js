@@ -20,7 +20,7 @@ import {
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
 
-class MedicalHistoryForm extends Component {
+class JoinedGroup extends Component {
 
 	constructor() {
 		super()
@@ -97,7 +97,7 @@ class MedicalHistoryForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Medical History</div>
+					<div style={comStyles().sign_header}>Joined Group</div>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
@@ -194,18 +194,18 @@ class MedicalHistoryForm extends Component {
 }
 
 // defines the types of variables in this.props
-MedicalHistoryForm.propTypes = {
+JoinedGroup.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-MedicalHistoryForm.defaultProps = {
+JoinedGroup.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(MedicalHistoryForm)
+const RadiumHOC = Radium(JoinedGroup)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

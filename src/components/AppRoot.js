@@ -269,10 +269,16 @@ class AppRoot extends Component {
 
                 <Route exact path='/:building_alias' component={BuildingPage} />
 
-                <Switch>
-                  <Route path='/signing/sublet' component={SubletApplication} />
-                  <Route path='/signing/lease' component={SubletApplication} />
-                </Switch>
+                {
+                  this.props.tenant_profile.tenant_id
+                  ?
+                  <Switch>
+                    <Route path='/signing/sublet' component={SubletApplication} />
+                    <Route path='/signing/lease/:building_id' component={LeaseApplication} />
+                  </Switch>
+                  :
+                  null
+                }
 
                 {/* Route Mobile Site to Here .... */}
               </Switch>
@@ -312,6 +318,7 @@ AppRoot.propTypes = {
   clearIntelList: PropTypes.func.isRequired,
   forwardUrlLocation: PropTypes.func.isRequired,
   location_forwarding: PropTypes.string.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -331,6 +338,7 @@ const mapReduxToProps = (redux) => {
     sublet_filter_params: redux.filter.sublet_filter_params,
     collectedRawIntel: redux.intel.collectedRawIntel,
     location_forwarding: redux.auth.location_forwarding,
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
