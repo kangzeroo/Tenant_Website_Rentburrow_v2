@@ -1,4 +1,24 @@
 
+export const languageOptions = [
+  { key: 'en', value: 'English', text: 'English' },
+  { key: 'zh', value: 'Chinese', text: 'Chinese' },
+  { key: 'ar', value: 'Arabic', text: 'Arabic' },
+  { key: 'es', value: 'Spanish', text: 'Spanish' },
+  { key: 'hi', value: 'Hindi', text: 'Hindi' },
+  { key: 'ur', value: 'Urdu', text: 'Urdu' },
+  { key: 'sw', value: 'Swahili', text: 'Swahili' },
+  { key: 'kr', value: 'Korean', text: 'Korean' },
+  { key: 'ru', value: 'Russian', text: 'Russian' },
+  { key: 'uk', value: 'Ukrainian', text: 'Ukrainian' },
+  { key: 'fa', value: 'Farsi', text: 'Farsi' },
+  { key: 'bn', value: 'Bengali', text: 'Bengali' },
+  { key: 'pt', value: 'Portuguese', text: 'Portuguese' },
+  { key: 'ta', value: 'Tamil', text: 'Tamil' },
+  { key: 'ms', value: 'Malay', text: 'Malay' },
+  { key: 'fil', value: 'Filipino', text: 'Filipino' },
+  { key: 'other', value: 'Other', text: 'Other' },
+]
+
 export const countryOptions = [
   { key: 'af', value: 'af', flag: 'af', text: 'Afghanistan' },
   { key: 'ax', value: 'ax', flag: 'ax', text: 'Aland Islands' },
