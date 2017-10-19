@@ -46,11 +46,12 @@ class GroupMembers extends Component {
             <Feed style={comStyles().group_members_container}>
             {
               this.state.group_members.map((member) => {
+                console.log(member)
                 return (
-                  <Feed.Event>
+                  <Feed.Event key={member.tenant_id}>
                     <Feed.Label image={member.thumbnail} />
                     <Feed.Content>
-                      {member.first_name + ' ' + member.last_name}
+                      { member.first_name + ' ' + member.last_name }
                     </Feed.Content>
                   </Feed.Event>
                 )
