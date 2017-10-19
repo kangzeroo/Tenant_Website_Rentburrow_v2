@@ -26,7 +26,7 @@ class PeopleWhoWantToSubletMine extends Component {
 	}
 
 	componentWillMount() {
-		getReceivedApplications(this.props.tenant_profile.student_id)
+		getReceivedApplications(this.props.tenant_profile.tenant_id)
 		.then((data) => {
 			// const existsAlready = (app, unique_apps) => {
       //   let exists = false

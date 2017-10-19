@@ -16,10 +16,10 @@ export const getSubletPostById = (post_id) => {
   return p
 }
 
-// save student profile
-export const saveStudentProfile = (fbProfile) => {
+// save tenant profile
+export const saveTenantProfile = (fbProfile) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/insert_student_profile`, fbProfile)
+    axios.post(`${SUBLETTING_MICROSERVICE}/insert_tenant_profile`, fbProfile)
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -31,9 +31,9 @@ export const saveStudentProfile = (fbProfile) => {
   return p
 }
 
-export const updateStudentProfile = (profile) => {
+export const updateTenantProfile = (profile) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/update_student_profile`, profile)
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_tenant_profile`, profile)
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -45,9 +45,9 @@ export const updateStudentProfile = (profile) => {
   return p
 }
 
-export const getStudentProfile = ({ student_id, }) => {
+export const getTenantProfile = ({ tenant_id, }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/get_student_profile`, { student_id, })
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_tenant_profile`, { tenant_id, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data[0])

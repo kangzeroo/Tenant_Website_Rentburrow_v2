@@ -17,8 +17,8 @@ import {
   Progress,
 } from 'semantic-ui-react'
 import {
-  updateStudentProfile,
-  getStudentProfile,
+  updateTenantProfile,
+  getTenantProfile,
 } from '../../api/signing/sublet_contract_api'
 import { saveTenantToRedux } from '../../actions/auth/auth_actions'
 import { filterNonImages, uploadImageToS3WithEncryption, getEncryptedS3Image } from '../../api/aws/aws-S3'
@@ -50,7 +50,7 @@ class TenantAccount extends Component {
         phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
         student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
       })
-      getEncryptedS3Image(this.props.tenant_profile.student_card, this.props.tenant_profile.student_id)
+      getEncryptedS3Image(this.props.tenant_profile.student_card, this.props.tenant_profile.tenant_id)
     } else {
       this.props.history.push('/')
     }
@@ -66,11 +66,11 @@ class TenantAccount extends Component {
     this.setState({
       saving: true
     }, () => {
-      uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.student_id}/`, 'student_card-')
+      uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
   			.then((S3Obj) => {
           console.log(S3Obj)
-  				return updateStudentProfile({
-            student_id: this.props.tenant_profile.student_id,
+  				return updateTenantProfile({
+            tenant_id: this.props.tenant_profile.tenant_id,
             first_name: this.state.first_name,
             last_name: this.state.last_name,
             email: this.state.email,
@@ -82,7 +82,7 @@ class TenantAccount extends Component {
           this.setState({
             profile_saved: true,
           })
-          return getStudentProfile({ student_id: this.props.tenant_profile.student_id, })
+          return getTenantProfile({ tenant_id: this.props.tenant_profile.tenant_id, })
         })
         .then((data) => {
           this.props.saveTenantToRedux(data)

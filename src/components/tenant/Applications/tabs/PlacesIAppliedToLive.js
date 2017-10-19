@@ -28,7 +28,7 @@ class PlacesIAppliedToLive extends Component {
   }
 
   componentWillMount() {
-    getSentApplications(this.props.tenant_profile.student_id)
+    getSentApplications(this.props.tenant_profile.tenant_id)
     .then((data) => {
       // const existsAlready = (app, unique_apps) => {
       //   let exists = false
