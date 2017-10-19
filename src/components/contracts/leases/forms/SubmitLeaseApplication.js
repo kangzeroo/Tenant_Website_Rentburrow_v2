@@ -287,8 +287,8 @@ const comStyles = () => {
 		main_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '85vh',
-			maxHeight: '85vh',
+			minHeight: '100%',
+			maxHeight: '100%',
 			padding: '20px',
 			overflow: 'scroll',
 			width: '85vw',

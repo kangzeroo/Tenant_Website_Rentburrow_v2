@@ -42,8 +42,15 @@ class SuitePreferenceForm extends Component {
 	  }
 
 		this.why_sign_online = [
-			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' },
+			{ index: 1, icon: 'cubes', title: 'Someone might have booked the suite already', description: 'When the landlord gets your application, the suite you want may already be taken. By ranking, you can increase your likelihood of getting a suite. The landlord will try to place you in whichever suite is your next priority.' },
+			{ index: 2, icon: 'cube', title: 'I only want 1 suite', description: 'Then exclude every other suite. We hope you get the suite you want, but there is no guarantee it is still available!' },
+			{ index: 3, icon: 'square outline', title: 'What if no suites are available?', description: 'There is a possibility that no suites are available anymore. The landlord will have no choice but to reject your application, and then you will have to find another building to live at. Don\'t worry though! Rentburrow.com is exactly the tool for that!' },
+			{ index: 4, icon: 'cancel', title: 'What if I change my mind?', description: 'If the landlord assigns your group a suite and you change your mind, you will have to cancel the application and re-apply.' },
+			{ index: 5, icon: 'thumbs down', title: 'What if I don\'t like the suite when I move in?', description: 'You must stick with your choice. It is too late to change after move-in period.' },
+			{ index: 6, icon: 'picture', title: 'What if the suite doesn\'t look like the pictures?', description: 'Rentburrow tries to get pictures of the exact suite and exact room you will be moving into. However, this is not always possible. To ensure accuracy, ask the landlord to confirm that the suite does look like the pictures. By using Rentburrow.com, you accept the potential risks of media inaccuracy and assume all risks and responsibilities upon yourself.' },
+			{ index: 7, icon: 'bed', title: 'When can we pick our rooms?', description: 'You can pick your rooms after the landlord approves your application and assigns your group to a suite.' },
 		]
+		this.terms_and_conditions = 'On behalf of my group, I understand and accept that Rentburrow cannot guarantee that we will get the suite we want. I also understand that Rentburrow does not guarantee that suite and room photos are exact to life and that by using Rentburrow.com I assume all consequences of any media inaccuracies.'
 	}
 
 	componentWillMount() {
@@ -224,7 +231,13 @@ class SuitePreferenceForm extends Component {
 
 								<Card fluid style={comStyles().card_style}>
 									<Form.Field>
-										<Checkbox label='I understand that my group may not necessarily get the suite we want but the landlord will try their best to accomodate' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'understand_uncertainty')} checked={this.state.understand_uncertainty} />
+										<Checkbox
+											label='I understand the conditions on these suites'
+											onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'understand_uncertainty')}
+											checked={this.state.understand_uncertainty}
+										/>
+										&nbsp; &nbsp; &nbsp;
+										<span onClick={() => this.toggleModal(true, 'terms')} style={comStyles().viewTerms}>View</span>
 									</Form.Field>
 								</Card>
 
@@ -257,7 +270,7 @@ class SuitePreferenceForm extends Component {
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
 								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
-									Why Sign Contracts Online?
+									Why are we ranking suites?
 								</Accordion.Title>
 								{
 									this.why_sign_online.map((why) => {
@@ -385,8 +398,8 @@ const comStyles = () => {
 		main_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '85vh',
-			maxHeight: '85vh',
+			minHeight: '100%',
+			maxHeight: '100%',
 			padding: '20px',
 			overflow: 'scroll',
 			width: '85vw',

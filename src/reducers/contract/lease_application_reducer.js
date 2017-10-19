@@ -3,7 +3,7 @@ import {
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
-  about_me: {
+  about_tenant: {
     first_name: '',
     last_name: '',
     address: '',
@@ -13,7 +13,7 @@ const INITIAL_STATE = {
     date_of_birth: '',
     gender: '',
     primary_language: '',
-    secondary_language: '',
+    secondary_languages: '',
     citizenship: '',
     permanent_resident: false,
     govt_id: '',
@@ -30,7 +30,7 @@ const INITIAL_STATE = {
     ec2_email: '',
     ec2_relationship: '',
   },
-  about_me_student: {
+  about_student: {
     program: '',
     graduating_year: '',
     school: '',
