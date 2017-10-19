@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Card,
 } from 'semantic-ui-react'
 
 
@@ -17,7 +17,9 @@ class BeginForm extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				BeginForm
+				<Card style={comStyles().card_style}>
+					BeginForm
+				</Card>
 			</div>
 		)
 	}
@@ -59,6 +61,14 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			width: '100%',
+			height: '100%',
+		},
+		card_style: {
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'center',
+			alignItems: 'center',
 		}
 	}
 }

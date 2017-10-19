@@ -26,7 +26,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
-import { filterNonImages } from '../../../../api/aws/aws-S3'
+import { filterNonImages, uploadImageToS3WithEncryption } from '../../../../api/aws/aws-S3'
 import { insertGuarantorProfile, } from '../../../../api/application/lease_application_api'
 
 class GuarantorForm extends Component {
@@ -130,23 +130,26 @@ class GuarantorForm extends Component {
   }
 
 	saveGuarantorProfileToDb() {
-		insertGuarantorProfile({
-			application_id: this.props.my_application_id,
-			tenant_id: this.props.tenant_profile.tenant_id,
-			first_name: this.state.first_name,
-			last_name: this.state.last_name,
-			phone: this.state.phone,
-			email: this.state.email,
-			address: this.state.building_address,
-			date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
-			relationship: this.state.relationship,
-			government_id: this.state.government_id,
-			citizenship: this.state.citizenship,
-			permanent_resident: this.state.permanent_resident,
-		})
-		.then((data) => {
-			this.props.goToNextForm()
-		})
+		uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'guarantor-government_id-')
+			.then((S3Obj) => {
+				return insertGuarantorProfile({
+					application_id: this.props.my_application_id,
+					tenant_id: this.props.tenant_profile.tenant_id,
+					first_name: this.state.first_name,
+					last_name: this.state.last_name,
+					phone: this.state.phone,
+					email: this.state.email,
+					address: this.state.building_address,
+					date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
+					relationship: this.state.relationship,
+					government_id: S3Obj.Location,
+					citizenship: this.state.citizenship,
+					permanent_resident: this.state.permanent_resident,
+				})
+			})
+			.then((data) => {
+				this.props.goToNextForm()
+			})
 	}
 
 	toggleGuarantorNotPossible(event, data) {

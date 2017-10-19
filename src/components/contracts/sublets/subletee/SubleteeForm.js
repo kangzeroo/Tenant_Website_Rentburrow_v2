@@ -29,7 +29,6 @@ import {
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { filterNonImages } from '../../../../api/aws/aws-S3'
-import { uploadImageToS3WithEncryption } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj } from '../../../../api/search/sublet_api'
 import SubleteeSubletorRelationship from '../SubleteeSubletorRelationship'
 import { validateEmail } from '../../../../api/general/general_api'
