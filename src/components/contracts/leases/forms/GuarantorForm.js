@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
+import moment from 'moment'
 import {
 	Form,
 	Card,
@@ -35,7 +36,7 @@ class GuarantorForm extends Component {
 			first_name: '',
 	    last_name: '',
 	    relationship: '',
-	    date_of_birth: '',
+	    date_of_birth: moment('1/1/1970'),
 			building_address_components: {},
 			building_address: '',					  // the building_address typed in
       building_lat: 0,                // the building lat according to google
