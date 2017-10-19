@@ -38,7 +38,10 @@ class RoommateGroupForm extends Component {
 	  }
 
 		this.why_sign_online = [
-			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' },
+			{ index: 1, icon: 'users', title: 'Share the link', description: 'When your roommates open the link, they will automatically be added to your group. Each roommate must submit their own lease application, and the landlord will recieve all of them together. The original person who send this link is the leader and all roommates are that persons group. If you start a new application without the group link, then you are creating a seperate application altogether with your own seperate group. Make sure you only have 1 leader for each group of roommates.' },
+			{ index: 2, icon: 'user', title: 'I have no roommates', description: 'If you do not want or have roommates, then simply click next without sharing the link.' },
+			{ index: 3, icon: 'exclamation triangle', title: 'How many roommates max?', description: 'You can have as many roommates as you want, but the building you are applying to may not necessarily have enough bedrooms in one suite to hold you all. Later when you reach the Notes To The Landlord form, you can request that the landlord put all your friends in suites near eachother.' },
+			{ index: 4, icon: 'remove user', title: 'Removing roommates', description: 'To remove a user, go to your account at the top-right hand corner of the screen and from the dropdown menu, select Roommates. You can manage your roommates from there. Note that only the group leader can remove roommates.' },
 		]
 	}
 
@@ -120,7 +123,7 @@ class RoommateGroupForm extends Component {
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
 								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
-									Why Sign Contracts Online?
+									How does this work?
 								</Accordion.Title>
 								{
 									this.why_sign_online.map((why) => {
@@ -209,7 +212,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '600px',
-			width: '60vw',
+			width: '50vw',
 			height: '100%',
 			padding: '20px',
 		},
@@ -217,12 +220,12 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '350px',
-			width: '25vw',
+			width: '35vw',
 			padding: '20px',
 		},
 		card_style: {
 			padding: '20px',
-			height: 'auto',
+			height: '400px',
 		},
 		dates: {
 			display: 'flex',
