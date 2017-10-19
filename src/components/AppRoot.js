@@ -31,6 +31,7 @@ import TenantAccount from './tenant/TenantAccount'
 import TenantApplications from './tenant/Applications/TenantApplications'
 import TenantSettings from './tenant/TenantSettings'
 import SubletApplication from './contracts/sublets/SubletApplication'
+import LeaseApplication from './contracts/leases/LeaseApplication'
 import SentApplicationPage from './tenant/Applications/sublets/SentApplicationPage'
 import ReceivedApplicationPage from './tenant/Applications/sublets/ReceivedApplicationPage'
 import Authenticate from './pandadoc/Authenticate'
@@ -51,7 +52,6 @@ import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 import { saveTenantProfile, getTenantProfile } from '../api/signing/sublet_contract_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
 
- import BasicLeaseForm from './contracts/leases/basics/BasicLeaseForm'
 
 class AppRoot extends Component {
 
@@ -246,7 +246,7 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={BasicLeaseForm} />
+                <Route exact path='/sandbox' component={LeaseApplication} />
                 <Route exact path='/community' component={CommunityPage} />
                 <Route exact path='/logout' component={Logout} />
 
