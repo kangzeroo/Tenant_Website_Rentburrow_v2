@@ -17,9 +17,11 @@ import {
 	Step,
 	Modal,
 	Message,
+	Header
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { getAvailableSuites } from '../../../../api/building/building_api'
+import { saveRankingsToDb, } from '../../../../api/group/group_api'
 import SuitePreviewsForSelection from '../support/SuitePreviewsForSelection'
 
 class SuitePreferenceForm extends Component {
@@ -149,6 +151,25 @@ class SuitePreferenceForm extends Component {
 		}
 	}
 
+	saveRankings() {
+		const arrayOfPromises = this.state.available_suites.map((suite) => {
+			console.log({
+				group_id: this.props.group_id,
+				suite_style_id: suite.suite_style_id,
+				ranking: suite.rank,
+			})
+			saveRankingsToDb({
+				group_id: this.props.group_id,
+				suite_style_id: suite.suite_style_id,
+				ranking: suite.rank,
+			})
+		})
+
+		Promise.all(arrayOfPromises).then((res, rej) => {
+			this.props.goToNextForm()
+		})
+	}
+
 	updateAttr(e, attr) {
 		this.setState({
 			[attr]: e.target.value,
@@ -195,7 +216,12 @@ class SuitePreferenceForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Suite & Room Preferences</div>
+					<Header
+						as='h1'
+						icon='star'
+						content='Suite Preferences'
+						subheader='Rank your preferred suites'
+					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
@@ -263,7 +289,12 @@ class SuitePreferenceForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+									<Button
+										primary
+										size='large'
+										content='Save'
+										onClick={() => this.saveRankings()}
+									/>
 								}
 							</Form>
 						</div>
@@ -308,6 +339,7 @@ SuitePreferenceForm.propTypes = {
 	tenant_profile: PropTypes.object.isRequired,
 	goToNextForm: PropTypes.func.isRequired,			// passed in
 	building: PropTypes.object.isRequired,				// passed in
+	group_id: PropTypes.string.isRequired, 				// passed in
 }
 
 // for all optional props, define a default value
@@ -398,8 +430,8 @@ const comStyles = () => {
 		main_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '100%',
-			maxHeight: '100%',
+			minHeight: '85vh',
+			maxHeight: '85vh',
 			padding: '20px',
 			overflow: 'scroll',
 			width: '85vw',

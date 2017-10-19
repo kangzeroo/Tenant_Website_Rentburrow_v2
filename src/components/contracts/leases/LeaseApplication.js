@@ -216,6 +216,7 @@ class LeaseApplication extends Component {
     } else if (this.state.current_form === 'suite_room_preferences') {
       return (
         <SuitePreferencesForm
+          group_id={this.state.group_id}
           goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
           building={this.props.applied_building}
         />
@@ -331,7 +332,8 @@ const comStyles = () => {
       overflowY: 'scroll',
     },
     form_output: {
-      height: '90vh',
+      minHeight: '90vh',
+      maxHeight: '90vh',
       overflowY: 'scroll',
     }
 	}
