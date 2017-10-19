@@ -11,8 +11,6 @@ import {
   Step,
   Icon,
 } from 'semantic-ui-react'
-import { checkWhatLandlordWantsFromTenant } from '../../../api/leasing/leasing_api'
-import { checkIfUserAlreadyPartGroup, addMeToTheGroup, autoGenerateGroup } from '../../../api/group/group_api'
 import BeginForm from './forms/BeginForm'
 import AboutTenantForm from './forms/AboutTenantForm'
 import AboutStudentForm from './forms/AboutStudentForm'
@@ -28,7 +26,8 @@ import JoinedGroup from './forms/JoinedGroup'
 import SubmitLeaseApplication from './forms/SubmitLeaseApplication'
 import { applyToLiveAtThisBuilding } from '../../../actions/contract/contract_actions'
 import { getBuildingById } from '../../../api/building/building_api'
-
+import { checkWhatLandlordWantsFromTenant } from '../../../api/leasing/leasing_api'
+import { checkIfUserAlreadyPartGroup, addMeToTheGroup, autoGenerateGroup, createGroup, } from '../../../api/group/group_api'
 
 class LeaseApplication extends Component {
 
@@ -87,14 +86,17 @@ class LeaseApplication extends Component {
   autoAssociateGroup() {
     if (this.props.location_forwarding.indexOf('group=') > -1) {
       const group_id = this.props.location.search.slice(this.props.location.search.indexOf('group=') + 'group='.length)
-      checkIfUserAlreadyPartGroup(group_id)
+      checkIfUserAlreadyPartGroup(group_id, this.props.tenant_profile.tenant_id)
         .then((data) => {
           if (data.already_joined) {
+            console.log('User Already Joined!')
             this.setState({
               group_id: group_id,
             })
           } else {
-            addMeToTheGroup(this.props.tenant_profile.tenant_id, group_id).then((data) => {
+            console.log('Add User To the Group!')
+            addMeToTheGroup(this.props.tenant_profile.tenant_id, group_id)
+            .then((data) => {
               this.setState({
                 group_id: data.group_id,
               })
@@ -106,7 +108,8 @@ class LeaseApplication extends Component {
           console.log(err)
         })
     } else {
-      autoGenerateGroup().then((data) => {
+      createGroup(this.props.tenant_profile.tenant_id)
+      .then((data) => {
         this.setState({
           group_id: data.group_id
         })
@@ -170,6 +173,7 @@ class LeaseApplication extends Component {
     } else if (this.state.current_form === 'joined_group') {
       return (
         <JoinedGroup
+          group_id={this.state.group_id}
           goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
         />
       )
