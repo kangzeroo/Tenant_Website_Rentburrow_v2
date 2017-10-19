@@ -51,3 +51,4 @@ export const APPLY_FOR_THIS_BUILDING = 'APPLY_FOR_THIS_BUILDING'
 
 // actions related to group applications
 export const GROUP_MEMBERS = 'GROUP_MEMBERS'
+export const MY_LEASE_APPLICATION = 'MY_LEASE_APPLICATION'

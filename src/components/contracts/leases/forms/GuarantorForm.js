@@ -27,6 +27,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
 import { filterNonImages } from '../../../../api/aws/aws-S3'
+import { insertGuarantorProfile, } from '../../../../api/application/lease_application_api'
 
 class GuarantorForm extends Component {
 
@@ -42,10 +43,8 @@ class GuarantorForm extends Component {
       building_lat: 0,                // the building lat according to google
       building_long: 0,               // the building lng according to google
       building_place_id: '',          // the building place_id according to google
-	    cell_phone: '',
+	    phone: '',
 	    email: '',
-	    primary_language: '',
-	    secondary_languages: '',
 	    government_id: '',
 	    citizenship: '',
 	    permanent_resident: false,
@@ -129,6 +128,26 @@ class GuarantorForm extends Component {
       [attr]: filteredFiles[0]
     })
   }
+
+	saveGuarantorProfileToDb() {
+		insertGuarantorProfile({
+			application_id: this.props.my_application_id,
+			tenant_id: this.props.tenant_profile.tenant_id,
+			first_name: this.state.first_name,
+			last_name: this.state.last_name,
+			phone: this.state.phone,
+			email: this.state.email,
+			address: this.state.building_address,
+			date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
+			relationship: this.state.relationship,
+			government_id: this.state.government_id,
+			citizenship: this.state.citizenship,
+			permanent_resident: this.state.permanent_resident,
+		})
+		.then((data) => {
+			this.props.goToNextForm()
+		})
+	}
 
 	toggleGuarantorNotPossible(event, data) {
 		if (data.checked) {
@@ -254,11 +273,11 @@ class GuarantorForm extends Component {
 							/>
 						</Form.Field>
 						<Form.Field>
-							<label>Cell Phone</label>
+							<label>Primary Phone</label>
 							<input
-								placeholder='Cell Phone'
-								onChange={(e) => this.updateAttr(e, 'cell_phone')}
-								value={this.state.cell_phone}
+								placeholder='Primary Phone'
+								onChange={(e) => this.updateAttr(e, 'phone')}
+								value={this.state.phone}
 							/>
 						</Form.Field>
 						<Form.Field>
@@ -283,23 +302,6 @@ class GuarantorForm extends Component {
 				</Card.Header>
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
-						<Form.Field>
-							<label>Primary Language</label>
-							<Dropdown
-								placeholder='English'
-								selection
-								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'primary_language')}
-								options={languageOptions}
-							/>
-						</Form.Field>
-						<Form.Field>
-							<label>Secondary Languages</label>
-							<input
-								placeholder='List secondary languages here'
-								onChange={(e) => this.updateAttr(e, 'secondary_languages')}
-								value={this.state.secondary_languages}
-							/>
-						</Form.Field>
 						<Form.Field>
 							<label>Citizenship</label>
 							<Dropdown
@@ -409,7 +411,12 @@ class GuarantorForm extends Component {
 									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 								</div>
 								:
-								<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+								<Button
+									primary
+									size='large'
+									content='Save'
+									onClick={() => this.saveGuarantorProfileToDb()}
+								/>
 							}
 						</div>
 						<div style={comStyles().tips_contents}>
@@ -452,6 +459,7 @@ GuarantorForm.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
 	goToNextForm: PropTypes.func.isRequired,			// passed in
+	my_application_id: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -466,6 +474,7 @@ const RadiumHOC = Radium(GuarantorForm)
 const mapReduxToProps = (redux) => {
 	return {
 		tenant_profile: redux.auth.tenant_profile,
+		my_application_id: redux.group.my_application_id,
 	}
 }
 
@@ -542,8 +551,8 @@ const comStyles = () => {
 		main_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '100%',
-			maxHeight: '100%',
+			minHeight: '85vh',
+			maxHeight: '85vh',
 			padding: '20px',
 			overflow: 'scroll',
 			width: '85vw',

@@ -17,8 +17,10 @@ import {
 	Step,
 	Modal,
 	Message,
+	Header,
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
+import { insertWitnessToDb, } from '../../../../api/application/lease_application_api'
 
 class WitnessForm extends Component {
 
@@ -59,6 +61,17 @@ class WitnessForm extends Component {
 		})
 	}
 
+	saveWitnessToDb() {
+		insertWitnessToDb({
+			witness_name: this.state.witness_name,
+			witness_email: this.state.witness_email,
+			application_id: this.props.my_application_id,
+		})
+		.then((data) => {
+			this.props.goToNextForm()
+		})
+	}
+
 	toggleModal(bool, attr, context) {
 		this.setState({
       toggle_modal: bool,
@@ -91,7 +104,12 @@ class WitnessForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Witness</div>
+					<Header
+						as='h2'
+						icon='eye'
+						content='Witness'
+						subheader='Include a Witness to your Contract'
+					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
@@ -141,7 +159,12 @@ class WitnessForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+									<Button
+										primary
+										size='large'
+										content='Save'
+										onClick={() => this.saveWitnessToDb()}
+									/>
 								}
 							</Form>
 						</div>
@@ -185,11 +208,11 @@ WitnessForm.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
 	goToNextForm: PropTypes.func.isRequired,			// passed in
+	my_application_id: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
 WitnessForm.defaultProps = {
-
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -199,6 +222,7 @@ const RadiumHOC = Radium(WitnessForm)
 const mapReduxToProps = (redux) => {
 	return {
 		tenant_profile: redux.auth.tenant_profile,
+		my_application_id: redux.group.my_application_id,
 	}
 }
 

@@ -1,5 +1,6 @@
 import {
   GROUP_MEMBERS,
+  MY_LEASE_APPLICATION,
 } from '../action_types'
 
 
@@ -13,6 +14,17 @@ export const saveGroupApplicationToRedux = (group) => {
           ...x,
         }
       }),
+    })
+  }
+}
+
+
+export const saveMyApplicationToRedux = (app_id) => {
+  // dispatch lets you send actions to Redux
+  return (dispatch) => {
+    dispatch({
+      type: MY_LEASE_APPLICATION,
+      payload: app_id,
     })
   }
 }
