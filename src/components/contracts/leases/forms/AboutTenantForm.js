@@ -22,6 +22,7 @@ import {
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
+import { countryOptions } from '../../../../api/leasing/leasing_options'
 
 class AboutStudentForm extends Component {
 
@@ -247,10 +248,12 @@ class AboutStudentForm extends Component {
 						</Form.Field>
 						<Form.Field>
 							<label>Citizenship</label>
-							<input
-								placeholder='Citizenship'
-								onChange={(e) => this.updateAttr(e, 'contact_number_cell')}
-								value={this.state.contact_number_cell}
+							<Dropdown
+								placeholder='Select Country'
+								fluid
+								selection
+								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'citizenship')}
+								options={countryOptions}
 							/>
 						</Form.Field>
 						<Form.Field>
