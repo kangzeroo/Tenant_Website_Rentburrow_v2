@@ -51,9 +51,95 @@ class SuitePreferenceForm extends Component {
 			building_id: this.props.building.building_id,
 		}).then((data) => {
 			this.setState({
-				available_suites: data,
+				available_suites: data.map((suite, index) => {
+					return {
+						...suite,
+						rank: index + 1,
+					}
+				}),
 			})
 		})
+	}
+
+	updateSuiteRanking(suite_id, amount) {
+		let prechange_rank = 0
+		let total = 0
+		this.state.available_suites.forEach((suite, index) => {
+			if (suite.suite_id === suite_id) {
+				prechange_rank = suite.rank
+			}
+			if (suite.rank !== 0) {
+				total++
+			}
+		})
+		if (prechange_rank + amount > 0 && prechange_rank + amount <= total) {
+			this.setState({
+				available_suites: this.state.available_suites.map((suite) => {
+					if (suite.suite_id === suite_id) {
+						return {
+							...suite,
+							rank: suite.rank + amount,
+						}
+					} else if (suite.rank === 0) {
+						return suite
+					} else if (suite.rank - amount === prechange_rank) {
+						return {
+							...suite,
+							rank: prechange_rank
+						}
+					} else {
+						return suite
+					}
+				})
+			})
+		}
+	}
+
+	toggleSuiteInclusion(suite_id, bool) {
+		// if we are including a suite, we add it to the back of the list
+		if (bool) {
+			// first get the total of non-zero ranks
+			let total = 0
+			this.state.available_suites.forEach((suite, index) => {
+				if (suite.rank !== 0) {
+					total++
+				}
+			})
+			// and set the selected suite to have a rank equal to total + 1
+			this.setState({
+				available_suites: this.state.available_suites.map((suite) => {
+					if (suite.suite_id === suite_id) {
+						return {
+							...suite,
+							rank: total + 1,
+						}
+					} else {
+						return suite
+					}
+				})
+			})
+		} else {
+			// if we are excluding a suite, we set the rank to zero, and for all suites with a higher rank we decrement by 1
+			let prechange_rank = 9999999
+			this.setState({
+				available_suites: this.state.available_suites.map((suite) => {
+					if (suite.suite_id === suite_id) {
+						prechange_rank = suite.rank
+						return {
+							...suite,
+							rank: 0,
+						}
+					} else if (suite.rank > prechange_rank) {
+						return {
+							...suite,
+							rank: suite.rank - 1
+						}
+					} else {
+						return suite
+					}
+				})
+			})
+		}
 	}
 
 	updateAttr(e, attr) {
@@ -109,16 +195,26 @@ class SuitePreferenceForm extends Component {
 
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
-										Pick Your Suite
+										Rank Your Suite Preferences
 									</Card.Header>
 									<div style={comStyles().student_div}>
 										{
-											this.state.available_suites.map((suite) => {
+											this.state.available_suites.sort((suiteA, suiteB) => {
+												return suiteA.rank - suiteB.rank
+											}).filter((suite) => {
+												return suite.rank
+											}).concat(
+												this.state.available_suites.filter((suite) => {
+													return !suite.rank
+												})
+											).map((suite) => {
 												return (
 													<SuitePreviewsForSelection
 														key={suite.suite_id}
 														building={this.props.building}
 														suite={suite}
+														updateSuiteRanking={(suite_id, amount) => this.updateSuiteRanking(suite_id, amount)}
+														toggleSuiteInclusion={(suite_id, bool) => this.toggleSuiteInclusion(suite_id, bool)}
 													/>
 												)
 											})
@@ -347,6 +443,6 @@ const comStyles = () => {
 			padding: '30px',
 			fontSize: '1.3rem',
 			fontWeight: 'bold',
-		}
+		},
 	}
 }

@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Card,
   Button,
+  Icon,
 } from 'semantic-ui-react'
 import {
   getSuiteInfo,
@@ -18,8 +19,9 @@ import {
   getRoomsForSuite,
   getRoomAmenities,
 } from '../../../../api/building/building_api'
+import { aliasToURL } from '../../../../api/general/general_api'
 import SingularImageGallery from '../../../image/SingularImageGallery'
-import { xGreyText, xBootstrapRed } from '../../../../styles/base_colors'
+import { xGreyText, xBootstrapRed, xMidBlue } from '../../../../styles/base_colors'
 import { calculateComplexSuiteBaths, calculateRoomsSummary, calculateSuiteCommonAreasSummary, calculateFreeUtilitiesForSuite, } from '../../../../api/amenities/amenity_calculations'
 import SuiteBathSummary from '../../../home_explorer/canvases/summary/SuiteBathSummary'
 import SuiteBedSummary from '../../../home_explorer/canvases/summary/SuiteBedSummary'
@@ -155,6 +157,10 @@ class SuitePreviewsForSelection extends Component {
     )
   }
 
+  openInNewTab() {
+    window.open(`${window.location.origin}/${aliasToURL(this.props.building.building_alias)}`, '_blank')
+  }
+
 	render() {
     const suite = this.props.suite
 		return (
@@ -163,37 +169,60 @@ class SuitePreviewsForSelection extends Component {
 				raised
 				style={comStyles().hardCard}
 			>
-				<div style={comStyles().left}>
-					<div id='infobar' style={comStyles().left_top} >
-						{ renameSuite(suite.suite_alias) }
-					</div>
-					<div id='infobar' style={comStyles().left_middle} >
-            {
-              this.generateBedsSummary()
-            }
-            {
-              this.generateBathsSummary()
-            }
-					</div>
-					<div style={comStyles().left_bottom}>
-						<Button
-							fluid
-							color='blue'
-							content='Rank this'
-              icon='bed'
-							style={comStyles().explore_button}
-						/>
-					</div>
-				</div>
+  				<div style={comStyles().left}>
+  					<div id='infobar' onClick={() => this.openInNewTab()} style={comStyles().left_top} >
+  						{ renameSuite(suite.suite_alias) }
+  					</div>
+  					<div style={comStyles().left_bottom}>
+              {
+                suite.rank
+                ?
+                <div style={comStyles().ranking_row}>
+                  <div onClick={() => this.props.updateSuiteRanking(suite.suite_id, 1)} style={comStyles().ranker}>
+                    <Icon name='chevron down' size='large' />
+                  </div>
+                  <div style={comStyles().rank}>
+                    { suite.rank }
+                  </div>
+                  <div onClick={() => this.props.updateSuiteRanking(suite.suite_id, -1)} style={comStyles().ranker}>
+                    <Icon name='chevron up' size='large' />
+                  </div>
+                </div>
+                :
+                null
+              }
+              {
+                suite.rank
+                ?
+                <Button
+                  basic
+                  fluid
+                  color='red'
+                  content='Exclude'
+                  onClick={() => this.props.toggleSuiteInclusion(suite.suite_id, false)}
+                  style={comStyles().exclude}
+                />
+                :
+                <Button
+                  fluid
+                  color='red'
+                  content='Include'
+                  onClick={() => this.props.toggleSuiteInclusion(suite.suite_id, true)}
+                  style={comStyles().exclude}
+                />
+              }
+  					</div>
+  				</div>
 
-				<div style={comStyles().center} >
-					<div style={comStyles().ImageGallery} >
-						<SingularImageGallery
-							list_of_images={[suite.cover_photo].concat(suite.imgs)}
-							image_size='hd'
-						/>
-					</div>
-				</div>
+  				<div style={comStyles().center} >
+  					<div style={comStyles().ImageGallery} >
+  						<SingularImageGallery
+  							list_of_images={[suite.cover_photo].concat(suite.imgs)}
+  							image_size='hd'
+  						/>
+  					</div>
+  				</div>
+
 			</Card>
 		)
 	}
@@ -205,6 +234,8 @@ SuitePreviewsForSelection.propTypes = {
   building: PropTypes.object.isRequired,  // passed in
   suite: PropTypes.object.isRequired,    // passed in
   tenant_profile: PropTypes.object.isRequired,
+  updateSuiteRanking: PropTypes.func.isRequired,  // passed in
+  toggleSuiteInclusion: PropTypes.func.isRequired,  // passed in
 }
 
 // for all optional props, define a default value
@@ -247,6 +278,14 @@ const comStyles = () => {
       margin: '20px auto',
       display: 'flex',
       flexDirection: 'row',
+    },
+    top: {
+      height: '80%',
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    bottom: {
+      height: '20%',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
@@ -369,10 +408,9 @@ const comStyles = () => {
       margin: '5px auto',
     },
 		left: {
-      width: '40%',
+      width: '30%',
       minHeight: '100%',
       maxHeight: '100%',
-      minWidth: '200px',
 			padding: '20px',
       display: 'flex',
       flexDirection: 'column',
@@ -381,13 +419,15 @@ const comStyles = () => {
 		left_top: {
 			height: 'auto',
 			width: '100%',
-			color: xGreyText,
-			fontSize: '2.2rem',
+			color: xMidBlue,
+      textDecoration: 'underline',
+			fontSize: '1.5rem',
 			fontWeight: 'bold',
 			margin: '5px 0px 0px 0px',
 			textAlign: 'center',
 			padding: '15px',
 			lineHeight: '35px',
+      cursor: 'pointer',
 		},
 		left_middle: {
 			height: 'auto',
@@ -402,11 +442,10 @@ const comStyles = () => {
 		explore_button: {
 			height: '100%',
 			width: '100%',
-			fontSize: '1.8rem',
+			fontSize: '1.2rem',
 		},
     center: {
-      width: '60%',
-      minWidth: '300px',
+      width: '70%',
       minHeight: '100%',
     },
     imageGallery: {
@@ -430,6 +469,38 @@ const comStyles = () => {
 		ImageGallery: {
 			height: '100%',
 			maxHeight: '100%',
-		}
+		},
+    summary_row: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    ranking_row: {
+      display: 'flex',
+      flexDirection: 'row',
+      padding: '0px 0px 20px 0px'
+    },
+    ranker: {
+      width: '40%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      cursor: 'pointer',
+    },
+    rank: {
+      width: '20%',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    exclude: {
+			height: '100%',
+			width: '100%',
+			fontSize: '1.2rem',
+      margin: '10px 0px 0px 0px'
+    }
 	}
 }
