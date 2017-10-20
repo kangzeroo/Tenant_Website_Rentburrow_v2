@@ -22,6 +22,9 @@ import { xMidBlue } from '../../../../styles/base_colors'
 import {
 	submitApplicationToDb,
 } from '../../../../api/application/lease_application_api'
+import {
+	generateLeaseContract,
+} from '../../../../api/pandadoc/pandadoc_api'
 
 class SubmitLeaseApplication extends Component {
 
@@ -63,6 +66,7 @@ class SubmitLeaseApplication extends Component {
 			this.setState({
 				submitted: true,
 			})
+			generateLeaseContract(this.props.my_application_id)
 		})
 	}
 
