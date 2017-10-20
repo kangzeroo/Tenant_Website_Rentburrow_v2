@@ -20,6 +20,9 @@ import {
 import {
   getBuildingById,
 } from '../../../../api/search/search_api'
+import {
+  getApplicationStatus,
+} from '../../../../api/application/lease_application_api'
 
 class LeaseApplicationCard extends Component {
 
@@ -27,13 +30,19 @@ class LeaseApplicationCard extends Component {
     super()
     this.state = {
       building: {},
+      app_details: {},
     }
   }
 
   componentWillMount() {
+    getApplicationStatus(this.props.details.application_id)
+    .then((data) => {
+      this.setState({
+        app_details: data
+      })
+    })
     getBuildingById(this.props.details.building_id)
     .then((data) => {
-      console.log(data)
       this.setState({
         building: data,
       })
@@ -46,7 +55,16 @@ class LeaseApplicationCard extends Component {
 				<Card raised>
           <Card.Content>
             <Card.Header>
-              STATUS: PENDING
+              {
+              'STATUS: '
+              }
+              {
+                this.state.app_details && this.state.app_details.application_status !== null
+                ?
+                this.state.app_details.application_status
+                :
+                'PENDING'
+              }
               <Image fluid src={this.state.building.thumbnail} />
             </Card.Header>
             <Card.Content>

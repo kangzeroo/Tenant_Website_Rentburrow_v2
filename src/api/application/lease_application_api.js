@@ -70,3 +70,17 @@ export const submitApplicationToDb = (my_application_id) => {
   })
   return p
 }
+
+export const getApplicationStatus = (my_application_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_application_status`, { application_id: my_application_id })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
