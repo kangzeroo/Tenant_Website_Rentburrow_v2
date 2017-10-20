@@ -19,6 +19,9 @@ import {
 	Message,
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
+import {
+	submitApplicationToDb,
+} from '../../../../api/application/lease_application_api'
 
 class SubmitLeaseApplication extends Component {
 
@@ -51,6 +54,15 @@ class SubmitLeaseApplication extends Component {
 		this.setState({
 			[attr]: date,
 			current_active_field: attr,
+		})
+	}
+
+	submitApplication() {
+		submitApplicationToDb(this.props.my_application_id)
+		.then(() => {
+			this.setState({
+				submitted: true,
+			})
 		})
 	}
 
@@ -118,10 +130,15 @@ class SubmitLeaseApplication extends Component {
 									this.state.submitted
 									?
 									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+										Submitted Application.
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+									<Button
+										primary
+										size='large'
+										content='Submit Application'
+										onClick={() => this.submitApplication()}
+									/>
 								}
 							</Form>
 						</div>
@@ -164,6 +181,7 @@ class SubmitLeaseApplication extends Component {
 SubmitLeaseApplication.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
+	my_application_id: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -178,6 +196,7 @@ const RadiumHOC = Radium(SubmitLeaseApplication)
 const mapReduxToProps = (redux) => {
 	return {
 		tenant_profile: redux.auth.tenant_profile,
+		my_application_id: redux.group.my_application_id,
 	}
 }
 
@@ -254,8 +273,8 @@ const comStyles = () => {
 		main_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '100%',
-			maxHeight: '100%',
+			minHeight: '85vh',
+			maxHeight: '85vh',
 			padding: '20px',
 			overflow: 'scroll',
 			width: '85vw',
