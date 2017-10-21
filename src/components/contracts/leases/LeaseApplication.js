@@ -30,6 +30,7 @@ import { getBuildingById } from '../../../api/building/building_api'
 import { checkWhatLandlordWantsFromTenant } from '../../../api/leasing/leasing_api'
 import { checkIfUserAlreadyPartGroup, addMeToTheGroup, createGroup, getGroupMembers, } from '../../../api/group/group_api'
 import { getMyApplication, } from '../../../api/application/lease_application_api'
+import { sendSummaryEmailToLandlord } from '../../../api/messaging/summary_email'
 
 class LeaseApplication extends Component {
 
@@ -41,21 +42,23 @@ class LeaseApplication extends Component {
       required_forms: [],
 
       building: {},
-      // {
-      //   joined_group: true,
-      //   begin: true,
-      //   about_tenant: true,
-      //   roommates: true,
-      //   about_student: true,
-      //   suite_room_preferences: true,
-      //   emergancy_contact: true,
-      //   witness: true,
-      //   guarantor: true,
-      //   medical: true,
-      //   personality: true,
-      //   employment: true
-      //   submit: true,
-      // }
+
+      saved_form_state: {
+        joined_group: {},
+        begin: {},
+        about_tenant: {},
+        roommates: {},
+        about_student: {},
+        suite_room_preferences: {},
+        emergancy_contact: {},
+        witness: {},
+        guarantor: {},
+        medical: {},
+        personality: {},
+        employment: {},
+      },
+
+      loaded: false,
     }
   }
 
@@ -85,6 +88,7 @@ class LeaseApplication extends Component {
         this.setState({
           required_forms: forms,
           current_form: current_form,
+          loaded: true,
         }, () => {
           this.autoAssociateGroup()
         })
@@ -164,8 +168,14 @@ class LeaseApplication extends Component {
     })
   }
 
-  goToNextForm(form_key) {
+  goToNextForm(form_key, state) {
     let next_form_key = 'begin'
+    this.setState({
+      saved_form_state: {
+        ...this.state.saved_form_state,
+        [form_key]: state,
+      }
+    }, () => console.log(this.state))
     this.state.required_forms.forEach((form, index) => {
       if (form.key === form_key) {
         next_form_key = this.state.required_forms[index + 1].key
@@ -184,7 +194,7 @@ class LeaseApplication extends Component {
         {
           this.state.required_forms.map((form) => {
             return (
-              <Step key={form.key} active={this.isActiveStep(form.key)} completed={false} onClick={() => this.clickedFormStep(form.key)}>
+              <Step key={form.key} active={this.isActiveStep(form.key)} completed={this.isCompleted(form.key)} onClick={() => this.clickedFormStep(form.key)}>
                 <Icon name={form.icon} />
                 <Step.Content>
                   <Step.Title>{ form.title }</Step.Title>
@@ -202,99 +212,122 @@ class LeaseApplication extends Component {
     if (this.state.current_form === 'begin') {
       return (
         <BeginForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          building={this.state.building}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'joined_group') {
       return (
         <JoinedGroup
           group_id={this.state.group_id}
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
-    }else if (this.state.current_form === 'about_tenant') {
+    } else if (this.state.current_form === 'about_tenant') {
       return (
         <AboutTenantForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'roommates' && this.state.group_id) {
       return (
         <RoommateGroupForm
           group_id={this.state.group_id}
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'about_student') {
       return (
         <AboutStudentForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'suite_room_preferences') {
       return (
         <SuitePreferencesForm
           group_id={this.state.group_id}
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
           building={this.props.applied_building}
         />
       )
     } else if (this.state.current_form === 'witness') {
       return (
         <WitnessForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'guarantor') {
       return (
         <GuarantorForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'medical_history') {
       return (
         <MedicalHistoryForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'emergancy_contact') {
       return (
         <EmergancyContactForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'personality') {
       return (
         <PersonalityForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'employment') {
       return (
         <EmploymentForm
-          goToNextForm={(form_key) => this.goToNextForm(this.state.current_form)}
+          goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
     } else if (this.state.current_form === 'submit') {
       return (
-        <SubmitLeaseApplication />
+        <SubmitLeaseApplication
+          sendSummaryEmail={() => sendSummaryEmailToLandlord(this.state.saved_form_state, this.state.building)}
+        />
       )
+    }
+  }
+
+  isCompleted(attr) {
+    if (this.state.saved_form_state[attr]) {
+      return this.state.saved_form_state[attr].parent_component_saved
+    } else {
+      return false
     }
   }
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <div style={comStyles().steps}>
-  				{
-            this.generateSteps()
-          }
-        </div>
-        <div style={comStyles().form_output}>
-          {
-            this.generateForm()
-          }
-        </div>
+        {
+          this.state.loaded
+          ?
+          <div style={comStyles().inner_container}>
+            <div style={comStyles().steps}>
+      				{
+                this.generateSteps()
+              }
+            </div>
+            <div style={comStyles().form_output}>
+              {
+                this.generateForm()
+              }
+            </div>
+          </div>
+          :
+          <div style={comStyles().inner_container}>
+            <div style={comStyles().hidden_loading}>
+              <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+            </div>
+          </div>
+        }
 			</div>
 		)
 	}
@@ -349,6 +382,10 @@ const comStyles = () => {
       flexDirection: 'row',
       padding: '10px',
 		},
+    inner_container: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
     steps: {
       minWidth: '200px',
       maxWidth: '200px',
@@ -359,6 +396,16 @@ const comStyles = () => {
       minHeight: '90vh',
       maxHeight: '90vh',
       overflowY: 'scroll',
-    }
+    },
+    hidden_loading: {
+      position: 'absolute',
+      zIndex: 5,
+      minWidth: '100%',
+      minHeight: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 	}
 }

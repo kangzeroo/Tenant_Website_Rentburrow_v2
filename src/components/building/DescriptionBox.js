@@ -89,7 +89,7 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = (expanded) => {
   let attrs = {
-    maxHeight: '400px',
+    maxHeight: '200px',
     overflow: 'hidden'
   }
   if (expanded) {
@@ -101,7 +101,7 @@ const comStyles = (expanded) => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      margin: '15px auto',
+      margin: '5px auto',
 		},
     desc: {
       ...attrs,
@@ -114,7 +114,7 @@ const comStyles = (expanded) => {
     expand: {
       width: '100%',
       height: '30px',
-      padding: '10px',
+      padding: '10px 0px 0px 0px',
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',

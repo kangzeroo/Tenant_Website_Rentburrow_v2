@@ -44,31 +44,33 @@ class AmenityBrowser extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <div style={comStyles().amenities}>
-          Amenities
-        </div>
         <div style={comStyles().box}>
-          <div style={comStyles().amenitiesGrid}>
-            {
-              this.props.amenities.map((am, index) => {
-                return (
-                  <Item
-                    onClick={() => {
-                      this.setState({ current_amenity: am })
-                    }}
-                    key={am.amenity_alias || index}
-                    style={amenityStyles(this.state.current_amenity, am).amenity}
-                  >
-                    <Icon name='checkmark' />
-                    <Item.Content>
-                      <Item.Header>
-                        { am.amenity_alias }
-                      </Item.Header>
-                    </Item.Content>
-                  </Item>
-                )
-              })
-            }
+          <div style={comStyles().amen}>
+            <div style={comStyles().amentity_title}>
+              Amenities
+            </div>
+            <div style={comStyles().amenitiesGrid}>
+              {
+                this.props.amenities.map((am, index) => {
+                  return (
+                    <Item
+                      onClick={() => {
+                        this.setState({ current_amenity: am })
+                      }}
+                      key={am.amenity_alias || index}
+                      style={amenityStyles(this.state.current_amenity, am).amenity}
+                    >
+                      <Icon name='checkmark' />
+                      <Item.Content>
+                        <Item.Header>
+                          { am.amenity_alias }
+                        </Item.Header>
+                      </Item.Content>
+                    </Item>
+                  )
+                })
+              }
+            </div>
           </div>
           {
             this.state.current_amenity.imgs && this.state.current_amenity.imgs.length > 0
@@ -77,7 +79,7 @@ class AmenityBrowser extends Component {
             <div style={comStyles().imageGallery}>
               <SingularImageGallery
                 list_of_images={this.state.current_amenity.imgs}
-                image_size='thumbnail'
+                image_size='hd'
               />
             </div>
             :
@@ -134,30 +136,49 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
+      minHeight: '400px',
+      width: '100%',
       overflow: 'scroll',
       backgroundColor: 'white',
       padding: '20px',
 		},
-		amenities: {
+		amentity_title: {
 			fontSize: '2.0rem',
 			lineHeight: '2.0rem',
 			fontWeight: 'bold',
       display: 'flex',
-      flexDirection: 'flex-start',
-			padding: '5px 0px 5px 0px',
+      flexDirection: 'center',
+			padding: '10px',
+      width: '100%',
+      height: '20%',
+      justifyContent: 'center',
 		},
+    amen: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      minWidth: '40%',
+      maxWidth: '40%',
+      minHeight: '380px',
+      maxHeight: '100%',
+    },
     amenitiesGrid: {
       display: 'flex',
       flexDirection: 'row',
+      justifyContent: 'center',
       flexWrap: 'wrap',
-      width: '50%',
-      height: '100%',
+      minWidth: '100%',
+      maxWidth: '100%',
+      // minHeight: '300px',
+      maxHeight: '80%',
       padding: '10px',
       borderRadius: '3px',
+      overflowY: 'scroll',
     },
     imageGallery: {
-      minWidth: '45%',
-      minHeight: '300px',
+      minWidth: '60%',
+      minHeight: '400px',
+      // maxHeight: '250px',
       height: 'auto',
       borderRadius: '3px',
       display: 'flex',
@@ -169,7 +190,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: 'center',
     },
 	}
 }
@@ -190,7 +211,8 @@ const amenityStyles = (current_amenity, this_amenity) => {
 			lineHeight: '1.0rem',
 			display: 'flex',
 			flexDirection: 'row',
-      width: '33%',
+      // flexWrap: 'wrap',
+      width: '200px',
       cursor: 'pointer',
       padding: '10px',
       ...style,

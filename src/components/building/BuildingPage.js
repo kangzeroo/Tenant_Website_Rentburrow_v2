@@ -72,7 +72,7 @@ class BuildingPage extends Component {
       modal_name: '',
       context: {},
 
-			expand_amenities: false,
+			expand_amenities: true,
 		}
 	}
 
@@ -268,7 +268,7 @@ class BuildingPage extends Component {
 							:
 							null
 						}
-						{
+						{/*
 							this.state.expand_amenities
 							?
 							<div style={comStyles().expanded_amenities} >
@@ -285,7 +285,7 @@ class BuildingPage extends Component {
 							</div>
 							:
 							null
-						}
+						*/}
 						{/*<div style={comStyles().images_container}>
 							<SingularImageGallery
 								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
@@ -337,6 +337,10 @@ class BuildingPage extends Component {
 				</div>
 
 				<div style={comStyles().suites_table}>
+					<AmenityBrowser
+						building={this.state.building}
+						amenities={this.state.amenities}
+					/>
 					{
 						this.state.building
 						?
@@ -530,6 +534,8 @@ const comStyles = () => {
 		suites_table: {
 			borderRadius: '3px',
 			padding: '50px',
+			display: 'flex',
+			flexDirection: 'column',
 		},
 		images_container: {
 			margin: '20px 0px 10px 0px'

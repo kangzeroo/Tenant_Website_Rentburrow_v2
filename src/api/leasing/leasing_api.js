@@ -66,12 +66,12 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
       //   icon: 'briefcase',
       //   key: 'employment',
       // },
-      witness: {
-        title: 'Witness',
-        desc: 'To be used later',
-        icon: 'eye',
-        key: 'witness',
-      },
+      // witness: {
+      //   title: 'Witness',
+      //   desc: 'To be used later',
+      //   icon: 'eye',
+      //   key: 'witness',
+      // },
       guarantor: {
         title: 'Guarantor',
         desc: 'In case of missed payment',

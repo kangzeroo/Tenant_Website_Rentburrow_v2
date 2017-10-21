@@ -70,6 +70,7 @@ class HomeOverview extends Component {
 							building={this.props.building}
 							current_suite={context}
 							all_suites={this.props.suites}
+							showVirtualTourFirst
 						/>
 	        </Modal.Content>
 	      </Modal>
