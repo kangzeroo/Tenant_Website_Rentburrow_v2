@@ -37,6 +37,7 @@ class WitnessForm extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+			parent_component_saved: true,
 	  }
 
 		this.why_sign_online = [
@@ -68,7 +69,7 @@ class WitnessForm extends Component {
 			application_id: this.props.my_application_id,
 		})
 		.then((data) => {
-			this.props.goToNextForm()
+			this.props.goToNextForm(this.state)
 		})
 	}
 
@@ -260,7 +261,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '600px',
-			width: '60vw',
+			width: '45vw',
 			height: '100%',
 			padding: '20px',
 		},
@@ -268,7 +269,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '350px',
-			width: '25vw',
+			width: '40vw',
 			padding: '20px',
 		},
 		card_style: {
@@ -287,7 +288,7 @@ const comStyles = () => {
 		student_form: {
 			display: 'flex',
 			flexDirection: 'column',
-			width: '75%',
+			width: '100%',
 		},
 		student_card: {
 			display: 'flex',

@@ -34,6 +34,7 @@ class EmergancyContactForm extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+			parent_component_saved: true,
 	  }
 
 		this.why_sign_online = [
@@ -154,7 +155,7 @@ class EmergancyContactForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm(this.state)}>Next</Button>
 								}
 							</Form>
 						</div>

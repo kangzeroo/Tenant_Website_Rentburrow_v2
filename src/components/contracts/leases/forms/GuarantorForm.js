@@ -21,6 +21,7 @@ import {
 	Message,
 	Image,
 	Dropdown,
+	Header,
 } from 'semantic-ui-react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -28,6 +29,7 @@ import { xMidBlue } from '../../../../styles/base_colors'
 import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
 import { filterNonImages, uploadImageToS3WithEncryption } from '../../../../api/aws/aws-S3'
 import { insertGuarantorProfile, } from '../../../../api/application/lease_application_api'
+import { validateEmail } from '../../../../api/general/general_api'
 
 class GuarantorForm extends Component {
 
@@ -58,6 +60,7 @@ class GuarantorForm extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+			parent_component_saved: true,
 	  }
 
 		this.why_sign_online = [
@@ -130,26 +133,53 @@ class GuarantorForm extends Component {
   }
 
 	saveGuarantorProfileToDb() {
-		uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'guarantor-government_id-')
-			.then((S3Obj) => {
-				return insertGuarantorProfile({
-					application_id: this.props.my_application_id,
-					tenant_id: this.props.tenant_profile.tenant_id,
-					first_name: this.state.first_name,
-					last_name: this.state.last_name,
-					phone: this.state.phone,
-					email: this.state.email,
-					address: this.state.building_address,
-					date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
-					relationship: this.state.relationship,
-					government_id: S3Obj.Location,
-					citizenship: this.state.citizenship,
-					permanent_resident: this.state.permanent_resident,
+		this.setState({
+			submitted: true,
+		})
+		if (this.validateForm()) {
+			// uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'guarantor-government_id-')
+			Promise.resolve()
+				.then((S3Obj) => {
+					return insertGuarantorProfile({
+						application_id: this.props.my_application_id,
+						tenant_id: this.props.tenant_profile.tenant_id,
+						first_name: this.state.first_name,
+						last_name: this.state.last_name,
+						phone: this.state.phone,
+						email: this.state.email,
+						address: this.state.building_address,
+						date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
+						relationship: this.state.relationship,
+						// government_id: S3Obj.Location,
+						citizenship: this.state.citizenship,
+						permanent_resident: this.state.permanent_resident,
+					})
 				})
-			})
-			.then((data) => {
-				this.props.goToNextForm()
-			})
+				.then((data) => {
+					this.props.goToNextForm(this.state)
+					this.setState({
+						submitted: true,
+					})
+				})
+		}
+	}
+
+	validateForm() {
+		let ok_to_proceed = true
+		const error_messages = []
+		if (this.state.first_name.length === 0) {
+			error_messages.push('Please enter your guarantors name')
+			ok_to_proceed = false
+		}
+		if (this.state.email.length === 0 || !validateEmail(this.state.email)) {
+			error_messages.push('Please enter a valid email')
+			ok_to_proceed = false
+		}
+		this.setState({
+			submitted: false,
+			error_messages: error_messages
+		})
+		return ok_to_proceed
 	}
 
 	toggleGuarantorNotPossible(event, data) {
@@ -222,14 +252,22 @@ class GuarantorForm extends Component {
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
 						<Form.Field>
-							<label>Legal First Name</label>
+							<label>Guarantor Name</label>
 							<input
-								placeholder='Legal First Name'
+								placeholder='Full Legal Name'
 								onChange={(e) => this.updateAttr(e, 'first_name')}
 								value={this.state.first_name}
 							/>
 						</Form.Field>
 						<Form.Field>
+							<label>Email</label>
+							<input
+								placeholder='Email'
+								onChange={(e) => this.updateAttr(e, 'email')}
+								value={this.state.email}
+							/>
+						</Form.Field>
+						{/*<Form.Field>
 							<label>Legal Last Name</label>
 							<input
 								placeholder='Legal Last Name'
@@ -251,7 +289,7 @@ class GuarantorForm extends Component {
 								selected={this.state.date_of_birth}
 								onChange={(d) => this.updateDate(d, 'date_of_birth')}
 							/>
-						</Form.Field>
+						</Form.Field>*/}
 					</div>
 				</div>
 			</Card>
@@ -357,7 +395,12 @@ class GuarantorForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Guarantors</div>
+					<Header
+						as='h2'
+						icon='money'
+						content='Guarantor'
+						subheader='Add a guarantor to your lease'
+					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							{
@@ -378,18 +421,18 @@ class GuarantorForm extends Component {
 								</Card>
 								:
 								<Form style={comStyles().form}>
-									{
+									{/*
 										this.renderGuarantorAvailable()
-									}
+									*/}
 									{
 										this.renderBasicProfile()
 									}
-									{
+									{/*
 										this.renderContactInfo()
-									}
-									{
+									*/}
+									{/*
 										this.renderGovtInfo()
-									}
+									*/}
 
 									<Form.Field>
 										{
@@ -515,7 +558,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '600px',
-			width: '60vw',
+			width: '45vw',
 			height: '100%',
 			padding: '20px',
 		},
@@ -523,7 +566,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '350px',
-			width: '25vw',
+			width: '40vw',
 			padding: '20px',
 		},
 		card_style: {
@@ -542,7 +585,7 @@ const comStyles = () => {
 		student_form: {
 			display: 'flex',
 			flexDirection: 'column',
-			width: '75%',
+			width: '100%',
 		},
 		student_card: {
 			display: 'flex',

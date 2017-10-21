@@ -28,6 +28,8 @@ class SubmitLeaseApplication extends Component {
 	constructor() {
 		super()
 		this.state = {
+			agree_to_terms: false,
+
 			submitted: false,
 			error_messages: [],
 			activeIndex: 1,
@@ -35,6 +37,7 @@ class SubmitLeaseApplication extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+			parent_component_saved: true,
 	  }
 
 		this.why_sign_online = [
@@ -58,12 +61,21 @@ class SubmitLeaseApplication extends Component {
 	}
 
 	submitApplication() {
-		submitApplicationToDb(this.props.my_application_id)
-		.then(() => {
-			this.setState({
-				submitted: true,
+		if (this.state.agree_to_terms) {
+			submitApplicationToDb(this.props.my_application_id)
+			.then(() => {
+				this.setState({
+					submitted: true,
+					error_messages: [],
+				})
+				// this.props.history.push('/applications')
+				this.props.sendSummaryEmail()
 			})
-		})
+		} else {
+			this.setState({
+				error_messages: ['You must agree to the terms and conditions before you can submit this application.']
+			})
+		}
 	}
 
 	toggleModal(bool, attr, context) {
@@ -98,10 +110,33 @@ class SubmitLeaseApplication extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<div style={comStyles().sign_header}>Submit Lease Application</div>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
+
+								<Accordion fluid styled>
+									<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
+										Why Sign Contracts Online?
+									</Accordion.Title>
+									{
+										this.why_sign_online.map((why) => {
+											return (
+												<div key={why.index}>
+													<Accordion.Title active={this.state.activeIndex === why.index}  onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
+														<Icon name={why.icon} />
+														&nbsp; &nbsp;
+														{ why.title }
+													</Accordion.Title>
+													<Accordion.Content active={this.state.activeIndex === why.index} style={comStyles().why_content}>
+														<p>
+															{ why.description }
+														</p>
+													</Accordion.Content>
+												</div>
+											)
+										})
+									}
+								</Accordion>
 
 								<Card fluid style={comStyles().card_style}>
 									<Form.Field>
@@ -143,29 +178,7 @@ class SubmitLeaseApplication extends Component {
 							</Form>
 						</div>
 						<div style={comStyles().tips_contents}>
-							<Accordion styled>
-								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
-									Why Sign Contracts Online?
-								</Accordion.Title>
-								{
-									this.why_sign_online.map((why) => {
-										return (
-											<div key={why.index}>
-												<Accordion.Title active={this.state.activeIndex === why.index}  onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
-													<Icon name={why.icon} />
-													&nbsp; &nbsp;
-													{ why.title }
-												</Accordion.Title>
-												<Accordion.Content active={this.state.activeIndex === why.index} style={comStyles().why_content}>
-													<p>
-														{ why.description }
-													</p>
-												</Accordion.Content>
-											</div>
-										)
-									})
-								}
-							</Accordion>
+
 						</div>
 					</div>
 				</div>
@@ -182,6 +195,7 @@ SubmitLeaseApplication.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
 	my_application_id: PropTypes.string.isRequired,
+	sendSummaryEmail: PropTypes.func.isRequired,			// passed in
 }
 
 // for all optional props, define a default value
@@ -234,16 +248,16 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '600px',
-			width: '60vw',
+			width: '80vw',
 			height: '100%',
 			padding: '20px',
 		},
 		tips_contents: {
       display: 'flex',
       flexDirection: 'column',
-			minWidth: '350px',
-			width: '25vw',
-			padding: '20px',
+			minWidth: '0px',
+			width: '0vw',
+			padding: '0px',
 		},
 		card_style: {
 			padding: '20px',

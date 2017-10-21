@@ -21,7 +21,7 @@ class SuiteBedSummary extends Component {
 				{
 					this.props.rooms_summary.total_rooms
 					?
-					<Statistic size='small'>
+					<Statistic size={this.props.font}>
 			      <Statistic.Value>
 							<Icon name='bed' />
 			        {this.props.rooms_summary.total_rooms}
@@ -34,7 +34,7 @@ class SuiteBedSummary extends Component {
 				{
 					this.props.rooms_summary.standard_price !== 0
 					?
-					<Statistic size='small'>
+					<Statistic size={this.props.font}>
 			      <Statistic.Value>
 			        ${this.props.rooms_summary.standard_price}
 			      </Statistic.Value>
@@ -45,7 +45,7 @@ class SuiteBedSummary extends Component {
 						{
 							this.props.rooms_summary.min_price !== 0
 							?
-							<Statistic size='small'>
+							<Statistic size={this.props.font}>
 								<Statistic.Value>
 									{`$${this.props.rooms_summary.min_price}+`}
 								</Statistic.Value>
@@ -65,6 +65,7 @@ class SuiteBedSummary extends Component {
 SuiteBedSummary.propTypes = {
 	history: PropTypes.object.isRequired,
 	rooms_summary: PropTypes.object,
+	font: PropTypes.string,
 }
 
 // for all optional props, define a default value
@@ -75,7 +76,8 @@ SuiteBedSummary.defaultProps = {
 		standard_price: 0,
 		min_price: 0,
 		max_price: 0,
-	}
+	},
+	font: 'small',
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -104,8 +106,10 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
 			justifyContent: 'center',
+			alignItems: 'center',
       height: '100%',
 			width: '100%',
+			fontSize: '1rem',
     },
 	}
 }

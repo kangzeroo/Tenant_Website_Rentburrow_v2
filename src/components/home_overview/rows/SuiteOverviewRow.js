@@ -172,6 +172,11 @@ class SuiteOverviewRow extends Component {
     })
   }
 
+  signAndPayOnline() {
+    // this.toggleModal(true, 'sign_pay_online')
+    window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
+  }
+
 	render() {
     const suite = this.props.suite
 		return (
@@ -194,12 +199,17 @@ class SuiteOverviewRow extends Component {
             }
 					</div>
 					<div style={comStyles().left_bottom}>
+            <Button
+              onClick={() => this.signAndPayOnline()}
+              color='blue'
+              content='Rent Now'
+              style={comStyles().explore_button}
+            />
 						<Button
-							fluid
+              basic
 							onClick={() => this.props.toggleModal(true, 'suite', suite)}
 							color='blue'
-							content='Explore Suite Style'
-              icon='bed'
+							content='Virtual Tour'
 							style={comStyles().explore_button}
 						/>
 					</div>
@@ -420,6 +430,8 @@ const comStyles = () => {
 		},
 		left_bottom: {
 			height: 'auto',
+      display: 'flex',
+      flexDirection: 'row',
 		},
 		explore_button: {
 			height: '100%',

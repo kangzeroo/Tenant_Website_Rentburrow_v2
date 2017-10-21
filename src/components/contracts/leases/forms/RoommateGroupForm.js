@@ -29,6 +29,7 @@ class RoommateGroupForm extends Component {
 	constructor() {
 		super()
 		this.state = {
+			group_id: '',
 			group_name: '',
 			new_group_name: '',
 	    first_name: '',
@@ -42,6 +43,7 @@ class RoommateGroupForm extends Component {
       context: {},
 
 			edit: false,
+			parent_component_saved: true,
 	  }
 
 		this.why_sign_online = [
@@ -57,7 +59,8 @@ class RoommateGroupForm extends Component {
 		.then((data) => {
 			if (data.group_name !== null) {
 				this.setState({
-					group_name: data.group_name
+					group_id: this.props.group_id,
+					group_name: data.group_name,
 				})
 			} else {
 				this.setState({
@@ -156,7 +159,7 @@ class RoommateGroupForm extends Component {
 							<Button
 								primary
 								basic
-								content='Edit'
+								content='Edit Group Name'
 								onClick={() => this.setState({ edit: true, })}
 							/>
 						</div>
@@ -166,7 +169,8 @@ class RoommateGroupForm extends Component {
 							<Form style={comStyles().form}>
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
-										Share this link with anyone you want as a roommate
+										Share this link with your roommates
+										<div style={comStyles().keep_going}>You do not need to wait for them, click next to continue</div>
 									</Card.Header>
 									<div style={comStyles().student_div}>
 										<Form.Field>
@@ -189,7 +193,7 @@ class RoommateGroupForm extends Component {
 									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 								</div>
 								:
-								<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+								<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm(this.state)}>Next</Button>
 							}
 						</div>
 						<div style={comStyles().tips_contents}>
@@ -320,7 +324,7 @@ const comStyles = () => {
 		student_form: {
 			display: 'flex',
 			flexDirection: 'column',
-			width: '75%',
+			width: '100%',
 		},
 		student_card: {
 			display: 'flex',
@@ -350,7 +354,12 @@ const comStyles = () => {
 		card_header: {
 			padding: '30px 0px 40px 0px',
 			fontWeight: 'bold',
-			fontSize: '1.8rem',
+			fontSize: '2rem',
+			lineHeight: '30px',
+		},
+		keep_going: {
+			// fontWeight: 'bold',
+			fontSize: '1.2rem',
 		},
 		sign_header: {
 			width: '100%',
