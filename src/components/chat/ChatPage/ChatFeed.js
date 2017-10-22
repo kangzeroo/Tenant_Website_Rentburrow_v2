@@ -29,13 +29,13 @@ class ChatFeed extends Component {
             let msg
             if (message.receiver_id === message.corporation_id) {
               msg = (
-                <div key={message.message_id} style={comStyles().them}>
+                <div key={message.message_id} style={comStyles().me}>
                   { message.contents }
                 </div>
               )
             } else if (message.sender_id === message.corporation_id) {
               msg = (
-                <div key={message.message_id} style={comStyles().me}>
+                <div key={message.message_id} style={comStyles().them}>
                   { message.contents }
                 </div>
               )
@@ -43,7 +43,6 @@ class ChatFeed extends Component {
             return msg
           })
         }
-        <div style={comStyles().status}></div>
       </div>
 		)
 	}
@@ -75,38 +74,39 @@ const comStyles = () => {
       // alignSelf: 'stretch',
       display: 'flex',
       flexDirection: 'column',
+      justifyContent: 'flex-start',
       overflowY: 'scroll',
+      overflowX: 'hidden',
       padding: '15px 15px 20px 15px',
-      flex: 7,
-      minHeight: '85%',
-      maxHeight: '85%',
+      minHeight: '420px',
+      maxHeight: '420px',
     },
     them: {
-      display: 'flex',
+      // display: 'flex',
       backgroundColor: 'azure',
       padding: '10px',
       color: 'black',
       maxWidth: '80%',
       width: 'auto',
-      textAlign: 'flex-end',
-      flexWrap: 'wrap',
       height: 'auto',
-      wordWrap: 'break-word',
+      // textAlign: 'flex-end',
+      // flexWrap: 'wrap',
+      // wordWrap: 'break-word',
       margin: '5px',
       float: 'left',
       borderRadius: '10px',
     },
     me: {
-      display: 'flex',
+      // display: 'flex',
       backgroundColor: xMidBlue,
       padding: '10px',
       color: 'white',
       maxWidth: '80%',
       width: 'auto',
-      textAlign: 'flex-start',
-      flexWrap: 'wrap',
+      // textAlign: 'flex-start',
+      // flexWrap: 'wrap',
       height: 'auto',
-      wordWrap: 'break-word',
+      // wordWrap: 'break-word',
       margin: '5px 5px 5px 20%',
       float: 'right',
       borderRadius: '10px',

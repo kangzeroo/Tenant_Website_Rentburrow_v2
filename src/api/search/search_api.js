@@ -107,9 +107,9 @@ export const searchBuildingByAddress = (addr) => {
 }
 
 
-export const getSpecificLandlord = ({ corporation_id }) => {
+export const getSpecificLandlord = ({ building_id }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/get_specific_landlord`, { corporation_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_specific_landlord`, { building_id })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

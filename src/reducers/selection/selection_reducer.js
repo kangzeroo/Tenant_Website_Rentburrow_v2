@@ -2,13 +2,14 @@ import {
   SELECT_BUILDING,
   SELECT_CORPORATION,
   SELECT_POPUP_BUILDING,
+  SELECT_THREAD,
   NAV_TOP_TITLE,
   NAV_BOTTOM_TITLE,
 } from '../../actions/action_types'
 
 const INITIAL_STATE = {
-  selected_building: null,
-  selected_landlord: null,
+  selected_building: {},
+  selected_landlord: {},
   nav_top_title: '',        // for when you are in the <SuiteRoomBrowser> and changing the topContext
   nav_bottom_title: '',     // for when you are in the <SuiteRoomBrowser> and changing the bottomContext
 }
@@ -24,6 +25,19 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selected_landlord: action.payload,
+      }
+    case SELECT_THREAD:
+      let go_back = {
+        selected_building: state.selected_building,
+        selected_landlord: state.selected_landlord,
+      }
+      if (action.payload.length === 0) {
+        go_back.selected_building = {}
+        go_back.selected_landlord = {}
+      }
+      return {
+        ...state,
+        ...go_back,
       }
     case NAV_TOP_TITLE:
       return {

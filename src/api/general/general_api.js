@@ -130,3 +130,13 @@ export const validateEmail = (email) => {
 export const authenticateTenant = (tenant) => {
 	return tenant && tenant !== null && tenant !== {} && tenant.tenant_id
 }
+
+export const convertToArray = (obj) => {
+  const array = []
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      array.push(obj[key])
+    }
+  }
+  return array
+}

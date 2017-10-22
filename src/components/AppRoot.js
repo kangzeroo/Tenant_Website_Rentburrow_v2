@@ -50,6 +50,7 @@ import { clearIntelList, saveIntelToCloud } from '../actions/intel/intel_actions
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 import { saveTenantProfile, getTenantProfile } from '../api/auth/tenant_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
+import { initializeFirebaseChatDb } from '../actions/messaging/messaging_actions'
 
 
 class AppRoot extends Component {
@@ -129,6 +130,7 @@ class AppRoot extends Component {
       })
       .then((data) => {
         this.props.saveTenantToRedux(data)
+        this.props.initializeFirebaseChatDb(data.tenant_id)
           // use location_forwarding when you have a path that requires a login first (privately available)
           // use PossibleRoutes.js when you have a path that is publically available
         this.props.history.push(this.props.location_forwarding)
@@ -322,6 +324,7 @@ AppRoot.propTypes = {
   location_forwarding: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   saveIntelToCloud: PropTypes.func.isRequired,
+  initializeFirebaseChatDb: PropTypes.func.isRequired,
   selected_building_to_apply_for: PropTypes.object,
 }
 
@@ -358,6 +361,7 @@ export default withRouter(connect(mapReduxToProps, {
   clearIntelList,
   forwardUrlLocation,
   saveIntelToCloud,
+  initializeFirebaseChatDb,
 })(RadiumHOC))
 
 // =============================

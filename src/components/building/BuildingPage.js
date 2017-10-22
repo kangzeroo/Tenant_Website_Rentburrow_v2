@@ -77,23 +77,6 @@ class BuildingPage extends Component {
 	}
 
 	componentWillMount() {
-		// this.props.selectChatThread([
-		// 	{
-		// 		message_id: uuid.v4(),
-		// 		sender_id: this.props.building.corporation_id,
-		// 		receiver_id: this.props.tenant.id,
-		// 		tenant_id: this.props.tenant.id,
-		// 		tenant_name: this.props.tenant.name,
-		// 		staff_id: '',
-		// 		building_id: this.props.building.building_id,
-		// 		building_thumbnail: this.props.building.thumbnail,
-		// 		building_alias: this.props.building.building_name,
-		// 		corporation_id: this.props.building.corporation_id,
-		// 		corporation_name: this.props.building.corporation_name,
-		// 		channel_id: `${this.props.building.corporation_id}_${this.props.tenant.id}`,
-		// 		contents: `Welcome to ${this.props.building.building_address}! Ask me any questions live!`,
-		// 	}
-		// ])
     let building_alias = URLToAlias(this.props.location.pathname)
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
@@ -135,6 +118,10 @@ class BuildingPage extends Component {
 			this.setState({
 				sublets: sublets,
 			})
+			return getSpecificLandlord({ building_id: this.state.building.building_id })
+		})
+		.then((corporation) => {
+			this.props.selectCorporation(corporation)
 		})
 	}
 
@@ -379,7 +366,7 @@ BuildingPage.propTypes = {
 	selectBuilding: PropTypes.func.isRequired,
 	selectCorporation: PropTypes.func.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
-	tenant: PropTypes.object.isRequired,
+	tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -393,7 +380,7 @@ const RadiumHOC = Radium(BuildingPage)
 const mapReduxToProps = (redux) => {
 	return {
 		// building: redux.selection.selected_building,
-		tenant: redux.auth.tenant_profile,
+		tenant_profile: redux.auth.tenant_profile,
 	}
 }
 

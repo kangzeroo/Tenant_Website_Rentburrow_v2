@@ -23,6 +23,7 @@ import PopupPanel from './panel/PopupPanel'
 import {
 	querySubletsInArea,
 } from '../../api/search/sublet_api'
+import { selectHelpThread } from '../../actions/messaging/messaging_actions'
 
 class HousingPage extends Component {
 
@@ -35,6 +36,7 @@ class HousingPage extends Component {
 
 	componentWillMount() {
 		this.refreshBuildings()
+		this.props.selectHelpThread()
 	}
 
 	refreshBuildings() {
@@ -108,6 +110,7 @@ HousingPage.propTypes = {
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
 	saveSubletsToRedux: PropTypes.func.isRequired,
+  selectHelpThread: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -141,6 +144,7 @@ export default withRouter(
 	connect(mapReduxToProps, {
 		saveBuildingsToRedux,
 		saveSubletsToRedux,
+    selectHelpThread,
 	})(RadiumHOC)
 )
 

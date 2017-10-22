@@ -1,5 +1,5 @@
-// Compt for copying as a template
-// This compt is used for...
+// Sidebar chat panel
+// lists messages
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -8,94 +8,94 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-	Header,
-	Icon,
+  Header,
+  Icon,
 } from 'semantic-ui-react'
+import {
+  xLightBlue,
+  xDeepBlue,
+} from '../../../styles/base_colors'
 import { selectChatThread } from '../../../actions/messaging/messaging_actions'
 import ChatFeed from './ChatFeed'
 import ChatInput from './ChatInput'
 
 
-class ChatsDash extends Component {
+class ChatPanel extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      question: '',
+    }
+  }
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<Header as='h2' textAlign='center' style={comStyles().header}>
-					<div style={comStyles().back_button}>
-					{
-						this.props.history.location.pathname.indexOf('/chat') > -1
-						?
-						null
-						:
-						<Icon name='chevron left' onClick={() => this.props.selectChatThread([])} style={comStyles().left_arrow} />
-					}
-					</div>
-					<div style={comStyles().property_title}>
+			<div style={comStyles(this.props.history.location.pathname).container}>
+        <Header as='h2' textAlign='center' style={comStyles().header}>
+          {
+            this.props.history.location.pathname.indexOf('/chat') > -1
+            ?
+            null
+            :
+            <Icon name='chevron left' onClick={() => this.props.selectChatThread([])} style={comStyles().left_arrow} />
+          }
           {
             this.props.current_thread.length > 0
             ?
-            <h3 style={comStyles().title}>{ this.props.current_thread[0].corporation_name }</h3>
+            <h2 style={comStyles().title}>{ this.props.current_thread[0].corporation_name }</h2>
             :
-            <h3 style={comStyles().title}>Messages</h3>
+            <h2 style={comStyles().title}>Help Chat</h2>
           }
-					</div>
         </Header>
-        {
-          this.props.current_thread.length > 0
-          ?
-					<div style={comStyles().chat_interface}>
-          	<ChatFeed current_thread={this.props.current_thread} style={comStyles().chat_feed} />
-						<ChatInput
-							selected_building={this.props.selected_building}
-							corporation={{
-								corporation_id: this.props.selected_landlord.corporation_id,
-								corporation_name: this.props.selected_landlord.corporation_name,
-							}}
-							style={comStyles().chat_input} />
-					</div>
-          :
-          <div style={comStyles().no_history}>
-            <h3>No Chat History</h3>
-          </div>
-        }
+        <div style={comStyles().chat_interface}>
+          {
+            this.props.current_thread.length > 0
+            ?
+            <ChatFeed current_thread={this.props.current_thread} style={comStyles().chat_feed} />
+            :
+            <div style={comStyles().chat_feed}>
+              Got a question? Ask us!
+            </div>
+          }
+          <ChatInput
+            corporation={{
+              corporation_id: 'Rentburrow_Student_Help_Chat',
+              corp_name: 'Rentburrow Help',
+            }}
+            style={comStyles().chat_input} />
+        </div>
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-ChatsDash.propTypes = {
+ChatPanel.propTypes = {
 	history: PropTypes.object.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
-	current_thread: PropTypes.array,								// passed in
-	selected_landlord: PropTypes.object,
-	selected_building: PropTypes.object,
+	current_thread: [],
 }
 
 // for all optional props, define a default value
-ChatsDash.defaultProps = {
-	current_thread: [],
-	selected_landlord: {},
-	selected_building: {},
+ChatPanel.defaultProps = {
+
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(ChatsDash)
+const RadiumHOC = Radium(ChatPanel)
 
 // Get access to state from the Redux store
 function mapStateToProps(state) {
 	return {
 		current_thread: state.messaging.current_thread,
-		selected_landlord: state.selection.selected_landlord,
-    selected_building: state.selection.selected_building,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapStateToProps, {
-		selectChatThread,
+    selectChatThread,
 	})(RadiumHOC)
 )
 
@@ -146,21 +146,18 @@ const comStyles = () => {
 		},
 		chat_feed: {
 			minHeight: '85%',
-			maxHeight: '85%'
+			maxHeight: '85%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '40px',
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
 		},
 		chat_input: {
 			minHeight: '15%',
 			maxHeight: '15%',
-		},
-		back_button: {
-			width: '10%',
-		},
-		property_title: {
-			width: '90%',
-			display: 'flex',
-			flexDirection: 'row',
-			flexWrap: 'wrap',
-			justifyContent: 'center',
-		},
+		}
 	}
 }
