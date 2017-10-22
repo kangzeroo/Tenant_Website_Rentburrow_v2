@@ -141,7 +141,7 @@ class SuitePreviewsForSelection extends Component {
 
   generateBedsSummary() {
     return (
-      <SuiteBedSummary rooms_summary={this.state.rooms_summary} />
+      <SuiteBedSummary font='mini' rooms_summary={this.state.rooms_summary} />
     )
   }
 
@@ -174,6 +174,9 @@ class SuitePreviewsForSelection extends Component {
   						{ renameSuite(suite.suite_alias) }
   					</div>
   					<div style={comStyles().left_bottom}>
+              {
+                this.generateBedsSummary()
+              }
               {
                 suite.rank
                 ?
@@ -421,20 +424,20 @@ const comStyles = () => {
 			width: '100%',
 			color: xMidBlue,
       textDecoration: 'underline',
-			fontSize: '1.5rem',
+			fontSize: '1.2rem',
 			fontWeight: 'bold',
 			margin: '5px 0px 0px 0px',
 			textAlign: 'center',
-			padding: '15px',
-			lineHeight: '35px',
+			padding: '5px',
+			lineHeight: '20px',
       cursor: 'pointer',
 		},
 		left_middle: {
 			height: 'auto',
 			display: 'flex',
 			flexDirection: 'column',
-			justifyContent: 'space-between',
-			alignItems: 'space-between',
+			justifyContent: 'flex-start',
+			alignItems: 'flex-start',
 		},
 		left_bottom: {
 			height: 'auto',

@@ -28,7 +28,7 @@ class StepByStepCard extends Component {
 	}
 
   signAndPayOnline() {
-    this.toggleModal(true, 'sign_pay_online')
+    // this.toggleModal(true, 'sign_pay_online')
     window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
   }
 

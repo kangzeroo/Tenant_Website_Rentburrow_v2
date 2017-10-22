@@ -64,6 +64,7 @@ class AboutStudentForm extends Component {
 			toggle_modal: false,
       modal_name: '',
       context: {},
+			parent_component_saved: true,
 	  }
 
 		this.why_sign_online = [
@@ -138,25 +139,34 @@ class AboutStudentForm extends Component {
   }
 
 	saveTenantDetailsToDb() {
-		uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'government_id-')
-			.then((S3Obj) => {
-				return saveTenantDetails({
-					tenant_id: this.props.tenant_profile.tenant_id,
-					first_name: this.state.first_name,
-					last_name: this.state.last_name,
-					address: this.state.building_address,
-					date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
-					gender: this.state.gender,
-					primary_language: this.state.primary_language,
-					secondary_languages: this.state.secondary_languages,
-					citizenship: this.state.citizenship,
-					permanent_resident: this.state.permanent_resident,
-					government_id: S3Obj.Location,
+		this.setState({
+			submitted: true,
+		})
+		if (this.validateForm()) {
+			// uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'government_id-')
+			Promise.resolve()
+				.then((S3Obj) => {
+					return saveTenantDetails({
+						tenant_id: this.props.tenant_profile.tenant_id,
+						first_name: this.state.first_name,
+						last_name: this.state.last_name,
+						address: this.state.building_address,
+						date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
+						gender: this.state.gender,
+						primary_language: this.state.primary_language,
+						secondary_languages: this.state.secondary_languages,
+						citizenship: this.state.citizenship,
+						permanent_resident: this.state.permanent_resident,
+						// government_id: S3Obj.Location,
+					})
 				})
-			})
-			.then((data) => {
-				this.props.goToNextForm()
-			})
+				.then((data) => {
+					this.setState({
+						submitted: false,
+					})
+					this.props.goToNextForm(this.state)
+				})
+		}
 	}
 
 	toggleModal(bool, attr, context) {
@@ -166,6 +176,28 @@ class AboutStudentForm extends Component {
       context,
     })
   }
+
+	validateForm() {
+		let ok_to_proceed = true
+		const error_messages = []
+		if (this.state.first_name.length === 0 || this.state.last_name.length === 0 || this.state.first_name.gender === 0) {
+			error_messages.push('You must enter a first name, last name and gender')
+			ok_to_proceed = false
+		}
+		if (this.state.building_address.length === 0) {
+			error_messages.push('You must enter your current address')
+			ok_to_proceed = false
+		}
+		if (this.state.email.length === 0 || this.state.phone.length === 0) {
+			error_messages.push('You must enter your email and phone number')
+			ok_to_proceed = false
+		}
+		this.setState({
+			error_messages: error_messages,
+			submitted: false,
+		})
+		return ok_to_proceed
+	}
 
 	renderAppropriateModal(modal_name, context) {
 		if (modal_name === 'terms') {
@@ -213,18 +245,18 @@ class AboutStudentForm extends Component {
 								disabled={this.props.tenant_profile.last_name !== ''}
 							/>
 						</Form.Field>
-						<Form.Field required>
+						<Form.Field>
 							<label>Date of Birth</label>
 							<DatePicker
 								selected={this.state.date_of_birth}
 								onChange={(d) => this.updateDate(d, 'date_of_birth')}
 							/>
 						</Form.Field>
-						<Form.Field required>
+						<Form.Field>
 							<label>Gender</label>
 							<Dropdown
-								placeholder='Gender'
 								selection
+								defaultValue='female'
 								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'gender')}
 								options={[
 									{ key: 'male', value: 'male', text: 'Male' },
@@ -233,10 +265,8 @@ class AboutStudentForm extends Component {
 								]}
 							/>
 						</Form.Field>
-					</div>
-					{/*<div style={comStyles().student_card}>
 						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
-					</div>*/}
+					</div>
 				</div>
 			</Card>
 		)
@@ -250,11 +280,11 @@ class AboutStudentForm extends Component {
 				</Card.Header>
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
-						<Form.Field required>
-							<label>Permanent Address</label>
+						<Form.Field>
+							<label>Current Address</label>
 							<input
 								id='building_address'
-								placeholder='Permanent Address'
+								placeholder='Current Address'
 								onChange={(e) => this.updateAttr(e, 'building_address')}
 								value={this.state.building_address}
 							/>
@@ -277,6 +307,7 @@ class AboutStudentForm extends Component {
 								disabled={this.props.tenant_profile.email !== ''}
 							/>
 						</Form.Field>
+						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
 					</div>
 					{/*<div style={comStyles().student_card}>
 						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
@@ -294,7 +325,7 @@ class AboutStudentForm extends Component {
 				</Card.Header>
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
-						<Form.Field required>
+						<Form.Field>
 							<label>Primary Language</label>
 							<Dropdown
 								placeholder='English'
@@ -303,7 +334,7 @@ class AboutStudentForm extends Component {
 								options={languageOptions}
 							/>
 						</Form.Field>
-						<Form.Field required>
+						<Form.Field>
 							<label>Secondary Languages</label>
 							<input
 								placeholder='List secondary languages here'
@@ -311,7 +342,7 @@ class AboutStudentForm extends Component {
 								value={this.state.secondary_languages}
 							/>
 						</Form.Field>
-						<Form.Field required>
+						<Form.Field>
 							<label>Citizenship</label>
 							<Dropdown
 								placeholder='Select Country'
@@ -322,15 +353,15 @@ class AboutStudentForm extends Component {
 								options={countryOptions}
 							/>
 						</Form.Field>
-						<Form.Field required>
+						<Form.Field>
 							<Checkbox
 								onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'permanent_resident')}
 								checked={this.state.permanent_resident}
 								label='I am a Canadian Permanant Resident'
 							/>
 						</Form.Field>
-						<br />
-						<Form.Field required>
+						{/*<br />
+						<Form.Field>
 							<label>Photo ID</label>
 							<label>(Drivers License, Health Card or Passport)</label>
 							<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'government_id')} style={comStyles().dropzone} multiple={false}>
@@ -350,7 +381,7 @@ class AboutStudentForm extends Component {
 									<div style={comStyles().dropzone_text}>Upload Government ID</div>
 								}
 							</Dropzone>
-						</Form.Field>
+						</Form.Field>*/}
 					</div>
 					{/*<div style={comStyles().student_card}>
 						<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
@@ -380,9 +411,9 @@ class AboutStudentForm extends Component {
 								{
 									this.renderContactProfileCard()
 								}
-								{
+								{/*
 									this.renderGovtAndLanguageCard()
-								}
+								*/}
 
 								<Form.Field>
 									{
@@ -506,7 +537,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '600px',
-			width: '60vw',
+			width: '45vw',
 			height: '100%',
 			padding: '20px',
 		},
@@ -514,7 +545,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '350px',
-			width: '25vw',
+			width: '40vw',
 			padding: '20px',
 		},
 		card_style: {
@@ -533,7 +564,7 @@ const comStyles = () => {
 		student_form: {
 			display: 'flex',
 			flexDirection: 'column',
-			width: '75%',
+			width: '100%',
 		},
 		student_card: {
 			display: 'flex',

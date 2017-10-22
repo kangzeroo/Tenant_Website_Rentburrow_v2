@@ -1,25 +1,25 @@
 // AWS SES (Simple Email Service) for sending emails via Amazon
 import AWS_SES from 'aws-sdk/clients/ses'
-import {BUCKET_NAME} from './aws-profile'
+import { BUCKET_NAME } from './aws-profile'
 import AWS from 'aws-sdk/global'
 
 export function sendAWSInquiryEmail(corporationEmail, corporationInfo, lease){
 	const ses = new AWS_SES({
 		region: 'us-east-1'
 	})
-	const p = new Promise((res, rej)=>{
-		if(!corporationInfo || !corporationInfo.corporationEmail || !corporationInfo.corporationMessage){
+	const p = new Promise((res, rej) => {
+		if (!corporationInfo || !corporationInfo.corporationEmail || !corporationInfo.corporationMessage) {
 			rej('Missing corporation email or message')
-		}else{
+		} else {
 			const params = createInquiryParamsConfig(corporationEmail, corporationInfo, lease)
 			// console.log('Sending email with attached params!')
-			AWS.config.credentials.refresh(function(){
+			AWS.config.credentials.refresh(function() {
 				// console.log(AWS.config.credentials)
 				ses.sendEmail(params, function(err, data) {
-				  if(err){
+				  if (err) {
 				  	 // console.log(err, err.stack); // an error occurred
 				  	 rej(err)
-				  }else{
+				  } else {
 				  	// console.log(data);           // successful response
 					res('Success! Email sent')
 				  }

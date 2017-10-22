@@ -31,7 +31,7 @@ class HomeExplorer extends Component {
       // console.log(this.props.current_suite)
       this.setState({
         topContextValue: JSON.stringify(this.props.current_suite),
-        bottomContextValue: '',
+        bottomContextValue: JSON.stringify(this.props.current_suite),
       })
     } else if (this.props.showBuildingAmenitiesFirst || this.props.showBuildingCommonAreaFirst) {
       this.props.selectTopTitle('Building')

@@ -37,9 +37,11 @@ class SuitePreferenceForm extends Component {
 			error_messages: [],
 			activeIndex: 1,
 
+			error_messages: [],
 			toggle_modal: false,
       modal_name: '',
       context: {},
+			parent_component_saved: true,
 	  }
 
 		this.why_sign_online = [
@@ -151,22 +153,52 @@ class SuitePreferenceForm extends Component {
 	}
 
 	saveRankings() {
-		const arrayOfPromises = this.state.available_suites.map((suite) => {
-			console.log({
-				group_id: this.props.group_id,
-				suite_style_id: suite.suite_style_id,
-				ranking: suite.rank,
+		this.setState({
+			submitted: true,
+		})
+		if (this.validationCheck()) {
+			const arrayOfPromises = this.state.available_suites.map((suite) => {
+				saveRankingsToDb({
+					group_id: this.props.group_id,
+					suite_style_id: suite.suite_style_id,
+					ranking: suite.rank,
+				})
 			})
-			saveRankingsToDb({
-				group_id: this.props.group_id,
-				suite_style_id: suite.suite_style_id,
-				ranking: suite.rank,
+			Promise.all(arrayOfPromises).then((res, rej) => {
+				this.setState({
+					error_messages: [],
+				})
+				this.props.goToNextForm(this.state)
 			})
+		}
+	}
+
+	validationCheck() {
+		let ok_to_proceed = true
+		const error_messages = []
+
+		let at_least_one_suite = false
+		this.state.available_suites.forEach((suite) => {
+			if (suite.rank > 0) {
+				at_least_one_suite = true
+			}
 		})
 
-		Promise.all(arrayOfPromises).then((res, rej) => {
-			this.props.goToNextForm()
+		if (!at_least_one_suite) {
+			ok_to_proceed = false
+			error_messages.push('You must select at least one suite style')
+		}
+
+		if (!this.state.understand_uncertainty) {
+			ok_to_proceed = false
+			error_messages.push('You must understand the uncertainty before proceeding')
+		}
+
+		this.setState({
+			error_messages: error_messages,
+			submitted: false,
 		})
+		return ok_to_proceed
 	}
 
 	updateAttr(e, attr) {
@@ -229,29 +261,37 @@ class SuitePreferenceForm extends Component {
 									<Card.Header style={comStyles().card_header}>
 										Rank Your Suite Preferences
 									</Card.Header>
-									<div style={comStyles().student_div}>
-										{
-											this.state.available_suites.sort((suiteA, suiteB) => {
-												return suiteA.rank - suiteB.rank
-											}).filter((suite) => {
-												return suite.rank
-											}).concat(
-												this.state.available_suites.filter((suite) => {
-													return !suite.rank
+									{
+										this.state.available_suites.length > 0
+										?
+										<div style={comStyles().student_div}>
+											{
+												this.state.available_suites.sort((suiteA, suiteB) => {
+													return suiteA.rank - suiteB.rank
+												}).filter((suite) => {
+													return suite.rank
+												}).concat(
+													this.state.available_suites.filter((suite) => {
+														return !suite.rank
+													})
+												).map((suite) => {
+													return (
+														<SuitePreviewsForSelection
+															key={suite.suite_id}
+															building={this.props.building}
+															suite={suite}
+															updateSuiteRanking={(suite_id, amount) => this.updateSuiteRanking(suite_id, amount)}
+															toggleSuiteInclusion={(suite_id, bool) => this.toggleSuiteInclusion(suite_id, bool)}
+														/>
+													)
 												})
-											).map((suite) => {
-												return (
-													<SuitePreviewsForSelection
-														key={suite.suite_id}
-														building={this.props.building}
-														suite={suite}
-														updateSuiteRanking={(suite_id, amount) => this.updateSuiteRanking(suite_id, amount)}
-														toggleSuiteInclusion={(suite_id, bool) => this.toggleSuiteInclusion(suite_id, bool)}
-													/>
-												)
-											})
-										}
-									</div>
+											}
+										</div>
+										:
+										<div style={comStyles().hidden_loading}>
+											<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+										</div>
+									}
 								</Card>
 
 								<Card fluid style={comStyles().card_style}>
