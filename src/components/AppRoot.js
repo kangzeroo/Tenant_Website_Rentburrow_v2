@@ -50,7 +50,6 @@ import { clearIntelList, saveIntelToCloud } from '../actions/intel/intel_actions
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 import { saveTenantProfile, getTenantProfile } from '../api/auth/tenant_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
-import { initializeFirebaseChatDb } from '../actions/messaging/messaging_actions'
 
 
 class AppRoot extends Component {
@@ -129,8 +128,7 @@ class AppRoot extends Component {
         return getTenantProfile({ tenant_id: data.tenant_id, })
       })
       .then((data) => {
-        this.props.saveTenantToRedux(data)
-        this.props.initializeFirebaseChatDb(data.tenant_id)
+        this.props.saveTenantToRedux(data[0])
           // use location_forwarding when you have a path that requires a login first (privately available)
           // use PossibleRoutes.js when you have a path that is publically available
         this.props.history.push(this.props.location_forwarding)
@@ -139,13 +137,22 @@ class AppRoot extends Component {
         // no facebook login, use AWS Cognito Unauth role
         unauthRoleStudent().then((unauthUser) => {
           // console.log(unauthUser)
-          // this.props.saveTenantToRedux(unauthUser)
+          this.props.saveTenantToRedux(unauthUser)
         })
         // in X seconds, force login popup
         setTimeout(() => {
           this.props.triggerForcedSignin(true)
         }, 300000)
       })
+    } else {
+      unauthRoleStudent().then((unauthUser) => {
+        // console.log(unauthUser)
+        this.props.saveTenantToRedux(unauthUser)
+      })
+      // in X seconds, force login popup
+      setTimeout(() => {
+        this.props.triggerForcedSignin(true)
+      }, 300000)
     }
   }
 
@@ -295,7 +302,13 @@ class AppRoot extends Component {
 
             </div>
 
-            <Chat style={comStyles().chat} />
+            {
+              this.props.tenant_profile && this.props.tenant_profile.tenant_id
+              ?
+              <Chat style={comStyles().chat} />
+              :
+              null
+            }
 
           </div>
         </StyleRoot>
@@ -324,7 +337,6 @@ AppRoot.propTypes = {
   location_forwarding: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   saveIntelToCloud: PropTypes.func.isRequired,
-  initializeFirebaseChatDb: PropTypes.func.isRequired,
   selected_building_to_apply_for: PropTypes.object,
 }
 
@@ -361,7 +373,6 @@ export default withRouter(connect(mapReduxToProps, {
   clearIntelList,
   forwardUrlLocation,
   saveIntelToCloud,
-  initializeFirebaseChatDb,
 })(RadiumHOC))
 
 // =============================

@@ -17,6 +17,10 @@ class ChatInput extends Component {
     super()
     this.state = {
       inputText: '',
+
+      toggle_modal: false,
+      modal_name: '',              // name of the modal
+      context: {},
     }
   }
 
@@ -42,6 +46,12 @@ class ChatInput extends Component {
       console.log(err)
     }
     const onComplete = () => {
+      let additionalInfo = {}
+      if (!this.props.authenticated && localStorage.getItem('unauthUser_email')) {
+        additionalInfo = {
+          unauth_email: localStorage.getItem('unauthUser_email')
+        }
+      }
       // a channel_id is comprised of corporation_id + corporation_id + building_id
       const newMessage = {
         message_id: uuid.v4(),
@@ -57,6 +67,7 @@ class ChatInput extends Component {
         channel_id: this.props.chat_help ? `Rentburrow_Student_Help_Chat_${this.props.tenant_profile.tenant_id}` : `${this.props.corporation.corporation_id}_${this.props.tenant_profile.tenant_id}`,
         contents: this.state.inputText,
         sent_at: new Date().getTime(),
+        ...additionalInfo,
       }
       this.setState({
         inputText: '',
@@ -92,6 +103,7 @@ class ChatInput extends Component {
           value={this.state.inputText}
           onChange={(e) => this.handleTyping(e)}
           placeholder='Send a message'
+          disabled={!this.props.authenticated && !localStorage.getItem('unauthUser_email') ? true : false}
           style={comStyles().textbox}
         />
       </Form>
@@ -105,11 +117,15 @@ ChatInput.propTypes = {
   tenant_profile: PropTypes.object.isRequired,
   selected_building: PropTypes.object,          // passed in
   chat_help: PropTypes.bool,
+  authenticated: PropTypes.bool,
+  showing_email_unauth: PropTypes.bool,         // passed in
 }
 
 ChatInput.defaultProps = {
   selected_building: {},
   chat_help: false,
+  authenticated: false,
+  showing_email_unauth: true,
 }
 
 const RadiumHOC = Radium(ChatInput)
@@ -118,6 +134,7 @@ function mapStateToProps(state) {
 	return {
     tenant_profile: state.auth.tenant_profile,
     chat_help: state.messaging.chat_help,
+    authenticated: state.auth.authenticated,
 	}
 }
 

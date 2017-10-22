@@ -6,7 +6,6 @@ import config from '../api/firebase/firebase_profile'
 import {
   LISTEN_TO_FIREBASE_DB,
   SEND_MESSAGE,
-  ADD_MESSAGE,
 } from '../actions/action_types'
 import {
   updateChatHistory,
@@ -27,6 +26,7 @@ const establishFirebaseRealtimeDatabaseMessaging = (() => {
       switch (action.type) {
 
         case LISTEN_TO_FIREBASE_DB:
+          console.log(action)
           const messages = firebase_db.ref(`tenants/${action.payload}/messages/`)
           messages.on('value', (snapshot) => {
             const array_of_messages = convertToArray(snapshot.val())
@@ -37,15 +37,11 @@ const establishFirebaseRealtimeDatabaseMessaging = (() => {
           })
           break;
 
-        case ADD_MESSAGE:
-          console.log(action)
-          next(action)
-          break
-
         case SEND_MESSAGE:
           console.log('SEND_MESSAGE')
           console.log(action)
           firebase_db.ref(`tenants/${action.payload.sender_id}/messages/${action.payload.message_id}`).set(action.payload)
+          firebase_db.ref(`landlords/${action.payload.receiver_id}/messages/${action.payload.message_id}`).set(action.payload)
           next(action)
           break;
 
