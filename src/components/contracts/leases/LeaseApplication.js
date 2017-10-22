@@ -437,7 +437,6 @@ const imageBackground = (img, open) => {
       ...sidebar_styles,
     },
     steps: {
-
     }
   }
 }

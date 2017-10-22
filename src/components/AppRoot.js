@@ -78,6 +78,8 @@ class AppRoot extends Component {
     this.executeOnURL()
     // being Intel collection
     this.beginCollectingIntel()
+    // set the zoom level so that CSS displays well
+    this.setZoomLevel()
   }
 
   detectBrowser() {
@@ -189,6 +191,13 @@ class AppRoot extends Component {
     }, 10000)
   }
 
+  setZoomLevel() {
+    // const scale = 'scale(0.9)';
+    // document.body.style.webkitTransform =  scale;    // Chrome, Opera, Safari
+    // document.body.style.msTransform =   scale;       // IE 9
+    // document.body.style.transform = scale;     // General
+  }
+
   renderAppropriateModal(modal_name, context) {
     if (modal_name === 'chrome') {
       return this.renderChromeMessage()
@@ -284,13 +293,7 @@ class AppRoot extends Component {
 
             </div>
 
-            {
-              this.props.selected_building
-              ?
-              <Chat style={comStyles().chat} />
-              :
-              null
-            }
+            <Chat style={comStyles().chat} />
 
           </div>
         </StyleRoot>
@@ -319,12 +322,14 @@ AppRoot.propTypes = {
   location_forwarding: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   saveIntelToCloud: PropTypes.func.isRequired,
+  selected_building_to_apply_for: PropTypes.object,
 }
 
 AppRoot.defaultProps = {
   children: {},
   location: {},
   selected_building: null,
+  selected_building_to_apply_for: {},
   // collectedRawIntel: [],
 }
 
@@ -339,6 +344,7 @@ const mapReduxToProps = (redux) => {
     // collectedRawIntel: redux.intel.collectedRawIntel,
     location_forwarding: redux.auth.location_forwarding,
     tenant_profile: redux.auth.tenant_profile,
+    selected_building_to_apply_for: redux.contract.selected_building_to_apply_for,
 	}
 }
 
