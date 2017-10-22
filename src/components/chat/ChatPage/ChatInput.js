@@ -47,9 +47,10 @@ class ChatInput extends Component {
     }
     const onComplete = () => {
       let additionalInfo = {}
-      if (!this.props.authenticated && localStorage.getItem('unauthUser_email')) {
+      if (!this.props.authenticated && localStorage.getItem('unauthUser_email') && localStorage.getItem('unauthUser_name')) {
         additionalInfo = {
-          unauth_email: localStorage.getItem('unauthUser_email')
+          unauth_email: localStorage.getItem('unauthUser_email'),
+          tenant_name: localStorage.getItem('unauthUser_name'),
         }
       }
       // a channel_id is comprised of corporation_id + corporation_id + building_id
@@ -162,8 +163,8 @@ const inputStyles = () => {
       borderTop: `3px solid ${xMidBlue}`,
       position: 'absolute',
       bottom: '0px',
-      minHeight: '15%',
-      maxHeight: '15%',
+      minHeight: '20%',
+      maxHeight: '20%',
     },
     inputDiv: {
       position: 'relative',

@@ -18,6 +18,7 @@ import {
 import { selectChatThread } from '../../../actions/messaging/messaging_actions'
 import ChatFeed from './ChatFeed'
 import ChatInput from './ChatInput'
+import ChatEmailUnauth from './ChatEmailUnauth'
 
 
 class ChatPanel extends Component {
@@ -31,7 +32,7 @@ class ChatPanel extends Component {
   }
 
 	componentWillMount() {
-    if (!this.props.authenticated && !localStorage.getItem('unauthUser_email')) {
+    if (!this.props.authenticated && !localStorage.getItem('unauthUser_email') && !localStorage.getItem('unauthUser_name')) {
       this.setState({
 				showing_email_unauth: true,
 			})
@@ -72,9 +73,22 @@ class ChatPanel extends Component {
             :
             <div style={comStyles().chat_feed}>
               Got a question? Ask us!
+              <br /><br />
+              {
+                this.state.showing_email_unauth
+                ?
+                <ChatEmailUnauth
+                  closePrompt={() => this.setState({
+                    showing_email_unauth: false,
+                  })}
+                />
+                :
+                null
+              }
             </div>
           }
           <ChatInput
+            showing_email_unauth={this.state.showing_email_unauth}
             corporation={{
               corporation_id: 'Rentburrow_Student_Help_Chat',
               corp_name: 'Rentburrow Help',

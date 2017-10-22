@@ -142,7 +142,7 @@ class ChatsPanel extends Component {
 // defines the types of variables in this.props
 ChatsPanel.propTypes = {
 	history: PropTypes.object.isRequired,
-  all_messages: PropTypes.array.isRequired,         // passed in
+  all_messages: PropTypes.array.isRequired,
   selectChatThread: PropTypes.func.isRequired,
   selectHelpThread: PropTypes.func.isRequired,
   selected_building: PropTypes.object,
