@@ -144,37 +144,36 @@ class SubmitLeaseApplication extends Component {
 										&nbsp; &nbsp; &nbsp;
 										<span onClick={() => this.toggleModal(true, 'terms')} style={comStyles().viewTerms}>View</span>
 									</Form.Field>
+									<Form.Field>
+										{
+											this.state.error_messages.map((err, index) => {
+												return (
+													<Message
+														visible
+														key={index}
+														error
+														content={err}
+													/>
+												)
+											})
+										}
+									</Form.Field>
+									{
+											this.state.submitted
+											?
+											<div style={comStyles().hidden_loading}>
+												Submitted Application.
+											</div>
+											:
+											<Button
+												primary
+												size='large'
+												content='Submit Application'
+												onClick={() => this.submitApplication()}
+											/>
+									}
 								</Card>
 
-								<Form.Field>
-									{
-										this.state.error_messages.map((err, index) => {
-											return (
-												<Message
-													visible
-													key={index}
-													error
-													content={err}
-												/>
-											)
-										})
-									}
-								</Form.Field>
-
-								{
-									this.state.submitted
-									?
-									<div style={comStyles().hidden_loading}>
-										Submitted Application.
-									</div>
-									:
-									<Button
-										primary
-										size='large'
-										content='Submit Application'
-										onClick={() => this.submitApplication()}
-									/>
-								}
 							</Form>
 						</div>
 						<div style={comStyles().tips_contents}>

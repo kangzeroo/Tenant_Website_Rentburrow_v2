@@ -23,9 +23,9 @@ class ChatIcon extends Component {
         {
           this.props.chat_open
           ?
-          <img src='https://s3.amazonaws.com/rentburrow-images/data-image-png%3Bbase%E2%80%A6.png' style={comStyles().cancel} />
+          <img src='https://s3.amazonaws.com/rentburrow3-images/close_icon.png' style={comStyles().cancel} />
           :
-          <img src='https://s3.amazonaws.com/rentburrow-images/happychat.png' style={comStyles().happychat} />
+          <img src='https://s3.amazonaws.com/rentburrow3-images/chat_icon.png' style={comStyles().happychat} />
         }
 			</div>
 		)
@@ -74,9 +74,9 @@ const comStyles = () => {
       margin: '10px 20px 10px 10px'
     },
     cancel: {
-      height: '30px',
+      height: '50px',
       width: 'auto',
-      margin: '20px 20px 20px 20px'
+      margin: '10px 20px 10px 10px'
     }
 	}
 }

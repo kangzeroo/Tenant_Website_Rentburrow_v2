@@ -167,18 +167,20 @@ class GuarantorForm extends Component {
 	validateForm() {
 		let ok_to_proceed = true
 		const error_messages = []
-		if (this.state.first_name.length === 0) {
-			error_messages.push('Please enter your guarantors name')
-			ok_to_proceed = false
+		if (!this.state.guarantor_not_possible) {
+			if (this.state.first_name.length === 0) {
+				error_messages.push('Please enter your guarantors name')
+				ok_to_proceed = false
+			}
+			if (this.state.email.length === 0 || !validateEmail(this.state.email)) {
+				error_messages.push('Please enter a valid email')
+				ok_to_proceed = false
+			}
+			this.setState({
+				submitted: false,
+				error_messages: error_messages
+			})
 		}
-		if (this.state.email.length === 0 || !validateEmail(this.state.email)) {
-			error_messages.push('Please enter a valid email')
-			ok_to_proceed = false
-		}
-		this.setState({
-			submitted: false,
-			error_messages: error_messages
-		})
 		return ok_to_proceed
 	}
 
@@ -187,10 +189,12 @@ class GuarantorForm extends Component {
 			this.setState({
 				guarantor_not_possible: !this.state.guarantor_not_possible,
 				guarantor_is_in_canada: false,
+				error_messages: [],
 			})
 		} else {
 			this.setState({
 				guarantor_not_possible: !this.state.guarantor_not_possible,
+				error_messages: [],
 			})
 		}
 	}
@@ -265,6 +269,14 @@ class GuarantorForm extends Component {
 								placeholder='Email'
 								onChange={(e) => this.updateAttr(e, 'email')}
 								value={this.state.email}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Relationship to Tenant</label>
+							<input
+								placeholder='Eg. Mother, Legal Guardian, Wealthy Uncle'
+								onChange={(e) => this.updateAttr(e, 'relationship')}
+								value={this.state.relationship}
 							/>
 						</Form.Field>
 						{/*<Form.Field>
@@ -395,14 +407,16 @@ class GuarantorForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<Header
-						as='h2'
-						icon='money'
-						content='Guarantor'
-						subheader='Add a guarantor to your lease'
-					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
+							<Card fluid style={comStyles().card_style}>
+								<Header
+									as='h2'
+									icon='money'
+									content='Guarantor'
+									subheader='Add a guarantor to your lease'
+								/>
+							</Card>
 							{
 								this.state.guarantor_not_possible
 								?
@@ -415,15 +429,15 @@ class GuarantorForm extends Component {
 										<Checkbox
 											onChange={(e, d) => this.toggleGuarantorNotPossible(e, d)}
 											checked={!this.state.guarantor_not_possible}
-											label='I do have a Canadian guarantor'
+											label='Actually, I do have a Canadian guarantor'
 										/>
 									</Form.Field>
 								</Card>
 								:
 								<Form style={comStyles().form}>
-									{/*
+									{
 										this.renderGuarantorAvailable()
-									*/}
+									}
 									{
 										this.renderBasicProfile()
 									}
@@ -433,37 +447,39 @@ class GuarantorForm extends Component {
 									{/*
 										this.renderGovtInfo()
 									*/}
-
-									<Form.Field>
-										{
-											this.state.error_messages.map((err, index) => {
-												return (
-													<Message
-														visible
-														key={index}
-														error
-														content={err}
-													/>
-												)
-											})
-										}
-									</Form.Field>
 								</Form>
 							}
-							{
-								this.state.submitted
-								?
-								<div style={comStyles().hidden_loading}>
-									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-								</div>
-								:
-								<Button
-									primary
-									size='large'
-									content='Save'
-									onClick={() => this.saveGuarantorProfileToDb()}
-								/>
-							}
+							<Card fluid raised style={comStyles().card_style}>
+								<Form.Field>
+									{
+										this.state.error_messages.map((err, index) => {
+											return (
+												<Message
+													visible
+													key={index}
+													error
+													content={err}
+												/>
+											)
+										})
+									}
+								</Form.Field>
+								{
+									this.state.submitted
+									?
+									<div style={comStyles().hidden_loading}>
+										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+									</div>
+									:
+									<Button
+										primary
+										fluid
+										size='large'
+										content='Save'
+										onClick={() => this.saveGuarantorProfileToDb()}
+									/>
+								}
+							</Card>
 						</div>
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>

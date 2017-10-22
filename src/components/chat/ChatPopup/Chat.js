@@ -80,6 +80,7 @@ const comStyles = () => {
 			position: 'absolute',
 			bottom: '20px',
 			right: '20px',
+      zIndex: 99999,
 		},
 		chatcontainer: {
 			minWidth: '380px',

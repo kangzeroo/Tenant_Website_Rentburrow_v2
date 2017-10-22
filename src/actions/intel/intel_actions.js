@@ -1,4 +1,4 @@
-import { COLLECT_INTEL, CLEAR_INTEL_LIST } from '../action_types'
+import { COLLECT_INTEL, CLEAR_INTEL_LIST, SAVE_INTEL_TO_CLOUD } from '../action_types'
 
 export const collectIntel = (record) => {
 	return (dispatch) => {
@@ -14,6 +14,14 @@ export const clearIntelList = () => {
   return (dispatch) => {
 		dispatch({
 			type: CLEAR_INTEL_LIST
+		})
+	}
+}
+
+export const saveIntelToCloud = () => {
+	return (dispatch) => {
+		dispatch({
+			type: SAVE_INTEL_TO_CLOUD
 		})
 	}
 }

@@ -190,21 +190,23 @@ class LeaseApplication extends Component {
 
   generateSteps() {
     return (
-      <Step.Group vertical>
-        {
-          this.state.required_forms.map((form) => {
-            return (
-              <Step key={form.key} active={this.isActiveStep(form.key)} completed={this.isCompleted(form.key)} onClick={() => this.clickedFormStep(form.key)}>
-                <Icon name={form.icon} />
-                <Step.Content>
-                  <Step.Title>{ form.title }</Step.Title>
-                  <Step.Description>{ form.desc }</Step.Description>
-                </Step.Content>
-              </Step>
-            )
-          })
-        }
-      </Step.Group>
+      <div style={imageBackground().steps}>
+        <Step.Group vertical>
+          {
+            this.state.required_forms.map((form) => {
+              return (
+                <Step key={form.key} active={this.isActiveStep(form.key)} completed={this.isCompleted(form.key)} onClick={() => this.clickedFormStep(form.key)}>
+                  <Icon name={form.icon} />
+                  <Step.Content>
+                    <Step.Title>{ form.title }</Step.Title>
+                    <Step.Description>{ form.desc }</Step.Description>
+                  </Step.Content>
+                </Step>
+              )
+            })
+          }
+        </Step.Group>
+      </div>
     )
   }
 
@@ -310,12 +312,12 @@ class LeaseApplication extends Component {
           this.state.loaded
           ?
           <div style={comStyles().inner_container}>
-            <div style={comStyles().steps}>
+            <div style={imageBackground().sidebar}>
       				{
                 this.generateSteps()
               }
             </div>
-            <div style={comStyles().form_output}>
+            <div style={imageBackground(this.props.applied_building.cover_photo).form_output}>
               {
                 this.generateForm()
               }
@@ -380,22 +382,11 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
-      padding: '10px',
+      width: '95%',
 		},
     inner_container: {
       display: 'flex',
       flexDirection: 'row',
-    },
-    steps: {
-      minWidth: '200px',
-      maxWidth: '200px',
-      height: '90vh',
-      overflowY: 'scroll',
-    },
-    form_output: {
-      minHeight: '90vh',
-      maxHeight: '90vh',
-      overflowY: 'scroll',
     },
     hidden_loading: {
       position: 'absolute',
@@ -408,4 +399,45 @@ const comStyles = () => {
       alignItems: 'center',
     },
 	}
+}
+
+const imageBackground = (img, open) => {
+  let form_output_styles = {
+    minWidth: '100%',
+    maxWidth: '100%',
+  }
+  let sidebar_styles = {
+    minWidth: '0%',
+    maxWidth: '0%',
+  }
+  if (open) {
+    sidebar_styles.midWidth = '15%'
+    sidebar_styles.maxWidth = '15%'
+    form_output_styles.midWidth = '85%'
+    form_output_styles.maxWidth = '85%'
+  }
+  return {
+    form_output: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '93vh',
+      maxHeight: '93vh',
+      // overflowY: 'scroll',
+      backgroundImage: `url('${img}')`,
+      backgroundSize: 'cover',
+      padding: '20px 20px 50px 150px',
+      ...form_output_styles,
+    },
+    sidebar: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      ...sidebar_styles,
+    },
+    steps: {
+
+    }
+  }
 }

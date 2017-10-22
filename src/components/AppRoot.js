@@ -46,8 +46,7 @@ import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
 import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
 import { querySubletsInArea } from '../api/search/sublet_api'
 import UseChrome from './instructions/UseChrome'
-import { clearIntelList } from '../actions/intel/intel_actions'
-import { sendOffToDynamoDB } from '../api/intel/intel_api'
+import { clearIntelList, saveIntelToCloud } from '../actions/intel/intel_actions'
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 import { saveTenantProfile, getTenantProfile } from '../api/auth/tenant_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
@@ -185,8 +184,8 @@ class AppRoot extends Component {
 
   beginCollectingIntel() {
     setInterval(() => {
-      sendOffToDynamoDB(this.props.collectedRawIntel)
-      this.props.clearIntelList()
+      this.props.saveIntelToCloud()
+      // this.props.clearIntelList()
     }, 10000)
   }
 
@@ -286,7 +285,7 @@ class AppRoot extends Component {
             </div>
 
             {
-              this.props.selected_building && false
+              this.props.selected_building
               ?
               <Chat style={comStyles().chat} />
               :
@@ -314,18 +313,19 @@ AppRoot.propTypes = {
   saveSubletsToRedux: PropTypes.func.isRequired,
 	current_gps_center: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
-  collectedRawIntel: PropTypes.array,
+  // collectedRawIntel: PropTypes.array,
   clearIntelList: PropTypes.func.isRequired,
   forwardUrlLocation: PropTypes.func.isRequired,
   location_forwarding: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  saveIntelToCloud: PropTypes.func.isRequired,
 }
 
 AppRoot.defaultProps = {
   children: {},
   location: {},
   selected_building: null,
-  collectedRawIntel: [],
+  // collectedRawIntel: [],
 }
 
 const RadiumHOC = Radium(AppRoot)
@@ -336,7 +336,7 @@ const mapReduxToProps = (redux) => {
     language: redux.app.selected_language,
     current_gps_center: redux.filter.current_gps_center,
     sublet_filter_params: redux.filter.sublet_filter_params,
-    collectedRawIntel: redux.intel.collectedRawIntel,
+    // collectedRawIntel: redux.intel.collectedRawIntel,
     location_forwarding: redux.auth.location_forwarding,
     tenant_profile: redux.auth.tenant_profile,
 	}
@@ -351,6 +351,7 @@ export default withRouter(connect(mapReduxToProps, {
   saveSubletsToRedux,
   clearIntelList,
   forwardUrlLocation,
+  saveIntelToCloud,
 })(RadiumHOC))
 
 // =============================
@@ -378,5 +379,8 @@ const comStyles = () => {
       maxWidth: '100vw',
       overflowY: 'scroll'
     },
+    chat: {
+
+    }
 	}
 }
