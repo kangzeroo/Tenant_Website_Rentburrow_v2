@@ -3,6 +3,7 @@ import {
   FORCE_SIGNIN,
   LOGOUT_TENANT,
   LOCATION_FORWARDING,
+  LISTEN_TO_FIREBASE_DB,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -13,6 +14,10 @@ export const saveTenantToRedux = (tenantProfile) => {
       type: AUTHENTICATE_TENANT,
       payload: tenantProfile,
     })
+		dispatch({
+			type: LISTEN_TO_FIREBASE_DB,
+			payload: tenantProfile.tenant_id,
+		})
   }
 }
 

@@ -4,7 +4,7 @@ import uuid from 'uuid'
 import AWS from 'aws-sdk/global'
 import 'amazon-cognito-js'
 import { CognitoUserPool, CognitoUserAttribute, CognitoUser, AuthenticationDetails, CognitoIdentityCredentials, WebIdentityCredentials } from 'amazon-cognito-identity-js';
-import { studentPool, STUDENT_USERPOOL_ID, tenant_idENTITY_POOL_ID } from './aws-profile'
+import { studentPool, STUDENT_USERPOOL_ID, TENANT_IDENTITY_POOL_ID } from './aws-profile'
 // import AWS_CognitoIdentity from 'aws-sdk/clients/cognitoidentity'
 // import AWS_CognitoSyncManager from 'aws-sdk/clients/cognitosync'
 
@@ -84,7 +84,7 @@ const authenticateStudent = (cognitoUser, authenticationDetails) => {
 	                [STUDENT_USERPOOL_ID]: result.getIdToken().getJwtToken()
 	            }
 			    		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-	                IdentityPoolId: tenant_idENTITY_POOL_ID, // your identity pool id here
+	                IdentityPoolId: TENANT_IDENTITY_POOL_ID, // your identity pool id here
 	                Logins: loginsObj
 	            })
 	            AWS.config.credentials.refresh(() => {
@@ -277,7 +277,7 @@ export const retrieveStaffFromLocalStorage = () => {
                 [STUDENT_USERPOOL_ID]: session.getIdToken().getJwtToken()
             }
 				    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-		                IdentityPoolId: tenant_idENTITY_POOL_ID, // your identity pool id here
+		                IdentityPoolId: TENANT_IDENTITY_POOL_ID, // your identity pool id here
 		                Logins: loginsObj
 		            })
 		            AWS.config.credentials.refresh(() => {
@@ -315,7 +315,7 @@ export const registerFacebookLoginWithCognito = (response) => {
 
 	    // Add the Facebook access token to the Cognito credentials login map.
 	    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-	      IdentityPoolId: tenant_idENTITY_POOL_ID,
+	      IdentityPoolId: TENANT_IDENTITY_POOL_ID,
 	      Logins: {
 	         'graph.facebook.com': response.authResponse.accessToken
 	      }
@@ -335,7 +335,7 @@ export const registerFacebookLoginWithCognito = (response) => {
 // export function corporationClaimViewIdentity(){
 // 	// Add the unauthenticated_staff user to the Cognito credentials login map.
 // 	AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-// 		IdentityPoolId: tenant_idENTITY_POOL_ID
+// 		IdentityPoolId: TENANT_IDENTITY_POOL_ID
 // 	})
 //
 // 	// AWS Cognito Sync to sync Facebook
@@ -348,22 +348,24 @@ export const registerFacebookLoginWithCognito = (response) => {
 export const unauthRoleStudent = () => {
 	const p = new Promise((res, rej) => {
 		// Add the unauthenticated_staff user to the Cognito credentials login map.
-		// AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-		// 	IdentityPoolId: tenant_idENTITY_POOL_ID
-		// })
-		// // AWS Cognito Sync to sync Facebook
-		// AWS.config.credentials.get(() => {
-		// 	const client = new AWS.CognitoSyncManager();
-		// 	// console.log(AWS.config.credentials)
-		// 	res({
-		// 		id: AWS.config.credentials.identityId,
-		// 		name: 'Student on RentBurrow',
-		// 		picurl: 'https://image.flaticon.com/icons/png/128/149/149071.png'
-		// 	})
-		// });
-		res({
-			id: 'COGNITO_UNAUTH_USER'
+		AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+			IdentityPoolId: TENANT_IDENTITY_POOL_ID
 		})
+		// AWS Cognito Sync to sync Facebook
+		AWS.config.credentials.get(() => {
+			const client = new AWS.CognitoSyncManager();
+			console.log(AWS.config.credentials)
+			res({
+				tenant_id: AWS.config.credentials.data.IdentityId,
+				first_name: 'Student on Rentburrow.com',
+				last_name: '(Not Signed In)',
+				thumbnail: 'https://image.flaticon.com/icons/png/128/149/149071.png',
+				unauthRoleStudent: true,
+			})
+		})
+		// res({
+		// 	id: 'COGNITO_UNAUTH_USER'
+		// })
 	})
 	return p
 }

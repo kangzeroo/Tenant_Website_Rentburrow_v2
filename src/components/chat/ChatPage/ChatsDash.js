@@ -18,36 +18,59 @@ import ChatInput from './ChatInput'
 
 class ChatsDash extends Component {
 
+	constructor() {
+    super()
+    this.state = {
+      showing_email_unauth: false,
+    }
+  }
+
+	componentWillMount() {
+    if (!this.props.authenticated && !localStorage.getItem('unauthUser_email')) {
+      this.setState({
+				showing_email_unauth: true,
+			})
+    }
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
 				<Header as='h2' textAlign='center' style={comStyles().header}>
 					<div style={comStyles().back_button}>
-					{
-						this.props.history.location.pathname.indexOf('/chat') > -1
-						?
-						null
-						:
-						<Icon name='chevron left' onClick={() => this.props.selectChatThread([])} style={comStyles().left_arrow} />
-					}
+						{
+							this.props.history.location.pathname.indexOf('/chat') > -1
+							?
+							null
+							:
+							<Icon name='chevron left' onClick={() => this.props.selectChatThread([])} style={comStyles().left_arrow} />
+						}
 					</div>
 					<div style={comStyles().property_title}>
-          {
-            this.props.current_thread.length > 0
-            ?
-            <h3 style={comStyles().title}>{ this.props.current_thread[0].corporation_name }</h3>
-            :
-            <h3 style={comStyles().title}>Messages</h3>
-          }
+	          {
+	            this.props.current_thread.length > 0
+	            ?
+	            <h3 style={comStyles().title}>{ this.props.current_thread[0].corporation_name }</h3>
+	            :
+	            <h3 style={comStyles().title}>Messages</h3>
+	          }
 					</div>
         </Header>
         {
           this.props.current_thread.length > 0
           ?
 					<div style={comStyles().chat_interface}>
-          	<ChatFeed current_thread={this.props.current_thread} style={comStyles().chat_feed} />
+          	<ChatFeed
+							current_thread={this.props.current_thread}
+							closePrompt={() => this.setState({
+								showing_email_unauth: false,
+							})}
+							showing_email_unauth={this.state.showing_email_unauth}
+							style={comStyles().chat_feed}
+						/>
 						<ChatInput
 							selected_building={this.props.selected_building}
+							showing_email_unauth={this.state.showing_email_unauth}
 							corporation={{
 								corporation_id: this.props.selected_landlord.corporation_id,
 								corporation_name: this.props.selected_landlord.corporation_name,
@@ -70,6 +93,7 @@ ChatsDash.propTypes = {
 	selectChatThread: PropTypes.func.isRequired,
 	current_thread: PropTypes.array,								// passed in
 	selected_landlord: PropTypes.object,
+  authenticated: PropTypes.bool,
 	selected_building: PropTypes.object,
 }
 
@@ -78,6 +102,7 @@ ChatsDash.defaultProps = {
 	current_thread: [],
 	selected_landlord: {},
 	selected_building: {},
+  authenticated: false,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -89,6 +114,7 @@ function mapStateToProps(state) {
 		current_thread: state.messaging.current_thread,
 		selected_landlord: state.selection.selected_landlord,
     selected_building: state.selection.selected_building,
+    authenticated: state.auth.authenticated,
 	}
 }
 

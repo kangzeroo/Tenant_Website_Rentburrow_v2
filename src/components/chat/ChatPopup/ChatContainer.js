@@ -6,6 +6,12 @@ import uuid from 'uuid'
 import {
   xMidBlue
 } from '../../../styles/base_colors'
+import {
+  Modal,
+  Card,
+  Input,
+  Button,
+} from 'semantic-ui-react'
 import ChatsDash from '../ChatPage/ChatsDash'
 import ChatsPanel from '../ChatPage/ChatsPanel'
 import ChatHelp from '../ChatPage/ChatHelp'
@@ -33,7 +39,7 @@ class ChatContainer extends Component {
           corporation_id: this.props.selected_landlord.corporation_id,
           corporation_name: this.props.selected_landlord.corporation_name,
           channel_id: `${this.props.selected_landlord.corporation_id}_${this.props.tenant_profile.tenant_id}`,
-          contents: 'Ask us anything!',
+          contents: 'We are the landlords, ask us any questions directly!',
         }])
       }
     }
@@ -146,6 +152,13 @@ const comStyles = () => {
       backgroundColor: 'white'
 		},
 		icon: {
-		}
+		},
+    popup_card: {
+      padding: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
 	}
 }

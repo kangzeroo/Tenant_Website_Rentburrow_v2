@@ -29,7 +29,7 @@ class LoginPopup extends Component {
         return getTenantProfile({ tenant_id: data.tenant_id, })
       })
       .then((data) => {
-        this.props.saveTenantToRedux(data)
+        this.props.saveTenantToRedux(data[0])
       })
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
@@ -95,7 +95,7 @@ class LoginPopup extends Component {
 // defines the types of variables in this.props
 LoginPopup.propTypes = {
 	history: PropTypes.object.isRequired,
-  toggleModal: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,           // passed in
   saveTenantToRedux: PropTypes.func.isRequired,
   triggerForcedSignin: PropTypes.func.isRequired,
   force_signin: PropTypes.bool,

@@ -85,7 +85,7 @@ class TenantAccount extends Component {
           return getTenantProfile({ tenant_id: this.props.tenant_profile.tenant_id, })
         })
         .then((data) => {
-          this.props.saveTenantToRedux(data)
+          this.props.saveTenantToRedux(data[0])
         })
     })
   }

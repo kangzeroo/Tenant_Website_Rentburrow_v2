@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import {
   xMidBlue
 } from '../../../styles/base_colors'
+import ChatEmailUnauth from './ChatEmailUnauth'
+
 
 class ChatFeed extends Component {
 
@@ -24,6 +26,15 @@ class ChatFeed extends Component {
 	render() {
 		return (
       <div id='chatfeed' style={comStyles().chatfeed}>
+        {
+          this.props.showing_email_unauth
+          ?
+          <ChatEmailUnauth
+            closePrompt={() => this.props.closePrompt()}
+          />
+          :
+          null
+        }
         {
           this.props.current_thread.map((message) => {
             let msg
@@ -50,17 +61,19 @@ class ChatFeed extends Component {
 
 ChatFeed.propTypes = {
   current_thread: PropTypes.array,              // passed in
+  closePrompt: PropTypes.func.isRequired,       // passed in
+  showing_email_unauth: PropTypes.bool,         // passed in
 }
 
 ChatFeed.defaultProps = {
-  current_thread: []
+  current_thread: [],
+  showing_email_unauth: true,
 }
 
 const RadiumHOC = Radium(ChatFeed)
 
 function mapStateToProps(state) {
 	return {
-
 	}
 }
 

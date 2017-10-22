@@ -87,7 +87,6 @@ class ChatsPanel extends Component {
     //   return
     // })
     // and save to the internal state
-    console.log(latest_threads)
     this.setState({
       latest_threads: latest_threads
     })
@@ -118,7 +117,6 @@ class ChatsPanel extends Component {
               showNoResults={false}
           />
           <div style={comStyles().action_bar}>
-            <Icon name='add' size='large' onClick={() => this.selectThisThread([])} />
             <Icon name='question' size='large' onClick={() => this.props.selectHelpThread()} />
           </div>
         </div>
