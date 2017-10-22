@@ -81,11 +81,12 @@ class TenantAccount extends Component {
         .then(() => {
           this.setState({
             profile_saved: true,
+            saving: false,
           })
           return getTenantProfile({ tenant_id: this.props.tenant_profile.tenant_id, })
         })
         .then((data) => {
-          this.props.saveTenantToRedux(data[0])
+          this.props.saveTenantToRedux(data)
         })
     })
   }
@@ -114,6 +115,13 @@ class TenantAccount extends Component {
           null
         }
         <div style={comStyles().formContainer}>
+          {
+            this.state.profile_saved
+            ?
+            <Button color='blue' content='Back' onClick={() => this.props.history.goBack()} style={comStyles().back_button} />
+            :
+            null
+          }
           <Header as='h2'>
             <Image
               shape='circular'
@@ -276,6 +284,9 @@ const comStyles = () => {
     click_image_to_change: {
       margin: '10px auto',
       width: '100%',
+    },
+    back_button: {
+      width: '150px',
     }
 	}
 }

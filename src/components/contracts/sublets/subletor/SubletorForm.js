@@ -459,7 +459,7 @@ class SubletorForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-							    <Button primary size='large' type='submit' onClick={() => this.props.goToNextForm()}>Next</Button>
+							    <Button primary size='large' type='submit' onClick={() => this.submit()}>Next</Button>
 								}
 						  </Form>
 						</div>

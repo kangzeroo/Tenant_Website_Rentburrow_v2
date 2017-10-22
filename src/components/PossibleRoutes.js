@@ -8,4 +8,5 @@ export default [
   '/sandbox',
   '/lease',
   '/signing/lease',
+  '/applications',
 ]

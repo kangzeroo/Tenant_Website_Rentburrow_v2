@@ -128,11 +128,11 @@ class AppRoot extends Component {
         return saveTenantProfile(fbProfile)
       })
       .then((data) => {
-        this.documentStatus(data.tenant_id)
+        // this.documentStatus(data.tenant_id)
         return getTenantProfile({ tenant_id: data.tenant_id, })
       })
       .then((data) => {
-        this.props.saveTenantToRedux(data[0])
+        this.props.saveTenantToRedux(data)
           // use location_forwarding when you have a path that requires a login first (privately available)
           // use PossibleRoutes.js when you have a path that is publically available
         this.props.history.push(this.props.location_forwarding)
