@@ -6,11 +6,13 @@ import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import {
   Tab,
   Header,
   Button,
+  Card,
 } from 'semantic-ui-react'
 import GroupApplication from './tabs/GroupApplication'
 import MyApplication from './tabs/MyApplication'
@@ -26,8 +28,11 @@ import {
   authenticateTenant,
 } from '../../../../api/general/general_api'
 import {
-  checkIfUserAlreadyPartGroup,
+  userInGroup,
 } from '../../../../api/group/group_api'
+import {
+  generateNewLeaseSession,
+} from '../../../../api/pandadoc/pandadoc_api'
 
 class LeaseApplicationPage extends Component {
 
@@ -37,9 +42,10 @@ class LeaseApplicationPage extends Component {
       group_app: {},
       building: {},
 
-      application_id: '',
+      application: {},
 
       loading: false,
+      loaded: false,
     }
   }
 
@@ -47,7 +53,7 @@ class LeaseApplicationPage extends Component {
     const pathname = this.props.location.pathname
     const group_id = pathname.slice(pathname.indexOf('/lease_applications/applications/') + '/lease_applications/applications/'.length)
 
-    if (authenticateTenant(this.props.tenant_profile) && this.authenticate(group_id, this.props.tenant_profile.tenant_id)) {
+    if (authenticateTenant(this.props.tenant_profile) && this.authenticate(this.props.tenant_profile.tenant_id, group_id)) {
 
       this.setState({
         loading: true,
@@ -55,7 +61,6 @@ class LeaseApplicationPage extends Component {
 
       getGroupApplication(group_id)
       .then((data) => {
-        console.log(data)
         this.setState({
           group_app: data
         })
@@ -72,18 +77,45 @@ class LeaseApplicationPage extends Component {
       })
       .then((data) => {
         this.setState({
-          application_id: data.application_id
+          application: data,
         })
+        this.newPandadocSession(data)
       })
 		} else {
 			this.props.history.push('/')
 		}
   }
 
+  newPandadocSession(application) {
+    const time = moment.duration('04:15:00');
+    const generated_expiry_date = moment(application.session_expires_at, 'YYYY-MM-DD HH:mm').subtract(time)
+    const cur_date = moment()
+
+    if (cur_date.isAfter(generated_expiry_date)) {
+      console.log('generating new session...')
+			generateNewLeaseSession({
+				application_id: application.application_id,
+				doc_id: application.doc_id,
+				email: this.props.tenant_profile.email,
+			})
+			.then(() => {
+				getMyApplication(this.props.tenant_profile.tenant_id, application.application_id)
+        .then((data) => {
+          this.setState({
+            application: data,
+            loaded: true,
+          })
+        })
+			})
+    } else {
+      console.log('session still available')
+    }
+  }
+
   authenticate(group_id, tenant_id) {
-    return checkIfUserAlreadyPartGroup(group_id, tenant_id)
+    return userInGroup(tenant_id, group_id)
     .then((data) => {
-      return data.already_joined
+      return data.user_in_group
     })
   }
 
@@ -107,21 +139,23 @@ class LeaseApplicationPage extends Component {
   }
 
   renderMyApp() {
-    if (this.props.tenant_profile && this.props.tenant_profile.tenant_id && this.state.application_id !== '') {
+    if (this.props.tenant_profile && this.props.tenant_profile.tenant_id && this.state.application.application_id !== '') {
       return (
         <MyApplication
-          application_id={this.state.application_id}
+          application_id={this.state.application.application_id}
         />
       )
     }
   }
 
-  renderContract() {
-    return (
-      <ApplicationContract
-
-      />
-    )
+  renderApplicationContract() {
+    if (this.props.tenant_profile && this.props.tenant_profile.tenant_id && this.state.application.application_id !== '' && this.state.loaded) {
+      return (
+        <ApplicationContract
+          application={this.state.application}
+        />
+      )
+    }
   }
 
   renderTabs() {
@@ -135,8 +169,7 @@ class LeaseApplicationPage extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <div style={comStyles().header_container} >
-          <div style={comStyles().header_left} >
+        <Card raised fluid style={comStyles().card_style}>
             <Button
               basic
               primary
@@ -148,17 +181,18 @@ class LeaseApplicationPage extends Component {
             <Header
               as='h2'
               icon='building'
-              content={this.state.building.building_alias}
+              content={this.state.building.building_alias + ' Application'}
               subheader={this.state.building.building_address}
             />
-          </div>
+
           <Button
             primary
             icon='building outline'
             content='Explore Building'
             onClick={() => this.goToBuilding(this.state.building.building_alias)}
+            style={comStyles().explore_building_button}
           />
-        </div>
+        </Card>
         <div style={comStyles().tabsContainer} >
           <Tab
             menu={{ secondary: true, pointing: true }}
@@ -209,25 +243,29 @@ const comStyles = () => {
       flexDirection: 'column',
       margin: ''
 		},
-    header_container: {
+    card_style: {
       display: 'flex',
       flexDirection: 'row',
-      width: '100%',
-      height: '70px',
-      alignItems: 'center',
       justifyContent: 'space-between',
-      margin: '10px 10px 10px 20px',
-    },
+      alignItems: 'center',
+			padding: '10px 20px 10px 10px',
+      margin: 'auto',
+		},
     header_left: {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center'
     },
     go_back_button: {
-      height: '40px'
+      height: '40px',
+      width: '100px'
     },
     tabsContainer: {
 			margin: '50px'
-		}
+		},
+    explore_building_button: {
+      height: '40px',
+      width: '200px'
+    }
 	}
 }

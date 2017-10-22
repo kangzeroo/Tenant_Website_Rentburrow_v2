@@ -121,7 +121,8 @@ const comStyles = () => {
     feed_container: {
       display: 'flex',
       flexDirection: 'column',
-      margin: '10px 30px 30px 30px'
+      margin: '10px',
+      padding: '10px'
     },
     group_members_container: {
       display: 'flex',

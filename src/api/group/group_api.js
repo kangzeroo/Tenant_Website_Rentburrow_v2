@@ -47,6 +47,21 @@ export const autoGenerateGroup = (user_id) => {
   return p
 }
 
+
+export const userInGroup = (tenant_id, group_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/user_in_group`, { tenant_id, group_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const createGroup = (tenant_id, corporation_id, building_id) => {
   const p = new Promise((res, rej) => {
     axios.post(`${CONTRACTING_MICROSERVICE}/create_group`, { tenant_id, corporation_id, building_id, })
