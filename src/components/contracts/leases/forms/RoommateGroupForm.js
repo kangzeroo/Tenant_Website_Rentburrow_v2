@@ -125,76 +125,77 @@ class RoommateGroupForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					{
-						this.state.edit
-						?
-						<div style={comStyles().header_container} >
-							<Input
-								placeholder='Enter A Group Name'
-								value={this.state.new_group_name}
-								onChange={(e) => this.updateAttr(e, 'new_group_name')}
-							/>
-							<div style={comStyles().buttons_container} >
-								<Button
-									primary
-									basic
-									content='Cancel'
-									onClick={() => this.setState({ edit: false, new_group_name: '' })}
-								/>
-								<Button
-									primary
-									content='Save'
-									onClick={() => this.saveGroupName(this.state.new_group_name)}
-								/>
-							</div>
-						</div>
-						:
-						<div style={comStyles().header_container} >
-							<Header
-								as='h1'
-								content={this.state.group_name}
-								subheader='Add roommates to your group'
-								icon='add user'
-							/>
-							<Button
-								primary
-								basic
-								content='Edit Group Name'
-								onClick={() => this.setState({ edit: true, })}
-							/>
-						</div>
-					}
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
+								{
+									this.state.edit
+									?
+									<Card fluid style={comStyles().row_card_style} >
+										<Input
+											placeholder='Enter A Group Name'
+											value={this.state.new_group_name}
+											onChange={(e) => this.updateAttr(e, 'new_group_name')}
+											width='70%'
+										/>
+										<div style={comStyles().buttons_container} >
+											<Button
+												primary
+												basic
+												content='Cancel'
+												onClick={() => this.setState({ edit: false, new_group_name: '' })}
+											/>
+											<Button
+												primary
+												content='Save'
+												onClick={() => this.saveGroupName(this.state.new_group_name)}
+											/>
+										</div>
+									</Card>
+									:
+									<Card fluid style={comStyles().row_card_style} >
+										<Header
+											as='h1'
+											content={this.state.group_name}
+											subheader='Add roommates to your group'
+											icon='add user'
+											width='300px'
+										/>
+										<Button
+											primary
+											basic
+											content='Edit Group Name'
+											onClick={() => this.setState({ edit: true, })}
+											style={comStyles().edit_group_name}
+										/>
+									</Card>
+								}
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
 										Share this link with your roommates
 										<div style={comStyles().keep_going}>You do not need to wait for them, click next to continue</div>
 									</Card.Header>
 									<div style={comStyles().student_div}>
-										<Form.Field>
-											<input
-												value={`${window.location.origin}${window.location.pathname}?group=${this.props.group_id}`}
-												style={comStyles().share_link}
-											/>
-										</Form.Field>
+										<div style={comStyles().share_link}>
+											{ `${window.location.origin}${window.location.pathname}?group=${this.props.group_id}` }
+										</div>
+									</div>
+									<div style={comStyles().next_button}>
+										{
+											this.state.submitted
+											?
+											<div style={comStyles().hidden_loading}>
+												<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+											</div>
+											:
+											<Button fluid type='submit' primary size='large' onClick={() => this.props.goToNextForm(this.state)}>Next</Button>
+										}
 									</div>
 								</Card>
 								<GroupMembers
 									group_id={this.props.group_id}
 								/>
 							</Form>
-
-							{
-								this.state.submitted
-								?
-								<div style={comStyles().hidden_loading}>
-									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-								</div>
-								:
-								<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm(this.state)}>Next</Button>
-							}
 						</div>
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
@@ -276,7 +277,8 @@ const comStyles = () => {
 			justifyContent: 'space-between'
 		},
 		buttons_container: {
-
+			position: 'absolute',
+			right: '20px',
 		},
 		form: {
       display: 'flex',
@@ -310,7 +312,15 @@ const comStyles = () => {
 		},
 		card_style: {
 			padding: '20px',
-			height: '250px',
+			height: '350px',
+		},
+		row_card_style: {
+			display: 'flex',
+			flexDirection: 'row',
+			width: '100%',
+			padding: '20px',
+			justifyContent: 'space-between',
+			position: 'relative',
 		},
 		dates: {
 			display: 'flex',
@@ -320,6 +330,10 @@ const comStyles = () => {
 		student_div: {
 			display: 'flex',
 			flexDirection: 'row',
+			margin: '0px 0px 20px 0px',
+			height: '400px',
+			justifyContent: 'center',
+			alignItems: 'center',
 		},
 		student_form: {
 			display: 'flex',
@@ -401,8 +415,17 @@ const comStyles = () => {
 			fontWeight: 'bold',
 		},
 		share_link: {
-			minWidth: '500px',
-			maxWidth: '100%',
+			fontSize: '1.2rem',
+			fontWeight: 'bold',
+			padding: '30px',
+		},
+		next_button: {
+			margin: '20px',
+		},
+		edit_group_name: {
+			width: '100px',
+			position: 'absolute',
+			right: '20px',
 		}
 	}
 }

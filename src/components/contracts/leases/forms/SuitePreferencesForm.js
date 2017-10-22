@@ -247,20 +247,19 @@ class SuitePreferenceForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<Header
-						as='h1'
-						icon='star'
-						content='Suite Preferences'
-						subheader='Rank your preferred suites'
-					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
 
-								<Card raised fluid style={comStyles().card_style}>
-									<Card.Header style={comStyles().card_header}>
-										Rank Your Suite Preferences
-									</Card.Header>
+								{/*<Card raised fluid style={comStyles().transparent_card}>*/}
+									<Card raised fluid style={comStyles().card_style}>
+										<Header
+											as='h1'
+											icon='star'
+											content='Suite Preferences'
+											subheader='Rank your preferred suites'
+										/>
+									</Card>
 									{
 										this.state.available_suites.length > 0
 										?
@@ -292,7 +291,7 @@ class SuitePreferenceForm extends Component {
 											<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 										</div>
 									}
-								</Card>
+								{/*</Card>*/}
 
 								<Card fluid style={comStyles().card_style}>
 									<Form.Field>
@@ -304,9 +303,6 @@ class SuitePreferenceForm extends Component {
 										&nbsp; &nbsp; &nbsp;
 										<span onClick={() => this.toggleModal(true, 'terms')} style={comStyles().viewTerms}>View</span>
 									</Form.Field>
-								</Card>
-
-								<Form.Field>
 									{
 										this.state.error_messages.map((err, index) => {
 											return (
@@ -319,22 +315,22 @@ class SuitePreferenceForm extends Component {
 											)
 										})
 									}
-								</Form.Field>
+									{
+										this.state.submitted
+										?
+										<div style={comStyles().hidden_loading}>
+											<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+										</div>
+										:
+										<Button
+											primary
+											size='large'
+											content='Save'
+											onClick={() => this.saveRankings()}
+										/>
+									}
+								</Card>
 
-								{
-									this.state.submitted
-									?
-									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-									</div>
-									:
-									<Button
-										primary
-										size='large'
-										content='Save'
-										onClick={() => this.saveRankings()}
-									/>
-								}
 							</Form>
 						</div>
 						<div style={comStyles().tips_contents}>
@@ -444,6 +440,11 @@ const comStyles = () => {
 		card_style: {
 			padding: '20px',
 			height: 'auto',
+		},
+		transparent_card: {
+			padding: '20px',
+			height: 'auto',
+			backgroundColor: 'rgba(256, 256, 256, 0)',
 		},
 		dates: {
 			display: 'flex',

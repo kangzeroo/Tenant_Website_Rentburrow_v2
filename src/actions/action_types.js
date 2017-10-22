@@ -43,6 +43,7 @@ export const REQUEST_NOTIFICATIONS_PERMISSION = 'REQUEST_NOTIFICATIONS_PERMISSIO
 // Actions related to collecting intel
 export const COLLECT_INTEL = 'COLLECT_INTEL'
 export const CLEAR_INTEL_LIST = 'CLEAR_INTEL_LIST'
+export const SAVE_INTEL_TO_CLOUD = 'SAVE_INTEL_TO_CLOUD'
 
 // actions related to contract applications
 export const I_APPLIED = 'I_APPLIED'

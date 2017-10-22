@@ -395,15 +395,18 @@ class AboutStudentForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<Header
-						as='h1'
-						icon='user'
-						content='Tenant Profile'
-						subheader='Tell the landlord a bit more about you'
-					/>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
 							<Form style={comStyles().form}>
+
+								<Card fluid style={comStyles().card_style}>
+									<Header
+										as='h1'
+										icon='user'
+										content='Tenant Profile'
+										subheader='Tell the landlord a bit more about you'
+									/>
+								</Card>
 
 								{
 									this.renderBasicProfileCard()
@@ -415,35 +418,38 @@ class AboutStudentForm extends Component {
 									this.renderGovtAndLanguageCard()
 								*/}
 
-								<Form.Field>
-									{
-										this.state.error_messages.map((err, index) => {
-											return (
-												<Message
-													visible
-													key={index}
-													error
-													content={err}
-												/>
-											)
-										})
-									}
-								</Form.Field>
+								<Card raised fluid style={comStyles().card_style}>
+									<Form.Field>
+										{
+											this.state.error_messages.map((err, index) => {
+												return (
+													<Message
+														visible
+														key={index}
+														error
+														content={err}
+													/>
+												)
+											})
+										}
+									</Form.Field>
 
-								{
-									this.state.submitted
-									?
-									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-									</div>
-									:
-									<Button
-										primary
-										size='large'
-										content='Save'
-										onClick={() => this.saveTenantDetailsToDb()}
-									/>
-								}
+									{
+										this.state.submitted
+										?
+										<div style={comStyles().hidden_loading}>
+											<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+										</div>
+										:
+										<Button
+											fluid
+											primary
+											size='large'
+											content='Save'
+											onClick={() => this.saveTenantDetailsToDb()}
+										/>
+									}
+								</Card>
 							</Form>
 						</div>
 						<div style={comStyles().tips_contents}>

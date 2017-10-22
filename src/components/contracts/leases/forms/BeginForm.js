@@ -92,57 +92,40 @@ class WitnessForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().main_contents}>
-					<Header
-						as='h2'
-						icon='building'
-						content='Lease Application'
-						subheader='Apply to live here'
-					/>
-					ADD A COVER PHOTO~~
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>
-							<Form style={comStyles().form}>
+							{/*<BuildingCard
+								key={this.props.building.building_id}
+								building={this.props.building}
+								style={comStyles().gridItem}
+							/>
 
-								<BuildingCard
-									key={this.props.building.building_id}
-									building={this.props.building}
-									style={comStyles().gridItem}
-								/>
-
-								<Form.Field>
-									{
-										this.state.error_messages.map((err, index) => {
-											return (
-												<Message
-													visible
-													key={index}
-													error
-													content={err}
-												/>
-											)
-										})
-									}
-								</Form.Field>
-
+							<Form.Field>
 								{
-									this.state.submitted
-									?
-									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-									</div>
-									:
-									<Button
-										primary
-										size='large'
-										content='Begin'
-										onClick={() => this.props.goToNextForm(this.state)}
-										style={comStyles().begin}
-									/>
+									this.state.error_messages.map((err, index) => {
+										return (
+											<Message
+												visible
+												key={index}
+												error
+												content={err}
+											/>
+										)
+									})
 								}
-							</Form>
+							</Form.Field>*/}
+							<Card fluid style={comStyles().header_card_style}>
+								<Header
+									as='h2'
+									icon='building'
+									content='Lease Application'
+									subheader='Apply to live here'
+								/>
+							</Card>
+
 						</div>
 						<div style={comStyles().tips_contents}>
-							<Accordion styled>
+							<Accordion fluid styled>
 								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
 									What is a witness for?
 								</Accordion.Title>
@@ -165,6 +148,22 @@ class WitnessForm extends Component {
 									})
 								}
 							</Accordion>
+							{
+								this.state.submitted
+								?
+								<div style={comStyles().hidden_loading}>
+									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+								</div>
+								:
+								<Button
+									primary
+									fluid
+									size='massive'
+									content='Begin'
+									onClick={() => this.props.goToNextForm(this.state)}
+									style={comStyles().begin}
+								/>
+							}
 						</div>
 					</div>
 				</div>
@@ -212,6 +211,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			width: '100vw',
 		},
 		form: {
       display: 'flex',
@@ -225,7 +225,7 @@ const comStyles = () => {
 		},
 		contents: {
 			display: 'flex',
-			flexDirection: 'row',
+			flexDirection: 'column',
 			justifyContent: 'center',
 			padding: '20px',
 		},
@@ -233,7 +233,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '600px',
-			width: '45vw',
+			width: '80vw',
 			height: '100%',
 			padding: '20px',
 		},
@@ -241,12 +241,15 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			minWidth: '350px',
-			width: '40vw',
-			padding: '20px',
+			width: '80vw',
+			padding: '20px 50px 20px 20px',
 		},
 		card_style: {
 			padding: '20px',
 			height: '350px',
+		},
+		header_card_style: {
+			padding: '20px',
 		},
 		dates: {
 			display: 'flex',
@@ -332,8 +335,7 @@ const comStyles = () => {
 			fontWeight: 'bold',
 		},
 		begin: {
-			width: '360px',
-			margin: 'auto',
+			margin: '30px auto',
 		}
 	}
 }
