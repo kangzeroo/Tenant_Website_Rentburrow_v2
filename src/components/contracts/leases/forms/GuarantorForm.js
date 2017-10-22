@@ -37,9 +37,6 @@ class GuarantorForm extends Component {
 	constructor() {
 		super()
 		this.state = {
-			// application Details
-			application_id: '',
-
 			// general guarantor information
 			guarantor_id: '',
 			first_name: '',
@@ -84,16 +81,16 @@ class GuarantorForm extends Component {
 		getGuarantorInfo(this.props.my_application_id, this.props.tenant_profile.tenant_id)
 		.then((data) => {
 			this.setState({
-				application_id: data.application_id,
 				guarantor_id: data.guarantor_id,
 
 				first_name: data.first_name,
 		    last_name: data.last_name,
 				email: data.email,
 				relationship: data.relationship,
-				guarantor_is_in_canada: data.guarator_is_in_canada !== null ? data.guarator_is_in_canada : false,
-				guarantor_not_possible: data.guarantor_not_possible !== null ? data.guarantor_not_possible : false,
+				guarantor_is_in_canada: data.guarator_is_in_canada ? data.guarator_is_in_canada : false,
+				guarantor_not_possible: data.guarantor_not_possible ? data.guarantor_not_possible : false,
 			})
+			console.log(this.state)
 		})
 	}
 
@@ -166,6 +163,17 @@ class GuarantorForm extends Component {
 		})
 		if (this.validateForm()) {
 			// uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'guarantor-government_id-')
+			console.log({
+				guarantor_id: this.state.guarantor_id,
+				application_id: this.props.my_application_id,
+				tenant_id: this.props.tenant_profile.tenant_id,
+				first_name: this.state.first_name,
+				last_name: this.state.last_name,
+				email: this.state.email,
+				relationship: this.state.relationship,
+				guarantor_is_in_canada: this.state.guarantor_is_in_canada,
+				guarantor_not_possible: this.state.guarantor_not_possible,
+			})
 			return insertGuarantorProfile({
 				guarantor_id: this.state.guarantor_id,
 				application_id: this.props.my_application_id,

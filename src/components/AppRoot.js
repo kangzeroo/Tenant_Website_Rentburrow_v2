@@ -28,12 +28,14 @@ import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
 import SubletPage from './sublets/SubletPage'
 import TenantAccount from './tenant/TenantAccount'
-import TenantApplications from './tenant/Applications/TenantApplications'
+import SubletApplications from './tenant/SubletApplications/TenantSubletApplications'
+import LeaseApplications from './tenant/LeaseApplications/TenantLeaseApplications'
 import TenantSettings from './tenant/TenantSettings'
 import SubletApplication from './contracts/sublets/SubletApplication'
 import LeaseApplication from './contracts/leases/LeaseApplication'
-import SentApplicationPage from './tenant/Applications/sublets/SentApplicationPage'
-import ReceivedApplicationPage from './tenant/Applications/sublets/ReceivedApplicationPage'
+import LeaseApplicationPage from './tenant/LeaseApplications/pages/LeaseApplicationPage'
+import SentApplicationPage from './tenant/SubletApplications/sublets/SentApplicationPage'
+import ReceivedApplicationPage from './tenant/SubletApplications/sublets/ReceivedApplicationPage'
 import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
 import Logout from './auth/Logout'
@@ -261,7 +263,9 @@ class AppRoot extends Component {
                 <Route exact path='/sublet/:sublet_id' component={SubletPage} />
 
                 <Route exact path='/account' component={TenantAccount} />
-                <Route exact path='/applications' component={TenantApplications} />
+                <Route exact path='/sublet_applications' component={SubletApplications} />
+                <Route exact path='/lease_applications' component={LeaseApplications} />
+                <Route exact path='/lease_applications/applications/:group_id' component={LeaseApplicationPage} />
                 <Route exact path='/applications/subletee/:subletee_id' component={SentApplicationPage} />
                 <Route exact path='/applications/subletor/:subletor_id' component={ReceivedApplicationPage} />
                 <Route exact path='/settings' component={TenantSettings} />

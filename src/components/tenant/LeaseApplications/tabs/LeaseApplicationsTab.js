@@ -23,7 +23,7 @@ import {
   saveLeaseApplicationsToRedux,
 } from '../../../../actions/contract/contract_actions'
 
-class LeaseApplications extends Component {
+class LeaseApplicationsTab extends Component {
 
   constructor() {
     super()
@@ -47,7 +47,7 @@ class LeaseApplications extends Component {
       <div style={comStyles().container}>
         <Header
           as='h3'
-          icon='share'
+          icon='file text'
           content='Lease Applications'
           subheader='View all your lease applications'
         />
@@ -58,8 +58,16 @@ class LeaseApplications extends Component {
             <Header
               as='h2'
               content='You currently have no Lease applications :('
-              subheader='To upload a sublet, post it on Facebook and it will automatically appear on Rentburrow'
+              subheader='Take a virtual tour, browse images, and sign online -- All on Rentburrow'
             />
+            <div style={comStyles().button_text}>
+              <div>Search for a lease:</div>
+              <Button
+                content='Leases'
+                primary
+                onClick={() => this.props.history.push('/lease')}
+              />
+            </div>
           </div>
           :
           <div style={comStyles().activeContainer} >
@@ -81,19 +89,19 @@ class LeaseApplications extends Component {
 }
 
 // defines the types of variables in this.props
-LeaseApplications.propTypes = {
+LeaseApplicationsTab.propTypes = {
 	history: PropTypes.object.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   saveLeaseApplicationsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
-LeaseApplications.defaultProps = {
+LeaseApplicationsTab.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(LeaseApplications)
+const RadiumHOC = Radium(LeaseApplicationsTab)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -127,7 +135,7 @@ const comStyles = () => {
     no_applications_container: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center',
+      justifyContent: 'space-around',
       alignItems: 'center',
       minHeight: '150px',
       maxHeight: '150px',
@@ -137,8 +145,8 @@ const comStyles = () => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      minWidth: '400px',
-      maxWidth: '400px',
+      minWidth: '250px',
+      maxWidth: '250px',
     }
 	}
 }
