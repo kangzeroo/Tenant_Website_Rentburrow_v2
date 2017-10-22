@@ -7,5 +7,5 @@ export default [
   '/sublet',
   '/sandbox',
   '/lease',
-  '/signing/lease'
+  '/signing/lease',
 ]

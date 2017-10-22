@@ -97,8 +97,8 @@ class ChatEmailUnauth extends Component {
             null
           }
           <div style={comStyles().email_form}>
-            <Input fluid placeholder='email' value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })} />
             <Input fluid placeholder='name' value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
+            <Input fluid placeholder='email' value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })} />
             <Button fluid color='green' content='Save' onClick={() => this.rememberEmail(this.state.email, this.state.name)} />
           </div>
         </div>

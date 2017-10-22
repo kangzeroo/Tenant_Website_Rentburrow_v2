@@ -72,7 +72,7 @@ class ChatPanel extends Component {
             />
             :
             <div style={comStyles().chat_feed}>
-              Got a question? Ask us!
+              Got a question? Checkout our <span onClick={() => this.props.history.push('/protips')} style={comStyles().pro_tips_link}>Rent Pro-Tips Page</span> or ask the Rentburrow Team directly!
               <br /><br />
               {
                 this.state.showing_email_unauth
@@ -190,6 +190,11 @@ const comStyles = () => {
 		chat_input: {
 			minHeight: '15%',
 			maxHeight: '15%',
-		}
+		},
+    pro_tips_link: {
+      color: 'blue',
+      textDecoration: 'underline',
+      cursor: 'pointer',
+    }
 	}
 }

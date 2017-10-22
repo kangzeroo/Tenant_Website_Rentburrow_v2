@@ -23,6 +23,8 @@ import locale from 'browser-locale'
 import { Helmet } from 'react-helmet'
 import Header from './Header'
 import Chat from './chat/ChatPopup/Chat'
+import ProTipsPage from './community/ProTipsPage'
+import PrivacyPolicyPage from './community/PrivacyPolicyPage'
 import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
@@ -266,6 +268,8 @@ class AppRoot extends Component {
               <Switch>
                 <Route exact path='/' component={HousingPage} />
                 <Route exact path='/sandbox' component={LeaseApplication} />
+                <Route exact path='/protips' component={ProTipsPage} />
+                <Route exact path='/privacy-policy' component={PrivacyPolicyPage} />
                 <Route exact path='/community' component={CommunityPage} />
                 <Route exact path='/logout' component={Logout} />
 
