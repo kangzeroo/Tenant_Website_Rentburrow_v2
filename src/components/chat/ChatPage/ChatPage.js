@@ -25,7 +25,7 @@ class ChatPage extends Component {
 		return (
 			<div style={comStyles().container}>
 				<ChatsPanel messages={this.props.messages} selectThread={(thread) => this.selectThread(thread)} style={comStyles().chatspanel} />
-				<ChatsDash thread={this.state.currentThread} style={comStyles().chatsdash} />
+				<ChatsDash onPage={true} thread={this.state.currentThread} style={comStyles().chatsdash} />
 			</div>
 		)
 	}

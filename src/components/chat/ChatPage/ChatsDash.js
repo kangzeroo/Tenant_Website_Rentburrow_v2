@@ -64,6 +64,7 @@ class ChatsDash extends Component {
           ?
 					<div style={comStyles().chat_interface}>
           	<ChatFeed
+							onPage={this.props.onPage}
 							current_thread={this.props.current_thread}
 							closePrompt={() => this.setState({
 								showing_email_unauth: false,
@@ -98,6 +99,7 @@ ChatsDash.propTypes = {
 	selected_landlord: PropTypes.object,
   authenticated: PropTypes.bool,
 	selected_building: PropTypes.object,
+	onPage: PropTypes.bool,										// passed in
 }
 
 // for all optional props, define a default value
@@ -106,6 +108,7 @@ ChatsDash.defaultProps = {
 	selected_landlord: {},
 	selected_building: {},
   authenticated: false,
+	onPage: false,
 }
 
 // Wrap the prop in Radium to allow JS styling

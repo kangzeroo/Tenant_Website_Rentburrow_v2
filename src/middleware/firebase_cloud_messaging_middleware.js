@@ -2,19 +2,22 @@
 
 import Rx from 'rxjs'
 import firebase from 'firebase'
-import config from '../api/firebase/firebase_profile'
+import { getFirebase } from '../api/firebase/firebase_profile'
 import {
   REQUEST_NOTIFICATIONS_PERMISSION,
   SEND_MESSAGE,
   ADD_MESSAGE,
 } from '../actions/action_types'
 import {
+  FIREBASE_VERSION
+} from '../api/API_URLS'
+import {
   setFCMToken,
   addChatHistory,
 } from '../actions/messaging/messaging_actions'
 
 
-firebase.initializeApp(config)
+firebase.initializeApp(getFirebase(FIREBASE_VERSION))
 const messaging = firebase.messaging()
 
 // this middleware is to establish websocket connections for messaging
