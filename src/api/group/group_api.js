@@ -103,9 +103,23 @@ export const saveGroupNameToDb = (group_id, group_name) => {
   return p
 }
 
-export const saveRankingsToDb = ({ group_id, suite_style_id, suite_alias, ranking, }) => {
+export const getSuiteRankings = (group_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/save_suite_rankings`, { group_id, suite_style_id, suite_alias, ranking, })
+    axios.post(`${CONTRACTING_MICROSERVICE}/get_suite_rankings`, { group_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const saveRankingsToDb = ({ group_id, suite_style_id, suite_alias, ranking, sample_suite_id, cover_photo, imgs, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/save_suite_rankings`, { group_id, suite_style_id, suite_alias, ranking, sample_suite_id, cover_photo, imgs, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

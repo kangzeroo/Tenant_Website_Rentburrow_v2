@@ -30,26 +30,35 @@ import { countryOptions, languageOptions } from '../../../../api/leasing/leasing
 import { filterNonImages, uploadImageToS3WithEncryption } from '../../../../api/aws/aws-S3'
 import { insertGuarantorProfile, } from '../../../../api/application/lease_application_api'
 import { validateEmail } from '../../../../api/general/general_api'
+import { getGuarantorInfo, } from '../../../../api/leasing/tenant_form_api'
 
 class GuarantorForm extends Component {
 
 	constructor() {
 		super()
 		this.state = {
+			// application Details
+			application_id: '',
+
+			// general guarantor information
+			guarantor_id: '',
 			first_name: '',
 	    last_name: '',
+			email: '',
 	    relationship: '',
-	    date_of_birth: moment('1/1/1970'),
-			building_address_components: {},
-			building_address: '',					  // the building_address typed in
-      building_lat: 0,                // the building lat according to google
-      building_long: 0,               // the building lng according to google
-      building_place_id: '',          // the building place_id according to google
-	    phone: '',
-	    email: '',
-	    government_id: '',
-	    citizenship: '',
-	    permanent_resident: false,
+
+
+	    // date_of_birth: moment('1/1/1970'),
+			// building_address_components: {},
+			// building_address: '',					  // the building_address typed in
+      // building_lat: 0,                // the building lat according to google
+      // building_long: 0,               // the building lng according to google
+      // building_place_id: '',          // the building place_id according to google
+	    // phone: '',
+	    // email: '',
+	    // government_id: '',
+	    // citizenship: '',
+	    // permanent_resident: false,
 
 			guarantor_is_in_canada: false,
 			guarantor_not_possible: false,
@@ -71,26 +80,45 @@ class GuarantorForm extends Component {
 		]
 	}
 
-	componentDidMount() {
-		// google address autocomplete
-    // restricted to only show addresses and in canada
-    this.autocomplete = new google.maps.places.Autocomplete(
-            /** @type {!HTMLInputElement} */(document.getElementById('building_address')),
-            {
-              types: ['address'],
-              componentRestrictions: { country: 'ca' },
-              // bounds: new google.maps.LatLngBounds(
-              //   new google.maps.LatLng(-80.671519, 43.522913),
-              //   new google.maps.LatLng(-80.344067, 43.436979)
-              // )
-            }
-          );
-    // When the user selects an address from the dropdown, populate the address
-    // fields in the form.
-    this.autocomplete.addListener('place_changed', this.fillInAddress.bind(this));
+	componentWillMount() {
+		getGuarantorInfo(this.props.my_application_id, this.props.tenant_profile.tenant_id)
+		.then((data) => {
+			this.setState({
+				application_id: data.application_id,
+				guarantor_id: data.guarantor_id,
+
+				first_name: data.first_name,
+		    last_name: data.last_name,
+				email: data.email,
+				relationship: data.relationship,
+				guarantor_is_in_canada: data.guarator_is_in_canada !== null ? data.guarator_is_in_canada : false,
+				guarantor_not_possible: data.guarantor_not_possible !== null ? data.guarantor_not_possible : false,
+			})
+		})
 	}
 
+
+	// componentDidMount() {
+	// 	// google address autocomplete
+  //   // restricted to only show addresses and in canada
+  //   this.autocomplete = new google.maps.places.Autocomplete(
+  //           /** @type {!HTMLInputElement} */(document.getElementById('building_address')),
+  //           {
+  //             types: ['address'],
+  //             componentRestrictions: { country: 'ca' },
+  //             // bounds: new google.maps.LatLngBounds(
+  //             //   new google.maps.LatLng(-80.671519, 43.522913),
+  //             //   new google.maps.LatLng(-80.344067, 43.436979)
+  //             // )
+  //           }
+  //         );
+  //   // When the user selects an address from the dropdown, populate the address
+  //   // fields in the form.
+  //   this.autocomplete.addListener('place_changed', this.fillInAddress.bind(this));
+	// }
+
   // fill in address from google autocomplete dropdown
+	/*
   fillInAddress() {
 		const place = this.autocomplete.getPlace()
 		this.setState({
@@ -100,7 +128,7 @@ class GuarantorForm extends Component {
       building_long: place.geometry.location.lng().toFixed(7),
 			building_place_id: place.place_id,
 		})
-	}
+	}*/
 
 	updateAttr(e, attr) {
 		this.setState({
@@ -109,12 +137,12 @@ class GuarantorForm extends Component {
 		})
 	}
 
-	updateDate(date, attr) {
-		this.setState({
-			[attr]: date,
-			current_active_field: attr,
-		})
-	}
+	// updateDate(date, attr) {
+	// 	this.setState({
+	// 		[attr]: date,
+	// 		current_active_field: attr,
+	// 	})
+	// }
 
 	toggleModal(bool, attr, context) {
 		this.setState({
@@ -125,12 +153,12 @@ class GuarantorForm extends Component {
   }
 
 	// upload just 1 photo
-  uploadPhoto(acceptedFiles, rejectedFiles, attr) {
-    const filteredFiles = filterNonImages(acceptedFiles)
-    this.setState({
-      [attr]: filteredFiles[0]
-    })
-  }
+  // uploadPhoto(acceptedFiles, rejectedFiles, attr) {
+  //   const filteredFiles = filterNonImages(acceptedFiles)
+  //   this.setState({
+  //     [attr]: filteredFiles[0]
+  //   })
+  // }
 
 	saveGuarantorProfileToDb() {
 		this.setState({
@@ -138,29 +166,23 @@ class GuarantorForm extends Component {
 		})
 		if (this.validateForm()) {
 			// uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'guarantor-government_id-')
-			Promise.resolve()
-				.then((S3Obj) => {
-					return insertGuarantorProfile({
-						application_id: this.props.my_application_id,
-						tenant_id: this.props.tenant_profile.tenant_id,
-						first_name: this.state.first_name,
-						last_name: this.state.last_name,
-						phone: this.state.phone,
-						email: this.state.email,
-						address: this.state.building_address,
-						date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
-						relationship: this.state.relationship,
-						// government_id: S3Obj.Location,
-						citizenship: this.state.citizenship,
-						permanent_resident: this.state.permanent_resident,
-					})
+			return insertGuarantorProfile({
+				guarantor_id: this.state.guarantor_id,
+				application_id: this.props.my_application_id,
+				tenant_id: this.props.tenant_profile.tenant_id,
+				first_name: this.state.first_name,
+				last_name: this.state.last_name,
+				email: this.state.email,
+				relationship: this.state.relationship,
+				guarantor_is_in_canada: this.state.guarantor_is_in_canada,
+				guarantor_not_possible: this.state.guarantor_not_possible,
+			})
+			.then((data) => {
+				this.props.goToNextForm(this.state)
+				this.setState({
+					submitted: true,
 				})
-				.then((data) => {
-					this.props.goToNextForm(this.state)
-					this.setState({
-						submitted: true,
-					})
-				})
+			})
 		}
 	}
 
@@ -256,11 +278,19 @@ class GuarantorForm extends Component {
 				<div style={comStyles().student_div}>
 					<div style={comStyles().student_form}>
 						<Form.Field>
-							<label>Guarantor Name</label>
+							<label>Guarantor First Name</label>
 							<input
-								placeholder='Full Legal Name'
+								placeholder='Guarantor First Name'
 								onChange={(e) => this.updateAttr(e, 'first_name')}
 								value={this.state.first_name}
+							/>
+						</Form.Field>
+						<Form.Field>
+							<label>Guarantor Last Name</label>
+							<input
+								placeholder='Guarantor Last Name'
+								onChange={(e) => this.updateAttr(e, 'last_name')}
+								value={this.state.last_name}
 							/>
 						</Form.Field>
 						<Form.Field>

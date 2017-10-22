@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { CONTRACTING_MICROSERVICE } from '../API_URLS'
 
-export const getGuarantorInfo = (group_id, tenant_id) => {
+export const getGuarantorInfo = (application_id, tenant_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/get_guarantor_information`, { group_id, tenant_id, })
+    axios.post(`${CONTRACTING_MICROSERVICE}/get_guarantor_information`, { application_id, tenant_id, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

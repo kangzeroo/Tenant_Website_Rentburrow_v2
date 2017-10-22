@@ -29,7 +29,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
 import { filterNonImages, uploadImageToS3WithEncryption } from '../../../../api/aws/aws-S3'
-import { saveTenantDetails } from '../../../../api/auth/tenant_api'
+import { saveTenantDetails, getTenantDetails, } from '../../../../api/auth/tenant_api'
 
 class AboutStudentForm extends Component {
 
@@ -38,7 +38,7 @@ class AboutStudentForm extends Component {
 		this.state = {
 	    first_name: '',
 	    last_name: '',
-	    date_of_birth: moment('1/1/1997'),
+	    date_of_birth: '',
 	    gender: '',
 
 			building_address_components: {},
@@ -83,6 +83,14 @@ class AboutStudentForm extends Component {
 			phone: tenant.phone,
 			email: tenant.email,
     })
+		getTenantDetails(tenant.tenant_id)
+		.then((data) => {
+			this.setState({
+				building_address: data.current_address,
+				gender: data.gender,
+				date_of_birth: data.date_of_birth === '' ? moment('1/1/1997') : moment(data.date_of_birth),
+			})
+		})
   }
 
 	componentDidMount() {
@@ -144,21 +152,18 @@ class AboutStudentForm extends Component {
 		})
 		if (this.validateForm()) {
 			// uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'government_id-')
-			Promise.resolve()
-				.then((S3Obj) => {
-					return saveTenantDetails({
-						tenant_id: this.props.tenant_profile.tenant_id,
-						first_name: this.state.first_name,
-						last_name: this.state.last_name,
-						address: this.state.building_address,
-						date_of_birth: this.state.date_of_birth.format('MMMM Do YYYY'),
-						gender: this.state.gender,
-						primary_language: this.state.primary_language,
-						secondary_languages: this.state.secondary_languages,
-						citizenship: this.state.citizenship,
-						permanent_resident: this.state.permanent_resident,
-						// government_id: S3Obj.Location,
-					})
+				return saveTenantDetails({
+					tenant_id: this.props.tenant_profile.tenant_id,
+					// first_name: this.state.first_name,
+					// last_name: this.state.last_name,
+					address: this.state.building_address,
+					date_of_birth: this.state.date_of_birth,
+					gender: this.state.gender,
+					// primary_language: this.state.primary_language,
+					// secondary_languages: this.state.secondary_languages,
+					// citizenship: this.state.citizenship,
+					// permanent_resident: this.state.permanent_resident,
+					// government_id: S3Obj.Location,
 				})
 				.then((data) => {
 					this.setState({
@@ -256,7 +261,7 @@ class AboutStudentForm extends Component {
 							<label>Gender</label>
 							<Dropdown
 								selection
-								defaultValue='female'
+								value={this.state.gender !== '' ? this.state.gender : 'female'}
 								onChange={(e, value) => this.updateAttr({ target: { value: value.value } }, 'gender')}
 								options={[
 									{ key: 'male', value: 'male', text: 'Male' },
