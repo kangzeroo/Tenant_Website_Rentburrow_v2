@@ -26,8 +26,17 @@ class ChatPanel extends Component {
     super()
     this.state = {
       question: '',
+      showing_email_unauth: false,
     }
   }
+
+	componentWillMount() {
+    if (!this.props.authenticated && !localStorage.getItem('unauthUser_email')) {
+      this.setState({
+				showing_email_unauth: true,
+			})
+    }
+	}
 
 	render() {
 		return (
@@ -52,7 +61,14 @@ class ChatPanel extends Component {
           {
             this.props.current_thread.length > 0
             ?
-            <ChatFeed current_thread={this.props.current_thread} style={comStyles().chat_feed} />
+            <ChatFeed
+              current_thread={this.props.current_thread}
+							closePrompt={() => this.setState({
+								showing_email_unauth: false,
+							})}
+							showing_email_unauth={this.state.showing_email_unauth}
+              style={comStyles().chat_feed}
+            />
             :
             <div style={comStyles().chat_feed}>
               Got a question? Ask us!
@@ -75,11 +91,12 @@ ChatPanel.propTypes = {
 	history: PropTypes.object.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
 	current_thread: [],
+  authenticated: PropTypes.bool,
 }
 
 // for all optional props, define a default value
 ChatPanel.defaultProps = {
-
+  authenticated: false,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -89,6 +106,7 @@ const RadiumHOC = Radium(ChatPanel)
 function mapStateToProps(state) {
 	return {
 		current_thread: state.messaging.current_thread,
+    authenticated: state.auth.authenticated,
 	}
 }
 
