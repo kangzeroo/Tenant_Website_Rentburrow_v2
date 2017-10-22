@@ -87,6 +87,20 @@ export const generateNewSubletorSession = (obj) => {
   return p
 }
 
+export const generateNewLeaseSession = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_lease_session`, obj)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const updateDocumentStatus = (obj) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SUBLETTING_MICROSERVICE}/update_document_status`, obj)
