@@ -25,6 +25,8 @@ import RoommateGroupForm from './forms/RoommateGroupForm'
 import JoinedGroup from './forms/JoinedGroup'
 import SubmitLeaseApplication from './forms/SubmitLeaseApplication'
 import { applyToLiveAtThisBuilding } from '../../../actions/contract/contract_actions'
+import { selectBuilding, selectCorporation } from '../../../actions/selection/selection_actions'
+import { getSpecificLandlord } from '../../../api/search/search_api'
 import { saveMyApplicationToRedux, saveGroupApplicationToRedux, saveAppliedBuildingToRedux, } from '../../../actions/group/group_actions'
 import { getBuildingById } from '../../../api/building/building_api'
 import { checkWhatLandlordWantsFromTenant } from '../../../api/leasing/leasing_api'
@@ -75,6 +77,7 @@ class LeaseApplication extends Component {
         this.setState({
           building: data,
         })
+        this.props.selectBuilding(data)
         this.props.saveAppliedBuildingToRedux(data)
         this.props.applyToLiveAtThisBuilding(data)
         return checkWhatLandlordWantsFromTenant(building_id)
@@ -92,7 +95,11 @@ class LeaseApplication extends Component {
         }, () => {
           this.autoAssociateGroup()
         })
+        return getSpecificLandlord({ building_id: this.state.building.building_id })
       })
+  		.then((corporation) => {
+  			this.props.selectCorporation(corporation)
+  		})
   }
 
   autoAssociateGroup() {
@@ -346,6 +353,8 @@ LeaseApplication.propTypes = {
   saveGroupApplicationToRedux: PropTypes.func.isRequired,
   saveAppliedBuildingToRedux: PropTypes.func.isRequired,
   my_application_id: PropTypes.string,
+  selectBuilding: PropTypes.func.isRequired,
+  selectCorporation: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -373,6 +382,8 @@ export default withRouter(
     saveMyApplicationToRedux,
     saveGroupApplicationToRedux,
     saveAppliedBuildingToRedux,
+    selectBuilding,
+    selectCorporation,
 	})(RadiumHOC)
 )
 

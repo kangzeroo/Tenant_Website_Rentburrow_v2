@@ -101,6 +101,7 @@ const generateHTMLInquiryEmail = (tenant_name, building, message) => {
 		                        <table border='0' cellpadding='20' cellspacing='0' width='100%' id='emailHeader'>
 		                            <tr>
 		                                <td align='center' valign='top'>
+                                        <h1 style='color:#337ab7;'>Rentburrow.com</h1>
 		                                    <img src='https://s3.amazonaws.com/${BUCKET_NAME}/rentburrow_logo.png' style='width:150px; height: auto; margin: auto;' />
 		                                </td>
 		                            </tr>

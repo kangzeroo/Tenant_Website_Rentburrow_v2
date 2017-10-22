@@ -165,8 +165,8 @@ const comStyles = () => {
 		},
 		left_arrow: {
 			position: 'absolute',
-			left: '5px',
-			top: '5px',
+			left: '10px',
+			top: '15px',
 			cursor: 'pointer',
 		},
 		title: {
