@@ -78,12 +78,8 @@ class SubmitLeaseApplication extends Component {
 			this.setState({
 				error_messages: ['You must agree to the terms and conditions before you can submit this application.']
 			})
-<<<<<<< HEAD
 			generateLeaseContract(this.props.my_application_id)
-		})
-=======
 		}
->>>>>>> c63141148836b171f1c75c11a7957368ff6eeb28
 	}
 
 	toggleModal(bool, attr, context) {
