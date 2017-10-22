@@ -158,9 +158,10 @@ class SuitePreferenceForm extends Component {
 		})
 		if (this.validationCheck()) {
 			const arrayOfPromises = this.state.available_suites.map((suite) => {
-				saveRankingsToDb({
+				return saveRankingsToDb({
 					group_id: this.props.group_id,
 					suite_style_id: suite.suite_style_id,
+					suite_alias: suite.suite_alias,
 					ranking: suite.rank,
 				})
 			})
