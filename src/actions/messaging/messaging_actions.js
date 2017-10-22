@@ -1,17 +1,48 @@
 import {
 	SEND_MESSAGE,
 	ADD_MESSAGE,
+	ADD_ALL_MESSAGES,
 	SELECT_THREAD,
 	REQUEST_NOTIFICATIONS_PERMISSION,
+	CHAT_HELP,
+	LISTEN_TO_FIREBASE_DB,
 } from '../action_types'
 
 // send a message via FCM
 export const sendChatMessage = (msg) => {
 	return (dispatch) => {
+		// dispatch({
+		// 	type: LISTEN_TO_FIREBASE_DB
+		// })
 		dispatch({
 			type: SEND_MESSAGE,
-			payload: [msg]
+			payload: msg
 		})
+	}
+}
+
+export const initializeFirebaseChatDb = (tenant_id) => {
+	return (dispatch) => {
+		dispatch({
+			type: LISTEN_TO_FIREBASE_DB,
+			payload: tenant_id
+		})
+	}
+}
+
+export const selectHelpThread = () => {
+	return (dispatch) => {
+		dispatch({
+			type: CHAT_HELP,
+		})
+	}
+}
+
+// replaces all messages
+export const updateChatHistory = (msgs) => {
+	return {
+		type: ADD_ALL_MESSAGES,
+		payload: msgs
 	}
 }
 
@@ -25,8 +56,6 @@ export const addChatHistory = (msgs) => {
 
 // select the chat channel that we are on
 export const selectChatThread = (thread) => {
-	console.log(thread)
-	console.log('selectChatThread()')
 	return (dispatch) => {
 		dispatch({
 			type: SELECT_THREAD,

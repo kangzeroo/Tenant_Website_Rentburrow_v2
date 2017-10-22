@@ -10,12 +10,14 @@ import { withRouter } from 'react-router-dom'
 import {
   Search,
   Segment,
+  Icon,
 } from 'semantic-ui-react'
 import {
   xLightBlue,
   xDeepBlue,
 } from '../../../styles/base_colors'
-import { selectChatThread } from '../../../actions/messaging/messaging_actions'
+import { selectChatThread, selectHelpThread } from '../../../actions/messaging/messaging_actions'
+import { selectBuilding, selectCorporation } from '../../../actions/selection/selection_actions'
 
 
 class ChatsPanel extends Component {
@@ -49,7 +51,7 @@ class ChatsPanel extends Component {
 
   filterMessagesViaSearch(search_string, all_messages) {
     const filtered_messages = all_messages.filter((m) => {
-      return m.building_address.toLowerCase().indexOf(search_string) > -1 || m.tenant_name.toLowerCase().indexOf(search_string) > -1
+      return m.building_alias.toLowerCase().indexOf(search_string) > -1 || m.corporation_name.toLowerCase().indexOf(search_string) > -1
     })
     this.sortMessages(filtered_messages)
   }
@@ -91,27 +93,49 @@ class ChatsPanel extends Component {
     })
   }
 
+  selectThisThread(thread) {
+    this.props.selectChatThread(thread)
+    if (thread.length > 0) {
+      this.props.selectBuilding({
+        building_id: thread[0].building_id,
+        building_address: thread[0].building_alias,
+      })
+      this.props.selectCorporation({
+        corporation_id: thread[0].corporation_id,
+        corporation_name: thread[0].corporation_name,
+      })
+    }
+  }
+
 	render() {
 		return (
 			<div style={comStyles(this.props.history.location.pathname).container}>
-        <Search
-            onSearchChange={(e) => this.updateAttr('search_string', e)}
-            value={this.state.search_string}
-            fluid
-            showNoResults={false}
-        />
-        <Segment.Group>
-  				{
-            this.state.latest_threads.map((thread) => {
-              return (
-                <Segment key={thread[0].message_id} onClick={() => this.props.selectChatThread(thread)} style={comStyles().segment}>
-                  { thread[0].corporation_id }
-                </Segment>
-              )
-            })
-          }
-          <Segment style={comStyles().rest} />
-        </Segment.Group>
+        <div style={comStyles().top_bar}>
+          <Search
+              onSearchChange={(e) => this.updateAttr('search_string', e)}
+              value={this.state.search_string}
+              fluid
+              showNoResults={false}
+          />
+          <div style={comStyles().action_bar}>
+            <Icon name='add' size='large' onClick={() => this.selectThisThread([])} />
+            <Icon name='question' size='large' onClick={() => this.props.selectHelpThread()} />
+          </div>
+        </div>
+        <div style={comStyles().bottom_section}>
+          <Segment.Group>
+    				{
+              this.state.latest_threads.map((thread) => {
+                return (
+                  <Segment key={thread[0].message_id} onClick={() => this.selectThisThread(thread)} style={comStyles().segment}>
+                    { thread[0].corporation_name }
+                  </Segment>
+                )
+              })
+            }
+            <Segment style={comStyles().rest} />
+          </Segment.Group>
+        </div>
 			</div>
 		)
 	}
@@ -122,11 +146,16 @@ ChatsPanel.propTypes = {
 	history: PropTypes.object.isRequired,
   all_messages: PropTypes.array.isRequired,         // passed in
   selectChatThread: PropTypes.func.isRequired,
+  selectHelpThread: PropTypes.func.isRequired,
+  selected_building: PropTypes.object,
+  selected_landlord: PropTypes.object,
+  selectBuilding: PropTypes.func.isRequired,
+  selectCorporation: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 ChatsPanel.defaultProps = {
-
+  selected_building: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -136,6 +165,8 @@ const RadiumHOC = Radium(ChatsPanel)
 function mapStateToProps(state) {
 	return {
     all_messages: state.messaging.all_messages,
+    selected_building: state.selection.selected_building,
+    selected_landlord: state.selection.selected_landlord,
 	}
 }
 
@@ -143,6 +174,9 @@ function mapStateToProps(state) {
 export default withRouter(
 	connect(mapStateToProps, {
     selectChatThread,
+    selectHelpThread,
+    selectBuilding,
+    selectCorporation,
 	})(RadiumHOC)
 )
 
@@ -161,13 +195,28 @@ const comStyles = (pathname) => {
       alignSelf: 'stretch',
       padding: '10px',
       backgroundColor: 'white',
-      width: width
+      width: width,
 		},
+    top_bar: {
+      display: 'flex',
+      flexDirection: 'row',
+      height: '90px',
+      position: 'relative'
+    },
+    bottom_section: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '90%',
+    },
     segment: {
       cursor: 'pointer',
     },
     rest: {
       height: '90vh'
+    },
+    action_bar: {
+      position: 'absolute',
+      right: '10px',
     }
 	}
 }

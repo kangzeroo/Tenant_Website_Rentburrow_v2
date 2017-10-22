@@ -51,22 +51,35 @@ class Chat extends Component {
 }
 
 Chat.propTypes = {
-	corporation: PropTypes.object
+	corporation: PropTypes.object,
+  selected_building: PropTypes.object,
+  selected_landlord: PropTypes.object,
+  tenant_profile: PropTypes.object,
+  all_messages: PropTypes.array,
 }
 
 Chat.defaultProps = {
-	corporation: null
+	corporation: null,
+  selected_landlord: {},
+  tenant_profile: {},
+  selected_building: {},
+  all_messages: [],
 }
 
 const RadiumHOC = Radium(Chat)
 
 function mapStateToProps(state) {
 	return {
-		corporation: state.auth.corporation_profile
+		all_messages: state.messaging.all_messages,
+		corporation: state.auth.corporation_profile,
+    selected_landlord: state.selection.selected_landlord,
+    tenant_profile: state.auth.tenant_profile,
+    selected_building: state.selection.selected_building,
 	}
 }
 
-export default connect(mapStateToProps, {})(RadiumHOC)
+export default connect(mapStateToProps, {
+})(RadiumHOC)
 
 // ===============================
 

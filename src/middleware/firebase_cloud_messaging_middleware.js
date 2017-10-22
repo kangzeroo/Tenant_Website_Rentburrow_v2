@@ -67,8 +67,9 @@ const establishFirebaseMessaging = (() => {
           next(action)
           break;
 
-          // any messages will also get emitted to socket.io server
         case SEND_MESSAGE:
+          console.log('SEND_MESSAGE')
+
           next(action)
           break;
 

@@ -45,17 +45,18 @@ class ChatInput extends Component {
       // a channel_id is comprised of corporation_id + corporation_id + building_id
       const newMessage = {
         message_id: uuid.v4(),
-        sender_id: this.props.tenant.id,
-        receiver_id: this.props.corporation.corporation_id,
-        tenant_id: this.props.tenant.id,
-        tenant_name: this.props.tenant.name,
-        // building_id: this.props.building_target.building_id,
+        sender_id: this.props.tenant_profile.tenant_id,
+        receiver_id: this.props.chat_help ? 'Rentburrow_Student_Help_Chat' : this.props.corporation.corporation_id,
+        tenant_id: this.props.tenant_profile.tenant_id,
+        tenant_name: `${this.props.tenant_profile.first_name} ${this.props.tenant_profile.last_name}`,
+        building_id: this.props.chat_help ? 'main_page_chat_help' : this.props.selected_building.building_id,
         // building_thumbnail: this.props.building_target.thumbnail,
-        // building_alias: this.props.building_target.address,
-        corporation_id: this.props.corporation.corporation_id,
-        corporation_name: this.props.corporation.corp_name,
-        channel_id: `${this.props.corporation.corporation_id}_${this.props.tenant.id}`,
+        building_alias: this.props.chat_help ? 'Main Page Help' : this.props.selected_building.building_address,
+        corporation_id: this.props.chat_help ? 'Rentburrow_Student_Help_Chat' : this.props.corporation.corporation_id,
+        corporation_name: this.props.chat_help ? 'Rentburrow Help' : this.props.corporation.corporation_name,
+        channel_id: this.props.chat_help ? `Rentburrow_Student_Help_Chat_${this.props.tenant_profile.tenant_id}` : `${this.props.corporation.corporation_id}_${this.props.tenant_profile.tenant_id}`,
         contents: this.state.inputText,
+        sent_at: new Date().getTime(),
       }
       this.setState({
         inputText: '',
@@ -91,6 +92,7 @@ class ChatInput extends Component {
           value={this.state.inputText}
           onChange={(e) => this.handleTyping(e)}
           placeholder='Send a message'
+          style={comStyles().textbox}
         />
       </Form>
     )
@@ -100,18 +102,22 @@ class ChatInput extends Component {
 ChatInput.propTypes = {
   sendChatMessage: PropTypes.func.isRequired,
   corporation: PropTypes.object.isRequired,     // passed in
-  tenant: PropTypes.object.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+  selected_building: PropTypes.object,          // passed in
+  chat_help: PropTypes.bool,
 }
 
 ChatInput.defaultProps = {
-
+  selected_building: {},
+  chat_help: false,
 }
 
 const RadiumHOC = Radium(ChatInput)
 
 function mapStateToProps(state) {
 	return {
-    tenant: state.auth.tenant_profile,
+    tenant_profile: state.auth.tenant_profile,
+    chat_help: state.messaging.chat_help,
 	}
 }
 
@@ -188,6 +194,9 @@ const inputStyles = () => {
       color: 'gray',
       padding: '5px',
       cursor: 'pointer'
+    },
+    textbox: {
+      maxHeight: '200px',
     }
   }
 }
