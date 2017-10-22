@@ -15,6 +15,7 @@ import {
 import {
   xLightBlue,
   xDeepBlue,
+  xMidBlue,
 } from '../../../styles/base_colors'
 import { selectChatThread, selectHelpThread } from '../../../actions/messaging/messaging_actions'
 import { selectBuilding, selectCorporation } from '../../../actions/selection/selection_actions'
@@ -117,7 +118,7 @@ class ChatsPanel extends Component {
               showNoResults={false}
           />
           <div style={comStyles().action_bar}>
-            <Icon name='question' size='large' onClick={() => this.props.selectHelpThread()} />
+            <Icon name='question' size='big' inverted onClick={() => this.props.selectHelpThread()} />
           </div>
         </div>
         <div style={comStyles().bottom_section}>
@@ -194,15 +195,16 @@ const comStyles = (pathname) => {
       display: 'flex',
       flexDirection: 'column',
       alignSelf: 'stretch',
-      padding: '10px',
       backgroundColor: 'white',
       width: width,
 		},
     top_bar: {
       display: 'flex',
       flexDirection: 'row',
-      height: '90px',
-      position: 'relative'
+      height: '120px',
+      position: 'relative',
+      backgroundColor: xMidBlue,
+      padding: '5px',
     },
     bottom_section: {
       display: 'flex',

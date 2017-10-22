@@ -14,6 +14,7 @@ import {
 import {
   xLightBlue,
   xDeepBlue,
+  xMidBlue,
 } from '../../../styles/base_colors'
 import { selectChatThread } from '../../../actions/messaging/messaging_actions'
 import ChatFeed from './ChatFeed'
@@ -141,7 +142,6 @@ const comStyles = () => {
       flexDirection: 'column',
 			width: '100%',
 			height: '100%',
-			padding: '10px',
 			backgroundColor: 'white',
 		},
     header: {
@@ -155,6 +155,8 @@ const comStyles = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			position: 'relative',
+      backgroundColor: xMidBlue,
+      color: 'white',
     },
 		no_history: {
 			height: '90vh',
