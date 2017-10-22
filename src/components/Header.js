@@ -94,10 +94,10 @@ class Header extends Component {
   handleTenantChange(e, value) {
     if (value.value === 'account') {
       this.props.history.push('/account')
-    } else if (value.value === 'applications') {
-      this.props.history.push('/applications')
-    } else if (value.value === 'settings') {
-      this.props.history.push('/settings')
+    } else if (value.value === 'sublet_apps') {
+      this.props.history.push('/sublet_applications')
+    } else if (value.value === 'lease_apps') {
+      this.props.history.push('/lease_applications')
     } else if (value.value === 'logout') {
       this.props.history.push('/logout')
     }
@@ -116,8 +116,8 @@ class Header extends Component {
 
     const options = [
       { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
-      { key: 'applications', value: 'applications', text: 'Applications', icon: 'file text' },
-      { key: 'settings', value: 'settings', text: 'Settings', icon: 'settings' },
+      { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
+      { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
       { key: 'sign-out', value: 'logout', text: 'Sign Out', icon: 'sign out' }
     ]
 

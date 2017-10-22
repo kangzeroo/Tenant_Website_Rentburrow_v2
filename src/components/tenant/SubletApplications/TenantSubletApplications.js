@@ -15,10 +15,9 @@ import {
 import PlacesIAppliedToLive from './tabs/PlacesIAppliedToLive'
 import PeopleWhoWantToSubletMine from './tabs/PeopleWhoWantToSubletMine'
 import CompletedApplications from './tabs/CompletedApplications'
-import LeaseApplications from './tabs/LeaseApplications'
 import { authenticateTenant, } from '../../../api/general/general_api'
 
-class TenantApplications extends Component {
+class TenantSubletApplications extends Component {
 
 	constructor() {
 		super()
@@ -62,19 +61,11 @@ class TenantApplications extends Component {
 
 	renderTabs() {
 		return [
-			{ index: 0, code: 'lease-applications', menuItem: 'Lease Applications', render: () => <Tab.Pane attached={false}>{ this.renderMyLeaseApplications() }</Tab.Pane> },
-			{ index: 1, code: 'where-i-want-to-live', menuItem: 'Places I have applied to live', render: () => <Tab.Pane attached={false}>{ this.renderPlacesIAppliedToLive() }</Tab.Pane> },
-			{ index: 2, code: 'people-want-to-live-at-mine', menuItem: 'People who want to sublet my place', render: () => <Tab.Pane attached={false}>{ this.renderReceivedApplications() }</Tab.Pane> },
+			// { index: 0, code: 'lease-applications', menuItem: 'Lease Applications', render: () => <Tab.Pane attached={false}>{ this.renderMyLeaseApplications() }</Tab.Pane> },
+			{ index: 0, code: 'where-i-want-to-live', menuItem: 'Places I have applied to live', render: () => <Tab.Pane attached={false}>{ this.renderPlacesIAppliedToLive() }</Tab.Pane> },
+			{ index: 1, code: 'people-want-to-live-at-mine', menuItem: 'People who want to sublet my place', render: () => <Tab.Pane attached={false}>{ this.renderReceivedApplications() }</Tab.Pane> },
 			// { index: 2, code: 'completed-apps', menuItem: 'Completed Applications', render: () => <Tab.Pane attached={false}>{ this.renderCompletedApplications() }</Tab.Pane> },
 		]
-	}
-
-	renderMyLeaseApplications() {
-		return (
-			<LeaseApplications
-
-			/>
-		)
 	}
 
 	renderPlacesIAppliedToLive() {
@@ -124,18 +115,18 @@ class TenantApplications extends Component {
 }
 
 // defines the types of variables in this.props
-TenantApplications.propTypes = {
+TenantSubletApplications.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object,
 }
 
 // for all optional props, define a default value
-TenantApplications.defaultProps = {
+TenantSubletApplications.defaultProps = {
 	tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(TenantApplications)
+const RadiumHOC = Radium(TenantSubletApplications)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

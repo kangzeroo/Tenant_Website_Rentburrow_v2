@@ -11,11 +11,12 @@ import {
   Card,
   Feed,
   Header,
+  Image,
 } from 'semantic-ui-react'
-import { getGroupMembers, } from '../../../../api/group/group_api'
-import { saveGroupApplicationToRedux, } from '../../../../actions/group/group_actions'
+import { getGroupMembers, } from '../../../../../api/group/group_api'
+import { shortenTimestamp, } from '../../../../../api/general/general_api'
 
-class GroupMembers extends Component {
+class GroupMembersCard extends Component {
 
   constructor() {
     super()
@@ -30,54 +31,69 @@ class GroupMembers extends Component {
       this.setState({
         group_members: data
       })
-      this.props.saveGroupApplicationToRedux(data)
     })
+  }
+
+  goToFacebookUser(e, fb_user_id) {
+    if (e) {
+      e.stopPropagation()
+    }
+    window.open(`https://www.facebook.com/${fb_user_id}`, '_blank')
   }
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Card raised fluid>
+				<Card.Group>
           <div style={comStyles().feed_container} >
             <Header
               as='h2'
-              content='Group Members'
+              icon='users'
+              content={this.props.group_name ? this.props.group_name + ' Group Members' : 'Group Members'}
             />
-            <Feed style={comStyles().group_members_container}>
+            <div style={comStyles().group_members_container}>
             {
               this.state.group_members.map((member) => {
                 return (
-                  <Feed.Event key={member.tenant_id}>
-                    <Feed.Label image={member.thumbnail} />
-                    <Feed.Content>
-                      { member.first_name + ' ' + member.last_name }
-                    </Feed.Content>
-                  </Feed.Event>
+                  <Card key={member.tenant_id}>
+                    <Card.Content>
+                      <Image floated='right' shape='circular' src={member.thumbnail} onClick={(e) => this.goToFacebookUser(e, member.fb_user_id)}/>
+                      <Card.Header>
+                        { member.first_name + ' ' + member.last_name }
+                      </Card.Header>
+                      <Card.Meta>
+                        { 'Application Status: ' + member.doc_status }
+                      </Card.Meta>
+                      <Card.Description>
+                        { member.submitted_at ? `Application Submitted at ${shortenTimestamp(member.submitted_at)}` : 'Application Not Complete' }
+                      </Card.Description>
+                    </Card.Content>
+                  </Card>
                 )
               })
             }
-            </Feed>
+            </div>
           </div>
-        </Card>
+        </Card.Group>
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-GroupMembers.propTypes = {
+GroupMembersCard.propTypes = {
 	history: PropTypes.object.isRequired,
   group_id: PropTypes.string.isRequired,      // passed in
-  saveGroupApplicationToRedux: PropTypes.func,
+  group_name: PropTypes.string.isRequired,      // passed in
 }
 
 // for all optional props, define a default value
-GroupMembers.defaultProps = {
+GroupMembersCard.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(GroupMembers)
+const RadiumHOC = Radium(GroupMembersCard)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -89,7 +105,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-    saveGroupApplicationToRedux
+
 	})(RadiumHOC)
 )
 

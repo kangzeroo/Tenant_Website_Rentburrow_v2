@@ -73,6 +73,7 @@ class SubmitLeaseApplication extends Component {
 				})
 				// this.props.history.push('/applications')
 				this.props.sendSummaryEmail()
+				generateLeaseContract(this.props.my_application_id)
 			})
 		} else {
 			this.setState({

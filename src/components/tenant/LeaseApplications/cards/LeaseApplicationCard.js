@@ -12,6 +12,9 @@ import {
   Card,
   Button,
   Image,
+  Label,
+  Header,
+  Icon,
 } from 'semantic-ui-react'
 import {
   shortenAddress,
@@ -23,6 +26,9 @@ import {
 import {
   getApplicationStatus,
 } from '../../../../api/application/lease_application_api'
+import {
+  getGroupInfo,
+} from '../../../../api/group/group_api'
 
 class LeaseApplicationCard extends Component {
 
@@ -31,6 +37,7 @@ class LeaseApplicationCard extends Component {
     this.state = {
       building: {},
       app_details: {},
+      group: {},
     }
   }
 
@@ -47,30 +54,51 @@ class LeaseApplicationCard extends Component {
         building: data,
       })
     })
+    getGroupInfo(this.props.details.group_id)
+    .then((data) => {
+      this.setState({
+        group: data
+      })
+    })
+  }
+
+  goToPage(group_id) {
+    this.props.history.push(`/lease_applications/applications/${group_id}`)
+  }
+
+  renderStatusText() {
+    if (this.state.app_details && (this.state.app_details.application_status !== null)) {
+      return `STATUS:  + ${this.state.app_details.application_status}`
+    } else {
+      return 'STATUS: PENDING'
+    }
   }
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Card raised>
-          <Card.Content>
-            <Card.Header>
-              {
-              'STATUS: '
-              }
-              {
-                this.state.app_details && this.state.app_details.application_status !== null
-                ?
-                this.state.app_details.application_status
-                :
-                'PENDING'
-              }
-              <Image fluid src={this.state.building.thumbnail} />
-            </Card.Header>
+				<Card raised style={comStyles().card_styles} onClick={this.goToPage(this.props.details.group_id)}>
+          <Image
+            fluid
+            src={this.state.building.thumbnail}
+          />
             <Card.Content>
               <Card.Header>{shortenAddress(this.state.building.building_address)}</Card.Header>
-              <Card.Meta>Applied On {shortenTimestamp(this.props.details.created_at)}</Card.Meta>
-            </Card.Content>
+              <Card.Meta>Applied on {shortenTimestamp(this.props.details.created_at)}</Card.Meta>
+          </Card.Content>
+          <Header
+            as='h3'
+            icon='time'
+            content={this.renderStatusText()}
+            subheader='Waiting for all parties to sign'
+            color='blue'
+            style={comStyles().status_text}
+          />
+          <Card.Content extra>
+            <a>
+              <Icon name={this.state.group.group_size > 1 ? 'users' : 'user'} />
+              { `${this.state.group.group_name} ${this.state.group.group_size} Group Member${this.state.group.group_size > 1 ? 's' : ''}`}
+            </a>
           </Card.Content>
         </Card>
 			</div>
@@ -114,22 +142,15 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      minHeight: '200px',
+      minHeight: '400px',
       margin: '10px auto',
 		},
-    buttons_container: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      padding: '10px 0px 10px 0px'
+    card_styles: {
+      height: '400px',
+      width: '400px',
     },
-    subletor_pic: {
-      position: 'absolute',
-      top: '5px',
-      right: '5px'
-    },
-    status: {
-      padding: '20px',
+    status_text: {
+      margin: '0px 0px 10px 0px',
     }
 	}
 }

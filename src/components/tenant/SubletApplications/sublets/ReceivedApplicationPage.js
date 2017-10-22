@@ -31,7 +31,7 @@ class ReceivedSentApplicationPage extends Component {
 
 	componentWillMount() {
 		const pathname = this.props.location.pathname
-		const contract_id = pathname.slice(pathname.indexOf('/applications/subletor/') + '/applications/subletor/'.length)
+		const contract_id = pathname.slice(pathname.indexOf('/sublet_applications/subletor/') + '/sublet_applications/subletor/'.length)
 
 		const application = this.props.received_applications.filter((app) => {
 													return contract_id === app.contract_id
@@ -50,7 +50,7 @@ class ReceivedSentApplicationPage extends Component {
 	}
 
 	goBack() {
-		this.props.history.push('/applications/?tab=people-want-to-live-at-mine')
+		this.props.history.push('/sublet_applications/?tab=people-want-to-live-at-mine')
 	}
 
 	downloadContractFromAPI() {
