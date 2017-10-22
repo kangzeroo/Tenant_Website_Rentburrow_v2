@@ -44,7 +44,7 @@ class ReceivedSentApplicationPage extends Component {
 		getQuickSubletorContractLink(contract_id,	application.tenant_id)
 		.then((data) => {
 			this.setState({
-				link: data[0].contract_link
+				link: data.contract_link
 			})
 		})
 	}

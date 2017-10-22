@@ -390,7 +390,7 @@ class SubleteeForm extends Component {
 										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 									</div>
 									:
-									<Button type='submit' primary size='large' onClick={() => this.props.goToNextForm()}>Next</Button>
+									<Button type='submit' primary size='large' onClick={() => this.submit()}>Next</Button>
 								}
 							</Form>
 						</div>
