@@ -11,6 +11,9 @@ import {
 	Header,
 	Icon,
 } from 'semantic-ui-react'
+import {
+  xMidBlue
+} from '../../../styles/base_colors'
 import { selectChatThread } from '../../../actions/messaging/messaging_actions'
 import ChatFeed from './ChatFeed'
 import ChatInput from './ChatInput'
@@ -26,7 +29,7 @@ class ChatsDash extends Component {
   }
 
 	componentWillMount() {
-    if (!this.props.authenticated && !localStorage.getItem('unauthUser_email')) {
+    if (!this.props.authenticated && !localStorage.getItem('unauthUser_email') && !localStorage.getItem('unauthUser_name')) {
       this.setState({
 				showing_email_unauth: true,
 			})
@@ -91,7 +94,7 @@ class ChatsDash extends Component {
 ChatsDash.propTypes = {
 	history: PropTypes.object.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
-	current_thread: PropTypes.array,								// passed in
+	current_thread: PropTypes.array,
 	selected_landlord: PropTypes.object,
   authenticated: PropTypes.bool,
 	selected_building: PropTypes.object,
@@ -135,7 +138,6 @@ const comStyles = () => {
       flexDirection: 'column',
 			width: '100%',
 			height: '100%',
-			padding: '10px',
 			backgroundColor: 'white',
 		},
     header: {
@@ -149,6 +151,8 @@ const comStyles = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			position: 'relative',
+			color: 'white',
+			backgroundColor: xMidBlue,
     },
 		no_history: {
 			height: '90vh',
@@ -168,7 +172,7 @@ const comStyles = () => {
 		chat_interface: {
 			display: 'flex',
 			flexDirection: 'column',
-			height: '90%'
+			height: '100%'
 		},
 		chat_feed: {
 			minHeight: '85%',

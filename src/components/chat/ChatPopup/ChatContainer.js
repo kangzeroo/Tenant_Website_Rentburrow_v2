@@ -22,6 +22,8 @@ import { selectChatThread } from '../../../actions/messaging/messaging_actions'
 class ChatContainer extends Component {
 
   componentWillMount() {
+    // checks that we have a selected landlord and selected building
+    // if the tenant has a convo with this landlord already, then we will load it
     if (this.props.selected_landlord.corporation_id && this.props.selected_building.building_id) {
       const has_convos = checkIfThisLandlordHasConvo(this.props.selected_landlord.corporation_id, this.props.all_messages)
       if (has_convos.length > 0) {
@@ -58,23 +60,15 @@ class ChatContainer extends Component {
 		let view = null
     if (this.props.chat_help) {
       view = (
-        <ChatHelp
-          thread={this.props.current_thread}
-        />
+        <ChatHelp />
       )
     } else if (this.props.current_thread.length === 0) {
       view = (
-        <ChatsPanel
-          messages={this.props.all_messages}
-          thread={this.props.current_thread}
-        />
+        <ChatsPanel />
       )
 		} else {
 			view = (
-				<ChatsDash
-          messages={this.props.all_messages}
-          thread={this.props.current_thread}
-        />
+				<ChatsDash />
 			)
 		}
 		return view

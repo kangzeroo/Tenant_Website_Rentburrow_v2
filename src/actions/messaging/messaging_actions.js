@@ -21,15 +21,6 @@ export const sendChatMessage = (msg) => {
 	}
 }
 
-export const initializeFirebaseChatDb = (tenant_id) => {
-	return (dispatch) => {
-		dispatch({
-			type: LISTEN_TO_FIREBASE_DB,
-			payload: tenant_id
-		})
-	}
-}
-
 export const selectHelpThread = () => {
 	return (dispatch) => {
 		dispatch({

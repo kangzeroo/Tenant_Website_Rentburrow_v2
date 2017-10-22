@@ -40,8 +40,13 @@ const establishFirebaseRealtimeDatabaseMessaging = (() => {
         case SEND_MESSAGE:
           console.log('SEND_MESSAGE')
           console.log(action)
-          firebase_db.ref(`tenants/${action.payload.sender_id}/messages/${action.payload.message_id}`).set(action.payload)
-          firebase_db.ref(`landlords/${action.payload.receiver_id}/messages/${action.payload.message_id}`).set(action.payload)
+          if (action.payload.receiver_id === 'Rentburrow_Student_Help_Chat') {
+            firebase_db.ref(`tenants/${action.payload.receiver_id}/messages/${action.payload.message_id}`).set(action.payload)
+            firebase_db.ref(`tenants/${action.payload.sender_id}/messages/${action.payload.message_id}`).set(action.payload)
+          } else {
+            firebase_db.ref(`tenants/${action.payload.sender_id}/messages/${action.payload.message_id}`).set(action.payload)
+            firebase_db.ref(`landlords/${action.payload.receiver_id}/messages/${action.payload.message_id}`).set(action.payload)
+          }
           next(action)
           break;
 

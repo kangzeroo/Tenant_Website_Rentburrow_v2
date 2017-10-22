@@ -23,23 +23,28 @@ class ChatEmailUnauth extends Component {
     super()
     this.state = {
       email: '',
-      error_message: '',
+      name: '',
+      error_messages: [],
     }
   }
 
-  rememberEmail(email) {
-    if (validateEmail(email)) {
-      this.toggleModal(false)
-      this.setState({
-        error_message: '',
-      })
-      localStorage.setItem('unauthUser_email', email)
-      this.props.closePrompt()
-    } else {
-      this.setState({
-        error_message: 'Not a valid email'
-      })
+  rememberEmail(email, name) {
+    const errors = []
+    if (!validateEmail(email)) {
+      errors.push('Not a valid email')
     }
+    if (name.length === 0) {
+      errors.push('Missing your name')
+    }
+    if (errors.length === 0) {
+      this.toggleModal(false)
+      this.props.closePrompt()
+      localStorage.setItem('unauthUser_email', email)
+      localStorage.setItem('unauthUser_name', name)
+    }
+    this.setState({
+      error_messages: errors,
+    })
   }
 
   // toggle modal
@@ -76,20 +81,25 @@ class ChatEmailUnauth extends Component {
         <div style={comStyles().leave_email}>
           Or leave your email for the landlord <br /><br />
           {
-            this.state.error_message
+            this.state.error_messages.length > 0
             ?
-            <Message
-              visible
-              key='error'
-              error
-              content={this.state.error_message}
-            />
+            this.state.error_messages.map((err) => {
+              return (
+                <Message
+                  visible
+                  key='error'
+                  error
+                  content={err}
+                />
+              )
+            })
             :
             null
           }
           <div style={comStyles().email_form}>
-            <Input value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })} />
-            <Button color='green' content='Save' onClick={() => this.rememberEmail(this.state.email)} />
+            <Input fluid placeholder='email' value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })} />
+            <Input fluid placeholder='name' value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
+            <Button fluid color='green' content='Save' onClick={() => this.rememberEmail(this.state.email, this.state.name)} />
           </div>
         </div>
         {
@@ -155,7 +165,7 @@ const comStyles = () => {
     },
     email_form: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       margin: '10x 0px 0px 0px',
     }
 	}
