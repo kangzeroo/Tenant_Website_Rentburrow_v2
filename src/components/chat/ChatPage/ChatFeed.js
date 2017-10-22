@@ -25,7 +25,7 @@ class ChatFeed extends Component {
 
 	render() {
 		return (
-      <div id='chatfeed' style={comStyles().chatfeed}>
+      <div id='chatfeed' style={comStyles(this.props.onPage).chatfeed}>
         {
           this.props.showing_email_unauth
           ?
@@ -63,11 +63,13 @@ ChatFeed.propTypes = {
   current_thread: PropTypes.array,              // passed in
   closePrompt: PropTypes.func.isRequired,       // passed in
   showing_email_unauth: PropTypes.bool,         // passed in
+  onPage: PropTypes.bool,                       // passed in
 }
 
 ChatFeed.defaultProps = {
   current_thread: [],
   showing_email_unauth: true,
+  onPage: false,
 }
 
 const RadiumHOC = Radium(ChatFeed)
@@ -81,7 +83,7 @@ export default connect(mapStateToProps, {})(RadiumHOC)
 
 // ===============================
 
-const comStyles = () => {
+const comStyles = (onPage) => {
 	return {
     chatfeed: {
       // alignSelf: 'stretch',
@@ -91,8 +93,8 @@ const comStyles = () => {
       overflowY: 'scroll',
       overflowX: 'hidden',
       padding: '15px 15px 20px 15px',
-      minHeight: '440px',
-      maxHeight: '440px',
+      minHeight: onPage ? '70vh' : '440px',
+      maxHeight: onPage ? '70vh' : '440px',
     },
     them: {
       // display: 'flex',

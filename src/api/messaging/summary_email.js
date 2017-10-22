@@ -3,6 +3,7 @@ import AWS_SES from 'aws-sdk/clients/ses'
 import AWS from 'aws-sdk/global'
 import moment from 'moment'
 import { BUCKET_NAME } from '../aws/aws-profile'
+import { aliasToURL } from '../general/general_api'
 
 
 export const sendSummaryEmailToLandlord = (saved_form_state, building) => {
@@ -96,7 +97,7 @@ const generateHTMLInquiryEmail = (
                                   guarantor,
                                   building,
                                 ) => {
-  const building_url = `https://rentburrow.com/${building.building_id}`
+  const building_url = `https://rentburrow.com/${aliasToURL(building.building_id)}`
   return `
 		<!DOCTYPE html>
 		<html>

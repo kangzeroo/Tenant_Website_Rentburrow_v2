@@ -9,6 +9,7 @@ import {
   xMidBlue
 } from '../../../styles/base_colors'
 import { sendChatMessage } from '../../../actions/messaging/messaging_actions'
+import { sendChatMessageToLandlord } from '../../../api/messaging/messaging_to_email'
 
 
 class ChatInput extends Component {
@@ -70,11 +71,12 @@ class ChatInput extends Component {
         sent_at: new Date().getTime(),
         ...additionalInfo,
       }
+      this.props.sendChatMessage(newMessage)
+      sendChatMessageToLandlord(this.props.tenant_profile.first_name, 'huang.khan74@gmail.com', this.props.selected_building, this.state.inputText)
       this.setState({
         inputText: '',
         checked: false
       })
-      this.props.sendChatMessage(newMessage)
       mergedStream.subscribe({
         next: onNext,
         error: onError,
