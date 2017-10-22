@@ -35,7 +35,7 @@ export const getTenantProfile = ({ tenant_id, }) => {
     axios.post(`${SUBLETTING_MICROSERVICE}/get_tenant_profile`, { tenant_id, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
-        res(data.data[0])
+        res(data.data)
       })
       .catch((err) => {
         rej(err)
@@ -43,6 +43,21 @@ export const getTenantProfile = ({ tenant_id, }) => {
   })
   return p
 }
+
+export const getTenantDetails = (tenant_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_tenant_details`, { tenant_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 
 export const saveTenantDetails = (obj) => {
   const p = new Promise((res, rej) => {

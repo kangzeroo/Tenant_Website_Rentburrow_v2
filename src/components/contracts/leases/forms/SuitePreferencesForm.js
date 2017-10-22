@@ -21,7 +21,7 @@ import {
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { getAvailableSuites } from '../../../../api/building/building_api'
-import { saveRankingsToDb, } from '../../../../api/group/group_api'
+import { saveRankingsToDb, getSuiteRankings, } from '../../../../api/group/group_api'
 import SuitePreviewsForSelection from '../support/SuitePreviewsForSelection'
 
 class SuitePreferenceForm extends Component {
@@ -57,17 +57,36 @@ class SuitePreferenceForm extends Component {
 	}
 
 	componentWillMount() {
-		getAvailableSuites({
-			building_id: this.props.building.building_id,
-		}).then((data) => {
-			this.setState({
-				available_suites: data.map((suite, index) => {
-					return {
-						...suite,
-						rank: index + 1,
-					}
-				}),
-			})
+		const group_id = localStorage.getItem('leasing_group_id')
+		getSuiteRankings(group_id)
+		.then((data) => {
+			if (data.length > 0) {
+				this.setState({
+					available_suites: data.map((suite) => {
+						return {
+							suite_id: suite.sample_suite_id,
+							suite_style_id: suite.suite_style_id,
+							suite_alias: suite.suite_alias,
+							rank: suite.ranking,
+							cover_photo: suite.cover_photo,
+							imgs: suite.imgs,
+						}
+					})
+				})
+			} else {
+				getAvailableSuites({
+					building_id: this.props.building.building_id,
+				}).then((data) => {
+					this.setState({
+						available_suites: data.map((suite, index) => {
+							return {
+								...suite,
+								rank: index + 1,
+							}
+						}),
+					})
+				})
+			}
 		})
 	}
 
@@ -160,9 +179,12 @@ class SuitePreferenceForm extends Component {
 			const arrayOfPromises = this.state.available_suites.map((suite) => {
 				return saveRankingsToDb({
 					group_id: this.props.group_id,
+					sample_suite_id: suite.suite_id,
 					suite_style_id: suite.suite_style_id,
 					suite_alias: suite.suite_alias,
 					ranking: suite.rank,
+					cover_photo: suite.cover_photo,
+					imgs: suite.imgs,
 				})
 			})
 			Promise.all(arrayOfPromises).then((res, rej) => {

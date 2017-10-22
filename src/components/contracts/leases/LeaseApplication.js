@@ -225,7 +225,7 @@ class LeaseApplication extends Component {
           goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
-    } else if (this.state.current_form === 'about_tenant') {
+    } else if (this.state.current_form === 'about_tenant' && this.props.tenant_profile && this.props.tenant_profile.tenant_id !== '') {
       return (
         <AboutTenantForm
           goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
@@ -258,7 +258,7 @@ class LeaseApplication extends Component {
           goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
         />
       )
-    } else if (this.state.current_form === 'guarantor') {
+    } else if (this.state.current_form === 'guarantor' && this.props.my_application_id !== '') {
       return (
         <GuarantorForm
           goToNextForm={(state) => this.goToNextForm(this.state.current_form, state)}
@@ -345,11 +345,12 @@ LeaseApplication.propTypes = {
   saveMyApplicationToRedux: PropTypes.func.isRequired,
   saveGroupApplicationToRedux: PropTypes.func.isRequired,
   saveAppliedBuildingToRedux: PropTypes.func.isRequired,
+  my_application_id: PropTypes.string,
 }
 
 // for all optional props, define a default value
 LeaseApplication.defaultProps = {
-
+  my_application_id: ''
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -361,6 +362,7 @@ const mapReduxToProps = (redux) => {
     tenant_profile: redux.auth.tenant_profile,
     applied_building: redux.contract.selected_building_to_apply_for,
     location_forwarding: redux.auth.location_forwarding,
+    my_application_id: redux.group.my_application_id,
 	}
 }
 
