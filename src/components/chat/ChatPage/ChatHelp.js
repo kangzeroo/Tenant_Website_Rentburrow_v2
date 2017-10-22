@@ -183,8 +183,8 @@ const comStyles = () => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: '40px',
-      fontSize: '1.5rem',
+      padding: '20px',
+      fontSize: '1.2rem',
       fontWeight: 'bold',
 		},
 		chat_input: {
