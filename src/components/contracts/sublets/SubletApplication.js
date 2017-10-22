@@ -18,7 +18,7 @@ import SubletReceipt from './SubletReceipt'
 import InvalidSubletor from './InvalidSubletor'
 import { getSubletPostById, saveSubletorFormToDb, getSubleteeContractForSubletor, getSubletorContractForReview, saveSubleteeFormToDb } from '../../../api/signing/sublet_contract_api'
 import { uploadImageToS3WithEncryption } from '../../../api/aws/aws-S3'
-import { generateContract } from '../../../api/pandadoc/pandadoc_api'
+import { generateSubletContract } from '../../../api/pandadoc/pandadoc_api'
 
 class SubletApplication extends Component {
 
@@ -216,7 +216,7 @@ class SubletApplication extends Component {
 				})
 			})
 			.then((data) => {
-				generateContract(this.state.subletee_contract.contract_id)
+				generateSubletContract(this.state.subletee_contract.contract_id)
 				return getSubletorContractForReview(data.contract_id)
 			})
 			.then((data) => {

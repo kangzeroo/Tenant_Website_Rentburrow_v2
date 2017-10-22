@@ -3,9 +3,23 @@ import FileDownload from 'react-file-download'
 import { SUBLETTING_MICROSERVICE } from '../API_URLS'
 
 
-export const generateContract = (contract_id) => {
+export const generateSubletContract = (contract_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/generate_contract`, { contract_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_sublet_contract`, { contract_id })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const generateLeaseContract = (application_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_lease_contract`, { application_id })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

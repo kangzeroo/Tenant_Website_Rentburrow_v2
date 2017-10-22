@@ -22,6 +22,9 @@ import { xMidBlue } from '../../../../styles/base_colors'
 import {
 	submitApplicationToDb,
 } from '../../../../api/application/lease_application_api'
+import {
+	generateLeaseContract,
+} from '../../../../api/pandadoc/pandadoc_api'
 
 class SubmitLeaseApplication extends Component {
 
@@ -75,7 +78,12 @@ class SubmitLeaseApplication extends Component {
 			this.setState({
 				error_messages: ['You must agree to the terms and conditions before you can submit this application.']
 			})
+<<<<<<< HEAD
+			generateLeaseContract(this.props.my_application_id)
+		})
+=======
 		}
+>>>>>>> c63141148836b171f1c75c11a7957368ff6eeb28
 	}
 
 	toggleModal(bool, attr, context) {

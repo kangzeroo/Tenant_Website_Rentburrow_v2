@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
-import { generateContract, authenticatePandaDoc } from '../../api/pandadoc/pandadoc_api'
+import { generateSubletContract, authenticatePandaDoc } from '../../api/pandadoc/pandadoc_api'
 
 
 class Authenticated extends Component {
