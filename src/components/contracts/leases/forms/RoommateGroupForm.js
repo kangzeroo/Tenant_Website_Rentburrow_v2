@@ -33,6 +33,7 @@ class RoommateGroupForm extends Component {
 			group_name: '',
 			new_group_name: '',
 	    first_name: '',
+			expected_group_size: 1,
 
 			submitted: false,
 			error_messages: [],
@@ -153,7 +154,7 @@ class RoommateGroupForm extends Component {
 										</div>
 									</Card>
 									:
-									<Card fluid style={comStyles().row_card_style} >
+									<Card fluid style={comStyles().row_card_style}>
 										<Header
 											as='h1'
 											content={this.state.group_name}
@@ -161,6 +162,16 @@ class RoommateGroupForm extends Component {
 											icon='add user'
 											width='300px'
 										/>
+										<div style={comStyles().expected_group_size}>
+											<label>Group Size</label>
+											<Input
+												primary
+												type='number'
+												value={this.state.expected_group_size}
+												onChange={(e) => this.setState({ expected_group_size: e.target.value, })}
+												style={comStyles().group_size}
+											/>
+										</div>
 										<Button
 											primary
 											basic
@@ -426,6 +437,12 @@ const comStyles = () => {
 			width: '100px',
 			position: 'absolute',
 			right: '20px',
+		},
+		expected_group_size: {
+			display: 'flex',
+			flexDirection: 'column',
+			width: '100px',
+			fontWeight: 'bold',
 		}
 	}
 }

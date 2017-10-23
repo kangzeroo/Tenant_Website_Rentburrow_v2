@@ -231,7 +231,7 @@ class StepByStepCard extends Component {
               <Label circular color='blue' size='big' key={3}>3</Label>
             </div>
             <div style={comStyles().contents}>
-              Sign & Pay Online
+              Apply & Sign Online
             </div>
           </Card.Content>
         </Card>
