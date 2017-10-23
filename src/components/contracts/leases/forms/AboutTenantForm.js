@@ -88,7 +88,7 @@ class AboutStudentForm extends Component {
 			this.setState({
 				building_address: data.current_address,
 				gender: data.gender,
-				date_of_birth: data.date_of_birth === '' ? moment('1/1/1997') : moment(data.date_of_birth),
+				date_of_birth: data.date_of_birth === null ? moment('1/1/1997') : moment(data.date_of_birth),
 			})
 		})
   }
