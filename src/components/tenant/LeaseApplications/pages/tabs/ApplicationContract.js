@@ -44,7 +44,7 @@ class ApplicationContract extends Component {
         <div style={comStyles().headerContainer} >
           <div style={comStyles().headerStatus}>
             {
-              this.props.application.doc_status === 'complete'
+              this.props.application.doc_status === 'document.completed'
               ?
               <Header
                 as='h2'
