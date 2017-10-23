@@ -19,6 +19,7 @@ import {
 import {
   shortenAddress,
   shortenTimestamp,
+  renderProcessedImage,
 } from '../../../../api/general/general_api'
 import {
   getBuildingById,
@@ -63,12 +64,12 @@ class LeaseApplicationCard extends Component {
   }
 
   goToPage(group_id) {
-    this.props.history.push(`/lease_applications/applications/${group_id}`)
+    this.props.history.push(`/applications/lease/${group_id}`)
   }
 
   renderStatusText() {
-    if (this.state.app_details && (this.state.app_details.application_status !== null)) {
-      return `STATUS:  + ${this.state.app_details.application_status}`
+    if (this.state.app_details && (this.state.app_details.doc_status !== null)) {
+      return `STATUS:  + ${this.state.app_details.doc_status}`
     } else {
       return 'STATUS: PENDING'
     }
@@ -77,10 +78,10 @@ class LeaseApplicationCard extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Card raised style={comStyles().card_styles} onClick={this.goToPage(this.props.details.group_id)}>
+				<Card raised style={comStyles().card_styles} onClick={() => this.goToPage(this.props.details.group_id)}>
           <Image
             fluid
-            src={this.state.building.thumbnail}
+            src={renderProcessedImage(this.state.building.thumbnail)}
           />
             <Card.Content>
               <Card.Header>{shortenAddress(this.state.building.building_address)}</Card.Header>
@@ -97,7 +98,7 @@ class LeaseApplicationCard extends Component {
           <Card.Content extra>
             <a>
               <Icon name={this.state.group.group_size > 1 ? 'users' : 'user'} />
-              { `${this.state.group.group_name} ${this.state.group.group_size} Group Member${this.state.group.group_size > 1 ? 's' : ''}`}
+              { `${this.state.group.group_name ? this.state.group.group_name :  ''} ${this.state.group.group_size} Group Member${this.state.group.group_size > 1 ? 's' : ''}`}
             </a>
           </Card.Content>
         </Card>

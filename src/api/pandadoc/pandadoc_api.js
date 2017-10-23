@@ -2,7 +2,6 @@ import axios from 'axios'
 import FileDownload from 'react-file-download'
 import { SUBLETTING_MICROSERVICE } from '../API_URLS'
 
-
 export const generateSubletContract = (contract_id) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SUBLETTING_MICROSERVICE}/generate_sublet_contract`, { contract_id })
@@ -115,6 +114,34 @@ export const updateDocumentStatus = (obj) => {
   return p
 }
 
+export const updateLeaseDocumentStatus = (tenant_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_lease_document_status`, { tenant_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const uploadHello = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/upload_hello`, obj)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const downloadContract = (doc_id) => {
   const p = new Promise((res, rej) => {
     console.log('starting download...')
@@ -126,7 +153,8 @@ export const downloadContract = (doc_id) => {
 				headers: { 'Authorization': `Bearer ${data.access_token}` }
 			})
 			.then((response) => {
-				FileDownload(response.data, `contract${doc_id}.pdf`)
+    //    uploadPDFToS3('application.pdf', response.data)
+        // FileDownload(response.data, `contract${doc_id}.pdf`)
         res()
 			})
       .catch((err) => {

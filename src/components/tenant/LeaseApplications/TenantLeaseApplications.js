@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react'
 import LeaseApplicationsTab from './tabs/LeaseApplicationsTab'
 import { authenticateTenant, } from '../../../api/general/general_api'
+import { updateLeaseDocumentStatus } from '../../../api/pandadoc/pandadoc_api'
 
 class TenantLeaseApplications extends Component {
 
@@ -27,9 +28,12 @@ class TenantLeaseApplications extends Component {
 		if (authenticateTenant(this.props.tenant_profile)) {
 	    // const chosenTab_loc = this.props.location.search.indexOf('?tab=')
 	    // const chosenTab = this.props.location.search.slice(chosenTab_loc + '?tab='.length)
-			this.setState({
-				// defaultActiveIndex: this.determineWhichTabOpen(chosenTab),
-				fully_loaded: true,
+			updateLeaseDocumentStatus(this.props.tenant_profile.tenant_id)
+			.then((data) => {
+				this.setState({
+					// defaultActiveIndex: this.determineWhichTabOpen(chosenTab),
+					fully_loaded: true,
+				})
 			})
 		} else {
 			this.props.history.push('/')

@@ -195,3 +195,36 @@ export const getEncryptedS3Image = (url, cognito_user_id) => {
 	})
 	return p
 }
+
+
+// export const uploadPDFToS3 = (file, resdata, prefix) => {
+// 	const p = new Promise((res, rej) => {
+// 		const S3 = new AWS_S3()
+// 		const fileName = `${file.name}`;
+// 		// const timestamp = new Date().getTime()/1000
+//
+// 		// S3 Folder-File syntax: corp_id/building_id/asset_type/file_name.png
+// 	//	const imageKey = s3_corporation + prefix + fileName
+// 		const doc = new PDFDocument(resdata)
+// 		console.log(doc)
+// 		// doc.text(resdata)
+// 		doc.end()
+// 		S3.upload({
+// 				Bucket: 'lease-agreements-completed',
+// 		    Key: 'application_contract.pdf',
+// 		    Body: doc,
+// 				contentType: 'application/pdf',
+// 		    ACL: 'public-read'
+// 		}, (err, S3Object) => {
+// 		    if (err) {
+// 		      	const msg = `There was an error uploading your photo: ${err.message}`
+// 		      	// console.log(msg)
+// 		      	rej(msg)
+// 		      	return
+// 		    }
+// 				const msg = `Successfully uploaded original photo ${fileName}`
+// 				res(S3Object)
+// 		})
+// 	})
+// 	return p
+// }

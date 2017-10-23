@@ -29,13 +29,8 @@ class MyApplication extends Component {
   }
 
   componentWillMount() {
-    console.log({
-      tenant_id: this.props.tenant_profile.tenant_id,
-      application_id: this.props.application_id,
-    })
     getTenantApplication(this.props.tenant_profile.tenant_id, this.props.application_id)
     .then((data) => {
-      console.log(data)
       this.setState({
         tenant_application: data
       })
@@ -149,7 +144,7 @@ class MyApplication extends Component {
               as='h3'
               icon='checkmark box'
               content='Application Received By Landlord'
-              subheader={`Submitted On ${moment(this.state.tenant_application.submitted_at).format('LLL')}`}
+              subheader={`Submitted On ${moment(this.state.tenant_application.submitted_at).format('LLL')} EDT`}
             />
           </Message>
         </Form>
