@@ -72,7 +72,13 @@ class ChatInput extends Component {
         ...additionalInfo,
       }
       this.props.sendChatMessage(newMessage)
-      sendChatMessageToLandlord(this.props.tenant_profile.first_name, 'huang.khan74@gmail.com', this.props.selected_building, this.state.inputText)
+      sendChatMessageToLandlord(
+        this.props.tenant_profile.first_name,
+        this.props.tenant_profile.email ? this.props.tenant_profile.email : localStorage.getItem('unauthUser_email'),
+        'huang.khan74@gmail.com',
+        this.props.selected_building,
+        this.state.inputText
+      )
       this.setState({
         inputText: '',
         checked: false

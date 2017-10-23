@@ -6,12 +6,12 @@ import { BUCKET_NAME } from '../aws/aws-profile'
 import { aliasToURL } from '../general/general_api'
 
 
-export const sendChatMessageToLandlord = (tenant_name, landlord_email, building, message) => {
+export const sendChatMessageToLandlord = (tenant_name, tenant_email, landlord_email, building, message) => {
   const ses = new AWS_SES({
 		region: 'us-east-1',
 	})
   const p = new Promise((res, rej) => {
-		const params = createInquiryParamsConfig(tenant_name, landlord_email, building, generateHTMLInquiryEmail(tenant_name, building, message))
+		const params = createInquiryParamsConfig(tenant_name, tenant_email, landlord_email, building, generateHTMLInquiryEmail(tenant_name, building, message))
     console.log(params)
 		// console.log('Sending email with attached params!')
 		AWS.config.credentials.refresh(() => {
@@ -21,7 +21,7 @@ export const sendChatMessageToLandlord = (tenant_name, landlord_email, building,
 			  	 // console.log(err, err.stack); // an error occurred
 			  	 rej(err)
 			  } else {
-			  	// console.log(data);           // successful response
+			  	console.log(data);           // successful response
 				res('Success! Email sent')
 			  }
 			})
@@ -30,19 +30,23 @@ export const sendChatMessageToLandlord = (tenant_name, landlord_email, building,
 	return p
 }
 
-const createInquiryParamsConfig = (tenant_name, landlord_email, building, HTML_Email) => {
+const createInquiryParamsConfig = (tenant_name, tenant_email, landlord_email, building, HTML_Email) => {
+
+  // tenant_email --> The sender (to be hidden from receiver)
+  // inquiries@rentburrow-messaging.com --> the email server
+  // landlord_email --> The target for inquiries@rentburrow-messaging.com
+
   const params = {
 	  Destination: { /* required */
 	    BccAddresses: [
-	      'email.records.rentburrow@gmail.com',
 	      /* more items */
 	    ],
 	    CcAddresses: [
 	      /* more items */
 	    ],
 	    ToAddresses: [
-	      landlord_email
 	      /* more items */
+        'inquiries@rentburrow-messaging.com'
 	    ]
 	  },
 	  Message: { /* required */
@@ -57,18 +61,17 @@ const createInquiryParamsConfig = (tenant_name, landlord_email, building, HTML_E
 	      // }
 	    },
 	    Subject: { /* required */
-	      Data: tenant_name + ' asked a question about ' + building.building_address, /* required */
+	      Data: ' - ' + tenant_name + ' asked a question about ' + building.building_address, /* required */
 	      Charset: 'UTF-8'
 	    }
 	  },
-	  Source: 'email.records.rentburrow@gmail.com', /* required */
+	  Source: 'inquiries@rentburrow-messaging.com', /* required */
 	  // ConfigurationSetName: 'STRING_VALUE',
 	  ReplyToAddresses: [
-	      landlord_email,
-	      'email.records.rentburrow@gmail.com'
+	      'inquiries@rentburrow-messaging.com',
 	    /* more items */
 	  ],
-	  ReturnPath: 'email.records.rentburrow@gmail.com',
+	  ReturnPath: 'inquiries@rentburrow-messaging.com',
 	  // ReturnPathArn: 'STRING_VALUE',
 	  // SourceArn: 'STRING_VALUE',
 	  Tags: [
