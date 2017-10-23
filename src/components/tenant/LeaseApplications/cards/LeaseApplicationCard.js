@@ -68,8 +68,8 @@ class LeaseApplicationCard extends Component {
   }
 
   renderStatusText() {
-    if (this.state.app_details && (this.state.app_details.doc_status !== null)) {
-      return `STATUS:  + ${this.state.app_details.doc_status}`
+    if (this.state.app_details && (this.state.app_details.doc_status === 'document.completed')) {
+      return `STATUS: COMPLETE`
     } else {
       return 'STATUS: PENDING'
     }
