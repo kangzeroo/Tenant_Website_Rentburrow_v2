@@ -48,7 +48,7 @@ class SuitePreferencesCard extends Component {
           {
             this.state.suites.slice(0, 3).map((suite) => {
               return (
-                <Card key={suite.tenant_id} style={comStyles().suiteCard}>
+                <Card key={suite.suite_style_id} style={comStyles().suiteCard}>
                   <div style={comStyles().suiteText} >
                     <Header
                       as='h2'

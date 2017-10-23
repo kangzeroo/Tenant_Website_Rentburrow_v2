@@ -31,7 +31,7 @@ import BuildingPage from './building/BuildingPage'
 import SubletPage from './sublets/SubletPage'
 import TenantAccount from './tenant/TenantAccount'
 import SubletApplications from './tenant/SubletApplications/TenantSubletApplications'
-import LeaseApplications from './tenant/LeaseApplications/TenantLeaseApplications'
+import TenantLeaseApplications from './tenant/LeaseApplications/TenantLeaseApplications'
 import TenantSettings from './tenant/TenantSettings'
 import SubletApplication from './contracts/sublets/SubletApplication'
 import LeaseApplication from './contracts/leases/LeaseApplication'
@@ -286,8 +286,8 @@ class AppRoot extends Component {
 
                 <Route exact path='/account' component={TenantAccount} />
                 <Route exact path='/sublet_applications' component={SubletApplications} />
-                <Route exact path='/lease_applications' component={LeaseApplications} />
-                <Route exact path='/lease_applications/applications/:group_id' component={LeaseApplicationPage} />
+                <Route exact path='/lease_applications' component={TenantLeaseApplications} />
+                <Route exact path='/applications/lease/:group_id' component={LeaseApplicationPage} />
                 <Route exact path='/applications/subletee/:subletee_id' component={SentApplicationPage} />
                 <Route exact path='/applications/subletor/:subletor_id' component={ReceivedApplicationPage} />
                 <Route exact path='/settings' component={TenantSettings} />

@@ -51,39 +51,42 @@ class LeaseApplicationPage extends Component {
 
   componentWillMount() {
     const pathname = this.props.location.pathname
-    const group_id = pathname.slice(pathname.indexOf('/lease_applications/applications/') + '/lease_applications/applications/'.length)
+    const group_id = pathname.slice(pathname.indexOf('/applications/lease/') + '/applications/lease/'.length)
 
-    if (authenticateTenant(this.props.tenant_profile) && this.authenticate(this.props.tenant_profile.tenant_id, group_id)) {
+    userInGroup(this.props.tenant_profile.tenant_id, group_id)
+    .then((data) => {
+      if (authenticateTenant(this.props.tenant_profile) && data.user_in_group) {
 
-      this.setState({
-        loading: true,
-      })
+        this.setState({
+          loading: true,
+        })
 
-      getGroupApplication(group_id)
-      .then((data) => {
-        this.setState({
-          group_app: data
+        getGroupApplication(group_id)
+        .then((data) => {
+          this.setState({
+            group_app: data
+          })
+          return getBuildingById(data.building_id)
         })
-        return getBuildingById(data.building_id)
-      })
-      .then((data) => {
-        this.setState({
-          building: data,
+        .then((data) => {
+          this.setState({
+            building: data,
+          })
+          return getMyApplication({
+            tenant_id: this.props.tenant_profile.tenant_id,
+            group_id: group_id
+          })
         })
-        return getMyApplication({
-          tenant_id: this.props.tenant_profile.tenant_id,
-          group_id: group_id
+        .then((data) => {
+          this.setState({
+            application: data,
+          })
+          this.newPandadocSession(data)
         })
-      })
-      .then((data) => {
-        this.setState({
-          application: data,
-        })
-        this.newPandadocSession(data)
-      })
-		} else {
-			this.props.history.push('/')
-		}
+  		} else {
+  			this.props.history.push('/')
+  		}
+    })
   }
 
   newPandadocSession(application) {
@@ -108,15 +111,11 @@ class LeaseApplicationPage extends Component {
         })
 			})
     } else {
+      this.setState({
+        loaded: true,
+      })
       console.log('session still available')
     }
-  }
-
-  authenticate(group_id, tenant_id) {
-    return userInGroup(tenant_id, group_id)
-    .then((data) => {
-      return data.user_in_group
-    })
   }
 
   goBack() {
@@ -169,35 +168,35 @@ class LeaseApplicationPage extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <Card raised fluid style={comStyles().card_style}>
+          <Card raised fluid style={comStyles().card_style}>
+            <div style={comStyles().headerContainer} >
+              <Button
+                basic
+                primary
+                icon='chevron left'
+                content='Back'
+                onClick={() => this.goBack()}
+                style={comStyles().go_back_button}
+              />
+              <Header
+                as='h2'
+                icon='building'
+                content={this.state.building.building_alias + ' Application'}
+                subheader={this.state.building.building_address}
+              />
             <Button
-              basic
               primary
-              icon='chevron left'
-              content='Back'
-              onClick={() => this.goBack()}
-              style={comStyles().go_back_button}
+              icon='building outline'
+              content='Explore Building'
+              onClick={() => this.goToBuilding(this.state.building.building_alias)}
+              style={comStyles().explore_building_button}
             />
-            <Header
-              as='h2'
-              icon='building'
-              content={this.state.building.building_alias + ' Application'}
-              subheader={this.state.building.building_address}
-            />
-
-          <Button
-            primary
-            icon='building outline'
-            content='Explore Building'
-            onClick={() => this.goToBuilding(this.state.building.building_alias)}
-            style={comStyles().explore_building_button}
-          />
+          </div>
         </Card>
         <div style={comStyles().tabsContainer} >
           <Tab
             menu={{ secondary: true, pointing: true }}
             panes={this.renderTabs()}
-            vertical
           />
         </div>
 			</div>
@@ -240,16 +239,19 @@ const comStyles = () => {
 	return {
 		container: {
       display: 'flex',
-      flexDirection: 'column',
-      margin: ''
+      flexDirection: 'column'
 		},
-    card_style: {
+    headerContainer: {
+      width: '100%',
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-			padding: '10px 20px 10px 10px',
+			padding: '10px 20px 10px 20px',
       margin: 'auto',
+    },
+    card_style: {
+      width: '100%'
 		},
     header_left: {
       display: 'flex',

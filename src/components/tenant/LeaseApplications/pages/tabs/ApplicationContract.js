@@ -11,38 +11,40 @@ import {
   Button,
   Header,
 } from 'semantic-ui-react'
-
+import {
+  downloadContract,
+} from '../../../../../api/pandadoc/pandadoc_api'
 
 class ApplicationContract extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      pdf: ''
+    }
+  }
+
+  componentWillMount() {
+    console.log(this.props.application)
+  }
+
+  downloadApplicationContract() {
+    downloadContract(this.props.application.doc_id)
+    .then((data) => {
+      console.log(data)
+      this.setState({
+        pdf: data
+      })
+    })
+  }
 
 	render() {
 		return (
 			<div style={comStyles().container}>
         <div style={comStyles().headerContainer} >
-          <div style={comStyles().headerButtonsContainer} >
-            <Button
-              primary
-              basic
-              icon='chevron left'
-              content='back'
-              onClick={() => this.goBack()}
-            />
-            {
-              this.state.link === null || this.state.link === ''
-              ?
-              null
-              :
-              <Button
-                primary
-                icon='cloud download'
-                content='Download Contract'
-                disabled={this.state.application.doc_status !== 'complete'}
-              />
-            }
-          </div>
           <div style={comStyles().headerStatus}>
             {
-              this.state.application.doc_status === 'complete'
+              this.props.application.doc_status === 'complete'
               ?
               <Header
                 as='h2'
@@ -54,12 +56,28 @@ class ApplicationContract extends Component {
               <Header
                 as='h2'
                 icon='wait'
-                content='Status: WAIT'
+                content='Status: PENDING'
                 subheader='Waiting for signatures from all recipients'
               />
             }
           </div>
+          <div style={comStyles().headerButtonsContainer} >
+            <Button
+              primary
+              icon='cloud download'
+              content='Download Contract'
+              onClick={() => this.downloadApplicationContract()}
+            />
+          </div>
         </div>
+        <div style={comStyles().contractContainer} >
+					<iframe
+						src={this.props.application.contract_link}
+						height={`900px`}
+						width={`100%`}
+					>
+					</iframe>
+				</div>
 			</div>
 		)
 	}
@@ -101,6 +119,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      height: '1100px'
 		},
     headerContainer: {
       display: 'flex',
@@ -117,6 +136,7 @@ const comStyles = () => {
 			margin: '30px',
 		},
     contractContainer: {
+      margin: '30px auto',
 			padding: '10px 100px 10px 100px',
 			height: '90%',
 			width: '100%',
