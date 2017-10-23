@@ -42,7 +42,13 @@ class WitnessForm extends Component {
 	  }
 
 		this.why_sign_online = [
-			{ index: 1, icon: 'legal', title: 'To add legitimacy', description: 'A witness is someone who can vouch that you knowingly signed the contract. Having a witness to a contract is important because it adds an extra layer of verification that the parties involved knew what they were getting themselves into. You can add your parents, friends or guardian as your witness.' },
+			{ index: 1, icon: 'home', title: 'Your application will go straight to the landlord', description: 'They will review your application and decide if they want to approve you. Your chances of success are high as the only requirement is that you are a student. If the landlord has any additional questions, they will reach out to you by email or phone.' },
+			{ index: 2, icon: 'hourglass half', title: 'How long will this take?', description: 'Applying is very fast, approximately 5 minutes. After the landlord approves your application, you will be instructued to sign the final lease. Most of it will already be filled out for you based on the information you enter here. The entire process should not take more than 1 day.' },
+			{ index: 3, icon: 'shield', title: 'Is this safe?', description: 'Yes it is safe and secure. Your information is only sent to the landlord for processing and all information is encrypted with SSL in-transit and AES-256bit encryption at rest. Your security is backed by Amazon Web Services.' },
+			{ index: 4, icon: 'question', title: 'What if I have questions?', description: 'You can message the landlord directly using our in-app chat. The landlord will receive an email copy and reply back to you as soon as possible, so check your email or in-app chat located on the bottom right hand corner.' },
+			{ index: 5, icon: 'group', title: 'Can I apply as a group?', description: 'Yes absolutely. There will be a link you can share with your roommates. When they open the link they will automatically be added to your group.' },
+			{ index: 6, icon: 'money', title: 'How do I pay?', description: 'You will pay through the landlord as you normally would. Depending on the landlord, your payment options are by cheque, debit card, wire transfer, credit card or cash.' },
+			{ index: 7, icon: 'user cancel', title: 'Can I cancel an application after submitting?', description: 'You are legally able to back out, but this is very frowned upon. If you are at this step, you should have already made a decision and be ready to sign and pay. Canceling a lease application may get you a bad reputation, so do not back out of an application.' },
 		]
 	}
 
@@ -116,18 +122,37 @@ class WitnessForm extends Component {
 							</Form.Field>*/}
 							<Card fluid style={comStyles().header_card_style}>
 								<Header
+									fluid
 									as='h2'
 									icon='building'
-									content='Lease Application'
-									subheader='Apply to live here'
+									content='Apply To Live Here'
+									subheader={this.props.building.building_address}
 								/>
+								<div style={comStyles().next_button_div}>
+									{
+										this.state.submitted
+										?
+										<div style={comStyles().hidden_loading}>
+											<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+										</div>
+										:
+										<Button
+											primary
+											fluid
+											size='huge'
+											content='Begin'
+											onClick={() => this.props.goToNextForm(this.state)}
+											style={comStyles().begin}
+										/>
+									}
+								</div>
 							</Card>
 
 						</div>
 						<div style={comStyles().tips_contents}>
 							<Accordion fluid styled>
 								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
-									What is a witness for?
+									How does this work?
 								</Accordion.Title>
 								{
 									this.why_sign_online.map((why) => {
@@ -148,22 +173,6 @@ class WitnessForm extends Component {
 									})
 								}
 							</Accordion>
-							{
-								this.state.submitted
-								?
-								<div style={comStyles().hidden_loading}>
-									<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-								</div>
-								:
-								<Button
-									primary
-									fluid
-									size='massive'
-									content='Begin'
-									onClick={() => this.props.goToNextForm(this.state)}
-									style={comStyles().begin}
-								/>
-							}
 						</div>
 					</div>
 				</div>
@@ -250,6 +259,9 @@ const comStyles = () => {
 		},
 		header_card_style: {
 			padding: '20px',
+			display: 'flex',
+			flexDirection: 'row',
+			position: 'relative',
 		},
 		dates: {
 			display: 'flex',
@@ -336,6 +348,12 @@ const comStyles = () => {
 		},
 		begin: {
 			margin: '30px auto',
+		},
+		next_button_div: {
+			width: '30%',
+			position: 'absolute',
+			right: '10px',
+			bottom: '0px',
 		}
 	}
 }

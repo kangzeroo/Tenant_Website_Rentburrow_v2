@@ -44,7 +44,11 @@ class SubmitLeaseApplication extends Component {
 	  }
 
 		this.why_sign_online = [
-			{ index: 1, icon: 'protect', title: 'It\'s Safer', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. We also require you to upload your student card so that both parties know that they are renting with students and not outsiders. You must be 18 or older to sign a contract.' },
+			{ index: 1, icon: 'home', title: 'What are my next steps?', description: 'The landlord will receive your application and assign your group a suite and room based on your preferences. Then a contract will be generated and sent to your email, and your guarantors email. Everyone will digitally sign their portion of the lease agreement, and when everyone has signed, the lease is complete! The landlord will contact you to explain how to pay.' },
+			{ index: 2, icon: 'time', title: 'How long will the landlord take to respond?', description: 'The landlord will immediately receive your application. It should take less than a day to review, depending on the landlord. Typically you will get a response the next day.' },
+			{ index: 3, icon: 'money', title: 'When do I have to pay?', description: 'After all the paperwork is complete, you can pay according to the landlords instructions.' },
+			{ index: 4, icon: 'privacy', title: 'When do I get my keys?', description: 'The landlord will coordinate with you an appropriate time to get your keys.' },
+			{ index: 5, icon: 'legal', title: 'How do I know everything is finalized?', description: 'When everyone has signed the digital lease agreement and you have paid the necessary deposits, the landlord will notify you that you are done.' },
 		]
 		this.terms_and_conditions = 'Terms and conditions are...'
 	}
@@ -74,6 +78,7 @@ class SubmitLeaseApplication extends Component {
 				// this.props.history.push('/applications')
 				this.props.sendSummaryEmail()
 				generateLeaseContract(this.props.my_application_id)
+				this.props.history.push('/lease_applications')
 			})
 		} else {
 			this.setState({
@@ -120,8 +125,8 @@ class SubmitLeaseApplication extends Component {
 							<Form style={comStyles().form}>
 
 								<Accordion fluid styled>
-									<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
-										Why Sign Contracts Online?
+									<Accordion.Title active={this.stateactiveIndex === 0} style={comStyles().why_sign_online_title}>
+										Ready To Submit!
 									</Accordion.Title>
 									{
 										this.why_sign_online.map((why) => {
@@ -167,7 +172,7 @@ class SubmitLeaseApplication extends Component {
 											this.state.submitted
 											?
 											<div style={comStyles().hidden_loading}>
-												Submitted Application.
+												Successfullly Submitted Application.
 											</div>
 											:
 											<Button
