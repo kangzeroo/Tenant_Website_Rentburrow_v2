@@ -155,6 +155,7 @@ class LeaseApplication extends Component {
     } else {
       createGroup(this.props.tenant_profile.tenant_id, this.state.building.corporation_id, this.state.building.building_id)
       .then((data) => {
+        console.log(data)
         this.setState({
           group_id: data.group_id
         })
@@ -319,6 +320,8 @@ class LeaseApplication extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+        <div style={imageBackground(this.props.applied_building.cover_photo).grayscale}>
+        </div>
         {
           this.state.loaded
           ?
@@ -328,7 +331,7 @@ class LeaseApplication extends Component {
                 this.generateSteps()
               }
             </div>
-            <div style={imageBackground(this.props.applied_building.cover_photo).form_output}>
+            <div style={imageBackground().form_output}>
               {
                 this.generateForm()
               }
@@ -404,6 +407,9 @@ const comStyles = () => {
     inner_container: {
       display: 'flex',
       flexDirection: 'row',
+      position: 'absolute',
+      width: '100vw',
+      height: '93vh',
     },
     hidden_loading: {
       position: 'absolute',
@@ -442,8 +448,6 @@ const imageBackground = (img, open) => {
       minHeight: '93vh',
       maxHeight: '93vh',
       // overflowY: 'scroll',
-      backgroundImage: `url('${img}')`,
-      backgroundSize: 'cover',
       padding: '20px 20px 50px 150px',
       ...form_output_styles,
     },
@@ -453,7 +457,18 @@ const imageBackground = (img, open) => {
       justifyContent: 'center',
       ...sidebar_styles,
     },
+    grayscale: {
+      backgroundImage: `url('${img}')`,
+      backgroundSize: 'cover',
+      position: 'absolute',
+      width: '100vw',
+      height: '93vh',
+      filter: 'grayscale(20%)',
+    },
     steps: {
+    },
+    condom: {
+      filter: 'none',
     }
   }
 }
