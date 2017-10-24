@@ -41,6 +41,11 @@ class SubmitLeaseApplication extends Component {
       modal_name: '',
       context: {},
 			parent_component_saved: true,
+
+			error: false,
+			error_message: '',
+
+			submitting: false,
 	  }
 
 		this.why_sign_online = [
@@ -68,17 +73,25 @@ class SubmitLeaseApplication extends Component {
 	}
 
 	submitApplication() {
+		this.setState({ submitting: true, })
 		if (this.state.agree_to_terms) {
 			submitApplicationToDb(this.props.my_application_id)
 			.then(() => {
-				this.setState({
-					submitted: true,
-					error_messages: [],
-				})
-				// this.props.history.push('/applications')
 				this.props.sendSummaryEmail()
-				generateLeaseContract(this.props.my_application_id)
-				this.props.history.push('/lease_applications')
+				return generateLeaseContract(this.props.my_application_id)
+			})
+			.then((data) => {
+				console.log(data)
+				setTimeout(() => {
+					this.props.history.push('/lease_applications')
+				}, 2000)
+				// this.props.history.push('/lease_applications')
+			})
+			.catch((err) => {
+				this.setState({
+					error: true,
+					error_message: 'Failed to Submit Application'
+				})
 			})
 		} else {
 			this.setState({
@@ -169,10 +182,11 @@ class SubmitLeaseApplication extends Component {
 										}
 									</Form.Field>
 									{
-											this.state.submitted
+											this.state.submitting
 											?
 											<div style={comStyles().hidden_loading}>
-												Successfullly Submitted Application.
+												<p>Submitting Application...</p>
+												<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
 											</div>
 											:
 											<Button
@@ -181,6 +195,15 @@ class SubmitLeaseApplication extends Component {
 												content='Submit Application'
 												onClick={() => this.submitApplication()}
 											/>
+									}
+									{
+										this.state.error
+										?
+										<div style={comStyles().error_msg} >
+											{this.state.error_message}
+										</div>
+										:
+										null
 									}
 								</Card>
 
@@ -354,6 +377,12 @@ const comStyles = () => {
 			padding: '30px',
 			fontSize: '1.3rem',
 			fontWeight: 'bold',
+		},
+		error_msg: {
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
 		}
 	}
 }
