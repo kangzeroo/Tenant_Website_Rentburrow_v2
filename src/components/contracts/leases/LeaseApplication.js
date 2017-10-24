@@ -158,6 +158,8 @@ class LeaseApplication extends Component {
         this.setState({
           group_id: data.group_id
         })
+        console.log(data)
+        this.props.saveMyApplicationToRedux(data.application_id)
         localStorage.setItem('leasing_group_id', data.group_id)
       })
     }
@@ -177,6 +179,7 @@ class LeaseApplication extends Component {
 
   goToNextForm(form_key, state) {
     let next_form_key = 'begin'
+    console.log(form_key)
     this.setState({
       saved_form_state: {
         ...this.state.saved_form_state,
@@ -188,6 +191,7 @@ class LeaseApplication extends Component {
         next_form_key = this.state.required_forms[index + 1].key
       }
     })
+    console.log(next_form_key)
     this.clickedFormStep(next_form_key)
   }
 
@@ -416,18 +420,18 @@ const comStyles = () => {
 
 const imageBackground = (img, open) => {
   let form_output_styles = {
-    minWidth: '100%',
-    maxWidth: '100%',
+    minWidth: '100vw',
+    maxWidth: '100vw',
   }
   let sidebar_styles = {
-    minWidth: '0%',
-    maxWidth: '0%',
+    minWidth: '0vw',
+    maxWidth: '0vw',
   }
   if (open) {
-    sidebar_styles.midWidth = '15%'
-    sidebar_styles.maxWidth = '15%'
-    form_output_styles.midWidth = '85%'
-    form_output_styles.maxWidth = '85%'
+    sidebar_styles.midWidth = '15vw'
+    sidebar_styles.maxWidth = '15vw'
+    form_output_styles.midWidth = '85vw'
+    form_output_styles.maxWidth = '85vw'
   }
   return {
     form_output: {
