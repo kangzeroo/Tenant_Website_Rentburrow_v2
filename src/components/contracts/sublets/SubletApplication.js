@@ -237,7 +237,7 @@ class SubletApplication extends Component {
 		return (
 			<div style={comStyles().container}>
 				{
-					this.state.current_form === 'loading' && !this.props.tenant_profile.tenant_id
+					this.state.current_form === 'loading'
 					?
 					<div style={comStyles().hidden_loading}>
 						<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
