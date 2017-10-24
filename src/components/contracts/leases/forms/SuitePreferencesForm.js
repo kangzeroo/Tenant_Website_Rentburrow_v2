@@ -20,7 +20,7 @@ import {
 	Header
 } from 'semantic-ui-react'
 import { xMidBlue } from '../../../../styles/base_colors'
-import { getAvailableSuites } from '../../../../api/building/building_api'
+import { getAvailableSuites, getSuiteImgs, } from '../../../../api/building/building_api'
 import { saveRankingsToDb, getSuiteRankings, } from '../../../../api/group/group_api'
 import SuitePreviewsForSelection from '../support/SuitePreviewsForSelection'
 
@@ -61,24 +61,32 @@ class SuitePreferenceForm extends Component {
 		getSuiteRankings(group_id)
 		.then((data) => {
 			if (data.length > 0) {
-				this.setState({
-					available_suites: data.map((suite) => {
+				const arrayOfPromises = data.map((suite) => {
+					return getSuiteImgs(suite.sample_suite_id)
+					.then((hello) => {
 						return {
 							suite_id: suite.sample_suite_id,
 							suite_style_id: suite.suite_style_id,
 							suite_alias: suite.suite_alias,
 							rank: suite.ranking,
 							cover_photo: suite.cover_photo,
-							imgs: suite.imgs,
+							imgs: hello.imgs,
 						}
+					})
+				})
+
+				Promise.all(arrayOfPromises)
+				.then((suites) => {
+					this.setState({
+						available_suites: suites,
 					})
 				})
 			} else {
 				getAvailableSuites({
 					building_id: this.props.building.building_id,
-				}).then((data) => {
+				}).then((hello) => {
 					this.setState({
-						available_suites: data.map((suite, index) => {
+						available_suites: hello.map((suite, index) => {
 							return {
 								...suite,
 								rank: index + 1,
@@ -184,7 +192,6 @@ class SuitePreferenceForm extends Component {
 					suite_alias: suite.suite_alias,
 					ranking: suite.rank,
 					cover_photo: suite.cover_photo,
-					imgs: suite.imgs,
 				})
 			})
 			Promise.all(arrayOfPromises).then((res, rej) => {
@@ -358,14 +365,14 @@ class SuitePreferenceForm extends Component {
 						</div>
 						<div style={comStyles().tips_contents}>
 							<Accordion styled>
-								<Accordion.Title active={this.stateactiveIndex === 0}  style={comStyles().why_sign_online_title}>
+								<Accordion.Title active={this.stateactiveIndex === 0} style={comStyles().why_sign_online_title}>
 									Why are we ranking suites?
 								</Accordion.Title>
 								{
 									this.why_sign_online.map((why) => {
 										return (
 											<div key={why.index}>
-												<Accordion.Title active={this.state.activeIndex === why.index}  onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
+												<Accordion.Title active={this.state.activeIndex === why.index} onClick={() => this.setState({ activeIndex: why.index })} style={comStyles().why_title}>
 													<Icon name={why.icon} />
 													&nbsp; &nbsp;
 													{ why.title }

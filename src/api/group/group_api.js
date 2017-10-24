@@ -132,9 +132,9 @@ export const getSuiteRankings = (group_id) => {
   return p
 }
 
-export const saveRankingsToDb = ({ group_id, suite_style_id, suite_alias, ranking, sample_suite_id, cover_photo, imgs, }) => {
+export const saveRankingsToDb = ({ group_id, suite_style_id, suite_alias, ranking, sample_suite_id, cover_photo, }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/save_suite_rankings`, { group_id, suite_style_id, suite_alias, ranking, sample_suite_id, cover_photo, imgs, })
+    axios.post(`${CONTRACTING_MICROSERVICE}/save_suite_rankings`, { group_id, suite_style_id, suite_alias, ranking, sample_suite_id, cover_photo, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
