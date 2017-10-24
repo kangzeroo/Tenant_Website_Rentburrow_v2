@@ -29,6 +29,7 @@ class StepByStepCard extends Component {
 
   signAndPayOnline() {
     // this.toggleModal(true, 'sign_pay_online')
+    localStorage.removeItem('leasing_group_id')
     window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
   }
 
@@ -105,8 +106,6 @@ class StepByStepCard extends Component {
     return (
       <div style={comStyles().share_div}>
         <Input
-          action={{ color: 'teal', labelPosition: 'left', icon: 'external share', content: 'Share Link' }}
-          actionPosition='left'
           fluid
           value={window.location}
         />

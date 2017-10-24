@@ -198,11 +198,11 @@ class GuarantorForm extends Component {
 		let ok_to_proceed = true
 		const error_messages = []
 		if (!this.state.guarantor_not_possible) {
-			if (this.state.first_name.length === 0) {
+			if (this.state.first_name && this.state.first_name.length === 0) {
 				error_messages.push('Please enter your guarantors name')
 				ok_to_proceed = false
 			}
-			if (this.state.email.length === 0 || !validateEmail(this.state.email)) {
+			if (this.state.email && (this.state.email.length === 0 || !validateEmail(this.state.email))) {
 				error_messages.push('Please enter a valid email')
 				ok_to_proceed = false
 			}
