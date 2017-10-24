@@ -15,6 +15,9 @@ import {
 import {
   getSuiteRankings,
 } from '../../../../../api/leasing/tenant_form_api'
+import {
+  getSuiteImgs,
+} from '../../../../../api/building/building_api'
 import SingularImageGallery from '../../../../image/SingularImageGallery'
 
 class SuitePreferencesCard extends Component {
@@ -29,8 +32,25 @@ class SuitePreferencesCard extends Component {
   componentWillMount() {
     getSuiteRankings(this.props.group_id)
     .then((data) => {
-      this.setState({
-        suites: data
+      const arrayOfPromises = data.map((suite) => {
+        return getSuiteImgs(suite.sample_suite_id)
+        .then((hello) => {
+          return {
+            suite_id: suite.sample_suite_id,
+            suite_style_id: suite.suite_style_id,
+            suite_alias: suite.suite_alias,
+            rank: suite.ranking,
+            cover_photo: suite.cover_photo,
+            imgs: hello.imgs,
+          }
+        })
+      })
+
+      Promise.all(arrayOfPromises)
+      .then((suites) => {
+        this.setState({
+          suites: suites,
+        })
       })
     })
   }
@@ -38,12 +58,12 @@ class SuitePreferencesCard extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+        <Header
+          as='h2'
+          content='Suite Preferences'
+          subheader='From top to lowest choice'
+        />
 				<Card.Group>
-          <Header
-            as='h2'
-            content='Suite Preferences'
-            subheader='From top to lowest choice'
-          />
           <div style={comStyles().group_members_container}>
           {
             this.state.suites.slice(0, 3).map((suite) => {
@@ -109,12 +129,12 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
-      justifyContent: 'center'
+      justifyContent: 'center',
 		},
     suiteCard: {
       display: 'flex',
       flexDirection: 'row',
-      width: '95%',
+      width: '1000px',
     },
     suiteText: {
       display: 'flex',
