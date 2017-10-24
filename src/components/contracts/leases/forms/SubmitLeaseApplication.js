@@ -184,9 +184,19 @@ class SubmitLeaseApplication extends Component {
 									{
 											this.state.submitting
 											?
-											<div style={comStyles().hidden_loading}>
-												<p>Submitting Application...</p>
-												<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+											<div>
+											{
+												this.state.error
+												?
+												<div style={comStyles().error_msg} >
+													{this.state.error_message}
+												</div>
+												:
+												<div style={comStyles().hidden_loading}>
+													<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+													<p>Submitting Application...</p>
+												</div>
+											}
 											</div>
 											:
 											<Button
@@ -195,15 +205,6 @@ class SubmitLeaseApplication extends Component {
 												content='Submit Application'
 												onClick={() => this.submitApplication()}
 											/>
-									}
-									{
-										this.state.error
-										?
-										<div style={comStyles().error_msg} >
-											{this.state.error_message}
-										</div>
-										:
-										null
 									}
 								</Card>
 
@@ -365,7 +366,7 @@ const comStyles = () => {
 		},
 		hidden_loading: {
 			display: 'flex',
-			flexDirection: 'row',
+			flexDirection: 'column',
 			justifyContent: 'center',
 			alignItems: 'center',
 			padding: '20px',
