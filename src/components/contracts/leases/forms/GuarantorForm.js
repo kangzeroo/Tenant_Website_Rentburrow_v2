@@ -58,7 +58,7 @@ class GuarantorForm extends Component {
 	    // permanent_resident: false,
 
 			guarantor_is_in_canada: false,
-			guarantor_not_possible: false,
+			lacking_guarantor: false,
 			submitted: false,
 			error_messages: [],
 			activeIndex: 1,
@@ -80,17 +80,17 @@ class GuarantorForm extends Component {
 	componentWillMount() {
 		getGuarantorInfo(this.props.my_application_id, this.props.tenant_profile.tenant_id)
 		.then((data) => {
-			this.setState({
-				guarantor_id: data.guarantor_id,
-
-				first_name: data.first_name,
-		    last_name: data.last_name,
-				email: data.email,
-				relationship: data.relationship,
-				guarantor_is_in_canada: data.guarator_is_in_canada ? data.guarator_is_in_canada : false,
-				guarantor_not_possible: data.guarantor_not_possible ? data.guarantor_not_possible : false,
-			})
-			console.log(this.state)
+			if (data) {
+				this.setState({
+					guarantor_id: data.guarantor_id,
+					first_name: data.first_name,
+			    last_name: data.last_name,
+					email: data.email,
+					relationship: data.relationship,
+					guarantor_is_in_canada: data.guarator_is_in_canada ? data.guarator_is_in_canada : false,
+					lacking_guarantor: data.lacking_guarantor ? data.lacking_guarantor : false,
+				}, () => console.log(this.state))
+			}
 		})
 	}
 
@@ -172,7 +172,7 @@ class GuarantorForm extends Component {
 				email: this.state.email,
 				relationship: this.state.relationship,
 				guarantor_is_in_canada: this.state.guarantor_is_in_canada,
-				guarantor_not_possible: this.state.guarantor_not_possible,
+				lacking_guarantor: this.state.lacking_guarantor,
 			})
 			return insertGuarantorProfile({
 				guarantor_id: this.state.guarantor_id,
@@ -183,7 +183,7 @@ class GuarantorForm extends Component {
 				email: this.state.email,
 				relationship: this.state.relationship,
 				guarantor_is_in_canada: this.state.guarantor_is_in_canada,
-				guarantor_not_possible: this.state.guarantor_not_possible,
+				lacking_guarantor: this.state.lacking_guarantor,
 			})
 			.then((data) => {
 				this.props.goToNextForm(this.state)
@@ -197,7 +197,7 @@ class GuarantorForm extends Component {
 	validateForm() {
 		let ok_to_proceed = true
 		const error_messages = []
-		if (!this.state.guarantor_not_possible) {
+		if (!this.state.lacking_guarantor) {
 			if (this.state.first_name && this.state.first_name.length === 0) {
 				error_messages.push('Please enter your guarantors name')
 				ok_to_proceed = false
@@ -210,20 +210,41 @@ class GuarantorForm extends Component {
 				submitted: false,
 				error_messages: error_messages
 			})
+		} else if (this.state.guarantor_is_in_canada) {
+			if (this.state.first_name && this.state.first_name.length === 0) {
+				error_messages.push('Please enter your guarantors name')
+				ok_to_proceed = false
+			}
+			if (this.state.email && (this.state.email.length === 0 || !validateEmail(this.state.email))) {
+				error_messages.push('Please enter a valid email')
+				ok_to_proceed = false
+			}
+			this.setState({
+				submitted: false,
+				error_messages: error_messages
+			})
+		} else {
+			error_messages.push('You need to verify that your guarantor, or let us know you do not have a guarantor')
+			ok_to_proceed = false
+			this.setState({
+				submitted: false,
+				error_messages: error_messages
+			})
 		}
+		console.log(ok_to_proceed)
 		return ok_to_proceed
 	}
 
 	toggleGuarantorNotPossible(event, data) {
 		if (data.checked) {
 			this.setState({
-				guarantor_not_possible: !this.state.guarantor_not_possible,
+				lacking_guarantor: !this.state.lacking_guarantor,
 				guarantor_is_in_canada: false,
 				error_messages: [],
 			})
 		} else {
 			this.setState({
-				guarantor_not_possible: !this.state.guarantor_not_possible,
+				lacking_guarantor: !this.state.lacking_guarantor,
 				error_messages: [],
 			})
 		}
@@ -263,8 +284,8 @@ class GuarantorForm extends Component {
 						</Form.Field>
 						<Form.Field>
 							<Checkbox
-								onChange={(e, d) => this.toggleGuarantorNotPossible(e, { checked: !d.checked })}
-								checked={this.state.guarantor_not_possible}
+								onChange={(e, d) => this.toggleGuarantorNotPossible(e, { checked: d.checked })}
+								checked={this.state.lacking_guarantor}
 								label='I do not have a Canadian guarantor'
 							/>
 						</Form.Field>
@@ -456,7 +477,7 @@ class GuarantorForm extends Component {
 								/>
 							</Card>
 							{
-								this.state.guarantor_not_possible
+								this.state.lacking_guarantor
 								?
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().no_guarantor_message}>
@@ -466,7 +487,7 @@ class GuarantorForm extends Component {
 									<Form.Field>
 										<Checkbox
 											onChange={(e, d) => this.toggleGuarantorNotPossible(e, d)}
-											checked={!this.state.guarantor_not_possible}
+											checked={!this.state.lacking_guarantor}
 											label='Actually, I do have a Canadian guarantor'
 										/>
 									</Form.Field>
