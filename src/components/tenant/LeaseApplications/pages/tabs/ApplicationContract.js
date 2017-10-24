@@ -136,7 +136,7 @@ const comStyles = () => {
 			margin: '30px',
 		},
     contractContainer: {
-      margin: '30px auto',
+      // margin: '30px auto',
 			padding: '10px 100px 10px 100px',
 			height: '90%',
 			width: '100%',
