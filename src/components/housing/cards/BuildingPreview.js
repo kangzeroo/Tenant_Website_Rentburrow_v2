@@ -44,7 +44,6 @@ class BuildingPreview extends Component {
 
     getNumVirtualTours(this.props.building.building_id)
     .then((data) => {
-      console.log(data)
       this.setState({
         vr_tour_count: parseInt(data.vr_tour_count, 10) + 1,
       })
@@ -72,7 +71,10 @@ class BuildingPreview extends Component {
               image_size='hd'
             />
           </div>
-         <Card.Content style={comStyles().info}>
+         <Card.Content style={comStyles().info} >
+         <div style={comStyles().ribbon}>
+           <Label as='a' color='blue' ribbon='right'>Apply Now</Label>
+         </div>
           <div style={comStyles().details}>
             <Card.Header style={comStyles().headerPrint}>
               <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
@@ -85,14 +87,11 @@ class BuildingPreview extends Component {
             </Card.Description>
             <Button fluid color='blue' content='Explore' size='large' />
           </div>
-          <div style={comStyles().ribbon}>
-            <Label as='a' color='blue' ribbon='right'>Apply Now</Label>
-          </div>
         </Card.Content>
       </Card>
         <div style={comStyles().analyticsContainer} >
           <Statistic>
-            <Statistic.Value color='blue'>
+            <Statistic.Value>
               <Icon name='image' color='blue' />
               {this.state.image_count}
             </Statistic.Value>
@@ -101,7 +100,7 @@ class BuildingPreview extends Component {
             </Statistic.Label>
           </Statistic>
           <Statistic>
-            <Statistic.Value color='blue'>
+            <Statistic.Value>
               <Icon name='simplybuilt' color='blue' />
               {this.state.vr_tour_count}
             </Statistic.Value>
@@ -167,9 +166,10 @@ const comStyles = () => {
       width: '90%',
     },
     ribbon: {
-      display: 'flex',
-      flexDirection: 'column',
-      width: '10%',
+      position: 'absolute',
+      right: '0',
+      top: '30px',
+      zIndex: '999'
     },
 	}
 }
