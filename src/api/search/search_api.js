@@ -106,6 +106,38 @@ export const searchBuildingByAddress = (addr) => {
   return p
 }
 
+export const getAllImagesSizeForSpecificBuilding = (building_id) => {
+  const p = new Promise((res, rej) => {
+    // search for a specific building from backend
+    // axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: building_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_all_images_size_for_specific_building`, { building_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const getNumVirtualTours = (building_id) => {
+  const p = new Promise((res, rej) => {
+    // search for a specific building from backend
+    // axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: building_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_num_virtual_tours`, { building_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 
 export const getSpecificLandlord = ({ building_id }) => {
   const p = new Promise((res, rej) => {

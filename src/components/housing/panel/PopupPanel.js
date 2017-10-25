@@ -16,7 +16,6 @@ import BuildingPreview from '../cards/BuildingPreview'
 import BuildingRow from '../cards/BuildingRow'
 import SubletCard from '../cards/SubletCard'
 
-
 class PopupPanel extends Component {
 
   generateBuildingCard(building) {
