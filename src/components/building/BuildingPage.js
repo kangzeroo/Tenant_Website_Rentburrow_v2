@@ -190,6 +190,7 @@ class BuildingPage extends Component {
 							building={this.state.building}
 							suites={this.state.suites}
 							closeModal={() => this.toggleModal(false)}
+							title='Apply Now'
 						/>
 	        </Modal.Content>
 	      </Modal>

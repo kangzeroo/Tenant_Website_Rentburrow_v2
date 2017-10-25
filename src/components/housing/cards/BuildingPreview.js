@@ -85,14 +85,17 @@ class BuildingPreview extends Component {
             <Card.Description style={comStyles().more_info}>
               <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
             </Card.Description>
-            <Button fluid color='blue' content='Explore' size='large' />
           </div>
+        </Card.Content>
+        <Card.Content style={comStyles().explore_button}>
+          <Button fluid color='blue' content='Explore' size='large' />
         </Card.Content>
       </Card>
         <div style={comStyles().analyticsContainer} >
           <Statistic>
             <Statistic.Value>
               <Icon name='image' color='blue' />
+              &nbsp;
               {this.state.image_count}
             </Statistic.Value>
             <Statistic.Label>
@@ -102,6 +105,7 @@ class BuildingPreview extends Component {
           <Statistic>
             <Statistic.Value>
               <Icon name='simplybuilt' color='blue' />
+              &nbsp;
               {this.state.vr_tour_count}
             </Statistic.Value>
             <Statistic.Label>
@@ -158,6 +162,11 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       // padding: '30px 10px 10px 10px',
+    },
+    explore_button: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'row',
     },
     details: {
       color: 'black',
