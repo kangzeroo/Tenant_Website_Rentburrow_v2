@@ -15,6 +15,7 @@ import {
 	Icon,
 	Header,
 	Container,
+	Label,
 	Button,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
@@ -118,9 +119,11 @@ class BuildingPage extends Component {
 			this.setState({
 				sublets: sublets,
 			})
+			console.log('getSpecificLandlord', this.state.building.building_id)
 			return getSpecificLandlord({ building_id: this.state.building.building_id })
 		})
 		.then((corporation) => {
+			console.log(corporation)
 			this.props.selectCorporation(corporation)
 		})
 	}
@@ -225,10 +228,15 @@ class BuildingPage extends Component {
 						}
 					</div>
 				</div>
-				<div style={comStyles().content_top} >
-					<div style={comStyles().content_left} >
-						<div style={comStyles().building_header} >
-							<h1>Welcome to {this.state.building.building_alias}</h1>
+				<div style={comStyles().content_top}>
+					<div style={comStyles().content_left}>
+						<div style={comStyles().building_header}>
+							<div style={comStyles().welcome_banner}>
+								<div style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</div>
+								<div style={comStyles().welcome_ribbon}>
+									<Label as='a' color='blue' ribbon='right'>Apply Now</Label>
+								</div>
+							</div>
 							<div style={comStyles().description} >
 								{
 									this.state.building.building_desc
@@ -510,6 +518,20 @@ const comStyles = () => {
 			flexDirection: 'column',
 			borderRadius: '2px',
 			padding: '10px',
+		},
+		welcome_banner: {
+			display: 'flex',
+			flexDirection: 'row',
+		},
+		welcome_message: {
+			width: '80%',
+			fontSize: '2rem',
+			fontWeight: 'bold',
+		},
+		welcome_ribbon: {
+			width: '20%',
+			fontSize: '1.5rem',
+			fontWeight: 'bold',
 		},
 		description: {
 			backgroundColor: 'white',

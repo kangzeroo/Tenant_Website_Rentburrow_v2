@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Card,
   Image,
+  Label,
   Button,
 } from 'semantic-ui-react'
 import {
@@ -44,16 +45,21 @@ class BuildingPreview extends Component {
           />
         </div>
         <Card.Content style={comStyles().info}>
-          <Card.Header style={comStyles().headerPrint}>
-            <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
-          </Card.Header>
-          <Card.Meta>
-            {this.props.building.building_address}
-          </Card.Meta>
-          <Card.Description style={comStyles().more_info}>
-            <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
-          </Card.Description>
-          <Button fluid color='blue' content='Explore' size='large' />
+          <div style={comStyles().details}>
+            <Card.Header style={comStyles().headerPrint}>
+              <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
+            </Card.Header>
+            <Card.Meta>
+              {this.props.building.building_address}
+            </Card.Meta>
+            <Card.Description style={comStyles().more_info}>
+              <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
+            </Card.Description>
+            <Button fluid color='blue' content='Explore' size='large' />
+          </div>
+          <div style={comStyles().ribbon}>
+            <Label as='a' color='blue' ribbon='right'>Apply Now</Label>
+          </div>
         </Card.Content>
       </Card>
 		)
@@ -93,6 +99,22 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
-
+    info: {
+      backgroundColor: 'rgba(0,0,0,0)',
+      display: 'flex',
+      flexDirection: 'row',
+      // padding: '30px 10px 10px 10px',
+    },
+    details: {
+      color: 'black',
+      display: 'flex',
+      flexDirection: 'column',
+      width: '90%',
+    },
+    ribbon: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '10%',
+    },
 	}
 }
