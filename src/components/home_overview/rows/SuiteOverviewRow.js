@@ -173,9 +173,9 @@ class SuiteOverviewRow extends Component {
   }
 
   signAndPayOnline() {
-    // this.toggleModal(true, 'sign_pay_online')
-    localStorage.removeItem('leasing_group_id')
-    window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
+    // localStorage.removeItem('leasing_group_id')
+    // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
+    this.props.toggleTemporaryCollectionFrom()
   }
 
 	render() {
@@ -237,6 +237,7 @@ SuiteOverviewRow.propTypes = {
   toggleModal: PropTypes.func.isRequired,   // passed in
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  toggleTemporaryCollectionFrom: PropTypes.func.isRequired,     // passed in
 }
 
 // for all optional props, define a default value

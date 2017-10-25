@@ -29,6 +29,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { xMidBlue } from '../../../../styles/base_colors'
 import { countryOptions, languageOptions } from '../../../../api/leasing/leasing_options'
 import { filterNonImages, uploadImageToS3WithEncryption } from '../../../../api/aws/aws-S3'
+import { validateEmail } from '../../../../api/general/general_api'
 import { saveTenantDetails, getTenantDetails, } from '../../../../api/auth/tenant_api'
 
 class AboutStudentForm extends Component {
@@ -195,6 +196,10 @@ class AboutStudentForm extends Component {
 		}
 		if (this.state.email.length === 0 || this.state.phone.length === 0) {
 			error_messages.push('You must enter your email and phone number')
+			ok_to_proceed = false
+		}
+		if (!validateEmail(this.state.email)) {
+			error_messages.push('The email entered is not valid')
 			ok_to_proceed = false
 		}
 		this.setState({

@@ -114,6 +114,7 @@ class HomeOverview extends Component {
 								building={this.props.building}
 								suite={suite}
 								toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
+								toggleTemporaryCollectionFrom={() => this.props.toggleTemporaryCollectionFrom()}
 							/>
 						)
 					})
@@ -134,6 +135,7 @@ HomeOverview.propTypes = {
   suites: PropTypes.array.isRequired,			// passed in
 	building: PropTypes.object.isRequired,	// passed in
 	promise_array_of_suite_amenities_with_id: PropTypes.array,		// passed in
+	toggleTemporaryCollectionFrom: PropTypes.func.isRequired,			// passed in
 }
 
 // for all optional props, define a default value

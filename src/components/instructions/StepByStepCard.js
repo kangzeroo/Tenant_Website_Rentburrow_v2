@@ -28,9 +28,9 @@ class StepByStepCard extends Component {
 	}
 
   signAndPayOnline() {
-    // this.toggleModal(true, 'sign_pay_online')
-    localStorage.removeItem('leasing_group_id')
-    window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
+    // localStorage.removeItem('leasing_group_id')
+    // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
+    this.props.toggleTemporaryCollectionFrom()
   }
 
   toggleModal(bool, attr, context) {
@@ -248,6 +248,7 @@ StepByStepCard.propTypes = {
   all_suites: PropTypes.array.isRequired,    // passed in
   building: PropTypes.object.isRequired,     // passed in
   applyToLiveAtThisBuilding: PropTypes.func.isRequired,
+  toggleTemporaryCollectionFrom: PropTypes.func.isRequired, // passed in
 }
 
 // for all optional props, define a default value
