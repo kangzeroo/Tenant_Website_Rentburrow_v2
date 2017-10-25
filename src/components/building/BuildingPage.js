@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import uuid from 'uuid'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Route } from 'react-router-dom'
 import {
 	Image,
 	Modal,
@@ -17,6 +17,8 @@ import {
 	Container,
 	Label,
 	Button,
+	Form,
+	Input,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
 import {
@@ -54,6 +56,7 @@ import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 import SingularImageGallery from '../image/SingularImageGallery'
 import SubletsList from '../sublets/SubletsList'
 import DescriptionBox from './DescriptionBox'
+import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 
 
 class BuildingPage extends Component {
@@ -169,6 +172,24 @@ class BuildingPage extends Component {
 	        <Modal.Content>
 						<ImageGallery
 							list_of_images={this.state.images}
+						/>
+	        </Modal.Content>
+	      </Modal>
+	    )
+		} else if (modal_name === 'collection') {
+			return (
+	      <Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='large'
+				>
+	        <Modal.Content>
+						<SimpleTempForm
+							building={this.state.building}
+							suites={this.state.suites}
+							closeModal={() => this.toggleModal(false)}
 						/>
 	        </Modal.Content>
 	      </Modal>
@@ -292,6 +313,7 @@ class BuildingPage extends Component {
 						<StepByStepCard
 							building={this.state.building}
 							all_suites={this.state.suites}
+							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
 						/>
 						{
 							this.state.building.building_id
@@ -343,6 +365,7 @@ class BuildingPage extends Component {
 							building={this.state.building}
 							suites={this.state.suites}
 							promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
+							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
 						/>
 						:
 						null
@@ -362,6 +385,11 @@ class BuildingPage extends Component {
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
+				<Route path='/:building_alias/apply'>
+					<div>
+						APPLY
+					</div>
+				</Route>
 			</div>
 		)
 	}

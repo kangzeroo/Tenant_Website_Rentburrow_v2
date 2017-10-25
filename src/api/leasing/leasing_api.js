@@ -72,12 +72,12 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
       //   icon: 'eye',
       //   key: 'witness',
       // },
-      guarantor: {
-        title: 'Guarantor',
-        desc: 'In case of missed payment',
-        icon: 'money',
-        key: 'guarantor',
-      },
+      // guarantor: {
+      //   title: 'Guarantor',
+      //   desc: 'In case of missed payment',
+      //   icon: 'money',
+      //   key: 'guarantor',
+      // },
       review: {
         title: 'Submit',
         desc: 'Send to landlord',
