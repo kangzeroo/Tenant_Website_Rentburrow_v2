@@ -73,7 +73,7 @@ class BuildingPreview extends Component {
           </div>
          <Card.Content style={comStyles().info} >
          {
-           this.props.building.label !== null || this.props.building.label !== ''
+           this.props.building.label !== null && this.props.building.label !== ''
            ?
            <div style={comStyles().ribbon}>
              <Label as='a' color='blue' ribbon='right'>{ this.props.building.label }</Label>

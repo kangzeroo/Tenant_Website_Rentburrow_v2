@@ -64,7 +64,7 @@ class SubleteeForm extends Component {
 		this.steps = [
 		  { icon: 'user', title: 'Profile', description: 'Subletee Profile', step_number: '1' },
 		  { icon: 'building', title: 'Room Info', description: 'Sublet Terms', step_number: '2' },
-		  { icon: 'eye', title: 'Contract Witness', description: 'Verification', step_number: '3' },
+		  // { icon: 'eye', title: 'Contract Witness', description: 'Verification', step_number: '3' },
 		]
 		this.why_sign_online = [
 			{ index: 1, icon: 'protect', title: 'It\'s Safe', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. Your signature is completely safe using our service provider PandaDoc. You must be 18 or older to sign a contract.' },
@@ -138,12 +138,12 @@ class SubleteeForm extends Component {
 		if (this.state.subletee_first_name.length === 0 || this.state.subletee_last_name === 0 || this.state.subletee_phone_number.length === 0 || !this.state.subletee_email.length === 0) {
 			errors.push('You must include your name, phone number and email')
 		}
-		if (!validateEmail(this.state.subletee_email) || !validateEmail(this.state.subletee_witness_email)) {
-			errors.push('One of the emails you entered is not valid')
-		}
-		if (this.state.subletee_witness_full_legal_name.length === 0 || this.state.subletee_witness_email.length === 0) {
-			errors.push('Please provide a witness to sign the contract too')
-		}
+		// if (!validateEmail(this.state.subletee_email) || !validateEmail(this.state.subletee_witness_email)) {
+		// 	errors.push('One of the emails you entered is not valid')
+		// }
+		// if (this.state.subletee_witness_full_legal_name.length === 0 || this.state.subletee_witness_email.length === 0) {
+		// 	errors.push('Please provide a witness to sign the contract too')
+		// }
 		if (!this.state.address.length > 1) {
 			errors.push('There must be an address')
 		}
@@ -184,11 +184,12 @@ class SubleteeForm extends Component {
 			if (this.state.current_active_field === 'requested_begin_date' || this.state.current_active_field === 'requested_end_date' || this.state.current_active_field === 'price' || this.state.current_active_field === 'address') {
 				active = true
 			}
-		} else if (step_number === '3') {
-			if (this.state.current_active_field === 'subletee_witness_full_legal_name' || this.state.current_active_field === 'subletee_witness_email') {
-				active = true
-			}
 		}
+		// else if (step_number === '3') {
+		// 	if (this.state.current_active_field === 'subletee_witness_full_legal_name' || this.state.current_active_field === 'subletee_witness_email') {
+		// 		active = true
+		// 	}
+		// }
 		return active
 	}
 
@@ -202,11 +203,12 @@ class SubleteeForm extends Component {
 			if (this.state.address.length > 1 && this.state.price > 0 && this.state.auto_sublet_terms_verified && this.state.requested_begin_date && this.state.requested_end_date) {
 				complete = true
 			}
-		} else if (step_number === '3') {
-			if (this.state.subletee_witness_full_legal_name.length > 0 && this.state.subletee_witness_email.length > 0) {
-				complete = true
-			}
 		}
+		// else if (step_number === '3') {
+		// 	if (this.state.subletee_witness_full_legal_name.length > 0 && this.state.subletee_witness_email.length > 0) {
+		// 		complete = true
+		// 	}
+		// }
 		return complete
 	}
 
@@ -345,7 +347,7 @@ class SubleteeForm extends Component {
 										<Checkbox label='I verify that these sublet terms are accurate' onChange={(e, d) => this.updateAttr({ target: { value: d.checked } }, 'auto_sublet_terms_verified')} checked={this.state.auto_sublet_terms_verified} />
 									</Form.Field>
 								</Card>
-
+							{/*
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
 										Step 3: Contract Witness
@@ -358,7 +360,7 @@ class SubleteeForm extends Component {
 										<label>Witness Email</label>
 										<input placeholder='Witness Email' onChange={(e) => this.updateAttr(e, 'subletee_witness_email')} value={this.state.subletee_witness_email} />
 									</Form.Field>
-								</Card>
+								</Card>*/}
 
 								<Card fluid style={comStyles().card_style}>
 									<Form.Field>
