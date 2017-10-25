@@ -71,7 +71,7 @@ class SubletorForm extends Component {
 		  { icon: 'user', title: 'Profile', description: 'Subletor Profile', step_number: '1' },
 		  { icon: 'building', title: 'Room Info', description: 'Sublet Terms', step_number: '2' },
 		  { icon: 'phone', title: 'Landlord Info', description: 'Contact & Emergancies', step_number: '3' },
-		  { icon: 'eye', title: 'Contract Witness', description: 'Verification', step_number: '4' },
+		  // { icon: 'eye', title: 'Contract Witness', description: 'Verification', step_number: '4' },
 		]
 		this.why_sign_online = [
 			{ index: 1, icon: 'protect', title: 'It\'s Safe', description: 'By signing online, both parties get a digital receipt of the contract. This eliminates the possibilty of fraud or an invalid sublet contract. All sublet contracts signed with our software is legally binding. We require all users to sign in with Facebook so that you can talk directly with them and see that they are a real person. Your signature is completely safe using our service provider PandaDoc. You must be 18 or older to sign a contract.' },
@@ -157,12 +157,12 @@ class SubletorForm extends Component {
 		if (this.state.suite_id.length === 0 || this.state.room_id.length === 0) {
 			errors.push('You must include the suite number and room number')
 		}
-		if (!validateEmail(this.state.subletor_email) || !validateEmail(this.state.subletor_witness_email)) {
-			errors.push('One of the emails you entered is not valid')
-		}
-		if (this.state.subletor_witness_full_legal_name.length === 0 || this.state.subletor_witness_email.length === 0) {
-			errors.push('Please provide a witness to sign the contract too')
-		}
+		// if (!validateEmail(this.state.subletor_email) || !validateEmail(this.state.subletor_witness_email)) {
+		// 	errors.push('One of the emails you entered is not valid')
+		// }
+		// if (this.state.subletor_witness_full_legal_name.length === 0 || this.state.subletor_witness_email.length === 0) {
+		// 	errors.push('Please provide a witness to sign the contract too')
+		// }
 		if (!this.state.address.length > 1) {
 			errors.push('There must be an address')
 		}
@@ -218,11 +218,12 @@ class SubletorForm extends Component {
 			if (this.state.current_active_field === 'landlord_full_legal_name' || this.state.current_active_field === 'landlord_phone' || this.state.current_active_field === 'landlord_email') {
 				active = true
 			}
-		} else if (step_number === '4') {
-			if (this.state.current_active_field === 'subletor_witness_full_legal_name' || this.state.current_active_field === 'subletor_witness_email') {
-				active = true
-			}
 		}
+		// else if (step_number === '4') {
+		// 	if (this.state.current_active_field === 'subletor_witness_full_legal_name' || this.state.current_active_field === 'subletor_witness_email') {
+		// 		active = true
+		// 	}
+		// }
 		return active
 	}
 
@@ -240,11 +241,12 @@ class SubletorForm extends Component {
 			if (this.state.landlord_full_legal_name.length > 0 && this.state.landlord_phone.length > 0 && this.state.landlord_email.length > 0) {
 				complete = true
 			}
-		} else if (step_number === '4') {
-			if (this.state.subletor_witness_full_legal_name.length > 0 && this.state.subletor_witness_email.length > 0) {
-				complete = true
-			}
 		}
+		// else if (step_number === '4') {
+		// 	if (this.state.subletor_witness_full_legal_name.length > 0 && this.state.subletor_witness_email.length > 0) {
+		// 		complete = true
+		// 	}
+		// }
 		return complete
 	}
 
@@ -416,6 +418,7 @@ class SubletorForm extends Component {
 							    </Form.Field>
 								</Card>
 
+								{/*
 								<Card raised fluid style={comStyles().card_style}>
 									<Card.Header style={comStyles().card_header}>
 										Step 4: Contract Witness
@@ -428,7 +431,7 @@ class SubletorForm extends Component {
 							      <label>Witness Email</label>
 							      <input placeholder='Witness Email' onChange={(e) => this.updateAttr(e, 'subletor_witness_email')} value={this.state.subletor_witness_email} />
 							    </Form.Field>
-								</Card>
+								</Card>*/}
 
 								<Card fluid style={comStyles().card_style}>
 									<Form.Field>

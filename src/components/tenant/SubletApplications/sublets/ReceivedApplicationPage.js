@@ -33,10 +33,11 @@ class ReceivedSentApplicationPage extends Component {
 		const pathname = this.props.location.pathname
 		const contract_id = pathname.slice(pathname.indexOf('/sublet_applications/subletor/') + '/sublet_applications/subletor/'.length)
 
+		console.log(contract_id)
 		const application = this.props.received_applications.filter((app) => {
 													return contract_id === app.contract_id
 												})[0]
-
+	  console.log(application)
 		this.setState({
 			application,
 		})
