@@ -70,9 +70,15 @@ class BuildingCard extends Component {
               <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
             </Card.Description>
           </div>
-          <div style={comStyles().ribbon}>
-            <Label as='a' color='blue' ribbon='right'>Apply Now</Label>
-          </div>
+          {
+            this.props.building.label !== null && this.props.building.label !== ''
+            ?
+            <div style={comStyles().ribbon}>
+              <Label as='a' color='blue' ribbon='right'>{ this.props.building.label }</Label>
+            </div>
+            :
+            null
+          }
         </Card.Content>
       </Card>
 		)
