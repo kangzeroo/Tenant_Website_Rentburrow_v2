@@ -72,9 +72,15 @@ class BuildingPreview extends Component {
             />
           </div>
          <Card.Content style={comStyles().info} >
-         <div style={comStyles().ribbon}>
-           <Label as='a' color='blue' ribbon='right'>Apply Now</Label>
-         </div>
+         {
+           this.props.building.label !== null || this.props.building.label !== ''
+           ?
+           <div style={comStyles().ribbon}>
+             <Label as='a' color='blue' ribbon='right'>{ this.props.building.label }</Label>
+           </div>
+           :
+           null
+         }
           <div style={comStyles().details}>
             <Card.Header style={comStyles().headerPrint}>
               <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
