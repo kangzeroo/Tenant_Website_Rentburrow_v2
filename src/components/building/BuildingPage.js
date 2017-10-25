@@ -255,9 +255,15 @@ class BuildingPage extends Component {
 						<div style={comStyles().building_header}>
 							<div style={comStyles().welcome_banner}>
 								<div style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</div>
-								<div style={comStyles().welcome_ribbon}>
-									<Label as='a' color='blue' ribbon='right'>Apply Now</Label>
-								</div>
+								{
+									this.state.building.label !== null && this.state.building.label !== ''
+									?
+									<div style={comStyles().welcome_ribbon}>
+										<Label as='a' color='blue' ribbon='right'>{ this.state.building.label }</Label>
+									</div>
+									:
+									null
+								}
 							</div>
 							<div style={comStyles().description} >
 								{
