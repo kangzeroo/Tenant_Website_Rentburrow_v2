@@ -125,137 +125,142 @@ class SimpleTermForm extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Form style={comStyles().form}>
-	        <Form.Field>
-	          <label>Name</label>
-	          <Input
-	            value={this.state.application_template.name}
-	            onChange={(e) => this.updateApplicationAttr(e, 'name')}
-	          />
-	        </Form.Field>
-					<Form.Field>
-	          <Radio
-	            label='Male'
-	            name='gender'
-	            value='Male'
-	            checked={this.state.application_template.gender === 'Male'}
-	            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Male' } }, 'gender')}
-	          />
-						&nbsp; &nbsp;
-	          <Radio
-	            label='Female'
-	            name='gender'
-	            value='Female'
-	            checked={this.state.application_template.gender === 'Female'}
-	            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Female' } }, 'gender')}
-	          />
-	        </Form.Field>
-	        <Form.Field>
-	          <label>School, Program and Term</label>
-	          <Input
-	            value={this.state.application_template.school_and_term}
-	            onChange={(e) => this.updateApplicationAttr(e, 'school_and_term')}
-	          />
-	        </Form.Field>
-	        <Form.Field>
-	          <label>Email</label>
-	          <Input
-	            value={this.state.application_template.email}
-	            onChange={(e) => this.updateApplicationAttr(e, 'email')}
-	          />
-	        </Form.Field>
-	        <Form.Field>
-	          <label>Phone</label>
-	          <Input
-	            value={this.state.application_template.phone}
-	            onChange={(e) => this.updateApplicationAttr(e, 'phone')}
-	          />
-	        </Form.Field>
-					<Form.Field>
-						{
-							this.state.error_messages.map((err, index) => {
-								return (
-									<Message
-										visible
-										key={index}
-										error
-										content={err}
-									/>
-								)
-							})
-						}
-					</Form.Field>
-	        <Form.Field>
-	          <Button
-							fluid
-							color='blue'
-							content='Add To Group'
-							onClick={() => this.addToGroup()}
-						/>
-	        </Form.Field>
-	      </Form>
-				<div style={comStyles().summary}>
-					<Card raised fluid>
-						<Card.Header style={comStyles().card_header}>
-							Group Members
-						</Card.Header>
-						<div style={comStyles().member_list}>
+				<div style={comStyles().title}>
+					{ this.props.title }
+				</div>
+				<div style={comStyles().body}>
+					<Form style={comStyles().form}>
+		        <Form.Field>
+		          <label>Name</label>
+		          <Input
+		            value={this.state.application_template.name}
+		            onChange={(e) => this.updateApplicationAttr(e, 'name')}
+		          />
+		        </Form.Field>
+						<Form.Field>
+		          <Radio
+		            label='Male'
+		            name='gender'
+		            value='Male'
+		            checked={this.state.application_template.gender === 'Male'}
+		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Male' } }, 'gender')}
+		          />
+							&nbsp; &nbsp;
+		          <Radio
+		            label='Female'
+		            name='gender'
+		            value='Female'
+		            checked={this.state.application_template.gender === 'Female'}
+		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Female' } }, 'gender')}
+		          />
+		        </Form.Field>
+		        <Form.Field>
+		          <label>School, Program and Term</label>
+		          <Input
+		            value={this.state.application_template.school_and_term}
+		            onChange={(e) => this.updateApplicationAttr(e, 'school_and_term')}
+		          />
+		        </Form.Field>
+		        <Form.Field>
+		          <label>Email</label>
+		          <Input
+		            value={this.state.application_template.email}
+		            onChange={(e) => this.updateApplicationAttr(e, 'email')}
+		          />
+		        </Form.Field>
+		        <Form.Field>
+		          <label>Phone</label>
+		          <Input
+		            value={this.state.application_template.phone}
+		            onChange={(e) => this.updateApplicationAttr(e, 'phone')}
+		          />
+		        </Form.Field>
+						<Form.Field>
 							{
-								this.state.group_members.map((member) => {
+								this.state.error_messages.map((err, index) => {
 									return (
-										<div style={comStyles().row_member}>
-											<div style={comStyles().row_member_name}>{ member.name }</div>
-											<div style={comStyles().row_member_email}>{ member.email }</div>
-											<div style={comStyles().row_member_button}>
-												<Icon name='cancel' onClick={() => this.removeFromGroup(member.id)} />
-											</div>
-										</div>
+										<Message
+											visible
+											key={index}
+											error
+											content={err}
+										/>
 									)
 								})
 							}
-						</div>
-					</Card>
-					<Card raised fluid>
-						<Card.Header style={comStyles().card_header}>
-							Group Notes for Landlord
-						</Card.Header>
-						<TextArea
-							rows={4}
-	            value={this.state.group_notes}
-							placeholder='Eg. My group may change, only female roommates please..etc'
-	            onChange={(e) => this.setState({ group_notes: e.target.value })}
-							style={comStyles().textArea}
-	          />
-					</Card>
-					<Form.Field>
+						</Form.Field>
+		        <Form.Field>
+		          <Button
+								fluid
+								color='blue'
+								content='Add To Group'
+								onClick={() => this.addToGroup()}
+							/>
+		        </Form.Field>
+		      </Form>
+					<div style={comStyles().summary}>
+						<Card raised fluid>
+							<Card.Header style={comStyles().card_header}>
+								Group Members
+							</Card.Header>
+							<div style={comStyles().member_list}>
+								{
+									this.state.group_members.map((member) => {
+										return (
+											<div style={comStyles().row_member}>
+												<div style={comStyles().row_member_name}>{ member.name }</div>
+												<div style={comStyles().row_member_email}>{ member.email }</div>
+												<div style={comStyles().row_member_button}>
+													<Icon name='cancel' onClick={() => this.removeFromGroup(member.id)} />
+												</div>
+											</div>
+										)
+									})
+								}
+							</div>
+						</Card>
+						<Card raised fluid>
+							<Card.Header style={comStyles().card_header}>
+								Group Notes for Landlord
+							</Card.Header>
+							<TextArea
+								rows={4}
+		            value={this.state.group_notes}
+								placeholder='Eg. My group may change, only female roommates please..etc'
+		            onChange={(e) => this.setState({ group_notes: e.target.value })}
+								style={comStyles().textArea}
+		          />
+						</Card>
+						<Form.Field>
+							{
+								this.state.group_error_messages.map((err, index) => {
+									return (
+										<Message
+											visible
+											key={index}
+											error
+											content={err}
+										/>
+									)
+								})
+							}
+						</Form.Field>
 						{
-							this.state.group_error_messages.map((err, index) => {
-								return (
-									<Message
-										visible
-										key={index}
-										error
-										content={err}
-									/>
-								)
-							})
+							this.state.submitted
+							?
+							<div style={comStyles().hidden_loading}>
+								<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+							</div>
+							:
+							<Button
+								basic
+								fluid
+								color='blue'
+								onClick={() => this.submitApplication()}
+								content='Submit Application'
+							/>
 						}
-					</Form.Field>
-					{
-						this.state.submitted
-						?
-						<div style={comStyles().hidden_loading}>
-							<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-						</div>
-						:
-						<Button
-							basic
-							fluid
-							color='blue'
-							onClick={() => this.submitApplication()}
-							content='Submit Application'
-						/>
-					}
+					</div>
 				</div>
 			</div>
 		)
@@ -269,6 +274,7 @@ SimpleTermForm.propTypes = {
   building: PropTypes.object.isRequired,    // passed in
   suites: PropTypes.array.isRequired,       // passed in
 	closeModal: PropTypes.func.isRequired,		// passed in
+	title: PropTypes.string.isRequired,				// passed in
 }
 
 // for all optional props, define a default value
@@ -299,6 +305,20 @@ export default withRouter(
 const comStyles = () => {
 	return {
 		container: {
+      display: 'flex',
+      flexDirection: 'column',
+		},
+		title: {
+      display: 'flex',
+      flexDirection: 'column',
+			fontSize: '2rem',
+			fontWeight: 'bold',
+			padding: '20px 20px 50px 20px',
+			width: '100%',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		body: {
       display: 'flex',
       flexDirection: 'row',
 		},
