@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Card,
   Image,
+  Label,
   Button,
   Statistic,
   Icon,
@@ -71,7 +72,8 @@ class BuildingPreview extends Component {
               image_size='hd'
             />
           </div>
-          <Card.Content style={comStyles().info}>
+         <Card.Content style={comStyles().info}>
+          <div style={comStyles().details}>
             <Card.Header style={comStyles().headerPrint}>
               <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
             </Card.Header>
@@ -82,8 +84,12 @@ class BuildingPreview extends Component {
               <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
             </Card.Description>
             <Button fluid color='blue' content='Explore' size='large' />
-          </Card.Content>
-        </Card>
+          </div>
+          <div style={comStyles().ribbon}>
+            <Label as='a' color='blue' ribbon='right'>Apply Now</Label>
+          </div>
+        </Card.Content>
+      </Card>
         <div style={comStyles().analyticsContainer} >
           <Statistic>
             <Statistic.Value color='blue'>
@@ -147,6 +153,23 @@ const comStyles = () => {
       flexDirection: 'row',
       justifyContent: 'space-around',
       margin: '30px'
-    }
+    },
+    info: {
+      backgroundColor: 'rgba(0,0,0,0)',
+      display: 'flex',
+      flexDirection: 'row',
+      // padding: '30px 10px 10px 10px',
+    },
+    details: {
+      color: 'black',
+      display: 'flex',
+      flexDirection: 'column',
+      width: '90%',
+    },
+    ribbon: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '10%',
+    },
 	}
 }

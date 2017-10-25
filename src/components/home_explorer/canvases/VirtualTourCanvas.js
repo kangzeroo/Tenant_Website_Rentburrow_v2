@@ -74,7 +74,7 @@ class VirtualTourCanvas extends Component {
               </div>
               :
               <div style={comStyles().hidden_loading}>
-                <h2>There is no virtual tour available for this unit</h2>
+                <h2>There is no virtual tour available for this unit. We are trying our best to book a filming with the landlord.</h2>
               </div>
             }
             <div style={comStyles().visible_virtual_tour}>

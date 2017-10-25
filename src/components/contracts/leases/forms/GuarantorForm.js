@@ -197,25 +197,14 @@ class GuarantorForm extends Component {
 	validateForm() {
 		let ok_to_proceed = true
 		const error_messages = []
-		if (!this.state.lacking_guarantor) {
-			if (this.state.first_name && this.state.first_name.length === 0) {
-				error_messages.push('Please enter your guarantors name')
-				ok_to_proceed = false
-			}
-			if (this.state.email && (this.state.email.length === 0 || !validateEmail(this.state.email))) {
-				error_messages.push('Please enter a valid email')
-				ok_to_proceed = false
-			}
-			this.setState({
-				submitted: false,
-				error_messages: error_messages
-			})
+		if (this.state.lacking_guarantor) {
+			// do nothing
 		} else if (this.state.guarantor_is_in_canada) {
-			if (this.state.first_name && this.state.first_name.length === 0) {
+			if (this.state.first_name.length === 0) {
 				error_messages.push('Please enter your guarantors name')
 				ok_to_proceed = false
 			}
-			if (this.state.email && (this.state.email.length === 0 || !validateEmail(this.state.email))) {
+			if (this.state.email.length === 0 || !validateEmail(this.state.email)) {
 				error_messages.push('Please enter a valid email')
 				ok_to_proceed = false
 			}
@@ -223,7 +212,7 @@ class GuarantorForm extends Component {
 				submitted: false,
 				error_messages: error_messages
 			})
-		} else {
+		} else if (!this.state.guarantor_is_in_canada && !this.state.lacking_guarantor) {
 			error_messages.push('You need to verify that your guarantor, or let us know you do not have a guarantor')
 			ok_to_proceed = false
 			this.setState({
