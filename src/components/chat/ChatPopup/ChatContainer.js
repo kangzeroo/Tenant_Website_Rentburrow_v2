@@ -41,7 +41,7 @@ class ChatContainer extends Component {
           corporation_id: this.props.selected_landlord.corporation_id,
           corporation_name: this.props.selected_landlord.corporation_name,
           channel_id: `${this.props.selected_landlord.corporation_id}_${this.props.tenant_profile.tenant_id}`,
-          contents: 'We are the landlords, ask us any questions directly!',
+          contents: 'Any questions for the landlord?',
         }])
       }
     }
