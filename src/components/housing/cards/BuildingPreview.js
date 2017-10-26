@@ -23,6 +23,7 @@ import {
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
 import { getAllImagesSizeForSpecificBuilding, getNumVirtualTours, } from '../../../api/search/search_api'
+import RibbonLabel from '../../instructions/RibbonLabel'
 
 class BuildingPreview extends Component {
 
@@ -72,15 +73,6 @@ class BuildingPreview extends Component {
             />
           </div>
          <Card.Content style={comStyles().info} >
-         {
-           this.props.building.label !== null && this.props.building.label !== ''
-           ?
-           <div style={comStyles().ribbon}>
-             <Label as='a' color='blue' ribbon='right'>{ this.props.building.label }</Label>
-           </div>
-           :
-           null
-         }
           <div style={comStyles().details}>
             <Card.Header style={comStyles().headerPrint}>
               <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
@@ -92,6 +84,15 @@ class BuildingPreview extends Component {
               <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
             </Card.Description>
           </div>
+          {
+            this.props.building.label
+            ?
+            <div style={comStyles().ribbon}>
+              <RibbonLabel label={this.props.building.label} />
+            </div>
+            :
+            null
+          }
         </Card.Content>
         <Card.Content style={comStyles().explore_button}>
           <Button fluid color='blue' content='Explore' size='large' />
@@ -181,10 +182,7 @@ const comStyles = () => {
       width: '90%',
     },
     ribbon: {
-      position: 'absolute',
-      right: '0',
-      top: '30px',
-      zIndex: '999'
+      width: '10%',
     },
 	}
 }

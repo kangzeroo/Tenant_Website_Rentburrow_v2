@@ -103,7 +103,7 @@ class ReceivedApplicationCard extends Component {
 							?
 							<h2> COMPLETE </h2>
 							:
-							<h2>Waiting For Signatures</h2>
+							<h2>Waiting For Signatures. Check your email.</h2>
 						}
 					</div>
 					<div style={comStyles().buttons_container}>

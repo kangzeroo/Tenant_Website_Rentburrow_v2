@@ -57,6 +57,7 @@ import SingularImageGallery from '../image/SingularImageGallery'
 import SubletsList from '../sublets/SubletsList'
 import DescriptionBox from './DescriptionBox'
 import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
+import RibbonLabel from '../instructions/RibbonLabel'
 
 
 class BuildingPage extends Component {
@@ -256,10 +257,10 @@ class BuildingPage extends Component {
 							<div style={comStyles().welcome_banner}>
 								<div style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</div>
 								{
-									this.state.building.label !== null && this.state.building.label !== ''
+									this.state.building.label
 									?
-									<div style={comStyles().welcome_ribbon}>
-										<Label as='a' color='blue' ribbon='right'>{ this.state.building.label }</Label>
+									<div onClick={() => this.toggleModal(true, 'collection')} style={comStyles().welcome_ribbon}>
+			              <RibbonLabel label={this.state.building.label} size='massive' />
 									</div>
 									:
 									null
