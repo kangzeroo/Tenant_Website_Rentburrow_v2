@@ -11,8 +11,8 @@ export const sendSummaryEmailToLandlord = (saved_form_state, building) => {
 		region: 'us-east-1',
 	})
   const p = new Promise((res, rej) => {
-    console.log(saved_form_state)
-    console.log(building)
+    // console.log(saved_form_state)
+    // console.log(building)
 		const params = createInquiryParamsConfig(building.landlord_email, building.building_address, generateHTMLInquiryEmail(
       saved_form_state.about_tenant,
       saved_form_state.roommates,
@@ -20,7 +20,7 @@ export const sendSummaryEmailToLandlord = (saved_form_state, building) => {
       saved_form_state.guarantor,
       building,
     ))
-    console.log(params)
+    // console.log(params)
 		// console.log('Sending email with attached params!')
 		AWS.config.credentials.refresh(() => {
 			// console.log(AWS.config.credentials)

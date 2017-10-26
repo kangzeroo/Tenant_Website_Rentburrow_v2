@@ -34,44 +34,44 @@ const establishFirebaseMessaging = (() => {
           // first request permission to display desktop notifications
           messaging.requestPermission()
             .then(() => {
-              console.log('Got permission!')
+              // console.log('Got permission!')
               // then get a FCM token
               return messaging.getToken()
             })
             .then((token) => {
-              console.log(token)
+              // console.log(token)
               store.dispatch(setFCMToken(token))
               next(action)
             })
             .catch((err) => {
-              console.log(err)
+              // console.log(err)
               next(action)
             })
           // listen for any token refreshes and save them as most updated version
           messaging.onTokenRefresh(() => {
             messaging.getToken()
               .then((refreshedToken) => {
-                console.log('Token refreshed: ', refreshedToken)
+                // console.log('Token refreshed: ', refreshedToken)
                 store.dispatch(setFCMToken(refreshedToken))
               })
               .catch((err) => {
-                console.log('Unable to retrieve refreshed token ', err)
+                // console.log('Unable to retrieve refreshed token ', err)
               })
           })
           // on receiving a message, dispatch a redux action
           messaging.onMessage((payload) => {
-            console.log('Message received. ', payload)
+            // console.log('Message received. ', payload)
             store.dispatch(addChatHistory([payload]))
           })
           break;
 
         case ADD_MESSAGE:
-          console.log(action)
+          // console.log(action)
           next(action)
           break;
 
         case SEND_MESSAGE:
-          console.log('SEND_MESSAGE')
+          // console.log('SEND_MESSAGE')
 
           next(action)
           break;

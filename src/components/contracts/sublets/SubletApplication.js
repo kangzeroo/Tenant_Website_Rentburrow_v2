@@ -199,7 +199,7 @@ class SubletApplication extends Component {
 				})
 			})
 			.catch((err) => {
-				console.log(err)
+				// console.log(err)
 			})
 	}
 
@@ -229,7 +229,7 @@ class SubletApplication extends Component {
 				this.props.history.push(`/sublet_applications?tab=people-want-to-live-at-mine`)
 			})
 			.catch((err) => {
-				console.log(err)
+				// console.log(err)
 			})
 	}
 

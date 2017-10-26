@@ -61,7 +61,7 @@ class JoinedGroup extends Component {
 	componentWillMount() {
 		// const group_id = this.props.location_forwarding.slice(this.props.location_forwarding.indexOf('group=') + 'group='.length)
 		// console.log(group_id)
-		console.log(this.props.group_id)
+		// console.log(this.props.group_id)
 		getGroupInfo(this.props.group_id)
 		.then((data) => {
 			this.setState({

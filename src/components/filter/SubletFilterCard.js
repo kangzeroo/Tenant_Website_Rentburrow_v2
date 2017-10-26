@@ -40,11 +40,11 @@ class SubletFilterCard extends Component {
 	componentWillMount() {
 		this.setState({
 			...this.props.sublet_filter_params,
-		}, () => console.log(this.state))
+		})
 	}
 
 	updateAttr(attr, value) {
-		console.log(value)
+		// console.log(value)
 		this.setState({
 			[attr]: value
 		})

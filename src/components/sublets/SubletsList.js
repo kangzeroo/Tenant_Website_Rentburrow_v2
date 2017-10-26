@@ -39,7 +39,7 @@ class SubletsList extends Component {
 		const geocoder = new google.maps.Geocoder()
 		geocoder.geocode({ 'placeId': place_id }, (results, status) => {
 			const addr = results[0]
-			console.log(addr)
+			// console.log(addr)
 			let addrObj
 			if (addr.address_components.length === 7) {
 				addrObj = {
@@ -66,9 +66,9 @@ class SubletsList extends Component {
 					this.setState({
 						building: JSON.parse(building),
 						exists: true,
-					}, () => console.log(this.state))
+					})
 				}
-				console.log(this.state.building)
+				// console.log(this.state.building)
 			})
 		})
 	}

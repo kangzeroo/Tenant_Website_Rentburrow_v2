@@ -12,7 +12,7 @@ export const sendChatMessageToLandlord = (tenant_name, tenant_email, landlord_em
 	})
   const p = new Promise((res, rej) => {
 		const params = createInquiryParamsConfig(tenant_name, tenant_email, landlord_email, building, generateHTMLInquiryEmail(tenant_name, building, message))
-    console.log(params)
+    // console.log(params)
 		// console.log('Sending email with attached params!')
 		AWS.config.credentials.refresh(() => {
 			// console.log(AWS.config.credentials)
@@ -21,7 +21,7 @@ export const sendChatMessageToLandlord = (tenant_name, tenant_email, landlord_em
 			  	 // console.log(err, err.stack); // an error occurred
 			  	 rej(err)
 			  } else {
-			  	console.log(data);           // successful response
+			  	// console.log(data);           // successful response
 				res('Success! Email sent')
 			  }
 			})

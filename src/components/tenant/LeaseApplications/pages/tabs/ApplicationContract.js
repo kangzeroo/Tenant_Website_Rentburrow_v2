@@ -25,13 +25,13 @@ class ApplicationContract extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.application)
+    // console.log(this.props.application)
   }
 
   downloadApplicationContract() {
     downloadContract(this.props.application.doc_id)
     .then((data) => {
-      console.log(data)
+      // console.log(data)
       this.setState({
         pdf: data
       })

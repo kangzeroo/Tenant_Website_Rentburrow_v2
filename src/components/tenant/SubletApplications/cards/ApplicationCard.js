@@ -54,7 +54,7 @@ class ApplicationCard extends Component {
     const cur_date = moment()
 
     if (cur_date.isAfter(generated_expiry_date)) {
-      console.log('generating new session...')
+      // console.log('generating new session...')
 			generateNewSubleteeSession({
 				subletor_id: this.props.details.subletee_id,
 				doc_id: this.props.details.doc_id,
