@@ -46,7 +46,7 @@ const createInquiryParamsConfig = (tenant_name, tenant_email, landlord_email, bu
 	    ],
 	    ToAddresses: [
 	      /* more items */
-        'support@rentburrow.com'
+        'inquiries@rentburrow-messaging.com'
 	    ]
 	  },
 	  Message: { /* required */
