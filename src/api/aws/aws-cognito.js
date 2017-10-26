@@ -354,7 +354,7 @@ export const unauthRoleStudent = () => {
 		// AWS Cognito Sync to sync Facebook
 		AWS.config.credentials.get(() => {
 			const client = new AWS.CognitoSyncManager();
-			console.log(AWS.config.credentials)
+			// console.log(AWS.config.credentials)
 			res({
 				tenant_id: AWS.config.credentials.data.IdentityId,
 				first_name: 'Student on Rentburrow.com',
