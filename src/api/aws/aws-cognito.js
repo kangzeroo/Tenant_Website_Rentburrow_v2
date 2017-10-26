@@ -324,7 +324,7 @@ export const registerFacebookLoginWithCognito = (response) => {
 	    // AWS Cognito Sync to sync Facebook
 	    AWS.config.credentials.get(() => {
 		    const client = new AWS.CognitoSyncManager()
-		    console.log(AWS.config.credentials)
+		    // console.log(AWS.config.credentials)
 			})
 
 	  } else {
