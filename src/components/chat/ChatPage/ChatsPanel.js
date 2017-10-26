@@ -127,7 +127,7 @@ class ChatsPanel extends Component {
               this.state.latest_threads.sort((a, b) => {
                 return b[0].sent_at - a[0].sent_at
               }).map((thread) => {
-                console.log(thread)
+                // console.log(thread)
                 return (
                   <Segment key={thread[0].message_id} onClick={() => this.selectThisThread(thread)} style={comStyles().segment}>
                     { thread[0].corporation_name }

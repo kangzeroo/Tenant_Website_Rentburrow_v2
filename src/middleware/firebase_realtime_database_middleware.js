@@ -29,11 +29,11 @@ const establishFirebaseRealtimeDatabaseMessaging = (() => {
       switch (action.type) {
 
         case LISTEN_TO_FIREBASE_DB:
-          console.log(action)
+          // console.log(action)
           const messages = firebase_db.ref(`tenants/${action.payload}/messages/`)
           messages.on('value', (snapshot) => {
             const array_of_messages = convertToArray(snapshot.val())
-            console.log(array_of_messages)
+            // console.log(array_of_messages)
             if (array_of_messages.length > 0) {
               store.dispatch(updateChatHistory(array_of_messages))
             }
@@ -41,8 +41,8 @@ const establishFirebaseRealtimeDatabaseMessaging = (() => {
           break;
 
         case SEND_MESSAGE:
-          console.log('SEND_MESSAGE')
-          console.log(action)
+          // console.log('SEND_MESSAGE')
+          // console.log(action)
           if (action.payload.receiver_id === 'Rentburrow_Student_Help_Chat') {
             firebase_db.ref(`tenants/${action.payload.receiver_id}/messages/${action.payload.message_id}`).set(action.payload)
             firebase_db.ref(`tenants/${action.payload.sender_id}/messages/${action.payload.message_id}`).set(action.payload)

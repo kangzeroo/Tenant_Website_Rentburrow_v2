@@ -129,7 +129,7 @@ class LeaseFilterCard extends Component {
 		          formatLabel={(value) => `$${value}`}
 		          value={this.state.price}
 		          onChange={(value) => this.updateAttr('price', value)}
-		          onChangeComplete={value => console.log(value)}
+		          onChangeComplete={value => console.log()}
 						/>
 					</div>
 				</div>

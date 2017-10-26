@@ -123,11 +123,11 @@ class BuildingPage extends Component {
 			this.setState({
 				sublets: sublets,
 			})
-			console.log('getSpecificLandlord', this.state.building.building_id)
+			// console.log('getSpecificLandlord', this.state.building.building_id)
 			return getSpecificLandlord({ building_id: this.state.building.building_id })
 		})
 		.then((corporation) => {
-			console.log(corporation)
+			// console.log(corporation)
 			this.props.selectCorporation(corporation)
 		})
 	}

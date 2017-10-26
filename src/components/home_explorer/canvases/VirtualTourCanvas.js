@@ -20,8 +20,8 @@ class VirtualTourCanvas extends Component {
     this.setState({
       vr_tour_height: document.getElementById('container').clientHeight
     })
-    console.log(this.props.istaging_url)
-    console.log(this.props.iguide_url)
+    // console.log(this.props.istaging_url)
+    // console.log(this.props.iguide_url)
   }
 
   renderVirtualTour_iStaging(link) {

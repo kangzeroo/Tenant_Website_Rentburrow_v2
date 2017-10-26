@@ -39,7 +39,7 @@ class PlacesIAppliedToLive extends Component {
       //   })
       //   return exists
       // }
-      console.log(data)
+      // console.log(data)
       const applications = data
       // const unique_apps = []
       // applications.forEach((app) => {

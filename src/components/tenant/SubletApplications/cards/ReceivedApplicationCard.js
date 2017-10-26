@@ -54,7 +54,7 @@ class ReceivedApplicationCard extends Component {
 		const cur_date = moment()
 
 		if (cur_date.isAfter(generated_expiry_date)) {
-			console.log('generating new session...')
+			// console.log('generating new session...')
 			generateNewSubletorSession({
 				subletor_id: this.props.details.subletor_id,
 				doc_id: this.props.details.doc_id,

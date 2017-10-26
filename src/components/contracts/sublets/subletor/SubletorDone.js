@@ -28,10 +28,10 @@ class SubletorDone extends Component {
   }
 
   viewContract() {
-    console.log(this.props.subletor_contract.contract_id)
+    // console.log(this.props.subletor_contract.contract_id)
     getContractLink(this.props.subletor_contract.contract_id)
     .then((data) => {
-      console.log(data)
+      // console.log(data)
       window.open(JSON.parse(data).contract_link)
     })
   }

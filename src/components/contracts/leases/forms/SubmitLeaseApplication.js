@@ -81,7 +81,7 @@ class SubmitLeaseApplication extends Component {
 				return generateLeaseContract(this.props.my_application_id)
 			})
 			.then((data) => {
-				console.log(data)
+				// console.log(data)
 				setTimeout(() => {
 					this.props.history.push('/lease_applications')
 				}, 2000)

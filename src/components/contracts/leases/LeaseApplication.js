@@ -114,7 +114,7 @@ class LeaseApplication extends Component {
       checkIfUserAlreadyPartGroup(group_id, this.props.tenant_profile.tenant_id)
         .then((data) => {
           if (data.already_joined) {
-            console.log('User Already Joined!')
+            // console.log('User Already Joined!')
             this.setState({
               group_id: group_id,
             })
@@ -127,7 +127,7 @@ class LeaseApplication extends Component {
               this.props.saveMyApplicationToRedux(data.application_id)
             })
           } else if (data.user_does_not_exist) {
-            console.log('User does not exist in the group!')
+            // console.log('User does not exist in the group!')
             createGroup(this.props.tenant_profile.tenant_id, this.state.building.corporation_id, this.state.building.building_id)
               .then((data) => {
                 this.setState({
@@ -137,7 +137,7 @@ class LeaseApplication extends Component {
                 localStorage.setItem('leasing_group_id', data.group_id)
               })
           } else {
-            console.log('Add User To the Group!')
+            // console.log('Add User To the Group!')
             addMeToTheGroup(this.props.tenant_profile.tenant_id, group_id)
             .then((data) => {
               this.setState({
@@ -150,16 +150,16 @@ class LeaseApplication extends Component {
           }
         })
         .catch((err) => {
-          console.log(err)
+          // console.log(err)
         })
     } else {
       createGroup(this.props.tenant_profile.tenant_id, this.state.building.corporation_id, this.state.building.building_id)
       .then((data) => {
-        console.log(data)
+        // console.log(data)
         this.setState({
           group_id: data.group_id
         })
-        console.log(data)
+        // console.log(data)
         this.props.saveMyApplicationToRedux(data.application_id)
         localStorage.setItem('leasing_group_id', data.group_id)
       })
@@ -180,19 +180,19 @@ class LeaseApplication extends Component {
 
   goToNextForm(form_key, state) {
     let next_form_key = 'begin'
-    console.log(form_key)
+    // console.log(form_key)
     this.setState({
       saved_form_state: {
         ...this.state.saved_form_state,
         [form_key]: state,
       }
-    }, () => console.log(this.state))
+    })
     this.state.required_forms.forEach((form, index) => {
       if (form.key === form_key) {
         next_form_key = this.state.required_forms[index + 1].key
       }
     })
-    console.log(next_form_key)
+    // console.log(next_form_key)
     this.clickedFormStep(next_form_key)
   }
 

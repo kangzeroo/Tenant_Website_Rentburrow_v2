@@ -89,7 +89,7 @@ class GuarantorForm extends Component {
 					relationship: data.relationship,
 					guarantor_is_in_canada: data.guarator_is_in_canada ? data.guarator_is_in_canada : false,
 					lacking_guarantor: data.lacking_guarantor ? data.lacking_guarantor : false,
-				}, () => console.log(this.state))
+				})
 			}
 		})
 	}

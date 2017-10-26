@@ -95,7 +95,7 @@ class LeaseApplicationPage extends Component {
     const cur_date = moment()
 
     if (cur_date.isAfter(generated_expiry_date)) {
-      console.log('generating new session...')
+      // console.log('generating new session...')
 			generateNewLeaseSession({
 				application_id: application.application_id,
 				doc_id: application.doc_id,
@@ -114,7 +114,7 @@ class LeaseApplicationPage extends Component {
       this.setState({
         loaded: true,
       })
-      console.log('session still available')
+      // console.log('session still available')
     }
   }
 

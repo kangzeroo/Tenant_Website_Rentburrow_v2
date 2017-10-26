@@ -144,7 +144,7 @@ export const uploadHello = (obj) => {
 
 export const downloadContract = (doc_id) => {
   const p = new Promise((res, rej) => {
-    console.log('starting download...')
+    // console.log('starting download...')
     generateNewTokens()
 		.then((data) => {
 			axios({
