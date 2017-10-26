@@ -21,6 +21,7 @@ import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
 import { collectIntel } from '../../../actions/intel/intel_actions'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
+import RibbonLabel from '../../instructions/RibbonLabel'
 
 class BuildingCard extends Component {
 
@@ -74,7 +75,7 @@ class BuildingCard extends Component {
             this.props.building.label !== null && this.props.building.label !== ''
             ?
             <div style={comStyles().ribbon}>
-              <Label as='a' color='blue' ribbon='right'>{ this.props.building.label }</Label>
+              <RibbonLabel label={this.props.building.label} />
             </div>
             :
             null

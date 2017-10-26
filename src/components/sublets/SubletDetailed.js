@@ -136,7 +136,7 @@ class SubletDetailed extends Component {
                 ?
                 <Button basic primary content='Message Student' onClick={(e) => this.goToFacebookUser(e, this.props.sublet.fb_user_id)} style={comStyles().originalButton} />
                 :
-        				<Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+        				null
               }
             </div>
             :
@@ -148,7 +148,7 @@ class SubletDetailed extends Component {
                 ?
                 null
                 :
-                <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+                null
               }
             </div>
           }
@@ -158,6 +158,9 @@ class SubletDetailed extends Component {
 		)
 	}
 }
+
+// <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+// <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
 
 // defines the types of variables in this.props
 SubletDetailed.propTypes = {

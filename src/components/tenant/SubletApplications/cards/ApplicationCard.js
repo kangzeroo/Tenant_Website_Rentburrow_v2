@@ -107,7 +107,7 @@ class ApplicationCard extends Component {
                   {
                     this.props.details.doc_id !== null
                     ?
-                    <h2>Waiting For Signatures</h2>
+                    <h2>Waiting For Signatures. Check your email.</h2>
                     :
                     <h2>Waiting For Subletor</h2>
                   }
