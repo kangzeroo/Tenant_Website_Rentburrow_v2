@@ -41,6 +41,7 @@ import ReceivedApplicationPage from './tenant/SubletApplications/sublets/Receive
 import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
 import Logout from './auth/Logout'
+import TestComponent from './test/TestComponent'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -267,7 +268,7 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={LeaseApplication} />
+                <Route exact path='/sandbox' component={TestComponent} />
                 <Route exact path='/protips' component={ProTipsPage} />
                 <Route exact path='/privacy-policy' component={PrivacyPolicyPage} />
                 <Route exact path='/community' component={CommunityPage} />

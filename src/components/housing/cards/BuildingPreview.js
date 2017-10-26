@@ -45,7 +45,7 @@ class BuildingPreview extends Component {
     getNumVirtualTours(this.props.building.building_id)
     .then((data) => {
       this.setState({
-        vr_tour_count: parseInt(data.vr_tour_count, 10) + 1,
+        vr_tour_count: parseInt(data.vr_tour_count, 10),
       })
     })
   }
