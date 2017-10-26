@@ -73,7 +73,7 @@ class ChatPanel extends Component {
             />
             :
             <div style={comStyles().chat_feed}>
-              Got a question? Checkout our <span onClick={() => this.props.history.push('/protips')} style={comStyles().pro_tips_link}>Rent Pro-Tips Page</span> or ask the Rentburrow Team directly!
+              Got a question? Ask the Rentburrow Team directly!
               <br /><br />
               {
                 this.state.showing_email_unauth
@@ -100,6 +100,8 @@ class ChatPanel extends Component {
 		)
 	}
 }
+
+// Checkout our <span onClick={() => this.props.history.push('/protips')} style={comStyles().pro_tips_link}>Rent Pro-Tips Page</span> or
 
 // defines the types of variables in this.props
 ChatPanel.propTypes = {
