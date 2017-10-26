@@ -176,7 +176,7 @@ export const getEncryptedS3Image = (url, cognito_user_id) => {
 		// https://rentburrow3-tenant-images.s3.amazonaws.com/8f24fead-afa4-4598-9e3b-90a4d1809bde/student_card-181575fb8a8651eea950686533241f0a.jpeg
 		const imageKeyLoc = url.indexOf(cognito_user_id)
 		const imageKey = url.slice(imageKeyLoc + cognito_user_id.length + 1)
-		console.log(imageKey)
+		// console.log(imageKey)
 		AWS.config.credentials.refresh(() => {
 			S3.getObject({
 					Bucket: ENCRYPTED_BUCKET_NAME,
