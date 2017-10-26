@@ -24,16 +24,16 @@ class LoginPopup extends Component {
       return loginFacebook()
     })
     .then((fbProfile) => {
-      saveTenantProfile(fbProfile)
-      .then((data) => {
-        return getTenantProfile({ tenant_id: data.tenant_id, })
-      })
-      .then((data) => {
-        this.props.saveTenantToRedux(data[0])
-      })
+      insertUser(fbProfile)
+      return saveTenantProfile(fbProfile)
+    })
+    .then((data) => {
+      return getTenantProfile({ tenant_id: data.tenant_id, })
+    })
+    .then((data) => {
+      this.props.saveTenantToRedux(data)
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
-      insertUser(fbProfile)
     })
   }
 
