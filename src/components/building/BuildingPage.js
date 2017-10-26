@@ -189,9 +189,10 @@ class BuildingPage extends Component {
 	        <Modal.Content>
 						<SimpleTempForm
 							building={this.state.building}
+							landlord={this.props.selected_landlord}
 							suites={this.state.suites}
 							closeModal={() => this.toggleModal(false)}
-							title='Apply Now'
+							title={this.state.building.label}
 						/>
 	        </Modal.Content>
 	      </Modal>
@@ -362,10 +363,16 @@ class BuildingPage extends Component {
 				</div>
 
 				<div style={comStyles().suites_table}>
-					<AmenityBrowser
-						building={this.state.building}
-						amenities={this.state.amenities}
-					/>
+					{
+						this.state.amenities && this.state.amenities.length > 0
+						?
+						<AmenityBrowser
+							building={this.state.building}
+							amenities={this.state.amenities}
+						/>
+						:
+						null
+					}
 					{
 						this.state.building
 						?
@@ -411,6 +418,7 @@ BuildingPage.propTypes = {
 	selectCorporation: PropTypes.func.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
+	selected_landlord: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -425,6 +433,7 @@ const mapReduxToProps = (redux) => {
 	return {
 		// building: redux.selection.selected_building,
 		tenant_profile: redux.auth.tenant_profile,
+		selected_landlord: redux.selection.selected_landlord,
 	}
 }
 

@@ -1,3 +1,6 @@
+import uuid from 'uuid'
+import axios from 'axios'
+import { sendSimpleApplicationEmailToRentburrow } from '../messaging/simple_application_email'
 import { CONTRACTING_MICROSERVICE } from '../API_URLS'
 
 
@@ -85,6 +88,36 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
         key: 'submit',
       },
     })
+  })
+  return p
+}
+
+export const saveSimpleForm = (group_members, building, landlord, group_notes) => {
+  const p = new Promise((res, rej) => {
+    const group_id = uuid.v4()
+    const leaseOjb = {
+      group_members: group_members.map((mem) => {
+        return {
+          ...mem,
+          id: uuid.v4(),
+          group_id: group_id,
+          building_id: building.building_id,
+          building_alias: building.building_alias,
+          landlord_id: landlord.corporation_id,
+          landlord_alias: landlord.corporation_name,
+          group_notes: group_notes,
+        }
+      })
+    }
+    sendSimpleApplicationEmailToRentburrow(leaseOjb, building.building_alias, landlord.corporation_name)
+    axios.post(`${CONTRACTING_MICROSERVICE}/save_simple_application`, leaseOjb)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
   })
   return p
 }

@@ -19,6 +19,7 @@ import {
 	Icon,
 } from 'semantic-ui-react'
 import { validateEmail } from '../../../api/general/general_api'
+import { saveSimpleForm } from '../../../api/leasing/leasing_api'
 
 
 class SimpleTermForm extends Component {
@@ -35,11 +36,11 @@ class SimpleTermForm extends Component {
       },
       my_group_may_change: false,
 			group_notes: '',
-      group_size: 0,
       group_members: [],
 			error_messages: [],
 			group_error_messages: [],
 			submitted: false,
+      success_message: '',
     }
   }
 
@@ -80,21 +81,45 @@ class SimpleTermForm extends Component {
 	}
 
 	submitApplication() {
-		if (this.state.group_members.length > 0) {
-			console.log('submitApplication')
+		if (this.validateGroupForm()) {
 			this.setState({
 				submitted: true,
 				group_error_messages: [],
+        error_messages: [],
 			})
-			setTimeout(() => {
-				this.props.closeModal()
-			}, 2000)
-		} else {
-			this.setState({
-				group_error_messages: ['You must have at least 1 group member']
-			})
+      saveSimpleForm(this.state.group_members, this.props.building, this.props.landlord, this.state.group_notes).then((data) => {
+        this.setState({
+          success_message: true
+        })
+        localStorage.setItem('saved_application', JSON.stringify({
+          landlord_id: this.props.landlord.corporation_id,
+          landlord_name: this.props.landlord.corporation_name,
+          applied_at: new Date().getTime(),
+        }))
+        setTimeout(() => {
+				  this.props.closeModal()
+        }, 5000)
+      })
 		}
 	}
+
+  validateGroupForm() {
+    let ok_to_proceed = true
+		const group_error_messages = []
+		if (this.state.group_members.length === 0) {
+			group_error_messages.push('You must have at least 1 group member')
+			ok_to_proceed = false
+		}
+    if (this.state.group_notes.length === 0) {
+      group_error_messages.push('You must tell the landlord which suites you want in the group notes')
+			ok_to_proceed = false
+    }
+		this.setState({
+			group_error_messages: group_error_messages,
+			submitted: false,
+		})
+		return ok_to_proceed
+  }
 
 	validateForm() {
 		let ok_to_proceed = true
@@ -126,7 +151,7 @@ class SimpleTermForm extends Component {
 		return (
 			<div style={comStyles().container}>
 				<div style={comStyles().title}>
-					{ this.props.title }
+					{ this.props.title && this.props.title.toLowerCase().indexOf('waitlist') > -1 ? 'Join Waitlist' : 'Apply Online' }
 				</div>
 				<div style={comStyles().body}>
 					<Form style={comStyles().form}>
@@ -226,7 +251,7 @@ class SimpleTermForm extends Component {
 							<TextArea
 								rows={4}
 		            value={this.state.group_notes}
-								placeholder='Eg. My group may change, only female roommates please..etc'
+								placeholder='Eg. Give as much info as possible. Which suites we you ok with? Will your group change? Do you want the landlord to match you with only female roommates? ...etc'
 		            onChange={(e) => this.setState({ group_notes: e.target.value })}
 								style={comStyles().textArea}
 		          />
@@ -249,7 +274,13 @@ class SimpleTermForm extends Component {
 							this.state.submitted
 							?
 							<div style={comStyles().hidden_loading}>
-								<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+                {
+                  this.state.success_message
+                  ?
+                  <div style={comStyles().success}>SUCCESS! The landlord has received your application and you will hear back from them soon.</div>
+                  :
+                  <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+                }
 							</div>
 							:
 							<Button
@@ -275,6 +306,7 @@ SimpleTermForm.propTypes = {
   suites: PropTypes.array.isRequired,       // passed in
 	closeModal: PropTypes.func.isRequired,		// passed in
 	title: PropTypes.string.isRequired,				// passed in
+  landlord: PropTypes.object.isRequired,    // passed in
 }
 
 // for all optional props, define a default value
@@ -371,5 +403,15 @@ const comStyles = () => {
 			alignItems: 'center',
 			padding: '20px',
 		},
+    success: {
+      width: '100%',
+      padding: '20px',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+			fontSize: '1rem',
+			fontWeight: 'bold',
+    }
 	}
 }

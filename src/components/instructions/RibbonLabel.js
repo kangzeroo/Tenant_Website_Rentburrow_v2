@@ -22,7 +22,7 @@ class RibbonLabel extends Component {
     } else if (label === 'Sold Out') {
       return 'red'
     } else {
-      return 'blue'
+      return 'yellow'
     }
   }
 
