@@ -62,27 +62,29 @@ export const calculateRoomsSummary = (result_of_api_calls) => {
   }
   // iterate for each room's info
   result_of_api_calls.forEach((resulting_room) => {
-    rooms_summary.total_rooms += 1
-    // iterate through all the resulting_rooms to get necessary data about rooms
-    const room = resulting_room.getRoomPage_results
-    // set the min price
-    if (parseInt(room.price) < rooms_summary.min_price) {
-      rooms_summary.min_price = parseInt(room.price)
-    }
-    // set the max price
-    if (parseInt(room.price) > rooms_summary.max_price) {
-      rooms_summary.max_price = parseInt(room.price)
-    }
-    // tracks if the rooms are all the same price
-    if (parseInt(room.price) !== rooms_summary.standard_price) {
-      rooms_summary.standard_price = 0
-    }
-    // iterate through all the resulting_rooms to get necessary data about ensuite baths
-    resulting_room.getRoomAmenities_results.forEach((am) => {
-      if (am.amenity_type === 'bathroom_1' || am.amenity_type === 'bathroom_2' || am.amenity_type === 'half_bathroom_1' || am.amenity_type === 'shared_bathroom_1') {
-        rooms_summary.total_ensuite_baths += 1
+    if (resulting_room) {
+      rooms_summary.total_rooms += 1
+      // iterate through all the resulting_rooms to get necessary data about rooms
+      const room = resulting_room.getRoomPage_results
+      // set the min price
+      if (parseInt(room.price) < rooms_summary.min_price) {
+        rooms_summary.min_price = parseInt(room.price)
       }
-    })
+      // set the max price
+      if (parseInt(room.price) > rooms_summary.max_price) {
+        rooms_summary.max_price = parseInt(room.price)
+      }
+      // tracks if the rooms are all the same price
+      if (parseInt(room.price) !== rooms_summary.standard_price) {
+        rooms_summary.standard_price = 0
+      }
+      // iterate through all the resulting_rooms to get necessary data about ensuite baths
+      resulting_room.getRoomAmenities_results.forEach((am) => {
+        if (am.amenity_type === 'bathroom_1' || am.amenity_type === 'bathroom_2' || am.amenity_type === 'half_bathroom_1' || am.amenity_type === 'shared_bathroom_1') {
+          rooms_summary.total_ensuite_baths += 1
+        }
+      })
+    }
   })
   return rooms_summary
 }
