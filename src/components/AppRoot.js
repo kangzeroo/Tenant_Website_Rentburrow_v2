@@ -151,7 +151,7 @@ class AppRoot extends Component {
       })
     } else {
       unauthRoleStudent().then((unauthUser) => {
-        console.log(unauthUser)
+        // console.log(unauthUser)
         this.props.saveTenantToRedux(unauthUser)
       })
       // in X seconds, force login popup

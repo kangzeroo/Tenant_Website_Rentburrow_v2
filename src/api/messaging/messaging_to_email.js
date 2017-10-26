@@ -87,7 +87,7 @@ const createInquiryParamsConfig = (tenant_name, tenant_email, landlord_email, bu
 }
 
 const generateHTMLInquiryEmail = (tenant_name, building, message) => {
-  const building_url = `https://rentburrow.com/${aliasToURL(building.building_alias)}`
+  const building_url = `https://rentburrow.com/${building && building.building_alias ? aliasToURL(building.building_alias) : ''}`
   return `
 		<!DOCTYPE html>
 		<html>
