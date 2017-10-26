@@ -21,7 +21,7 @@ export const sendChatMessageToLandlord = (tenant_name, tenant_email, landlord_em
 			  	 // console.log(err, err.stack); // an error occurred
 			  	 rej(err)
 			  } else {
-			  	// console.log(data);           // successful response
+			  	console.log(data);           // successful response
 				res('Success! Email sent')
 			  }
 			})
@@ -39,6 +39,7 @@ const createInquiryParamsConfig = (tenant_name, tenant_email, landlord_email, bu
   const params = {
 	  Destination: { /* required */
 	    BccAddresses: [
+        // 'email.records.rentburrow@gmail.com'
 	      /* more items */
 	    ],
 	    CcAddresses: [
@@ -46,7 +47,7 @@ const createInquiryParamsConfig = (tenant_name, tenant_email, landlord_email, bu
 	    ],
 	    ToAddresses: [
 	      /* more items */
-        'inquiries@rentburrow-messaging.com'
+        'email.records.rentburrow@gmail.com'
 	    ]
 	  },
 	  Message: { /* required */

@@ -223,75 +223,81 @@ class SimpleTermForm extends Component {
 							/>
 		        </Form.Field>
 		      </Form>
-					<div style={comStyles().summary}>
-						<Card raised fluid>
-							<Card.Header style={comStyles().card_header}>
-								Group Members
-							</Card.Header>
-							<div style={comStyles().member_list}>
-								{
-									this.state.group_members.map((member) => {
-										return (
-											<div style={comStyles().row_member}>
-												<div style={comStyles().row_member_name}>{ member.name }</div>
-												<div style={comStyles().row_member_email}>{ member.email }</div>
-												<div style={comStyles().row_member_button}>
-													<Icon name='cancel' onClick={() => this.removeFromGroup(member.id)} />
-												</div>
-											</div>
-										)
-									})
-								}
-							</div>
-						</Card>
-						<Card raised fluid>
-							<Card.Header style={comStyles().card_header}>
-								Group Notes for Landlord
-							</Card.Header>
-							<TextArea
-								rows={4}
-		            value={this.state.group_notes}
-								placeholder='Eg. Give as much info as possible. Which suites we you ok with? Will your group change? Do you want the landlord to match you with only female roommates? ...etc'
-		            onChange={(e) => this.setState({ group_notes: e.target.value })}
-								style={comStyles().textArea}
-		          />
-						</Card>
-						<Form.Field>
-							{
-								this.state.group_error_messages.map((err, index) => {
-									return (
-										<Message
-											visible
-											key={index}
-											error
-											content={err}
-										/>
-									)
-								})
-							}
-						</Form.Field>
-						{
-							this.state.submitted
-							?
-							<div style={comStyles().hidden_loading}>
-                {
-                  this.state.success_message
-                  ?
-                  <div style={comStyles().success}>SUCCESS! The landlord has received your application and you will hear back from them soon.</div>
-                  :
-                  <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-                }
-							</div>
-							:
-							<Button
-								basic
-								fluid
-								color='blue'
-								onClick={() => this.submitApplication()}
-								content='Submit Application'
-							/>
-						}
-					</div>
+          {
+            this.state.group_members.length > 0
+            ?
+  					<div style={comStyles().summary}>
+  						<Card raised fluid>
+  							<Card.Header style={comStyles().card_header}>
+  								Group Members
+  							</Card.Header>
+  							<div style={comStyles().member_list}>
+  								{
+  									this.state.group_members.map((member) => {
+  										return (
+  											<div style={comStyles().row_member}>
+  												<div style={comStyles().row_member_name}>{ member.name }</div>
+  												<div style={comStyles().row_member_email}>{ member.email }</div>
+  												<div style={comStyles().row_member_button}>
+  													<Icon name='cancel' onClick={() => this.removeFromGroup(member.id)} />
+  												</div>
+  											</div>
+  										)
+  									})
+  								}
+  							</div>
+  						</Card>
+  						<Card raised fluid>
+  							<Card.Header style={comStyles().card_header}>
+  								Group Notes for Landlord
+  							</Card.Header>
+  							<TextArea
+  								rows={4}
+  		            value={this.state.group_notes}
+  								placeholder='Eg. Give as much info as possible. Which suites we you ok with? Will your group change? Do you want the landlord to match you with only female roommates? ...etc'
+  		            onChange={(e) => this.setState({ group_notes: e.target.value })}
+  								style={comStyles().textArea}
+  		          />
+  						</Card>
+  						<Form.Field>
+  							{
+  								this.state.group_error_messages.map((err, index) => {
+  									return (
+  										<Message
+  											visible
+  											key={index}
+  											error
+  											content={err}
+  										/>
+  									)
+  								})
+  							}
+  						</Form.Field>
+  						{
+  							this.state.submitted
+  							?
+  							<div style={comStyles().hidden_loading}>
+                  {
+                    this.state.success_message
+                    ?
+                    <div style={comStyles().success}>SUCCESS! The landlord has received your application and you will hear back from them soon.</div>
+                    :
+                    <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+                  }
+  							</div>
+  							:
+  							<Button
+  								basic
+  								fluid
+  								color='blue'
+  								onClick={() => this.submitApplication()}
+  								content='Submit Application'
+  							/>
+  						}
+  					</div>
+            :
+            null
+          }
 				</div>
 			</div>
 		)
@@ -357,12 +363,12 @@ const comStyles = () => {
 		form: {
       display: 'flex',
       flexDirection: 'column',
-			width: '50%',
+			flexGrow: 1,
 		},
 		summary: {
       display: 'flex',
       flexDirection: 'column',
-			width: '50%',
+			flexGrow: 1,
 			padding: '15px',
 		},
 		row_member: {

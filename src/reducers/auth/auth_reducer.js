@@ -18,7 +18,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         tenant_profile: action.payload,
-        authenticated: !action.payload.unauthRoleStudent,
+        authenticated: action.payload.unauthRoleStudent ? false : true,
       }
     case LOGOUT_TENANT:
       return {

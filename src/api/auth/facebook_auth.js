@@ -43,7 +43,6 @@ export const loginFacebook = () => {
 export const checkIfFacebookLoggedIn = () => {
   const p = new Promise((res, rej) => {
 		FB.getLoginStatus((response) => {
-			// console.log(response )
 		  if (response.status === 'connected') {
 	      // save successful facebook login to cognito
 				// console.log('CONNECTED')
