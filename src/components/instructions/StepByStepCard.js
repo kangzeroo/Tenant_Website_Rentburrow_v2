@@ -199,6 +199,14 @@ class StepByStepCard extends Component {
     )
   }
 
+  generateText(label) {
+    if (label && label.toLowerCase().indexOf('waitlist') > -1) {
+      return 'Join Waitlist'
+    } else {
+      return 'Apply Online'
+    }
+  }
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -230,7 +238,7 @@ class StepByStepCard extends Component {
               <Label circular color='blue' size='big' key={3}>3</Label>
             </div>
             <div style={comStyles().contents}>
-              Apply & Sign Online
+              { this.generateText(this.props.building.label) }
             </div>
           </Card.Content>
         </Card>
