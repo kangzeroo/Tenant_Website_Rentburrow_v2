@@ -114,6 +114,7 @@ class Header extends Component {
           src={this.props.tenant_profile.thumbnail}
           shape='circular'
           bordered
+          style={comStyles().tenant_thumbnail}
         />
       </span>
     )
@@ -146,7 +147,16 @@ class Header extends Component {
               <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
             </Link>
           </div>
-          <SearchInput />
+          {
+            this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' || this.props.history.location.pathname === '/leases' || this.props.history.location.pathname === '/sublet' || this.props.history.location.pathname === '/sublets'
+            ?
+            <SearchInput
+              style={comStyles().searchContainer}
+            />
+            :
+            null
+          }
+
           {/*
           <div style={comStyles().righterFloat}>
             <h3> { i18n(WELCOME_MESSAGE) } </h3>
@@ -253,10 +263,23 @@ const comStyles = () => {
       float: 'left',
     },
     logo: {
-      height: '35px',
+      height: '5vh',
       width: 'auto',
       float: 'left',
       margin: '5px'
+    },
+    login: {
+      height: '5vh',
+      width: 'auto',
+    },
+    tenant_thumbnail: {
+      height: '6vh',
+      width: 'auto',
+      margin: '0.5vh'
+    },
+    searchContainer: {
+      height: '5vh',
+      width: 'auto',
     },
     rightFloat: {
       position: 'absolute',
@@ -279,8 +302,8 @@ const comStyles = () => {
       right: '20px',
       top: '0px',
       position: 'absolute',
-      maxHeight: '45px',
-      maxWidth: '45px'
+      maxHeight: '7vh',
+      maxWidth: '7vw'
     },
     close_login: {
       position: 'absolute',

@@ -17,9 +17,6 @@ class TestComponent extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<iframe
-          src=''
-        />
 			</div>
 		)
 	}
@@ -61,6 +58,9 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       height: '100vh'
+		},
+		headerImage: {
+			height: '50vh'
 		}
 	}
 }
