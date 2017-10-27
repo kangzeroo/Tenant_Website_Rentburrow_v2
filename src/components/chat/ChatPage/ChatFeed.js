@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import {
   xMidBlue
 } from '../../../styles/base_colors'
@@ -40,13 +41,13 @@ class ChatFeed extends Component {
             let msg
             if (message.receiver_id === message.corporation_id) {
               msg = (
-                <div key={message.message_id} style={comStyles().me}>
+                <div key={message.message_id} title={message.read_at ? `Seen ${moment(message.read_at).fromNow()}` : 'Not Seen Yet'} style={comStyles().me}>
                   { message.contents }
                 </div>
               )
             } else if (message.sender_id === message.corporation_id) {
               msg = (
-                <div key={message.message_id} style={comStyles().them}>
+                <div key={message.message_id} title={message.read_at ? `Seen ${moment(message.read_at).fromNow()}` : 'Not Seen Yet'} style={comStyles().them}>
                   { message.contents }
                 </div>
               )

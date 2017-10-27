@@ -23,16 +23,16 @@ class ChatIcon extends Component {
   anyNewMessages(messages) {
     const new_channels = []
     messages.forEach((msg) => {
-      let exists = false
-      if (msg.sender_id === this.props.tenant_profile.tenant_id) {
-        exists = true
+      let add_to_notifications = true
+      if (msg.read_at !== 0 || msg.sender_id === this.props.tenant_profile.tenant_id) {
+        add_to_notifications = false
       }
       new_channels.forEach((ch_msg) => {
         if (ch_msg.channel_id === msg.channel_id) {
-          exists = true
+          add_to_notifications = false
         }
       })
-      if (!exists) {
+      if (add_to_notifications) {
         new_channels.push(msg)
       }
     })

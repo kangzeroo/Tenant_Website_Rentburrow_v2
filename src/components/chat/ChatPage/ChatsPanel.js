@@ -130,7 +130,9 @@ class ChatsPanel extends Component {
                 // console.log(thread)
                 return (
                   <Segment key={thread[0].message_id} onClick={() => this.selectThisThread(thread)} style={comStyles().segment}>
-                    { thread[0].corporation_name }
+                    <div style={notificationStyles(thread).thread}>
+                      { thread[0].corporation_name }
+                    </div>
                   </Segment>
                 )
               })
@@ -222,4 +224,20 @@ const comStyles = (pathname) => {
       right: '10px',
     }
 	}
+}
+
+
+const notificationStyles = (thread) => {
+  let threadStyles = {
+    color: 'black',
+  }
+  thread.forEach((t) => {
+    if (t.read_at === 0) {
+      threadStyles.color = xMidBlue
+      threadStyles.fontWeight = 'bold'
+    }
+  })
+  return {
+    thread: threadStyles
+  }
 }

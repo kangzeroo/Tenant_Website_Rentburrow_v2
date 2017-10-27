@@ -55,7 +55,20 @@ const establishFirebaseRealtimeDatabaseMessaging = (() => {
           break;
 
         case MARK_AS_READ:
-          console.log(action)
+          action.payload.forEach((msg) => {
+            const updatedMsg = {
+              ...msg,
+              read_at: new Date().getTime(),
+            }
+            if (msg.sender_id === 'Rentburrow_Student_Help_Chat') {
+              firebase_db.ref(`tenants/${updatedMsg.receiver_id}/messages/${updatedMsg.message_id}`).set(updatedMsg)
+              firebase_db.ref(`tenants/${updatedMsg.sender_id}/messages/${updatedMsg.message_id}`).set(updatedMsg)
+            } else {
+              firebase_db.ref(`tenants/${updatedMsg.receiver_id}/messages/${updatedMsg.message_id}`).set(updatedMsg)
+              firebase_db.ref(`landlords/${updatedMsg.sender_id}/messages/${updatedMsg.message_id}`).set(updatedMsg)
+            }
+          })
+          break;
 
         // This action is irrelevant to us, pass it on to the next middleware
         default:
