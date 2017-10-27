@@ -13,12 +13,14 @@ import {
   Image,
   Button,
   TextArea,
+  Modal,
 } from 'semantic-ui-react'
 import {
   renderProcessedThumbnail,
   aliasToURL,
   shortenAddress,
 } from '../../api/general/general_api'
+import LoginPopup from '../auth/LoginPopup'
 import SingularImageGallery from '../image/SingularImageGallery'
 import { selectPinToRedux } from '../../actions/search/search_actions'
 import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
@@ -26,6 +28,38 @@ import { sortAmenitiesSublet } from '../../api/amenities/sublet_amenities'
 
 
 class SubletDetailed extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      toggle_modal: false,
+      modal_name: '',
+      context: null,
+    }
+  }
+
+  toggleModal(bool, attr, context) {
+    this.setState({
+      toggle_modal: bool,
+      modal_name: attr,
+      context: context
+    })
+  }
+
+  renderAppropriateModal(modal_name, context) {
+    if (modal_name === 'login') {
+      return (
+        <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+          <Modal.Content>
+            <LoginPopup
+              toggleModal={() => this.toggleModal()}
+            />
+          </Modal.Content>
+        </Modal>
+      )
+    }
+    return null
+  }
 
   selectThisPost(sublet) {
     window.open(`${window.location.origin}/sublet/${sublet.place_id}`, '_blank')
@@ -144,23 +178,26 @@ class SubletDetailed extends Component {
               <Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
               <br />
               {
-                this.props.tenant_profile.fb_user_id
-                ?
-                <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
-                :
-                null
-              }
-              {
                 this.props.onlyForShow
                 ?
                 null
                 :
-                null
+                <div>
+                  {
+                    this.props.authenticated
+                    ?
+                    <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+                    :
+                    <Button primary content='Sign Online (Free)' onClick={(e) => this.toggleModal(true, 'login')} style={comStyles().originalButton} />
+                  }
+                </div>
               }
             </div>
           }
         </div>
-
+        {
+          this.renderAppropriateModal(this.state.modal_name, this.state.context)
+        }
 			</Card>
 		)
 	}
@@ -177,12 +214,14 @@ SubletDetailed.propTypes = {
   tenant_profile: PropTypes.object.isRequired,
   onlyForShow: PropTypes.bool,            // passed in
   iAmTheSubletee: PropTypes.bool,         // passed in
+  authenticated: PropTypes.bool,
 }
 
 // for all optional props, define a default value
 SubletDetailed.defaultProps = {
   onlyForShow: false,
   iAmTheSubletee: false,
+  authenticated: false,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -192,6 +231,7 @@ const RadiumHOC = Radium(SubletDetailed)
 function mapStateToProps(state) {
 	return {
     tenant_profile: state.auth.tenant_profile,
+    authenticated: state.auth.authenticated,
 	}
 }
 

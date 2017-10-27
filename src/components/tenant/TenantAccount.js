@@ -66,18 +66,26 @@ class TenantAccount extends Component {
     this.setState({
       saving: true
     }, () => {
-      uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
-  			.then((S3Obj) => {
-          // console.log(S3Obj)
-  				return updateTenantProfile({
-            tenant_id: this.props.tenant_profile.tenant_id,
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            email: this.state.email,
-            phone: this.state.phone,
-            student_card: S3Obj.Location,
-          })
-  			})
+      // uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
+  		// 	.then((S3Obj) => {
+      //     // console.log(S3Obj)
+  		// 		return updateTenantProfile({
+      //       tenant_id: this.props.tenant_profile.tenant_id,
+      //       first_name: this.state.first_name,
+      //       last_name: this.state.last_name,
+      //       email: this.state.email,
+      //       phone: this.state.phone,
+      //       student_card: S3Obj.Location,
+      //     })
+  		// 	})
+        updateTenantProfile({
+          tenant_id: this.props.tenant_profile.tenant_id,
+          first_name: this.state.first_name,
+          last_name: this.state.last_name,
+          email: this.state.email,
+          phone: this.state.phone,
+          // student_card: S3Obj.Location,
+        })
         .then(() => {
           this.setState({
             profile_saved: true,
