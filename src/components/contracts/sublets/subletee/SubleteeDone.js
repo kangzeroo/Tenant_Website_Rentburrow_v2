@@ -29,7 +29,7 @@ class SubleteeDone extends Component {
           <Button positive onClick={() => this.openFacebookUser(`https://facebook.com/${this.props.sublet_post.FB_USER_ID}`)} style={comStyles().facebook_user}>
             Share this link with { this.props.sublet_post.FB_USER_NAME }
           </Button>
-          <Button basic primary content='View All Applications' onClick={() => this.props.history.push('/sublet_applications?tab=where-i-want-to-live')} style={comStyles().facebook_user} />
+          <Button basic primary content='View All Applications' onClick={() => this.props.history.push('/applications?tab=where-i-want-to-live')} style={comStyles().facebook_user} />
         </div>
         <div style={comStyles().share_link}>
           <input value={`${window.location.origin}/signing/sublet/${this.props.sublet_post.POST_ID}/initiate/applications/${this.props.subletee_contract.contract_id}`} style={comStyles().subletor_url} />
