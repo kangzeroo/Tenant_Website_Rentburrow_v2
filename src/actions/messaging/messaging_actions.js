@@ -6,7 +6,18 @@ import {
 	REQUEST_NOTIFICATIONS_PERMISSION,
 	CHAT_HELP,
 	LISTEN_TO_FIREBASE_DB,
+	MARK_AS_READ,
 } from '../action_types'
+
+
+export const markTheseAsRead = (msgs) => {
+	return (dispatch) => {
+		dispatch({
+			type: MARK_AS_READ,
+			payload: msgs
+		})
+	}
+}
 
 // send a message via FCM
 export const sendChatMessage = (msg) => {

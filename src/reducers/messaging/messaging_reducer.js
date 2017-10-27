@@ -56,7 +56,7 @@ export default (state = INITIAL_STATE, action) => {
 			if (action.payload) {
 				return {
 					...state,
-					chat_help: true,
+					chat_help: false,
 				}
 			} else {
 				return state
