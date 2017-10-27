@@ -8,7 +8,7 @@ import { Form, TextArea } from 'semantic-ui-react'
 import {
   xMidBlue
 } from '../../../styles/base_colors'
-import { sendChatMessage } from '../../../actions/messaging/messaging_actions'
+import { sendChatMessage, markTheseAsRead } from '../../../actions/messaging/messaging_actions'
 import { sendChatMessageToLandlord } from '../../../api/messaging/messaging_to_email'
 
 
@@ -26,6 +26,10 @@ class ChatInput extends Component {
   }
 
   componentDidMount() {
+    // mark the messages as read
+    this.props.markTheseAsRead(this.props.current_thread.filter((msg) => {
+      return msg.read_at === 0 && msg.receiver_id === this.props.tenant_profile.tenant_id
+    }))
     // get a hold of our stream sources
     // const sendBtn = document.getElementById('sendBtn')
     const textInput = document.getElementById('textInput')
@@ -89,6 +93,9 @@ class ChatInput extends Component {
         error: onError,
         complete: onComplete
       })
+      this.props.markTheseAsRead(this.props.current_thread.filter((msg) => {
+        return msg.read_at === 0 && msg.receiver_id === this.props.tenant_profile.tenant_id
+      }))
     }
 
     mergedStream.subscribe({
@@ -129,6 +136,8 @@ ChatInput.propTypes = {
   chat_help: PropTypes.bool,
   authenticated: PropTypes.bool,
   showing_email_unauth: PropTypes.bool,         // passed in
+  current_thread: PropTypes.array.isRequired,
+  markTheseAsRead: PropTypes.func.isRequired,   // passed in
 }
 
 ChatInput.defaultProps = {
@@ -145,11 +154,13 @@ function mapStateToProps(state) {
     tenant_profile: state.auth.tenant_profile,
     chat_help: state.messaging.chat_help,
     authenticated: state.auth.authenticated,
+    current_thread: state.messaging.current_thread,
 	}
 }
 
 export default connect(mapStateToProps, {
   sendChatMessage,
+  markTheseAsRead,
 })(RadiumHOC)
 
 // ===============================

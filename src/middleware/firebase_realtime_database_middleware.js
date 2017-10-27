@@ -6,6 +6,7 @@ import { getFirebase } from '../api/firebase/firebase_profile'
 import {
   LISTEN_TO_FIREBASE_DB,
   SEND_MESSAGE,
+  MARK_AS_READ,
 } from '../actions/action_types'
 import {
   FIREBASE_VERSION
@@ -52,6 +53,9 @@ const establishFirebaseRealtimeDatabaseMessaging = (() => {
           }
           next(action)
           break;
+
+        case MARK_AS_READ:
+          console.log(action)
 
         // This action is irrelevant to us, pass it on to the next middleware
         default:
