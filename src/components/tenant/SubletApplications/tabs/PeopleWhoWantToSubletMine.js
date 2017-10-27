@@ -15,6 +15,7 @@ import {
 import ReceivedApplicationCard from '../cards/ReceivedApplicationCard'
 import { getReceivedApplications, } from '../../../../api/application/application_api'
 import { saveReceivedApplicationsToRedux, } from '../../../../actions/contract/contract_actions'
+import { updateDocumentStatus, } from '../../../../api/pandadoc/pandadoc_api'
 
 class PeopleWhoWantToSubletMine extends Component {
 
@@ -26,6 +27,7 @@ class PeopleWhoWantToSubletMine extends Component {
 	}
 
 	componentWillMount() {
+		updateDocumentStatus(this.props.tenant_profile.tenant_id)
 		getReceivedApplications(this.props.tenant_profile.tenant_id)
 		.then((data) => {
 			// const existsAlready = (app, unique_apps) => {
