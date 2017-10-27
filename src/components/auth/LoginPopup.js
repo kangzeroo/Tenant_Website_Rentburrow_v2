@@ -19,6 +19,7 @@ import { saveTenantProfile, getTenantProfile } from '../../api/auth/tenant_api'
 class LoginPopup extends Component {
 
   loginWithFacebook() {
+    localStorage.removeItem('fbToken')
     initiateFacebook()
     .then(() => {
       return loginFacebook()

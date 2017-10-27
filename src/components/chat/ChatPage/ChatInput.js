@@ -69,13 +69,14 @@ class ChatInput extends Component {
         channel_id: this.props.chat_help ? `Rentburrow_Student_Help_Chat_${this.props.tenant_profile.tenant_id}` : `${this.props.corporation.corporation_id}_${this.props.tenant_profile.tenant_id}`,
         contents: this.state.inputText,
         sent_at: new Date().getTime(),
+        read_at: 0,
         ...additionalInfo,
       }
       this.props.sendChatMessage(newMessage)
       sendChatMessageToLandlord(
         this.props.tenant_profile.first_name,
         this.props.tenant_profile.email ? this.props.tenant_profile.email : localStorage.getItem('unauthUser_email'),
-        'huang.khan74@gmail.com',
+        this.props.corporation.email,
         this.props.selected_building,
         this.state.inputText
       )

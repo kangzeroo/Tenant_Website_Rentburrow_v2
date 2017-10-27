@@ -53,9 +53,13 @@ export default (state = INITIAL_STATE, action) => {
 				...go_back,
 			}
 		case SELECT_BUILDING:
-			return {
-				...state,
-				chat_help: false,
+			if (action.payload) {
+				return {
+					...state,
+					chat_help: true,
+				}
+			} else {
+				return state
 			}
 		case CHAT_HELP:
 			return {
