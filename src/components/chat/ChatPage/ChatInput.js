@@ -48,7 +48,7 @@ class ChatInput extends Component {
       this.setState({ inputText: text, checked: true })
     }
     const onError = (err) => {
-      console.log(err)
+      // console.log(err)
     }
     const onComplete = () => {
       let additionalInfo = {}
