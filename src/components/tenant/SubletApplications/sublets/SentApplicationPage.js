@@ -32,7 +32,6 @@ class SentApplicationPage extends Component {
 		componentWillMount() {
 			const pathname = this.props.location.pathname
 			const contract_id = pathname.slice(pathname.indexOf('/applications/subletee/') + '/applications/subletee/'.length)
-			console.log(this.props.sent_applications)
 			const application = this.props.sent_applications.filter((app) => {
 														return contract_id === app.contract_id
 													})[0] || {}
@@ -44,7 +43,7 @@ class SentApplicationPage extends Component {
 			getQuickSubleteeContractLink(contract_id,	application.tenant_id)
 			.then((data) => {
 				this.setState({
-					link: data[0].contract_link
+					link: data.contract_link
 				})
 			})
 		}
@@ -79,13 +78,13 @@ class SentApplicationPage extends Component {
 								icon='cloud download'
 								content='Download Contract'
 								onClick={() => this.downloadContractFromAPI()}
-								disabled={this.state.application.doc_status !== 'complete'}
+								disabled//={this.state.application.doc_status !== 'complete'}
 							/>
 						}
 					</div>
 					<div style={comStyles().headerStatus}>
 						{
-							this.state.application.doc_status === 'complete'
+							this.state.application.doc_status === 'document.completed'
 							?
 							<Header
 								as='h2'

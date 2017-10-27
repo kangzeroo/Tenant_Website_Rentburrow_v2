@@ -99,7 +99,7 @@ class ReceivedApplicationCard extends Component {
 					<div>
 						<h2>STATUS: </h2>
 						{
-							this.props.details.doc_status === 'complete'
+							this.props.details.doc_status === 'document.completed'
 							?
 							<h2> COMPLETE </h2>
 							:

@@ -17,6 +17,7 @@ import {
   getSentApplications,
 } from '../../../../api/application/application_api'
 import { saveSentApplicationsToRedux, } from '../../../../actions/contract/contract_actions'
+import { updateDocumentStatus, } from '../../../../api/pandadoc/pandadoc_api'
 
 class PlacesIAppliedToLive extends Component {
 
@@ -28,6 +29,7 @@ class PlacesIAppliedToLive extends Component {
   }
 
   componentWillMount() {
+    updateDocumentStatus(this.props.tenant_profile.tenant_id)
     getSentApplications(this.props.tenant_profile.tenant_id)
     .then((data) => {
       // const existsAlready = (app, unique_apps) => {

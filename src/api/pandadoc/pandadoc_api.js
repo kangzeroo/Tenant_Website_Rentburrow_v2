@@ -100,9 +100,9 @@ export const generateNewLeaseSession = (obj) => {
   return p
 }
 
-export const updateDocumentStatus = (obj) => {
+export const updateDocumentStatus = (tenant_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/update_document_status`, obj)
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_document_status`, { tenant_id, })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

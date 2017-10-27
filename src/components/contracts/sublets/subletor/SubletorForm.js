@@ -133,10 +133,12 @@ class SubletorForm extends Component {
 
 	submit() {
 		if (this.formValidation()) {
-			this.props.saveSubletorForm(this.state)
-			this.setState({
-				submitted: true,
-			})
+			setTimeout(() => {
+				this.props.saveSubletorForm(this.state)
+				this.setState({
+					submitted: true,
+				})
+			}, 3000)
 		}
 	}
 
@@ -458,8 +460,11 @@ class SubletorForm extends Component {
 								{
 									this.state.submitted
 									?
-									<div style={comStyles().hidden_loading}>
-										<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+									<div style={comStyles().saving} >
+										<div style={comStyles().hidden_loading}>
+											<img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+										</div>
+										<p>Generating Contract...</p>
 									</div>
 									:
 							    <Button primary size='large' type='submit' onClick={() => this.submit()}>Next</Button>
@@ -563,6 +568,12 @@ const comStyles = () => {
 		},
 		subletee_subletor_relationship: {
 
+		},
+		saving: {
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'center',
+			justifyContent: 'center'
 		},
 		contents: {
 			display: 'flex',

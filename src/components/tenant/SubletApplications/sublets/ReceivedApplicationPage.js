@@ -41,10 +41,8 @@ class ReceivedSentApplicationPage extends Component {
 		this.setState({
 			application,
 		})
-		console.log(application)
 		getQuickSubletorContractLink(contract_id,	application.tenant_id)
 		.then((data) => {
-			console.log(data)
 			this.setState({
 				link: data.contract_link
 			})
@@ -81,13 +79,13 @@ class ReceivedSentApplicationPage extends Component {
 								icon='cloud download'
 								content='Download Contract'
 								onClick={() => this.downloadContractFromAPI()}
-								disabled={this.state.application.doc_status !== 'complete'}
+								disabled//={this.state.application.doc_status !== 'complete'}
 							/>
 						}
 					</div>
 					<div style={comStyles().headerStatus}>
 						{
-							this.state.application.doc_status === 'complete'
+							this.state.application.doc_status === 'document.completed'
 							?
 							<Header
 								as='h2'
