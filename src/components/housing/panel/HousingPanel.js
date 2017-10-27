@@ -17,6 +17,9 @@ import {
 import {
 	changeCardStyle,
 } from '../../../actions/search/search_actions'
+import {
+	selectHelpThread
+} from '../../../actions/messaging/messaging_actions'
 import BuildingCard from '../cards/BuildingCard'
 import BuildingRow from '../cards/BuildingRow'
 import SubletCard from '../cards/SubletCard'
@@ -31,6 +34,10 @@ class HousingPanel extends Component {
 
 			running: true,
 		}
+	}
+
+	componentWillMount() {
+		// this.props.selectHelpThread()
 	}
 
 	generateCard(building) {
@@ -178,6 +185,7 @@ HousingPanel.propTypes = {
 	refresh: PropTypes.func.isRequired, 					// passed in
 	buildings: PropTypes.array.isRequired,
 	sublets: PropTypes.array.isRequired,
+	selectHelpThread: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -204,6 +212,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
 		changeCardStyle,
+		selectHelpThread,
 	})(RadiumHOC)
 )
 

@@ -73,7 +73,7 @@ class Header extends Component {
           }
           <Modal.Content>
             <LoginPopup
-              toggleModal={() => this.toggleModal()}
+              toggleModal={() => this.toggleModal(false)}
             />
           </Modal.Content>
         </div>
