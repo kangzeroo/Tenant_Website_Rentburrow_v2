@@ -50,7 +50,7 @@ class SentApplicationPage extends Component {
 		}
 
 		goBack() {
-			this.props.history.push('/applications/?tab=where-i-want-to-live')
+			this.props.history.push('/sublet_applications/?tab=where-i-want-to-live')
 		}
 
 		downloadContractFromAPI() {
