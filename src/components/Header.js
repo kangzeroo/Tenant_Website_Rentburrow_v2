@@ -121,7 +121,7 @@ class Header extends Component {
 
     const options = [
       { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
-      // { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
+      { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
       // { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
       // { key: 'pro_tips', value: 'pro_tips', text: 'Renting Pro-Tips', icon: 'star' },
       // { key: 'privacy_policy', value: 'privacy_policy', text: 'Privacy Policy', icon: 'privacy' },

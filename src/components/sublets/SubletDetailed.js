@@ -144,6 +144,13 @@ class SubletDetailed extends Component {
               <Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
               <br />
               {
+                this.props.tenant_profile.fb_user_id
+                ?
+                <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+                :
+                null
+              }
+              {
                 this.props.onlyForShow
                 ?
                 null

@@ -115,6 +115,7 @@ class SubletApplication extends Component {
 
 	// for when you load a page immediately onto Subletee Done
 	initiateSubleteeDone(post_id, contract_id) {
+		console.log('subletee done')
 		getSubletPostById(post_id).then((data) => {
 				this.setState({
 					sublet_post: data
@@ -175,16 +176,16 @@ class SubletApplication extends Component {
 	}
 
 	saveSubleteeForm(formObj) {
-		uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
-			.then((S3Obj) => {
+		// uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
+		// 	.then((S3Obj) => {
 				return saveSubleteeFormToDb({
 					...formObj,
-					subletee_student_card: S3Obj.Location,
+			//		subletee_student_card: S3Obj.Location,
           fb_post_id: this.state.fb_post_id,
 			    fb_user_id: this.props.tenant_profile.id,
 					tenant_id: this.props.tenant_profile.tenant_id,
 				})
-			})
+		//	})
 			.then((data) => {
 				this.props.history.push(`${this.props.location.pathname}/contract/${data.contract_id}/done`)
 				return getSubleteeContractForSubletor(data.contract_id)
@@ -204,17 +205,17 @@ class SubletApplication extends Component {
 	}
 
 	saveSubletorForm(formObj) {
-		uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
-			.then((S3Obj) => {
+		// uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
+		// 	.then((S3Obj) => {
 				return saveSubletorFormToDb({
 					...formObj,
-					subletor_student_card: S3Obj.Location,
+					// subletor_student_card: S3Obj.Location,
 					fb_post_id: this.state.fb_post_id,
 			    fb_user_id: this.props.tenant_profile.id,
 					tenant_id: this.props.tenant_profile.tenant_id,
 					contract_id: this.state.subletee_contract.contract_id,
 				})
-			})
+//			})
 			.then((data) => {
 				generateSubletContract(this.state.subletee_contract.contract_id)
 				return getSubletorContractForReview(data.contract_id)
