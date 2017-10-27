@@ -308,28 +308,28 @@ export const registerFacebookLoginWithCognito = (response) => {
 	// console.log('registerFacebookLoginWithCognito')
 	// console.log(response)
 	// Check if the user logged in successfully.
-	  if (response.authResponse) {
-
-	    // console.log('You are now logged in.');
-	    const cognitoidentity = new AWS.CognitoIdentity()
-
-	    // Add the Facebook access token to the Cognito credentials login map.
-	    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-	      IdentityPoolId: TENANT_IDENTITY_POOL_ID,
-	      Logins: {
-	         'graph.facebook.com': response.authResponse.accessToken
-	      }
-	    })
-
-	    // AWS Cognito Sync to sync Facebook
-	    AWS.config.credentials.get(() => {
-		    const client = new AWS.CognitoSyncManager()
-		    // console.log(AWS.config.credentials)
-			})
-
-	  } else {
-	    // console.log('There was a problem logging you in.');
-	  }
+	  // if (response.authResponse) {
+		//
+	  //   // console.log('You are now logged in.');
+	  //   const cognitoidentity = new AWS.CognitoIdentity()
+		//
+	  //   // Add the Facebook access token to the Cognito credentials login map.
+	  //   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+	  //     IdentityPoolId: TENANT_IDENTITY_POOL_ID,
+	  //     Logins: {
+	  //        'graph.facebook.com': response.authResponse.accessToken
+	  //     }
+	  //   })
+		//
+	  //   // AWS Cognito Sync to sync Facebook
+	  //   AWS.config.credentials.get(() => {
+		//     const client = new AWS.CognitoSyncManager()
+		//     // console.log(AWS.config.credentials)
+		// 	})
+		//
+	  // } else {
+	  //   // console.log('There was a problem logging you in.');
+	  // }
 }
 
 // export function corporationClaimViewIdentity(){
