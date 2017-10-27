@@ -31,7 +31,7 @@ class ReceivedSentApplicationPage extends Component {
 
 	componentWillMount() {
 		const pathname = this.props.location.pathname
-		const contract_id = pathname.slice(pathname.indexOf('/sublet_applications/subletor/') + '/sublet_applications/subletor/'.length)
+		const contract_id = pathname.slice(pathname.indexOf('/applications/subletor/') + '/applications/subletor/'.length)
 
 		// console.log(contract_id)
 		const application = this.props.received_applications.filter((app) => {
@@ -41,9 +41,10 @@ class ReceivedSentApplicationPage extends Component {
 		this.setState({
 			application,
 		})
-
+		console.log(application)
 		getQuickSubletorContractLink(contract_id,	application.tenant_id)
 		.then((data) => {
+			console.log(data)
 			this.setState({
 				link: data.contract_link
 			})

@@ -109,13 +109,12 @@ class PeopleWhoWantToSubletMine extends Component {
 // defines the types of variables in this.props
 PeopleWhoWantToSubletMine.propTypes = {
 	history: PropTypes.object.isRequired,
-	tenant_profile: PropTypes.object,
+	tenant_profile: PropTypes.object.isRequired,
 	saveReceivedApplicationsToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 PeopleWhoWantToSubletMine.defaultProps = {
-	tenant_profile: {}
 }
 
 // Wrap the prop in Radium to allow JS styling

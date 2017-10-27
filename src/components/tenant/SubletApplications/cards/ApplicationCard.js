@@ -43,7 +43,7 @@ class ApplicationCard extends Component {
   }
 
   goToPage(contract_id) {
-    this.props.history.push(`/sublet_applications/subletee/${contract_id}`)
+    this.props.history.push(`/applications/subletee/${contract_id}`)
   }
 
   newSession(contract_id) {
@@ -67,10 +67,10 @@ class ApplicationCard extends Component {
 				})
 			})
 			.then(() => {
-				this.props.history.push(`/sublet_applications/subletee/${contract_id}`)
+				this.props.history.push(`/applications/subletee/${contract_id}`)
 			})
 		} else {
-			this.props.history.push(`/sublet_applications/subletee/${contract_id}`)
+			this.props.history.push(`/applications/subletee/${contract_id}`)
 		}
 	}
 
