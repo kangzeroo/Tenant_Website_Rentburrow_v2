@@ -33,11 +33,32 @@ class HousingPanel extends Component {
 			fb_posts: [],
 
 			running: true,
+
+			page_start: 0,
+			page_end: 20,
+			page_number: 1,
 		}
 	}
 
 	componentWillMount() {
 		// this.props.selectHelpThread()
+	}
+
+	handleScroll(event) {
+		console.log('scroll')
+    const heightBound = window.height * 0.8
+    if (heightBound > window.scrollY) {
+        // Probably you want to load new cards?
+        this.nextPage(this.state.page_start, this.state.page_end, this.state.page_number)
+    }
+  }
+
+	nextPage(start, end, page) {
+		this.setState({
+			page_start: 0,
+			page_end: end + 20,
+			page_number: page + 1
+		})
 	}
 
 	generateCard(building) {
@@ -119,9 +140,13 @@ class HousingPanel extends Component {
 							{
 								this.props.sublet_search_results.length > 0
 								?
-								this.props.sublet_search_results.map((sublet, index) => {
-									return this.renderSubletCard(sublet, index)
-								})
+								<div>
+									<div style={comStyles().sublets_container} onScroll={(e) => this.handleScroll(e)}>
+										{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
+											return this.renderSubletCard(sublet, index)
+										})}
+									</div>
+								</div>
 								:
 								<div style={comStyles().panel_background}>
 									{
@@ -265,6 +290,15 @@ const comStyles = () => {
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
+		},
+		sublets_container: {
+			display: 'flex',
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+		},
+		pagination: {
+			display: 'flex',
+			flexDirection: 'row'
 		}
 	}
 }
