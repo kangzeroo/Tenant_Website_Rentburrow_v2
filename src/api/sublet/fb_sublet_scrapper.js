@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { SEARCH_MICROSERVICE } from '../API_URLS'
+import { FB_PARSER_MICROSERVICE } from '../API_URLS'
 import { convertToRegularSubletObj } from '../search/sublet_api'
 
 export const scrapeFacebookSublets = (profile, city = 'Waterloo') => {
@@ -17,13 +17,13 @@ const getGroupsForCity = ({ city, profile }) => {
 		res({
 			profile,
 			groups: [
-				{
-					groupid: 1591404561120090,
-					groupname: 'RentBurrow Sublets',
-					city_name: 'Waterloo',
-					active: true,
-					main: true
-				},
+				// {
+				// 	groupid: 1591404561120090,
+				// 	groupname: 'RentBurrow Sublets',
+				// 	city_name: 'Waterloo',
+				// 	active: true,
+				// 	main: true
+				// },
 				{
 					groupid: 142679255268,
 					groupname: 'UW/WLU 4 Month Subletting',
@@ -98,12 +98,10 @@ const getGroupsForCity = ({ city, profile }) => {
 const latestPostInServerPerGroup = ({ groups, profile }) => {
 	const p = new Promise((res, rej) => {
 		const promises = groups.map((group) => {
-			return axios.post(`${SEARCH_MICROSERVICE}/check_latest_sublet`, group)
+			return axios.post(`${FB_PARSER_MICROSERVICE}/check_latest_sublet`, group)
 				.then((data) => {
-					if (data.data.length > 0) {
-						// lastPostTime = data.data
-						const lastPostTime = convertToRegularSubletObj(data.data[0]).scrapped_at * 1000 || 0
-						// console.log(lastPostTime)
+					if (data.data) {
+						const lastPostTime = convertToRegularSubletObj(data.data).scrapped_at * 1000 || 0
 						return Promise.resolve({
               ...group,
               lastPostTime
@@ -129,11 +127,11 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 const getPostsFromGroups = ({ groupsTime, profile }) => {
 	const p = new Promise((resolve, rej) => {
 		const locallySavedAccessToken = localStorage.getItem('fbToken')
-		const access_token = profile.accessToken || locallySavedAccessToken
+		const access_token = profile.fbToken || locallySavedAccessToken
 		const promises = groupsTime.map((group) => {
 			const x = new Promise((res, rej) => {
 				FB.api(
-	        `/${group.groupid}/feed?limit=10`,
+	        `/${group.groupid}/feed?limit=100`,
 	        { access_token: access_token },
 	      	(response) => {
 	          if (response && !response.error) {
@@ -148,7 +146,6 @@ const getPostsFromGroups = ({ groupsTime, profile }) => {
 					  			groupid: group.groupid
 					  		}
 					  	})
-							// console.log(response.data.length, postsArray.length)
 							res(postsArray)
 	          } else {
 							res([])
@@ -193,8 +190,7 @@ const filterNonSublets = ({ postsArray, profile }) => {
 }
 
 const sendToServer = ({ filteredSublets, profile }) => {
-	// console.log(filteredSublets)
-	axios.post(`${SEARCH_MICROSERVICE}/new_sublets`, { newSublets: filteredSublets, profile })
+	axios.post(`${FB_PARSER_MICROSERVICE}/new_sublets`, { newSublets: filteredSublets, profile })
 		.then((data) => {
 			// console.log(data);
 		}).catch((err) => {
