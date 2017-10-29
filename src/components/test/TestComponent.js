@@ -17,6 +17,13 @@ class TestComponent extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
+				<iframe
+					width='100%'
+					height={`100%`}
+					src={'https://livetour.istaging.com/?group=8f39d0e0-8682-4dff-91cf-7f074b0266f7'}
+					frameBorder='0'
+					allowFullScreen
+				/>
 			</div>
 		)
 	}
