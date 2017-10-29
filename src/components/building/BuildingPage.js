@@ -58,7 +58,7 @@ import SubletsList from '../sublets/SubletsList'
 import DescriptionBox from './DescriptionBox'
 import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
-
+import AnalyticsSummary from './Components/AnalyticsSummary'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -317,6 +317,17 @@ class BuildingPage extends Component {
 								image_size='hd'
 							/>
 						</div>*/}
+						{
+							this.state.building.building_id
+							?
+							<div style={comStyles().analyticsSummary} >
+								<AnalyticsSummary
+									building={this.state.building}
+								/>
+							</div>
+							:
+							null
+						}
 					</div>
 					<div style={comStyles().content_right} >
 						<StepByStepCard
