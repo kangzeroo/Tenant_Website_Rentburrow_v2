@@ -45,7 +45,6 @@ class HousingPanel extends Component {
 	}
 
 	handleScroll(event) {
-		console.log('scroll')
     const heightBound = window.height * 0.8
     if (heightBound > window.scrollY) {
         // Probably you want to load new cards?
@@ -146,6 +145,12 @@ class HousingPanel extends Component {
 											return this.renderSubletCard(sublet, index)
 										})}
 									</div>
+									<Button
+										primary
+										fluid
+										content='Load More'
+										onClick={() => this.nextPage(this.state.page_start, this.state.page_end, this.state.page_number)}
+									/>
 								</div>
 								:
 								<div style={comStyles().panel_background}>
