@@ -14,6 +14,7 @@ import {
   Button,
   TextArea,
   Modal,
+  Icon,
 } from 'semantic-ui-react'
 import {
   renderProcessedThumbnail,
@@ -22,8 +23,9 @@ import {
 } from '../../api/general/general_api'
 import LoginPopup from '../auth/LoginPopup'
 import SingularImageGallery from '../image/SingularImageGallery'
+import SubleteeIntroModal from '../instructions/SubleteeIntroModal'
 import { selectPinToRedux } from '../../actions/search/search_actions'
-import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
+import { xGreyText, xBootstrapRed, xMidBlue } from '../../styles/base_colors'
 import { sortAmenitiesSublet } from '../../api/amenities/sublet_amenities'
 
 
@@ -53,6 +55,16 @@ class SubletDetailed extends Component {
           <Modal.Content>
             <LoginPopup
               toggleModal={() => this.toggleModal()}
+            />
+          </Modal.Content>
+        </Modal>
+      )
+    } else if (modal_name === 'primer') {
+      return (
+        <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+          <Modal.Content>
+            <SubleteeIntroModal
+              toggleModal={(a, b, c) => this.toggleModal(a, b, c)}
             />
           </Modal.Content>
         </Modal>
@@ -186,9 +198,17 @@ class SubletDetailed extends Component {
                   {
                     this.props.authenticated
                     ?
-                    <Button primary fluid content='Apply Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+                    <div>
+                      <Button primary fluid content='Apply Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+                      <Icon name='arrow up' size='large' style={comStyles().arrow_up} />
+                      <div onClick={() => this.toggleModal(true, 'primer')} style={comStyles().what_is_this}>What is this?</div>
+                    </div>
                     :
-                    <Button primary fluid content='Apply Online' onClick={(e) => this.toggleModal(true, 'login')} style={comStyles().originalButton} />
+                    <div>
+                      <Button primary fluid content='Apply Online' onClick={(e) => this.toggleModal(true, 'login')} style={comStyles().originalButton} />
+                      <Icon name='arrow up' size='large' style={comStyles().arrow_up} />
+                      <div onClick={() => this.toggleModal(true, 'primer')} style={comStyles().what_is_this}>What is this?</div>
+                    </div>
                   }
                 </div>
               }
@@ -468,6 +488,15 @@ const comStyles = () => {
       margin: '0px 0px 0px 30px',
       fontSize: '1.5rem',
       fontWeight: 'bold',
+    },
+    arrow_up: {
+      margin: '10px auto',
+    },
+    what_is_this: {
+      fontSize: 'fontSize',
+      fontWeight: 'bold',
+      color: xMidBlue,
+      cursor: 'pointer',
     }
 	}
 }
