@@ -218,7 +218,7 @@ class SimpleTermForm extends Component {
 		          <Button
 								fluid
 								color='blue'
-								content='Add To Group'
+								content={this.state.group_members.length > 0 ? 'Add To Group' : 'Save'}
 								onClick={() => this.addToGroup()}
 							/>
 		        </Form.Field>

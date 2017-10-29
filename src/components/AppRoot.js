@@ -41,6 +41,7 @@ import ReceivedApplicationPage from './tenant/SubletApplications/sublets/Receive
 import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
 import Logout from './auth/Logout'
+import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import TestComponent from './test/TestComponent'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
@@ -301,6 +302,7 @@ class AppRoot extends Component {
                   <Switch>
                     <Route path='/signing/sublet' component={SubletApplication} />
                     <Route path='/signing/lease/:building_id' component={LeaseApplication} />
+            				<Route exact path='/signing/example/paperwork/sublet' component={ExampleSubletPaperwork} />
                   </Switch>
                   :
                   null

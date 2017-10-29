@@ -30,6 +30,7 @@ import { filterNonImages } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj, getSubleteeProfile, } from '../../../../api/signing/sublet_contract_api'
 import SubleteeSubletorRelationship from '../SubleteeSubletorRelationship'
 import { validateEmail } from '../../../../api/general/general_api'
+import SubletorIntroModal from '../../../instructions/SubletorIntroModal'
 require('../../../../styles/react-datepicker.css')
 
 
@@ -99,6 +100,9 @@ class SubletorForm extends Component {
 			address: this.props.subletee_contract.building_address,
 			official_begin_date: moment(this.props.subletee_contract.begin_date),
 			official_end_date: moment(this.props.subletee_contract.end_date),
+
+			toggle_modal: true,
+			modal_name: 'primer',
 		})
 		getSubleteeProfile(this.props.subletee_contract.subletee_id)
 			.then((data) => {
@@ -266,6 +270,22 @@ class SubletorForm extends Component {
 						{
 							this.terms_and_conditions
 						}
+	        </Modal.Content>
+	      </Modal>
+	    )
+		} else if (modal_name === 'primer') {
+			return (
+	      <Modal
+	        dimmer
+	        open={this.state.toggle_modal}
+	        onClose={() => this.toggleModal(false)}
+	        closeIcon
+	        size='fullscreen'
+	      >
+	        <Modal.Content style={comStyles().terms_and_conditions}>
+						<SubletorIntroModal
+							toggleModal={(a, b, c) => this.toggleModal(a, b, c)}
+						/>
 	        </Modal.Content>
 	      </Modal>
 	    )

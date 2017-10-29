@@ -400,11 +400,6 @@ class BuildingPage extends Component {
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
-				<Route path='/:building_alias/apply'>
-					<div>
-						APPLY
-					</div>
-				</Route>
 			</div>
 		)
 	}

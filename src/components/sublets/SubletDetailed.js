@@ -186,9 +186,9 @@ class SubletDetailed extends Component {
                   {
                     this.props.authenticated
                     ?
-                    <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+                    <Button primary fluid content='Apply Online' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
                     :
-                    <Button primary content='Sign Online (Free)' onClick={(e) => this.toggleModal(true, 'login')} style={comStyles().originalButton} />
+                    <Button primary fluid content='Apply Online' onClick={(e) => this.toggleModal(true, 'login')} style={comStyles().originalButton} />
                   }
                 </div>
               }
@@ -203,8 +203,8 @@ class SubletDetailed extends Component {
 	}
 }
 
-// <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
-// <Button primary content='Sign Online (Free)' onClick={(e) => this.goToOnlineSubletSigning(e, this.props.sublet)} style={comStyles().originalButton} />
+// Button Possibilities = ['Sign Online (Free)', 'Apply', 'Do the paperwork online']
+
 
 // defines the types of variables in this.props
 SubletDetailed.propTypes = {
