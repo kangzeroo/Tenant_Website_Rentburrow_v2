@@ -35,29 +35,82 @@ class HousingPanel extends Component {
 			running: true,
 
 			page_start: 0,
-			page_end: 20,
+			page_end: 50,
 			page_number: 1,
 		}
+		this.scrollStream = null
 	}
 
 	componentWillMount() {
 		// this.props.selectHelpThread()
 	}
 
-	handleScroll(event) {
-    const heightBound = window.height * 0.8
-    if (heightBound > window.scrollY) {
-        // Probably you want to load new cards?
-        this.nextPage(this.state.page_start, this.state.page_end, this.state.page_number)
-    }
+	componentDidMount() {
+		this.scrollStream = new Rx.Subject()
+				.debounceTime(500)
+				.subscribe(
+					(position) => {
+		        // Probably you want to load new cards?
+						if (position.scrollTop / position.scrollHeight > 0.8) {
+		        	this.nextPage(1, position.scrollTop, position.scrollHeight, position.target)
+						} else if (position.scrollTop === 0) {
+							this.nextPage(-1, position.scrollTop, position.scrollHeight, position.target)
+						}
+					},
+					(err) => {
+						// console.log('Stream error occurred:')
+						// console.log(err)
+					},
+					() => {
+						// console.log('Stream finished')
+					}
+				)
+	}
+
+	handleScroll(e) {
+    this.scrollStream.next({
+			target: e.target,
+			scrollHeight: e.target.scrollHeight,
+			scrollTop: e.target.scrollTop,
+			clientHeight: e.target.clientHeight,
+		})
+		// .filter((positions) => {
+		// 	// positions = [0, 1] events from scrollStream
+		// 	// check that the position of [1] is less than [0], which indicates that we are scrolling down
+		// 	// check that the position of [1] is more than 70% the height of the container
+		// 	return positions[0].scrollTop < positions[1].scrollTop && ((positions[1].scrollTop + positions[1].clientHeight) / positions[1].scrollHeight) > (70 / 100)
+		// })
   }
 
-	nextPage(start, end, page) {
-		this.setState({
-			page_start: 0,
-			page_end: end + 20,
-			page_number: page + 1
-		})
+	nextPage(direction, scrollTop, scrollHeight, target) {
+		if (this.state.page_number + direction !== 0) {
+			// edge case where scroll up does not work when you have already reached the end of all sublets
+			if (this.props.rent_type === 'sublet' && this.props.sublet_search_results.length > this.state.page_end) {
+				this.setState({
+					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 40),
+					page_end: this.state.page_end + (direction * 50),
+					page_number: this.state.page_number + (direction)
+				}, () => {
+					if (direction > 0) {
+						target.scrollTop = target.scrollHeight * 0.2
+					} else {
+						target.scrollTop = target.scrollHeight * 0.8
+					}
+				})
+			} else if (this.props.building_search_results.length > this.state.page_end) {
+				this.setState({
+					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 40),
+					page_end: this.state.page_end + (direction * 50),
+					page_number: this.state.page_number + (direction)
+				}, () => {
+					if (direction > 0) {
+						target.scrollTop = target.scrollHeight * 0.2
+					} else {
+						target.scrollTop = target.scrollHeight * 0.8
+					}
+				})
+			}
+		}
 	}
 
 	generateCard(building) {
@@ -135,22 +188,14 @@ class HousingPanel extends Component {
 					{
 						this.props.rent_type === 'sublet'
 						?
-						<div style={comStyles().scroll}>
+						<div style={comStyles().regular_nonscroll}>
 							{
 								this.props.sublet_search_results.length > 0
 								?
-								<div>
-									<div style={comStyles().sublets_container} onScroll={(e) => this.handleScroll(e)}>
-										{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
-											return this.renderSubletCard(sublet, index)
-										})}
-									</div>
-									<Button
-										primary
-										fluid
-										content='Load More'
-										onClick={() => this.nextPage(this.state.page_start, this.state.page_end, this.state.page_number)}
-									/>
+								<div id='scroll_div' onScroll={(e, d) => this.handleScroll(e, d)} style={comStyles().scroll}>
+									{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
+										return this.renderSubletCard(sublet, index)
+									})}
 								</div>
 								:
 								<div style={comStyles().panel_background}>
@@ -172,7 +217,7 @@ class HousingPanel extends Component {
 							}
 						</div>
 						:
-						<div style={comStyles().scroll}>
+						<div id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
 							{
 								this.props.building_search_results.length > 0
 								?
@@ -260,6 +305,14 @@ const comStyles = () => {
       height: '100%',
 			// backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
 			backgroundSize: 'cover',
+		},
+		regular_nonscroll: {
+			display: 'flex',
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			maxHeight: '100%',
+			width: '100%',
+			justifyContent: 'flex-start',
 		},
 		scroll: {
 			display: 'flex',
