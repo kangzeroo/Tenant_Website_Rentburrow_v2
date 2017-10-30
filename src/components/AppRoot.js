@@ -314,7 +314,7 @@ class AppRoot extends Component {
             </div>
 
             {
-              this.props.tenant_profile && this.props.tenant_profile.tenant_id
+              this.props.tenant_profile && this.props.tenant_profile.tenant_id && this.props.location.pathname !== '/'
               ?
               <Chat style={comStyles().chat} />
               :

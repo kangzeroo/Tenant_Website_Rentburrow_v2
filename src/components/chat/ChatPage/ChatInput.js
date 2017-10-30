@@ -4,7 +4,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import uuid from 'uuid'
-import { Form, TextArea } from 'semantic-ui-react'
+import { Form, TextArea, Icon } from 'semantic-ui-react'
 import {
   xMidBlue
 } from '../../../styles/base_colors'
@@ -45,7 +45,7 @@ class ChatInput extends Component {
     const mergedStream = textEnteredStream.takeUntil(enterKeyPressedStream)
 
     const onNext = (text) => {
-      this.setState({ inputText: text, checked: true })
+      this.setState({ inputText: text })
     }
     const onError = (err) => {
       // console.log(err)
@@ -113,7 +113,7 @@ class ChatInput extends Component {
 
 	render() {
     return (
-      <Form>
+      <Form style={comStyles().container}>
         <TextArea
           id='textInput'
           autoHeight
@@ -123,6 +123,7 @@ class ChatInput extends Component {
           disabled={!this.props.authenticated && !localStorage.getItem('unauthUser_email') ? true : false}
           style={comStyles().textbox}
         />
+        {/*<Icon name='send' style={inputStyles().sendBtn} />*/}
       </Form>
     )
 	}
@@ -137,7 +138,7 @@ ChatInput.propTypes = {
   authenticated: PropTypes.bool,
   showing_email_unauth: PropTypes.bool,         // passed in
   current_thread: PropTypes.array.isRequired,
-  markTheseAsRead: PropTypes.func.isRequired,   // passed in
+  markTheseAsRead: PropTypes.func.isRequired,
 }
 
 ChatInput.defaultProps = {
@@ -167,8 +168,10 @@ export default connect(mapStateToProps, {
 
 const comStyles = () => {
 	return {
-		mainview: {
-
+		container: {
+      display: 'flex',
+      flexDirection: 'row',
+      position: 'relative',
 		}
 	}
 }
@@ -222,13 +225,10 @@ const inputStyles = () => {
     },
     sendBtn: {
       position: 'absolute',
-      height: '20px',
-      right: '8px',
-      bottom: '8px',
-      margin: '5px auto',
-      border: '2px gray',
-      borderRadius: '5px',
-      fontSize: '1rem',
+      height: '50px',
+      right: '10px',
+      bottom: '10px',
+      fontSize: '2rem',
       color: 'gray',
       padding: '5px',
       cursor: 'pointer'
