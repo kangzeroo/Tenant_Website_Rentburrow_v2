@@ -21,6 +21,7 @@ class SearchInput extends Component {
 		return (
 			<div style={comStyles().container}>
 				<Input
+          id='textInput'
           value={this.props.search_string}
           onChange={(e) => this.props.searchByString(e.target.value)}
           icon='search'
