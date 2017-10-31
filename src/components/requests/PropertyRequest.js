@@ -86,9 +86,9 @@ class PropertyRequest extends Component {
         <div style={comStyles().headerContainer} >
   				<Header
             as='h1'
-            icon='pin'
+            icon='camera retro'
             content="Can't Find What You're Looking For?"
-            subheader="We will find your perfect property for you, just tell us what you're looking for!"
+            subheader="Request a photoshoot of a property you have in mind, or if you don't know, just tell us what you're looking for!"
           />
         </div>
         <Form style={comStyles().formContainer} >

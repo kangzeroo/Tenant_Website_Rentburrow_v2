@@ -182,7 +182,7 @@ class Header extends Component {
               <Button
                 basic
                 inverted
-                content='Make a Request'
+                content='Request a Photoshoot'
                 style={comStyles().login}
                 onClick={() => this.toggleModal(true, 'request')}
               />
@@ -193,7 +193,7 @@ class Header extends Component {
               <Button
                 basic
                 inverted
-                content='Make a Request'
+                content='Request a Photoshoot'
                 style={comStyles().login}
                 onClick={() => this.toggleModal(true, 'request')}
               />

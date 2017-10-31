@@ -66,26 +66,18 @@ class TenantAccount extends Component {
     this.setState({
       saving: true
     }, () => {
-      // uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
-  		// 	.then((S3Obj) => {
-      //     // console.log(S3Obj)
-  		// 		return updateTenantProfile({
-      //       tenant_id: this.props.tenant_profile.tenant_id,
-      //       first_name: this.state.first_name,
-      //       last_name: this.state.last_name,
-      //       email: this.state.email,
-      //       phone: this.state.phone,
-      //       student_card: S3Obj.Location,
-      //     })
-  		// 	})
-        updateTenantProfile({
-          tenant_id: this.props.tenant_profile.tenant_id,
-          first_name: this.state.first_name,
-          last_name: this.state.last_name,
-          email: this.state.email,
-          phone: this.state.phone,
-          // student_card: S3Obj.Location,
-        })
+      uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
+  			.then((S3Obj) => {
+          console.log(S3Obj)
+  				return updateTenantProfile({
+            tenant_id: this.props.tenant_profile.tenant_id,
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
+            email: this.state.email,
+            phone: this.state.phone,
+            student_card: S3Obj.Location,
+          })
+  			})
         .then(() => {
           this.setState({
             profile_saved: true,
@@ -166,7 +158,7 @@ class TenantAccount extends Component {
                 />
               </Form.Field>
             </Form>
-            {/*<div style={comStyles().student_card}>
+            <div style={comStyles().student_card}>
               <Form.Field>
                 <Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'student_card')} style={comStyles().bannerDropzone} multiple={false}>
                   {
@@ -190,7 +182,7 @@ class TenantAccount extends Component {
                 </Dropzone>
                 <div style={comStyles().click_image_to_change}>Click on image to change</div>
               </Form.Field>
-            </div>*/}
+            </div>
           </div>
         </div>
         <div style={comStyles().buttons_container} >
