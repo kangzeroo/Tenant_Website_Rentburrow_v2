@@ -43,6 +43,12 @@ export default (state = INITIAL_STATE, action) => {
           } else {
             return true
           }
+        }).sort((building) => {
+          if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+            return 1
+          } else {
+            return -1
+          }
         }),
         sublet_search_results: state.sublets.filter((sublet) => {
           return sublet.address.toLowerCase().indexOf(action.payload.toLowerCase()) > -1
@@ -61,6 +67,12 @@ export default (state = INITIAL_STATE, action) => {
           } else {
             return true
           }
+        }).sort((building) => {
+          if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+            return 1
+          } else {
+            return -1
+          }
         }),
         buildings: action.payload,
       }
@@ -76,6 +88,12 @@ export default (state = INITIAL_STATE, action) => {
             }
           } else {
             return true
+          }
+        }).sort((building) => {
+          if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+            return 1
+          } else {
+            return -1
           }
         }),
       }
