@@ -22,7 +22,7 @@ import ChatInput from './ChatInput'
 import ChatEmailUnauth from './ChatEmailUnauth'
 
 
-class ChatPanel extends Component {
+class ChatHelp extends Component {
 
   constructor() {
     super()
@@ -54,9 +54,9 @@ class ChatPanel extends Component {
           {
             this.props.current_thread.length > 0
             ?
-            <h2 style={comStyles().title}>{ this.props.current_thread[0].corporation_name }</h2>
+            <div style={comStyles().title}>{ this.props.current_thread[0].corporation_name }</div>
             :
-            <h2 style={comStyles().title}>Help Chat</h2>
+            <div style={comStyles().title}>Help Chat</div>
           }
         </Header>
         <div style={comStyles().chat_interface}>
@@ -104,20 +104,21 @@ class ChatPanel extends Component {
 // Checkout our <span onClick={() => this.props.history.push('/protips')} style={comStyles().pro_tips_link}>Rent Pro-Tips Page</span> or
 
 // defines the types of variables in this.props
-ChatPanel.propTypes = {
+ChatHelp.propTypes = {
 	history: PropTypes.object.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
-	current_thread: [],
+	current_thread: PropTypes.array.isRequired,
   authenticated: PropTypes.bool,
 }
 
 // for all optional props, define a default value
-ChatPanel.defaultProps = {
+ChatHelp.defaultProps = {
   authenticated: false,
+	current_thread: [],
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(ChatPanel)
+const RadiumHOC = Radium(ChatHelp)
 
 // Get access to state from the Redux store
 function mapStateToProps(state) {

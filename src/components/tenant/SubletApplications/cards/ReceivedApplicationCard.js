@@ -117,11 +117,13 @@ class ReceivedApplicationCard extends Component {
 							basic
 							content='Original Post'
 							onClick={(e) => this.goToOriginalPost(e, this.props.details.fb_post_id)}
+							style={comStyles().step_buttons}
 						/>
 						{
 							this.props.details.contract_link
 							?
 							<Button
+								fluid
 								primary
 								content='View Contract'
 								onClick={() => this.newSession(this.props.details.contract_id)}
@@ -177,7 +179,7 @@ const comStyles = () => {
 		},
 		buttons_container: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'space-between',
       padding: '10px 0px 10px 0px'
     },
@@ -189,6 +191,9 @@ const comStyles = () => {
     subletor_name: {
       cursor: 'pointer',
       color: 'blue',
-    }
+    },
+    step_buttons: {
+      margin: '0px 0px 5px 0px'
+    },
 	}
 }

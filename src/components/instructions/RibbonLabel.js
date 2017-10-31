@@ -29,7 +29,7 @@ class RibbonLabel extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <Label as='a' color={this.determineColor(this.props.label)} ribbon='right'>{ this.props.label }</Label>
+        <Label color={this.determineColor(this.props.label)} ribbon='right'>{ this.props.label }</Label>
 			</div>
 		)
 	}

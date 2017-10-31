@@ -197,9 +197,9 @@ class SubletorForm extends Component {
 		if (this.state.price <= 0) {
 			errors.push('Monthly sublet rent cannot be zero or less')
 		}
-		if (!this.state.subletor_student_card) {
-			errors.push('You must upload a picture of your student card')
-		}
+		// if (!this.state.subletor_student_card) {
+		// 	errors.push('You must upload a picture of your student card')
+		// }
 		if (this.state.landlord_full_legal_name.length === 0) {
 			errors.push('You must include the landlords name')
 		}
