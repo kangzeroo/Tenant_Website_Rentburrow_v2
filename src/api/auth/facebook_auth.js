@@ -35,6 +35,7 @@ export const loginFacebook = () => {
       return grabFacebookProfile(fbToken)
     })
     .then((fbProfile) => {
+			console.log(fbProfile)
       return grabFacebookImage(fbProfile)
     })
 }
