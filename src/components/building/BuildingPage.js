@@ -201,13 +201,36 @@ class BuildingPage extends Component {
   }
 
 	photo_or_vr(building) {
-		if (building.istaging_url !== '') {
+		if (building.istaging_url) {
 			// console.log(building.istaging_url)
 			return (
 				<iframe
 					width='100%'
 					height={`100%`}
 					src={building.istaging_url}
+					frameBorder='0'
+					allowFullScreen
+				/>
+			)
+		} else if (building.iguide_url) {
+			return (
+				<iframe
+					width='100%'
+					height={`100%`}
+					src={building.iguide_url}
+					frameBorder='0'
+					allowFullScreen
+				/>
+			)
+		} else if (building.video_url) {
+			const video_id = building.video_url.split('/watch?v=')[1]
+			const embedded_url = `https://www.youtube.com/embed/${video_id}?autoplay=1`
+			return (
+				<iframe
+					width='100%'
+					height={`100%`}
+					type='text/html'
+					src={embedded_url}
 					frameBorder='0'
 					allowFullScreen
 				/>

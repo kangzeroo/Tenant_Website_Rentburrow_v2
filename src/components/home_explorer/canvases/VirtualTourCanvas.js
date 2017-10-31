@@ -36,6 +36,21 @@ class VirtualTourCanvas extends Component {
     )
   }
 
+  renderVirtualTour_Video(link) {
+    const video_id = link.split('/watch?v=')[1]
+    const embedded_url = `https://www.youtube.com/embed/${video_id}?autoplay=1`
+    return (
+      <iframe
+        width='100%'
+        height={`100%`}
+        type='text/html'
+        src={embedded_url}
+        frameBorder='0'
+        allowFullScreen
+      />
+    )
+  }
+
 	render() {
     const panes = []
     if (this.props.istaging_url) {
@@ -54,6 +69,16 @@ class VirtualTourCanvas extends Component {
         render: () => (
           <Tab.Pane attached={false} style={comStyles(this.state.vr_tour_height).vrTour}>
             { this.renderVirtualTour_Matterport(this.props.iguide_url) }
+          </Tab.Pane>
+        )
+      })
+    }
+    if (this.props.video_url) {
+      panes.push({
+        menuItem: 'Video Tour',
+        render: () => (
+          <Tab.Pane attached={false} style={comStyles(this.state.vr_tour_height).vrTour}>
+            { this.renderVirtualTour_Video(this.props.video_url) }
           </Tab.Pane>
         )
       })
@@ -105,12 +130,14 @@ VirtualTourCanvas.propTypes = {
 	history: PropTypes.object.isRequired,
   istaging_url: PropTypes.string,        // passed in
   iguide_url: PropTypes.string,         // passed in
+  video_url: PropTypes.string,          // passed in
 }
 
 // for all optional props, define a default value
 VirtualTourCanvas.defaultProps = {
   istaging_url: null,
   iguide_url: null,
+  video_url: null,
 }
 
 // Wrap the prop in Radium to allow JS styling
