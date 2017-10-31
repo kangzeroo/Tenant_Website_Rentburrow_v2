@@ -273,7 +273,7 @@ class SubleteeForm extends Component {
 									</Card.Header>
 									<div style={comStyles().student_div}>
 										<div style={comStyles().student_form}>
-											<Form.Field>
+											<Form.Field required>
 												<label>Legal First Name</label>
 												<input
 													placeholder='First Name'
@@ -282,7 +282,7 @@ class SubleteeForm extends Component {
 													disabled={this.props.tenant_profile.first_name !== ''}
 												/>
 											</Form.Field>
-											<Form.Field>
+											<Form.Field required>
 												<label>Legal Last Name</label>
 												<input
 													placeholder='Last Name'
@@ -291,7 +291,7 @@ class SubleteeForm extends Component {
 													disabled={this.props.tenant_profile.last_name !== ''}
 												/>
 											</Form.Field>
-											<Form.Field>
+											<Form.Field required>
 												<label>Phone</label>
 												<input
 													placeholder='Phone Number'
@@ -300,7 +300,7 @@ class SubleteeForm extends Component {
 													disabled={this.props.tenant_profile.phone !== '' }
 												/>
 											</Form.Field>
-											<Form.Field>
+											<Form.Field required>
 												<label>Email</label>
 												<input
 													placeholder='Email'
@@ -332,23 +332,23 @@ class SubleteeForm extends Component {
 									<Card.Header style={comStyles().card_header}>
 										Step 2: Room Info
 									</Card.Header>
-									<Form.Field>
+									<Form.Field required>
 										<label>Building Address</label>
 										<input placeholder='Address of Subletted Room' onChange={(e) => this.updateAttr(e, 'address')} value={this.state.address} disabled />
 									</Form.Field>
-									<Form.Field>
+									<Form.Field required>
 										<label>Rent per month</label>
 										<Input icon='dollar' type='number' iconPosition='left' placeholder='Sublet Price' onChange={(e) => this.updateAttr(e, 'price')} value={this.state.price} />
 									</Form.Field>
 									<div style={comStyles().dates}>
-										<Form.Field>
+										<Form.Field required>
 											<label>Requested Sublet Start Date</label>
 											<DatePicker
 												selected={this.state.requested_begin_date}
 												onChange={(d) => this.updateDate(d, 'requested_begin_date')}
 											/>
 										</Form.Field>
-										<Form.Field>
+										<Form.Field required>
 											<label>Requested Sublet End Date</label>
 											<DatePicker
 												selected={this.state.requested_end_date}

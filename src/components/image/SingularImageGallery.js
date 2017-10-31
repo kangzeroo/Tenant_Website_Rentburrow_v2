@@ -98,6 +98,8 @@ class SingularImageGallery extends Component {
       return renderProcessedThumbnail(all_images[current_image_position])
     } else if (this.props.image_size === 'hd') {
       return renderProcessedImage(all_images[current_image_position])
+    } else if (this.props.image_size === 'none') {
+      return all_images[current_image_position]
     } else {
       return all_images[current_image_position]
     }

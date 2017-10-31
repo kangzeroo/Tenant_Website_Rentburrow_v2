@@ -333,7 +333,7 @@ class SubletorForm extends Component {
 									</Card.Header>
 									<div style={comStyles().student_div}>
 										<div style={comStyles().student_form}>
-									    <Form.Field>
+									    <Form.Field required>
 									      <label>First Name</label>
 									      <input
 													placeholder='First Name'
@@ -342,7 +342,7 @@ class SubletorForm extends Component {
 													disabled={this.props.tenant_profile.first_name !== ''}
 												/>
 									    </Form.Field>
-									    <Form.Field>
+									    <Form.Field required>
 									      <label>Last Name</label>
 									      <input
 													placeholder='Last Name'
@@ -351,7 +351,7 @@ class SubletorForm extends Component {
 													disabled={this.props.tenant_profile.last_name !== ''}
 												/>
 									    </Form.Field>
-									    <Form.Field>
+									    <Form.Field required>
 									      <label>Phone</label>
 									      <input
 													placeholder='Phone Number'
@@ -360,7 +360,7 @@ class SubletorForm extends Component {
 													disabled={this.props.tenant_profile.phone !== ''}
 												/>
 									    </Form.Field>
-									    <Form.Field>
+									    <Form.Field required>
 									      <label>Email</label>
 									      <input
 													placeholder='Email'
@@ -392,38 +392,38 @@ class SubletorForm extends Component {
 									<Card.Header style={comStyles().card_header}>
 										Step 2: Room Info
 									</Card.Header>
-									<Form.Field>
+									<Form.Field required>
 							      <label>Building Address</label>
 							      <input placeholder='Address of Subletted Room' onChange={(e) => this.updateAttr(e, 'address')} value={this.state.address} />
 							    </Form.Field>
-									<Form.Field>
+									<Form.Field required>
 							      <label>Suite Number</label>
 							      <input placeholder='Suite of Subletted Room' onChange={(e) => this.updateAttr(e, 'suite_id')} value={this.state.suite_id} />
 							    </Form.Field>
-									<Form.Field>
+									<Form.Field required>
 							      <label>Room Number</label>
 							      <input placeholder='Subletted Room' onChange={(e) => this.updateAttr(e, 'room_id')} value={this.state.room_id} />
 							    </Form.Field>
-							    <Form.Field>
+							    <Form.Field required>
 							      <label>Price</label>
 										<Input icon='dollar' iconPosition='left' type='number' placeholder='Sublet Price' onChange={(e) => this.updateAttr(e, 'price')} value={this.state.price} />
 							    </Form.Field>
 									<div style={comStyles().dates}>
-								    <Form.Field>
+								    <Form.Field required>
 								      <label>Requested Sublet Start Date</label>
 											<DatePicker
 												selected={this.state.official_begin_date}
 												onChange={(d) => this.updateDate(d, 'official_begin_date')}
 											/>
 								    </Form.Field>
-								    <Form.Field>
+								    <Form.Field required>
 								      <label>Requested Sublet End Date</label>
 											<DatePicker
 												selected={this.state.official_end_date}
 												onChange={(d) => this.updateDate(d, 'official_end_date')}
 											/>
 								    </Form.Field>
-								    <Form.Field>
+								    <Form.Field required>
 								      <label>Original Lease Signing Date</label>
 											<DatePicker
 												selected={this.state.original_lease_signing_date}
@@ -440,15 +440,15 @@ class SubletorForm extends Component {
 									<Card.Header style={comStyles().card_header}>
 										Step 3: Landlord Info
 									</Card.Header>
-							    <Form.Field>
+							    <Form.Field required>
 							      <label>Landlord Name</label>
 							      <input placeholder='Landlord Name' onChange={(e) => this.updateAttr(e, 'landlord_full_legal_name')} value={this.state.landlord_full_legal_name} />
 							    </Form.Field>
-							    <Form.Field>
+							    <Form.Field required>
 							      <label>Landlord Phone</label>
 							      <input placeholder='Landlord Phone' onChange={(e) => this.updateAttr(e, 'landlord_phone')} value={this.state.landlord_phone} />
 							    </Form.Field>
-							    <Form.Field>
+							    <Form.Field required>
 							      <label>Landlord Email</label>
 							      <input placeholder='Landlord Email' onChange={(e) => this.updateAttr(e, 'landlord_email')} value={this.state.landlord_email} />
 							    </Form.Field>
