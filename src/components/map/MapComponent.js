@@ -168,17 +168,29 @@ class MapComponent extends Component {
 			if (!pinAlreadyPlaced(n, self.pins)) {
 				let marker
         // let infowindow
-				if (true) {
+				if (n.label && n.label.toLowerCase().indexOf('sold out') > -1) {
 	        marker = new google.maps.Marker({
+	            position: new google.maps.LatLng(n.gps_x, n.gps_y),
+	            pin_type: 'building',
+							icon: this.grey_map_pin,
+	        })
+	        marker.pin_id = n.building_id || n.post_id
+					marker.label = n.label
+          // marker.infowindow = new google.maps.InfoWindow({
+          //   content: `<div>$${n.min_price}+</div>`
+          // })
+	      } else {
+					marker = new google.maps.Marker({
 	            position: new google.maps.LatLng(n.gps_x, n.gps_y),
 	            pin_type: 'building',
 							icon: this.red_map_pin,
 	        })
 	        marker.pin_id = n.building_id || n.post_id
+					marker.label = n.label
           // marker.infowindow = new google.maps.InfoWindow({
           //   content: `<div>$${n.min_price}+</div>`
           // })
-	      }
+				}
         // listen to marker click
         marker.addListener('click', (event) => {
           // marker.infowindow.open(self.state.mapTarget, marker)
@@ -230,7 +242,6 @@ class MapComponent extends Component {
 		// this.props.alreadyViewed.forEach((clicked, index)=>{
 		// 	alreadyViewed[clicked] = index
 		// })
-
 		if (this.pins) {
 			// loop through all pins
 			for (let m = 0; m<this.pins.length; m++) {
@@ -250,7 +261,11 @@ class MapComponent extends Component {
 				} else {
 					// found a pin that has not yet been clicked
 					if ((this.pins[m].icon !== this.red_map_pin) || (this.pins[m].animating)) {
-						this.pins[m].setIcon(this.red_map_pin)
+						if (this.pins[m].label && this.pins[m].label.toLowerCase().indexOf('sold out') > -1) {
+							this.pins[m].setIcon(this.grey_map_pin)
+						} else {
+							this.pins[m].setIcon(this.red_map_pin)
+						}
 						this.pins[m].setAnimation(null)
 						// this.pins[m].infowindow.close()
 					}

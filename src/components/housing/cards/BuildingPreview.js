@@ -53,12 +53,16 @@ class BuildingPreview extends Component {
 
   selectThisBuilding(building) {
     // console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
-    window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
+    if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+      // do nothing
+    } else {
+      window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
+    }
   }
 
 	render() {
 		return (
-      <div style={comStyles().container} >
+      <div style={comStyles(this.props.building.label).container} >
         <Card
           onClick={() => this.selectThisBuilding(this.props.building)}
           onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)}
@@ -94,9 +98,17 @@ class BuildingPreview extends Component {
             null
           }
         </Card.Content>
-        <Card.Content style={comStyles().explore_button}>
-          <Button fluid color='blue' content='Explore' size='large' />
-        </Card.Content>
+        {
+          this.props.building.label && this.props.building.label.toLowerCase().indexOf('sold out') > -1
+          ?
+          <Card.Content style={comStyles().explore_button}>
+            <Button fluid color='red' content='SOLD OUT' size='large' />
+          </Card.Content>
+          :
+          <Card.Content style={comStyles().explore_button}>
+            <Button fluid color='blue' content='Explore' size='large' />
+          </Card.Content>
+        }
       </Card>
         <div style={comStyles().analyticsContainer} >
           <Statistic>
@@ -156,8 +168,15 @@ export default withRouter(
 // ===============================
 
 // the JS function that returns Radium JS styling
-const comStyles = () => {
+const comStyles = (label) => {
+  let opacityStyles = {}
+  if (label && label.toLowerCase().indexOf('sold out') > -1) {
+    opacityStyles.opacity = 0.5
+  }
 	return {
+    container: {
+      ...opacityStyles,
+    },
     analyticsContainer: {
       display: 'flex',
       flexDirection: 'row',
