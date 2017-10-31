@@ -116,7 +116,6 @@ class SubletApplication extends Component {
 
 	// for when you load a page immediately onto Subletee Done
 	initiateSubleteeDone(post_id, contract_id) {
-		console.log('subletee done')
 		getSubletPostById(post_id).then((data) => {
 				this.setState({
 					sublet_post: data
@@ -157,8 +156,8 @@ class SubletApplication extends Component {
 					return getSubleteeContractForSubletor(contract_id)
 				} else {
 					// do not allow progress
-					return Promise.reject()
-					// return getSubleteeContractForSubletor(contract_id)
+					// return Promise.reject()
+					return getSubleteeContractForSubletor(contract_id)
 				}
 			})
 			.then((data) => {

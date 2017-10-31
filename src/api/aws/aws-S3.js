@@ -140,21 +140,21 @@ export const uploadImageToS3 = (image, s3_corporation, prefix) => {
 // we group S3 assets from folders such as so:
 // corporation > building > main_photos > img.png
 // corporation > corporation_assets > thumbnail > img.png
-export const uploadImageToS3WithEncryption = (image, s3_corporation, prefix) => {
+export const uploadImageToS3WithEncryption = (image, tenant_id, prefix) => {
 	const p = new Promise((res, rej) => {
 		const S3 = new AWS_S3()
 		const fileName = `${image.name}`;
 		const timestamp = new Date().getTime()/1000
 
-		// S3 Folder-File syntax: corp_id/building_id/asset_type/file_name.png
-		const imageKey = s3_corporation + prefix + fileName
+		// S3 Folder-File syntax: tenant_id/building_id/asset_type/file_name.png
+		const imageKey = tenant_id + prefix + fileName
 		AWS.config.credentials.refresh(() => {
 			S3.upload({
 					Bucket: ENCRYPTED_BUCKET_NAME,
 			    Key: imageKey,
 			    Body: image,
 			    ACL: 'authenticated-read',
-					ServerSideEncryption: 'AES256',
+					ServerSideEncryption: 'aws:kms',
 			}, (err, S3Object) => {
 			    if (err) {
 			      	const msg = `There was an error uploading your photo: ${err.message}`
@@ -172,11 +172,14 @@ export const uploadImageToS3WithEncryption = (image, s3_corporation, prefix) => 
 
 export const getEncryptedS3Image = (url, cognito_user_id) => {
 	const p = new Promise((res, rej) => {
-		const S3 = new AWS_S3()
+		const S3 = new AWS_S3({
+			signatureVersion: 'v4'
+		})
+		const decodedUrl = decodeURIComponent(url)
 		// https://rentburrow3-tenant-images.s3.amazonaws.com/8f24fead-afa4-4598-9e3b-90a4d1809bde/student_card-181575fb8a8651eea950686533241f0a.jpeg
-		const imageKeyLoc = url.indexOf(cognito_user_id)
-		const imageKey = url.slice(imageKeyLoc + cognito_user_id.length + 1)
-		// console.log(imageKey)
+		// const imageKeyLoc = url.indexOf(cognito_user_id)
+		// const imageKey = url.slice(imageKeyLoc + cognito_user_id.length)
+		const imageKey = decodedUrl.slice('https://rentburrow3-tenant-images.s3.amazonaws.com/'.length)
 		AWS.config.credentials.refresh(() => {
 			S3.getObject({
 					Bucket: ENCRYPTED_BUCKET_NAME,
@@ -189,13 +192,24 @@ export const getEncryptedS3Image = (url, cognito_user_id) => {
 			      	return
 			    }
 					const msg = `Successfully got original photo ${imageKey}`
-					res(S3Object)
+					const imageBlob = convertUint8ArrayToImage(S3Object.Body)
+					res({
+						...S3Object,
+						image_blob: imageBlob
+					})
 			})
 		})
 	})
 	return p
 }
 
+export const convertUint8ArrayToImage = (uint8array) => {
+	// return new Blob(uint8array, {
+	// 	type: 'image/png'
+	// })
+	const str = uint8array.reduce((a, b) => { return a + String.fromCharCode(b) }, '');
+  return 'data:image/jpeg;base64,' + btoa(str).replace(/.{76}(?=.)/g,'$&\n');
+}
 
 // export const uploadPDFToS3 = (file, resdata, prefix) => {
 // 	const p = new Promise((res, rej) => {

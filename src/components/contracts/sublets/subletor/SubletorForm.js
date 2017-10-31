@@ -26,7 +26,8 @@ import {
 	xMidBlue,
 } from '../../../../styles/base_colors'
 import DatePicker from 'react-datepicker'
-import { filterNonImages } from '../../../../api/aws/aws-S3'
+import { getStudentCard } from '../../../../api/auth/tenant_api'
+import { filterNonImages, getEncryptedS3Image } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj, getSubleteeProfile, } from '../../../../api/signing/sublet_contract_api'
 import SubleteeSubletorRelationship from '../SubleteeSubletorRelationship'
 import { validateEmail } from '../../../../api/general/general_api'
@@ -80,7 +81,7 @@ class SubletorForm extends Component {
 			{ index: 3, icon: 'question circle', title: 'How does it work?', description: 'Good question. The person who sent you this URL link most likely already discussed sublet contract terms with you. They have filled out their portion, now you must fill out the form on the left. When you are done, click submit. After a successful submission, everyone including witnesses will get an email where you can sign the sublet contract online. Be sure to read over the sublet contract one last time before signing! Once signed, the contract is complete and you will arrange a time to meet the other person to exchange keys and payment.' },
 			{ index: 4, icon: 'dollar', title: 'Is there any cost?', description: 'Nope, its completely free :)' },
 			{ index: 5, icon: 'eye', title: 'Why do I need a witness?', description: 'Most contracts require a contract as backup proof that the contract was indeed signed by the stated parties. Don\'t worry, witnesses can be anyone who saw you sign the contract. So you can put your roommate, friend or a parent/guardian. They will get an email and be able to sign from within the email without any extra hassle.' },
-			// { index: 6, icon: 'user', title: 'Why do I need to upload my student card?', description: 'For safety purposes. Because you are renting student housing, we require that you be a student. You do not necessarily need to be a student of the University of Waterloo or Wilfrid Laurier University, as long as you are a student. The other person will be able to see your student card, and you will be able to see theirs. That way, everyone feels safe. We keep all sensitive information secure and encrypted on bank level AES-256 bit encryption.' },
+			{ index: 6, icon: 'user', title: 'Why do I need to upload my student card?', description: 'For safety purposes. Because you are renting student housing, we require that you be a student. You do not necessarily need to be a student of the University of Waterloo or Wilfrid Laurier University, as long as you are a student. The other person will be able to see your student card, and you will be able to see theirs. That way, everyone feels safe. We keep all sensitive information secure and encrypted on bank level AES-256 bit encryption.' },
 			{ index: 7, icon: 'privacy', title: 'How do I get paid rent and exchange keys?', description: 'You will still need to meet up in person to exchange keys and payment. It is up to you to determine how you will receive payment from the other person. Please remember that when you rent to a sublet, you are still paying the original landlord. This is your responsibility, not the subletee.' },
 			{ index: 8, icon: 'user cancel', title: 'What if the other person backs out?', description: 'If the other person agreed to sublet from you and signed the contract but later changed their mind, then legally they are still bound to the agreement. If the other person ignores this and does not pay you, you will have to work things out with them by yourself. You must also continue paying rent to your original landlord. Rentburrow cannot enforce a sublet contract for you, so be sure that the other person has integrity to uphold the contract.' },
 			{ index: 9, icon: 'legal', title: 'What are the terms and conditions?', description: 'We keep the terms and conditions very simple. Rentburrow provides you the means to sign a sublet contract online but we do not guarantee that the sublet contract is legally valid in every situation. We also do not guarantee that signing a sublet contract via Rentburrow will guarantee that you actually get the sublet - that is up to you and the other person. By using this service, you agree to take all responsibility for this sublet contract. You also release Rentburrow (and its parent company Bytenectar Inc) from all legal responsibility related to this sublet contract.' },
@@ -95,7 +96,6 @@ class SubletorForm extends Component {
 			subletor_last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
 			subletor_phone_number: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
 			subletor_email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
-			// subletor_student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
 			price: this.props.subletee_contract.rent_price,
 			address: this.props.subletee_contract.building_address,
 			official_begin_date: moment(this.props.subletee_contract.begin_date),
@@ -111,6 +111,19 @@ class SubletorForm extends Component {
 					subletee,
 				})
 			})
+		getStudentCard({ tenant_id: this.props.tenant_profile.tenant_id }).then((data) => {
+			if (data) {
+				getEncryptedS3Image(data.student_card, `${this.props.tenant_profile.tenant_id}/`).then((data) => {
+					this.setState({
+						subletor_student_card: data.image_blob
+					})
+				})
+			} else {
+				this.setState({
+					subletor_student_card: ''
+				})
+			}
+		})
 	}
 
 	updateAttr(e, attr) {
@@ -136,12 +149,12 @@ class SubletorForm extends Component {
   }
 
 	submit() {
+		this.setState({
+			submitted: true,
+		})
 		if (this.formValidation()) {
 			setTimeout(() => {
 				this.props.saveSubletorForm(this.state)
-				this.setState({
-					submitted: true,
-				})
 			}, 3000)
 		}
 	}
@@ -184,9 +197,9 @@ class SubletorForm extends Component {
 		if (this.state.price <= 0) {
 			errors.push('Monthly sublet rent cannot be zero or less')
 		}
-		// if (!this.state.subletor_student_card ) {//|| !this.state.subletor_student_card.name || !this.state.subletor_student_card.name.length > 0) {
-		// 	errors.push('You must upload a picture of your student card')
-		// }
+		if (!this.state.subletor_student_card) {
+			errors.push('You must upload a picture of your student card')
+		}
 		if (this.state.landlord_full_legal_name.length === 0) {
 			errors.push('You must include the landlords name')
 		}
@@ -203,10 +216,11 @@ class SubletorForm extends Component {
 		}
 		if (errors.length > 0) {
 			submittable = false
+			this.setState({
+				error_messages: errors,
+				submitted: false,
+			})
 		}
-		this.setState({
-			error_messages: errors
-		})
 		return submittable
 	}
 
@@ -357,20 +371,20 @@ class SubletorForm extends Component {
 									    </Form.Field>
 											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
 										</div>
-										{/*<div style={comStyles().student_card}>
+										<div style={comStyles().student_card}>
 											<Form.Field>
-												<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'subletor_student_card')} style={comStyles().bannerDropzone} multiple={false}>
-													{
-														this.state.subletor_student_card
-														?
-														<Image key={this.state.subletor_student_card.name} src={this.state.subletor_student_card.preview} style={comStyles().uploadImagesQueue} />
-														:
-														<div>Upload Student Card</div>
-													}
-												</Dropzone>
+												{
+													this.state.subletor_student_card
+													?
+													<Image src={this.state.subletor_student_card} style={comStyles().uploadImagesQueue} />
+													:
+													<div style={comStyles().dropzone_text}>
+														<Icon name='camera' /> &nbsp;
+														Edit Profile Details with a Student Card
+													</div>
+												}
 											</Form.Field>
-											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
-										</div>*/}
+										</div>
 									</div>
 								</Card>
 
@@ -487,7 +501,7 @@ class SubletorForm extends Component {
 										<p>Generating Contract...</p>
 									</div>
 									:
-							    <Button primary size='large' type='submit' onClick={() => this.submit()}>Next</Button>
+							    <Button primary size='large' type='submit' onClick={() => this.submit()}>Submit</Button>
 								}
 						  </Form>
 						</div>
@@ -632,12 +646,12 @@ const comStyles = () => {
 		student_form: {
 			display: 'flex',
 			flexDirection: 'column',
-			width: '75%',
+			width: '80%',
 		},
 		student_card: {
 			display: 'flex',
 			flexDirection: 'column',
-			padding: '10px',
+			padding: '20px',
 			justifyContent: 'center',
 			alignItems: 'center',
 		},

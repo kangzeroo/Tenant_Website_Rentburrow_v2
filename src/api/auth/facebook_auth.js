@@ -101,10 +101,19 @@ const grabFacebookProfile = (fbToken) => {
 	    { access_token: fbToken },
       (profile) => {
 				if (profile.id) {
-					convertTokenIntoLongLived(fbToken).then((longToken) => {
-		        res({
+					let longToken = ''
+					convertTokenIntoLongLived(fbToken).then((lngToken) => {
+						longToken = lngToken
+						return registerFacebookLoginWithCognito({
+							authResponse: {
+								accessToken: fbToken
+							}
+						})
+					}).then((IdentityId) => {
+						res({
 	            ...profile,
-	            fbToken: longToken
+	            fbToken: longToken,
+							cognito_id: IdentityId,
 	          })
 					}).catch((err) => {
 						localStorage.setItem('fbToken', fbToken)
@@ -154,11 +163,6 @@ const grabFacebookImage = (profile) => {
 }
 
 export const convertTokenIntoLongLived = (accessToken) => {
-	registerFacebookLoginWithCognito({
-		authResponse: {
-			accessToken: accessToken
-		}
-	})
 	const p = new Promise((res, rej)=>{
 		axios.post(SEARCH_MICROSERVICE+'/longlivetoken', { accessToken })
 			.then((longToken) => {
