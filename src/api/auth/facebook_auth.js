@@ -110,6 +110,7 @@ const grabFacebookProfile = (fbToken) => {
 							}
 						})
 					}).then((IdentityId) => {
+						console.log(IdentityId)
 						res({
 	            ...profile,
 	            fbToken: longToken,
