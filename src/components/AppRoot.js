@@ -314,7 +314,7 @@ class AppRoot extends Component {
             </div>
 
             {
-              this.props.tenant_profile && this.props.tenant_profile.tenant_id && this.props.location.pathname !== '/'
+              this.props.tenant_profile && this.props.tenant_profile.tenant_id
               ?
               <Chat style={comStyles().chat} />
               :
@@ -327,6 +327,8 @@ class AppRoot extends Component {
 		)
 	}
 }
+
+ // && this.props.location.pathname !== '/'
 
 AppRoot.propTypes = {
   children: PropTypes.object,

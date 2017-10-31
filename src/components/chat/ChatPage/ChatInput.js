@@ -51,51 +51,12 @@ class ChatInput extends Component {
       // console.log(err)
     }
     const onComplete = () => {
-      let additionalInfo = {}
-      if (!this.props.authenticated && localStorage.getItem('unauthUser_email') && localStorage.getItem('unauthUser_name')) {
-        additionalInfo = {
-          unauth_email: localStorage.getItem('unauthUser_email'),
-          tenant_name: localStorage.getItem('unauthUser_name'),
-        }
-      }
-      // a channel_id is comprised of corporation_id + corporation_id + building_id
-      const newMessage = {
-        message_id: uuid.v4(),
-        sender_id: this.props.tenant_profile.tenant_id,
-        receiver_id: this.props.chat_help ? 'Rentburrow_Student_Help_Chat' : this.props.corporation.corporation_id,
-        tenant_id: this.props.tenant_profile.tenant_id,
-        tenant_name: `${this.props.tenant_profile.first_name} ${this.props.tenant_profile.last_name}`,
-        building_id: this.props.chat_help ? 'main_page_chat_help' : this.props.selected_building.building_id,
-        // building_thumbnail: this.props.building_target.thumbnail,
-        building_alias: this.props.chat_help ? 'Main Page Help' : this.props.selected_building.building_address,
-        corporation_id: this.props.chat_help ? 'Rentburrow_Student_Help_Chat' : this.props.corporation.corporation_id,
-        corporation_name: this.props.chat_help ? 'Rentburrow Help' : this.props.corporation.corporation_name,
-        channel_id: this.props.chat_help ? `Rentburrow_Student_Help_Chat_${this.props.tenant_profile.tenant_id}` : `${this.props.corporation.corporation_id}_${this.props.tenant_profile.tenant_id}`,
-        contents: this.state.inputText,
-        sent_at: new Date().getTime(),
-        read_at: 0,
-        ...additionalInfo,
-      }
-      this.props.sendChatMessage(newMessage)
-      sendChatMessageToLandlord(
-        this.props.tenant_profile.first_name,
-        this.props.tenant_profile.email ? this.props.tenant_profile.email : localStorage.getItem('unauthUser_email'),
-        this.props.corporation.email,
-        this.props.selected_building,
-        this.state.inputText
-      )
-      this.setState({
-        inputText: '',
-        checked: false
-      })
+      this.sendMessage()
       mergedStream.subscribe({
         next: onNext,
         error: onError,
         complete: onComplete
       })
-      this.props.markTheseAsRead(this.props.current_thread.filter((msg) => {
-        return msg.read_at === 0 && msg.receiver_id === this.props.tenant_profile.tenant_id
-      }))
     }
 
     mergedStream.subscribe({
@@ -111,6 +72,49 @@ class ChatInput extends Component {
     })
   }
 
+  sendMessage() {
+    let additionalInfo = {}
+    if (!this.props.authenticated && localStorage.getItem('unauthUser_email') && localStorage.getItem('unauthUser_name')) {
+      additionalInfo = {
+        unauth_email: localStorage.getItem('unauthUser_email'),
+        tenant_name: localStorage.getItem('unauthUser_name'),
+      }
+    }
+    // a channel_id is comprised of corporation_id + corporation_id + building_id
+    const newMessage = {
+      message_id: uuid.v4(),
+      sender_id: this.props.tenant_profile.tenant_id,
+      receiver_id: this.props.chat_help ? 'Rentburrow_Student_Help_Chat' : this.props.corporation.corporation_id,
+      tenant_id: this.props.tenant_profile.tenant_id,
+      tenant_name: `${this.props.tenant_profile.first_name} ${this.props.tenant_profile.last_name}`,
+      building_id: this.props.chat_help ? 'main_page_chat_help' : this.props.selected_building.building_id,
+      // building_thumbnail: this.props.building_target.thumbnail,
+      building_alias: this.props.chat_help ? 'Main Page Help' : this.props.selected_building.building_address,
+      corporation_id: this.props.chat_help ? 'Rentburrow_Student_Help_Chat' : this.props.corporation.corporation_id,
+      corporation_name: this.props.chat_help ? 'Rentburrow Help' : this.props.corporation.corporation_name,
+      channel_id: this.props.chat_help ? `Rentburrow_Student_Help_Chat_${this.props.tenant_profile.tenant_id}` : `${this.props.corporation.corporation_id}_${this.props.tenant_profile.tenant_id}`,
+      contents: this.state.inputText,
+      sent_at: new Date().getTime(),
+      read_at: 0,
+      ...additionalInfo,
+    }
+    this.props.sendChatMessage(newMessage)
+    sendChatMessageToLandlord(
+      this.props.tenant_profile.first_name,
+      this.props.tenant_profile.email ? this.props.tenant_profile.email : localStorage.getItem('unauthUser_email'),
+      this.props.corporation.email,
+      this.props.selected_building,
+      this.state.inputText
+    )
+    this.setState({
+      inputText: '',
+      checked: false
+    })
+    this.props.markTheseAsRead(this.props.current_thread.filter((msg) => {
+      return msg.read_at === 0 && msg.receiver_id === this.props.tenant_profile.tenant_id
+    }))
+  }
+
 	render() {
     return (
       <Form style={comStyles().container}>
@@ -123,7 +127,7 @@ class ChatInput extends Component {
           disabled={!this.props.authenticated && !localStorage.getItem('unauthUser_email') ? true : false}
           style={comStyles().textbox}
         />
-        {/*<Icon name='send' style={inputStyles().sendBtn} />*/}
+        <Icon name='send' onClick={() => this.sendMessage()} style={inputStyles().sendBtn} />
       </Form>
     )
 	}
