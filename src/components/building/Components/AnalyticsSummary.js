@@ -24,7 +24,6 @@ class AnalyticsSummary extends Component {
   }
 
   componentWillMount() {
-		console.log(this.props.building)
     getAllImagesSizeForSpecificBuilding(this.props.building.building_id)
     .then((data) => {
       this.setState({

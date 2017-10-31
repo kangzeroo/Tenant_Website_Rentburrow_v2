@@ -74,6 +74,7 @@ class HomeExplorerCanvas extends Component {
 					<VirtualTourCanvas
 						istaging_url={JSON.parse(this.props.bottomContextValue).istaging_url}
 						iguide_url={JSON.parse(this.props.bottomContextValue).iguide_url}
+						video_url={JSON.parse(this.props.bottomContextValue).video_url}
 					/>
 				)
 			} else if (this.props.bottomContextValue && (this.props.bottomContextText.toLowerCase().indexOf('room') > -1 || this.props.bottomContextText.toLowerCase().indexOf('unit') > -1)) {
