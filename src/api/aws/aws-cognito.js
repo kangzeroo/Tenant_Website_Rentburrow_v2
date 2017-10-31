@@ -305,11 +305,14 @@ export const signOutStudent = () => {
 }
 
 export const registerFacebookLoginWithCognito = (response) => {
+	console.log('registerFacebookLoginWithCognito')
 	const p = new Promise((res, rej) => {
 		// Check if the user logged in successfully.
 		  if (response.authResponse) {
+				console.log(response)
 		    // console.log('You are now logged in.');
 		    const cognitoidentity = new AWS.CognitoIdentity()
+				console.log(AWS.config.credentials)
 
 		    // Add the Facebook access token to the Cognito credentials login map.
 		    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
