@@ -25,7 +25,6 @@ class LoginPopup extends Component {
       return loginFacebook()
     })
     .then((fbProfile) => {
-      console.log(fbProfile)
       insertUser(fbProfile)
       return saveTenantProfile(fbProfile)
     })
