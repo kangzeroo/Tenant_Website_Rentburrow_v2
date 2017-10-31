@@ -11,6 +11,7 @@ import {
   FILTERED_BUILDINGS,
   FILTERED_SUBLETS,
   UPDATE_SEARCH_RADIUS,
+  TOGGLE_HIDE_SOLD_OUTS,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -166,6 +167,16 @@ export const changeSearchRadius = (radius) => {
     dispatch({
       type: UPDATE_SEARCH_RADIUS,
       payload: radius,
+    })
+  }
+}
+
+// change search radius
+export const toggleHideSoldOuts = (bool) => {
+  return (dispatch) => {
+    dispatch({
+      type: TOGGLE_HIDE_SOLD_OUTS,
+      payload: bool,
     })
   }
 }

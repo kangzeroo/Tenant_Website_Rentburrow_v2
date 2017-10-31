@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import { queryBuildingsInArea } from '../../api/search/search_api'
-import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRedux, } from '../../actions/search/search_actions'
+import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRedux, toggleHideSoldOuts } from '../../actions/search/search_actions'
 import {
 	Checkbox,
 	Button,
@@ -186,6 +186,11 @@ class LeaseFilterCard extends Component {
 						checked={this.state.utils_incl}
 						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
 						toggle />
+					<Checkbox
+						label='Hide Sold Outs'
+						checked={this.props.hide_sold_outs}
+						onChange={() => this.props.toggleHideSoldOuts(!this.props.hide_sold_outs)}
+						toggle />
 					{/*
 					<Checkbox
 						label='Parking Available'
@@ -223,11 +228,13 @@ LeaseFilterCard.propTypes = {
 	building_search_results: PropTypes.array.isRequired,
 	buildings: PropTypes.array.isRequired,
 	saveFilteredBuildingsToRedux: PropTypes.func.isRequired,
+	toggleHideSoldOuts: PropTypes.func.isRequired,
+	hide_sold_outs: PropTypes.bool,
 }
 
 // for all optional props, define a default value
 LeaseFilterCard.defaultProps = {
-
+	hide_sold_outs: false,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -240,6 +247,7 @@ const mapReduxToProps = (redux) => {
 		current_gps_center: redux.filter.current_gps_center,
 		building_search_results: redux.search.building_search_results,
 		buildings: redux.search.buildings,
+		hide_sold_outs: redux.search.hide_sold_outs,
 	}
 }
 
@@ -249,6 +257,7 @@ export default withRouter(
 		saveBuildingsToRedux,
 		saveLeaseFilterParams,
 		saveFilteredBuildingsToRedux,
+		toggleHideSoldOuts,
 	})(RadiumHOC)
 )
 

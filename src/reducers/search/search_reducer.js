@@ -8,6 +8,7 @@ import {
   FOUND_SUBLETS,
   SELECT_POPUP_BUILDING,
   FILTERED_SUBLETS,
+  TOGGLE_HIDE_SOLD_OUTS,
 } from '../../actions/action_types'
 import { findAllMatchingGPS } from '../../api/map/map_api'
 
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
   search_style: 'map',     // list, map
   card_style: 'grid',       // row, grid or cover
   selected_pin: null,
+  hide_sold_outs: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -31,6 +33,16 @@ export default (state = INITIAL_STATE, action) => {
         search_string: action.payload,
         building_search_results: state.buildings.filter((building) => {
           return building.building_alias.toLowerCase().indexOf(action.payload.toLowerCase()) > -1 || building.building_address.toLowerCase().indexOf(action.payload.toLowerCase()) > -1
+        }).filter((building) => {
+          if (building.label) {
+            if (state.hide_sold_outs) {
+              return building.label.toLowerCase().indexOf('sold out') === -1
+            } else {
+              return true
+            }
+          } else {
+            return true
+          }
         }),
         sublet_search_results: state.sublets.filter((sublet) => {
           return sublet.address.toLowerCase().indexOf(action.payload.toLowerCase()) > -1
@@ -39,13 +51,33 @@ export default (state = INITIAL_STATE, action) => {
     case FOUND_BUILDINGS:
       return {
         ...state,
-        building_search_results: action.payload,
+        building_search_results: action.payload.filter((building) => {
+          if (building.label) {
+            if (state.hide_sold_outs) {
+              return building.label.toLowerCase().indexOf('sold out') === -1
+            } else {
+              return true
+            }
+          } else {
+            return true
+          }
+        }),
         buildings: action.payload,
       }
     case FILTERED_BUILDINGS:
       return {
         ...state,
-        building_search_results: action.payload,
+        building_search_results: action.payload.filter((building) => {
+          if (building.label) {
+            if (state.hide_sold_outs) {
+              return building.label.toLowerCase().indexOf('sold out') === -1
+            } else {
+              return true
+            }
+          } else {
+            return true
+          }
+        }),
       }
     case CHANGE_SEARCH_STYLE:
       return {
@@ -77,6 +109,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         sublet_search_results: action.payload,
+      }
+    case TOGGLE_HIDE_SOLD_OUTS:
+      return {
+        ...state,
+        hide_sold_outs: action.payload,
       }
 		default:
 			return {

@@ -26,8 +26,12 @@ import RibbonLabel from '../../instructions/RibbonLabel'
 class BuildingCard extends Component {
 
   selectThisBuilding(building) {
+    if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+      // do nothing
+    } else {
+      window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
+    }
     // console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
-    window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
   }
 
   cardOnHover(building) {
@@ -50,7 +54,7 @@ class BuildingCard extends Component {
         onClick={() => this.selectThisBuilding(this.props.building)}
         raised
         onMouseEnter={() => this.cardOnHover(this.props.building)}
-        style={comStyles().hardCard}
+        style={comStyles(this.props.building.label).hardCard}
       >
         {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
         <div style={comStyles().imageGallery}>
@@ -121,7 +125,11 @@ export default withRouter(
 // ===============================
 
 // the JS function that returns Radium JS styling
-const comStyles = () => {
+const comStyles = (label) => {
+  let opacityStyles = {}
+  if (label && label.toLowerCase().indexOf('sold out') > -1) {
+    opacityStyles.opacity = 0.5
+  }
 	return {
     hardCard: {
       minWidth: '360px',
@@ -129,6 +137,7 @@ const comStyles = () => {
       minHeight: '300px',
       maxHeight: '300px',
       margin: '5px auto',
+      ...opacityStyles,
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
