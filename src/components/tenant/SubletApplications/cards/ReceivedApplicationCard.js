@@ -75,9 +75,10 @@ class ReceivedApplicationCard extends Component {
 	}
 
 	render() {
+		console.log(this.props.details)
 		return (
 			<div style={comStyles().container}>
-			<Card raised onClick={() => this.newSession(this.props.details.contract_id)}>
+			<Card raised>
 				<Card.Content>
 					<Card.Header>
 						{shortenAddress(this.props.details.building_address)}
@@ -90,6 +91,9 @@ class ReceivedApplicationCard extends Component {
 							style={comStyles().subletor_pic}
 						/>
 					</Card.Header>
+					<Card.Meta onClick={(e) => this.goToFacebookUser(e, this.props.details.subletee_fb_id)} style={comStyles().subletor_name}>
+						{`${this.props.details.subletee_first_name} ${this.props.details.subletee_last_name}`} wants to sublet
+					</Card.Meta>
 					<Card.Meta>{this.props.details.suite_num ? 'Suite ' + this.props.details.suite_num : ''}</Card.Meta>
 					<Card.Meta>{this.props.details.room_num ? 'Room ' + this.props.details.room_num : ''}</Card.Meta>
 					<Card.Meta>{'Applied On ' + moment(this.props.details.created_at).format('MMM Do YYYY')}</Card.Meta>
@@ -103,11 +107,12 @@ class ReceivedApplicationCard extends Component {
 							?
 							<h2> COMPLETE </h2>
 							:
-							<h2>Waiting For Signatures. Check your email.</h2>
+							<h3>Waiting For Signatures. Check your email.</h3>
 						}
 					</div>
 					<div style={comStyles().buttons_container}>
 						<Button
+							fluid
 							primary
 							basic
 							content='Original Post'
@@ -118,8 +123,8 @@ class ReceivedApplicationCard extends Component {
 							?
 							<Button
 								primary
-								basic
 								content='View Contract'
+								onClick={() => this.newSession(this.props.details.contract_id)}
 							/>
 							:
 							null
@@ -180,6 +185,10 @@ const comStyles = () => {
       position: 'absolute',
       top: '5px',
       right: '5px'
+    },
+    subletor_name: {
+      cursor: 'pointer',
+      color: 'blue',
     }
 	}
 }

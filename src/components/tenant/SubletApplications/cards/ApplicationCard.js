@@ -80,7 +80,7 @@ class ApplicationCard extends Component {
 			.then((sublet_post) => {
 				this.props.triggerSubleteeDoneModal({
           sublet_post: sublet_post,
-          contract_id: details.contract_id
+          subletee_contract: { contract_id: details.contract_id }
         })
       })
   }
@@ -121,9 +121,9 @@ class ApplicationCard extends Component {
                   {
                     this.props.details.doc_id !== null
                     ?
-                    <h2>Waiting For Signatures. Check your email.</h2>
+                    <h3>Waiting For Signatures. Check your email.</h3>
                     :
-                    <h2>Waiting For Subletor</h2>
+                    <h3>Waiting For Subletor. Make sure you send them the link.</h3>
                   }
                 </div>
               }
@@ -143,7 +143,6 @@ class ApplicationCard extends Component {
                 <Button
                   fluid
                   primary
-                  basic
                   content='View Contract'
                   onClick={() => this.newSession(this.props.details.contract_id)}
                 />

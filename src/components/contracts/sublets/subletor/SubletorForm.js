@@ -149,12 +149,12 @@ class SubletorForm extends Component {
   }
 
 	submit() {
+		this.setState({
+			submitted: true,
+		})
 		if (this.formValidation()) {
 			setTimeout(() => {
 				this.props.saveSubletorForm(this.state)
-				this.setState({
-					submitted: true,
-				})
 			}, 3000)
 		}
 	}
@@ -216,10 +216,11 @@ class SubletorForm extends Component {
 		}
 		if (errors.length > 0) {
 			submittable = false
+			this.setState({
+				error_messages: errors,
+				submitted: false,
+			})
 		}
-		this.setState({
-			error_messages: errors
-		})
 		return submittable
 	}
 
@@ -500,7 +501,7 @@ class SubletorForm extends Component {
 										<p>Generating Contract...</p>
 									</div>
 									:
-							    <Button primary size='large' type='submit' onClick={() => this.submit()}>Next</Button>
+							    <Button primary size='large' type='submit' onClick={() => this.submit()}>Submit</Button>
 								}
 						  </Form>
 						</div>

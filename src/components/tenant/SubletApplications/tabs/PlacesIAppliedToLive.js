@@ -71,7 +71,7 @@ class PlacesIAppliedToLive extends Component {
       return (
         <SubleteeDone
           sublet_post={context.sublet_post}
-          subletee_contract={context.contract_id}
+          subletee_contract={context.subletee_contract}
         />
       )
     }
@@ -126,7 +126,7 @@ class PlacesIAppliedToLive extends Component {
                   <ApplicationCard
                     key={card.subletee_id}
                     details={card}
-                    triggerSubleteeDoneModal={({ sublet_post, contract_id }) => this.toggleModal(true, 'subletee_done', { sublet_post, contract_id })}
+                    triggerSubleteeDoneModal={({ sublet_post, subletee_contract }) => this.toggleModal(true, 'subletee_done', { sublet_post, subletee_contract })}
                   />
                 )
               })
