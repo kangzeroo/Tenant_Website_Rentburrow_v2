@@ -64,7 +64,7 @@ class SubletsList extends Component {
 			.then((building) => {
 				if (building) {
 					this.setState({
-						building: JSON.parse(building),
+						building: building,
 						exists: true,
 					})
 				}

@@ -17,6 +17,7 @@ import {
   Button,
   Modal,
   Dropdown,
+  Popup,
 } from 'semantic-ui-react'
 import LoginPopup from './auth/LoginPopup'
 import i18n from '../i18n/translator'
@@ -28,6 +29,7 @@ import { changeAppLanguage } from '../actions/app/app_actions'
 import SearchInput from './filter/SearchInput'
 import { queryBuildingsInArea } from '../api/building/building_api'
 import { saveBuildingsToRedux } from '../actions/search/search_actions'
+import PropertyRequest from './requests/PropertyRequest'
 
 class Header extends Component {
 
@@ -51,8 +53,19 @@ class Header extends Component {
   renderAppropriateModal(modal_name, context) {
     if (modal_name === 'login') {
       return this.renderLoginSuite()
+    } else if (modal_name === 'request') {
+      return this.renderRequest()
     }
     return null
+  }
+
+  renderRequest() {
+    return (
+      <Modal.Content inverted>
+        <PropertyRequest
+        />
+      </Modal.Content>
+    )
   }
 
   renderLoginSuite() {
@@ -166,10 +179,24 @@ class Header extends Component {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
+              <Button
+                basic
+                inverted
+                content='Make a Request'
+                style={comStyles().login}
+                onClick={() => this.toggleModal(true, 'request')}
+              />
               { this.renderProfileDropdown() }
             </div>
             :
             <div style={comStyles().rightFloat}>
+              <Button
+                basic
+                inverted
+                content='Make a Request'
+                style={comStyles().login}
+                onClick={() => this.toggleModal(true, 'request')}
+              />
               <Button
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
@@ -303,7 +330,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      maxWidth: '7vw'
+      maxWidth: '300px',
+      alignItems: 'center',
     },
     close_login: {
       position: 'absolute',
