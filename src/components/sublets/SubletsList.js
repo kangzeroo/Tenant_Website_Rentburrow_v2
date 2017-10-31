@@ -100,7 +100,7 @@ class SubletsList extends Component {
 						?
 						<Button
 							primary
-							content='View Building'
+							content='View Building Pictures'
 							style={comStyles().view_button}
 							onClick={() => this.viewBuilding()}
 						/>

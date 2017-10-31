@@ -156,8 +156,8 @@ class SubletApplication extends Component {
 					return getSubleteeContractForSubletor(contract_id)
 				} else {
 					// do not allow progress
-					// return Promise.reject()
-					return getSubleteeContractForSubletor(contract_id)
+					return Promise.reject()
+					// return getSubleteeContractForSubletor(contract_id)
 				}
 			})
 			.then((data) => {
