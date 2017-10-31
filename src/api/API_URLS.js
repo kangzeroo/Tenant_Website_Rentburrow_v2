@@ -30,3 +30,7 @@ export const SUBLETTING_MICROSERVICE = 'https://rentburrow.com:3005'
 export const CONTRACTING_MICROSERVICE = 'https://rentburrow.com:3005'
 export const FIREBASE_VERSION = 'production'
 export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
+
+
+
+// export const EC2_CONTAINER_IP_ADDRESS = '34.195.86.132'
