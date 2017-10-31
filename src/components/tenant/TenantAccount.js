@@ -19,6 +19,8 @@ import {
 import {
   updateTenantProfile,
   getTenantProfile,
+  insertStudentCard,
+  getStudentCard,
 } from '../../api/auth/tenant_api'
 import { saveTenantToRedux } from '../../actions/auth/auth_actions'
 import { filterNonImages, uploadImageToS3WithEncryption, getEncryptedS3Image } from '../../api/aws/aws-S3'
@@ -48,9 +50,20 @@ class TenantAccount extends Component {
         last_name: this.props.tenant_profile.last_name,
         email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
         phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
-        student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
       })
-      getEncryptedS3Image(this.props.tenant_profile.student_card, this.props.tenant_profile.tenant_id)
+      getStudentCard({ tenant_id: this.props.tenant_profile.tenant_id }).then((data) => {
+        if (data) {
+          getEncryptedS3Image(data.student_card, `${this.props.tenant_profile.tenant_id}/`).then((data) => {
+      			this.setState({
+      				student_card: data.image_blob
+      			})
+      		})
+        } else {
+          this.setState({
+            student_card: ''
+          })
+        }
+      })
     } else {
       this.props.history.push('/')
     }
@@ -68,16 +81,20 @@ class TenantAccount extends Component {
     }, () => {
       uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
   			.then((S3Obj) => {
-          console.log(S3Obj)
+          return insertStudentCard({
+            tenant_id: this.props.tenant_profile.tenant_id,
+            student_card: S3Obj.Location
+          })
+  			})
+        .then(() => {
   				return updateTenantProfile({
             tenant_id: this.props.tenant_profile.tenant_id,
             first_name: this.state.first_name,
             last_name: this.state.last_name,
             email: this.state.email,
             phone: this.state.phone,
-            student_card: S3Obj.Location,
           })
-  			})
+        })
         .then(() => {
           this.setState({
             profile_saved: true,
@@ -180,7 +197,7 @@ class TenantAccount extends Component {
                     </div>
                   }
                 </Dropzone>
-                <div style={comStyles().click_image_to_change}>Click on image to change</div>
+                <div style={comStyles().click_image_to_change}>Click on image to change Student Card</div>
               </Form.Field>
             </div>
           </div>

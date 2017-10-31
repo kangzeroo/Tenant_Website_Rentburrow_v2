@@ -308,7 +308,6 @@ export const registerFacebookLoginWithCognito = (response) => {
 	const p = new Promise((res, rej) => {
 		// Check if the user logged in successfully.
 		  if (response.authResponse) {
-
 		    // console.log('You are now logged in.');
 		    const cognitoidentity = new AWS.CognitoIdentity()
 
@@ -319,10 +318,8 @@ export const registerFacebookLoginWithCognito = (response) => {
 		         'graph.facebook.com': response.authResponse.accessToken
 		      }
 		    })
-
 		    // AWS Cognito Sync to sync Facebook
 		    AWS.config.credentials.get(() => {
-					console.log(AWS.config.credentials)
 			    const client = new AWS.CognitoSyncManager()
 					res(AWS.config.credentials.data.IdentityId)
 				})

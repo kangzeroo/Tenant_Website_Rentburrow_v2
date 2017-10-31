@@ -25,6 +25,7 @@ import {
 import {
 	getSentApplications,
 } from '../../../../api/application/application_api'
+import { getSubletPostById } from '../../../../api/signing/sublet_contract_api'
 
 class ApplicationCard extends Component {
 
@@ -74,10 +75,20 @@ class ApplicationCard extends Component {
 		}
 	}
 
+  triggerSubleteeDone(details) {
+    getSubletPostById(details.fb_post_id)
+			.then((sublet_post) => {
+				this.props.triggerSubleteeDoneModal({
+          sublet_post: sublet_post,
+          contract_id: details.contract_id
+        })
+      })
+  }
+
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Card raised onClick={() => this.newSession(this.props.details.contract_id)}>
+				<Card raised>
           <Card.Content>
             <Card.Header>
               {shortenAddress(this.props.details.building_address)}
@@ -92,6 +103,9 @@ class ApplicationCard extends Component {
             </Card.Header>
             <Card.Meta>{this.props.details.suite ? 'Suite ' + this.props.details.suite : ''}</Card.Meta>
             <Card.Meta>{this.props.details.room ? 'Room ' + this.props.details.room : ''}</Card.Meta>
+            <Card.Meta onClick={(e) => this.goToFacebookUser(e, this.props.details.subletor_fb_id)} style={comStyles().subletor_name}>
+              Renting from {this.props.details.subletor_name}
+            </Card.Meta>
             <Card.Meta>{'Applied On ' + moment(this.props.details.created_at).format('MMM Do YYYY')}</Card.Meta>
             <Card.Description>{'Begin Date:  ' + moment(this.props.details.begin_date).format('MMM Do YYYY')}</Card.Description>
             <Card.Description>{'End Date:  ' + moment(this.props.details.end_date).format('MMM Do YYYY')}</Card.Description>
@@ -116,21 +130,30 @@ class ApplicationCard extends Component {
             </div>
             <div style={comStyles().buttons_container}>
               <Button
+                fluid
                 primary
                 basic
-                content='Original Post'
+                content='See Original Post'
                 onClick={(e) => this.goToOriginalPost(e, this.props.details.fb_post_id)}
+                style={comStyles().step_buttons}
               />
               {
                 this.props.details.contract_link
                 ?
                 <Button
+                  fluid
                   primary
                   basic
                   content='View Contract'
+                  onClick={() => this.newSession(this.props.details.contract_id)}
                 />
                 :
-                null
+                <Button
+                  fluid
+                  primary
+                  content='Send Them Link To Complete'
+                  onClick={() => this.triggerSubleteeDone(this.props.details)}
+                />
               }
             </div>
           </Card.Content>
@@ -145,6 +168,7 @@ ApplicationCard.propTypes = {
 	history: PropTypes.object.isRequired,
   details: PropTypes.object.isRequired, // passed in
   saveSentApplicationsToRedux: PropTypes.func.isRequired,
+  triggerSubleteeDoneModal: PropTypes.func.isRequired,  // passed in
 }
 
 // for all optional props, define a default value
@@ -182,7 +206,7 @@ const comStyles = () => {
 		},
     buttons_container: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'space-between',
       padding: '10px 0px 10px 0px'
     },
@@ -193,6 +217,13 @@ const comStyles = () => {
     },
     status: {
       padding: '20px',
+    },
+    step_buttons: {
+      margin: '0px 0px 5px 0px'
+    },
+    subletor_name: {
+      cursor: 'pointer',
+      color: 'blue',
     }
 	}
 }

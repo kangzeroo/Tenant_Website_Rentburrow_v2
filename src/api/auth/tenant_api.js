@@ -72,3 +72,31 @@ export const saveTenantDetails = (obj) => {
   })
   return p
 }
+
+export const insertStudentCard = ({ tenant_id, student_card }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/insert_tenant_student_card`, { tenant_id, student_card })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const getStudentCard = ({ tenant_id }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_tenant_student_card`, { tenant_id })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}

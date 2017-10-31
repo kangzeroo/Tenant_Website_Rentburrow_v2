@@ -106,15 +106,10 @@ const grabFacebookProfile = (fbToken) => {
 						longToken = lngToken
 						return registerFacebookLoginWithCognito({
 							authResponse: {
-								accessToken: accessToken
+								accessToken: fbToken
 							}
 						})
 					}).then((IdentityId) => {
-						console.log({
-	            ...profile,
-	            fbToken: longToken,
-							cognito_id: IdentityId,
-	          })
 						res({
 	            ...profile,
 	            fbToken: longToken,

@@ -26,9 +26,10 @@ import {
 import {
 	xMidBlue,
 } from '../../../../styles/base_colors'
+import { getStudentCard } from '../../../../api/auth/tenant_api'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { filterNonImages } from '../../../../api/aws/aws-S3'
+import { filterNonImages, getEncryptedS3Image } from '../../../../api/aws/aws-S3'
 import { convertToRegularSubletObj } from '../../../../api/search/sublet_api'
 import SubleteeSubletorRelationship from '../SubleteeSubletorRelationship'
 import { validateEmail } from '../../../../api/general/general_api'
@@ -72,7 +73,7 @@ class SubleteeForm extends Component {
 			{ index: 3, icon: 'question circle', title: 'How does it work?', description: 'Good question. First message the person subletting on Facebook to work out the details such as price and the sublet start/end date. When you two have reached an agreement, you must fill out the form on the left and click submit. After submitting, you will get a URL link that you must send to the other person. They will open the link and fill out another form that will verify the sublet details. They will also provide the landlords contact info for you. When they submit their form, everyone including witnesses will get an email where you can sign the sublet contract online. Be sure to read over the sublet contract one last time before signing! Once signed, the contract is complete and you will arrange a time to meet the other person to exchange keys and payment.' },
 			{ index: 4, icon: 'dollar', title: 'Is there any cost?', description: 'Nope, its completely free :)' },
 			{ index: 5, icon: 'eye', title: 'Why do I need a witness?', description: 'Most contracts require a contract as backup proof that the contract was indeed signed by the stated parties. Don\'t worry, witnesses can be anyone who saw you sign the contract. So you can put your roommate, friend or a parent/guardian. They will get an email and be able to sign from within the email without any extra hassle.' },
-			// { index: 6, icon: 'user', title: 'Why do I need to upload my student card?', description: 'For safety purposes. Because you are renting student housing, we require that you be a student. You do not necessarily need to be a student of the University of Waterloo or Wilfrid Laurier University, as long as you are a student. The other person will be able to see your student card, and you will be able to see theirs. That way, everyone feels safe. We keep all sensitive information secure and encrypted on bank level AES-256 bit encryption.' },
+			{ index: 6, icon: 'user', title: 'Why do I need to upload my student card?', description: 'For safety purposes. Because you are renting student housing, we require that you be a student. You do not necessarily need to be a student of the University of Waterloo or Wilfrid Laurier University, as long as you are a student. The other person will be able to see your student card, and you will be able to see theirs. That way, everyone feels safe. We keep all sensitive information secure and encrypted on bank level AES-256 bit encryption.' },
 			{ index: 7, icon: 'privacy', title: 'How do I pay rent and get my keys?', description: 'You will still need to meet up in person to exchange keys and payment. It is up to you to determine how you will pay the other person. Please remember that when you pay for a sublet, you are paying the current tenant who will in turn pay the landlord.' },
 			{ index: 8, icon: 'user cancel', title: 'What if the other person backs out?', description: 'First of all, check with the person to see if the sublet is still available. You can simply message them on Facebook. If the other person agreed to sublet to you but later gave it to someone else, then legally the first person who signed a sublet contract has rights to the room. If the other person does not sublet at all, you will have to work things out with them by yourself. Rentburrow cannot enforce a sublet contract for you, so be sure that the other person has integrity to uphold the contract. In the rare event that the other person does not pay rent to the original landlord, you must go directly to the landlord and explain to them the situation.' },
 			{ index: 9, icon: 'legal', title: 'What are the terms and conditions?', description: 'We keep the terms and conditions very simple. Rentburrow provides you the means to sign a sublet contract online but we do not guarantee that the sublet contract is legally valid in every situation. We also do not guarantee that signing a sublet contract via Rentburrow will guarantee that you actually get the sublet - that is up to you and the other person. By using this service, you agree to take all responsibility for this sublet contract. You also release Rentburrow (and its parent company Bytenectar Inc) from all legal responsibility related to this sublet contract.' },
@@ -87,9 +88,21 @@ class SubleteeForm extends Component {
 			subletee_last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
 			subletee_phone_number: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
 			subletee_email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
-			// subletee_student_card: this.props.tenant_profile.student_card ? this.props.tenant_profile.student_card : '',
 			price: this.props.sublet_post.PRICE,
 			address: this.props.sublet_post.ADDRESS,
+		})
+		getStudentCard({ tenant_id: this.props.tenant_profile.tenant_id }).then((data) => {
+			if (data) {
+				getEncryptedS3Image(data.student_card, `${this.props.tenant_profile.tenant_id}/`).then((data) => {
+					this.setState({
+						subletee_student_card: data.image_blob
+					})
+				})
+			} else {
+				this.setState({
+					subletee_student_card: ''
+				})
+			}
 		})
 	}
 
@@ -156,9 +169,9 @@ class SubleteeForm extends Component {
 		if (this.state.price <= 0) {
 			errors.push('Monthly sublet rent cannot be zero or less')
 		}
-		// if (!this.state.subletee_student_card || !this.state.subletee_student_card.name || !this.state.subletee_student_card.name.length > 0) {
-		// 	errors.push('You must upload a picture of your student card')
-		// }
+		if (!this.state.subletee_student_card) {
+			errors.push('You must upload a picture of your student card')
+		}
 		if (!this.state.agree_to_terms) {
 			errors.push('You must agree to the terms and conditions of this online service')
 		}
@@ -298,20 +311,20 @@ class SubleteeForm extends Component {
 											</Form.Field>
 											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
 										</div>
-										{/*<div style={comStyles().student_card}>
+										<div style={comStyles().student_card}>
 											<Form.Field>
-												<Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'subletee_student_card')} style={comStyles().dropzone} multiple={false}>
-													{
-														this.state.subletee_student_card
-														?
-														<Image key={this.state.subletee_student_card.name} src={this.state.subletee_student_card.preview} style={comStyles().uploadImagesQueue} />
-														:
-														<div style={comStyles().dropzone_text}>Upload Student Card</div>
-													}
-												</Dropzone>
+												{
+													this.state.subletee_student_card
+													?
+													<Image src={this.state.subletee_student_card} style={comStyles().uploadImagesQueue} />
+													:
+													<div style={comStyles().dropzone_text}>
+														<Icon name='camera' /> &nbsp;
+														Edit Profile Details with a Student Card
+													</div>
+												}
 											</Form.Field>
-											<Button basic fluid primary onClick={() => this.props.history.push('/account')} content='Edit Profile Details' style={comStyles().edit_profile} />
-										</div>*/}
+										</div>
 									</div>
 								</Card>
 
@@ -526,12 +539,12 @@ const comStyles = () => {
 		student_form: {
 			display: 'flex',
 			flexDirection: 'column',
-			width: '100%',
+			width: '80%',
 		},
 		student_card: {
 			display: 'flex',
 			flexDirection: 'column',
-			padding: '10px',
+			padding: '20px',
 			justifyContent: 'center',
 			alignItems: 'center',
 		},

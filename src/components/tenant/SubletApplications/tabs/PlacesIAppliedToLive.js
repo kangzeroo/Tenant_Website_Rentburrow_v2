@@ -11,6 +11,7 @@ import {
   Header,
   Icon,
   Button,
+  Modal,
 } from 'semantic-ui-react'
 import ApplicationCard from '../cards/ApplicationCard'
 import {
@@ -18,13 +19,18 @@ import {
 } from '../../../../api/application/application_api'
 import { saveSentApplicationsToRedux, } from '../../../../actions/contract/contract_actions'
 import { updateDocumentStatus, } from '../../../../api/pandadoc/pandadoc_api'
+import SubleteeDone from '../../../contracts/sublets/subletee/SubleteeDone'
 
 class PlacesIAppliedToLive extends Component {
 
   constructor() {
     super()
     this.state = {
-      applications: []
+      applications: [],
+
+      toggle_modal: false,
+      modal_name: '',
+      context: null,
     }
   }
 
@@ -57,6 +63,25 @@ class PlacesIAppliedToLive extends Component {
       this.setState({
         applications: applications,
       })
+    })
+  }
+
+  renderAppropriateModal(modal_name, context) {
+    if (modal_name === 'subletee_done') {
+      return (
+        <SubleteeDone
+          sublet_post={context.sublet_post}
+          subletee_contract={context.contract_id}
+        />
+      )
+    }
+  }
+
+  toggleModal(bool, attr, context) {
+    this.setState({
+      toggle_modal: bool,
+      modal_name: attr,
+      context: context
     })
   }
 
@@ -101,12 +126,18 @@ class PlacesIAppliedToLive extends Component {
                   <ApplicationCard
                     key={card.subletee_id}
                     details={card}
+                    triggerSubleteeDoneModal={({ sublet_post, contract_id }) => this.toggleModal(true, 'subletee_done', { sublet_post, contract_id })}
                   />
                 )
               })
             }
           </div>
         }
+        <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+          {
+            this.renderAppropriateModal(this.state.modal_name, this.state.context)
+          }
+        </Modal>
       </div>
 		)
 	}

@@ -82,7 +82,7 @@ class SubleteeSubletorRelationship extends Component {
               </div>
               :
               <div style={comStyles().pricediv}>
-                <div style={comStyles().price}>Student Card</div>
+                <div style={comStyles().price}>Student Card Verified</div>
               </div>
             }
 
@@ -221,10 +221,11 @@ const comStyles = () => {
 			position: 'relative',
 		},
 		price: {
-			fontSize:'2.5rem',
-			fontWeight:'bold',
+			fontSize: '2rem',
+			fontWeight: 'bold',
 			color: xGreyText,
 			width: '100%',
+      lineHeight: '30px',
 		},
 		imageTile: {
 			position: 'absolute',

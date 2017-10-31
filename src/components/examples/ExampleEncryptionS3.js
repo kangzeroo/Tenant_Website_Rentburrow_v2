@@ -18,7 +18,7 @@ import { filterNonImages } from '../../api/aws/aws-S3'
 import { uploadImageToS3WithEncryption, getEncryptedS3Image } from '../../api/aws/aws-S3'
 
 
-class TestComponent extends Component {
+class ExampleEncryptionS3 extends Component {
 
 	constructor() {
 		super()
@@ -116,18 +116,18 @@ class TestComponent extends Component {
 }
 
 // defines the types of variables in this.props
-TestComponent.propTypes = {
+ExampleEncryptionS3.propTypes = {
 	history: PropTypes.object.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-TestComponent.defaultProps = {
+ExampleEncryptionS3.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(TestComponent)
+const RadiumHOC = Radium(ExampleEncryptionS3)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
