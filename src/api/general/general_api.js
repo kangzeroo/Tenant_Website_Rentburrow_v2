@@ -96,6 +96,7 @@ const checkIfPartOfRoutes = (urlPath) => {
 
 export const renderProcessedImage = (url) => {
 	if (url) {
+		console.log(url)
 		const newurl = url.replace('rentburrow3-images.s3.amazonaws.com', 'rentburrow3-watermark-processed.s3.amazonaws.com')
 		const new_name = newurl.slice(0, newurl.lastIndexOf('/')) + '/hd' + newurl.slice(newurl.lastIndexOf('/'))
 		return new_name

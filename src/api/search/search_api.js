@@ -122,6 +122,22 @@ export const getAllImagesSizeForSpecificBuilding = (building_id) => {
   return p
 }
 
+export const getAllSummaryImages = (building_id) => {
+  const p = new Promise((res, rej) => {
+    // search for a specific building from backend
+    // axios.post(`${SEARCH_MICROSERVICE}/get_specific_building`, { building_id: building_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_all_summary_images`, { building_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const getNumVirtualTours = (building_id) => {
   const p = new Promise((res, rej) => {
     // search for a specific building from backend
