@@ -156,8 +156,8 @@ class SubletApplication extends Component {
 					return getSubleteeContractForSubletor(contract_id)
 				} else {
 					// do not allow progress
-					return Promise.reject()
-					// return getSubleteeContractForSubletor(contract_id)
+					// return Promise.reject()
+					return getSubleteeContractForSubletor(contract_id)
 				}
 			})
 			.then((data) => {
@@ -178,7 +178,7 @@ class SubletApplication extends Component {
 	saveSubleteeForm(formObj) {
 		// uploadImageToS3WithEncryption(formObj.subletee_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
 		// 	.then((S3Obj) => {
-				return saveSubleteeFormToDb({
+				saveSubleteeFormToDb({
 					...formObj,
 			//		subletee_student_card: S3Obj.Location,
           fb_post_id: this.state.fb_post_id,
@@ -207,7 +207,7 @@ class SubletApplication extends Component {
 	saveSubletorForm(formObj) {
 		// uploadImageToS3WithEncryption(formObj.subletor_student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
 		// 	.then((S3Obj) => {
-				return saveSubletorFormToDb({
+				saveSubletorFormToDb({
 					...formObj,
 					// subletor_student_card: S3Obj.Location,
 					fb_post_id: this.state.fb_post_id,

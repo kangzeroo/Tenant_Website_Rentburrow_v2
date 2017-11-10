@@ -120,6 +120,11 @@ class HomeExplorerSidebar extends Component {
             },
           ].concat([
             {
+              key: 'vr_tour',
+              text: 'Virtual Tour',
+              value: this.props.building,
+            },
+            {
               key: 'am',
               text: 'Building Amenities',
               value: data.map((d) => {
@@ -281,7 +286,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '100px',
+      width: '200px',
       minWidth: '220px',
       height: '80vh',
       maxHeight: '80vh',

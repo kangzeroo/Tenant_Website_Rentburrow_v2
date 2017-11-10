@@ -37,6 +37,15 @@ class HomeExplorerCanvas extends Component {
 			      </Dimmer>
 					)
 			  }
+			} else if (this.props.bottomContextText === 'Virtual Tour' && this.props.bottomContextValue) {
+				return (
+					<VirtualTourCanvas
+						istaging_url={JSON.parse(this.props.bottomContextValue).istaging_url}
+						matterport_url={JSON.parse(this.props.bottomContextValue).matterport_url}
+						iguide_url={JSON.parse(this.props.bottomContextValue).iguide_url}
+						video_url={JSON.parse(this.props.bottomContextValue).video_url}
+					/>
+				)
 			} else if (this.props.bottomContextValue) {
 				return (
 					<AmenityProofs
@@ -73,6 +82,7 @@ class HomeExplorerCanvas extends Component {
 				return (
 					<VirtualTourCanvas
 						istaging_url={JSON.parse(this.props.bottomContextValue).istaging_url}
+						matterport_url={JSON.parse(this.props.bottomContextValue).matterport_url}
 						iguide_url={JSON.parse(this.props.bottomContextValue).iguide_url}
 						video_url={JSON.parse(this.props.bottomContextValue).video_url}
 					/>
