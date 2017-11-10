@@ -212,6 +212,7 @@ class BuildingPage extends Component {
 					src={building.istaging_url}
 					frameBorder='0'
 					allowFullScreen
+					style={comStyles().iframe_container}
 				/>
 			)
 		} else if (building.iguide_url) {
@@ -495,8 +496,8 @@ const loadStyles = (img) => {
 		cover_photo: {
 			minHeight: '70vh',
 			maxHeight: '70vh',
-			minWidth: '100%',
-			maxWidth: '100%',
+			minWidth: '100vw',
+			maxWidth: '100vw',
 			overflow: 'hidden',
       position: 'relative',
 			background: `url('${img}') center center no-repeat`,
@@ -510,7 +511,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-			backgroundColor: 'rgba(153,204,255,0.2)',
+			backgroundColor: 'rgba(153,204,255,0.1)',
 		},
     hidden_loading: {
       position: 'absolute',
@@ -576,6 +577,7 @@ const comStyles = () => {
 			flexDirection: 'column',
 			flex: '1',
 			margin: '20px 50px 20px 20px',
+			padding: '10px',
 		},
 		about: {
 			fontSize: '2.5rem',
@@ -664,5 +666,8 @@ const comStyles = () => {
 			fontSize: '1.3rem',
 			lineHeight: '30px',
 		},
+		iframe_container: {
+			zoom: '0.5'
+		}
 	}
 }
