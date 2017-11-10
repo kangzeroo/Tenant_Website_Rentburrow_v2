@@ -87,11 +87,9 @@ class BuildingPage extends Component {
     let building_alias = URLToAlias(this.props.location.pathname)
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
-    }
-		console.log(building_alias)
+		}
 		searchForSpecificBuildingByAlias(building_alias)
 		.then((data) => {
-			console.log(data)
 			this.setState({
 				building: data
 			})
