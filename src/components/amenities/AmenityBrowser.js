@@ -44,7 +44,7 @@ class AmenityBrowser extends Component {
 
 	render() {
 		return (
-			<div className='pretty_scrollbar' style={comStyles().container}>
+			<Card className='pretty_scrollbar' style={comStyles().container}>
         <div style={comStyles().box}>
           <div style={comStyles().amen}>
             <div style={comStyles().amentity_title}>
@@ -93,7 +93,8 @@ class AmenityBrowser extends Component {
               <h2>No Image Proof</h2>
             </div>
           }
-        </Card>
+        </div>
+      </Card>
 		)
 	}
 }
