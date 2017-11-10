@@ -69,7 +69,7 @@ class RoomCanvas extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div className='pretty_scrollbar' style={comStyles().container}>
 				<div style={comStyles().contain_image} >
 					<SingularImageGallery
 						list_of_images={[this.state.room.thumbnail].concat(this.state.room.imgs)}

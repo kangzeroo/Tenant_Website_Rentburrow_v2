@@ -139,7 +139,7 @@ class SubletsList extends Component {
 					:
 					null
 				}
-				<div style={comStyles().scroll}>
+				<div className='pretty_scrollbar' style={comStyles().scroll}>
 					{
 						this.props.sublets.sort((a, b) => {
 		          return b.posted_date - a.posted_date

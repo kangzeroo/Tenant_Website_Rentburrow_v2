@@ -56,6 +56,8 @@ import { clearIntelList, saveIntelToCloud } from '../actions/intel/intel_actions
 import { unauthRoleStudent, } from '../api/aws/aws-cognito'
 import { saveTenantProfile, getTenantProfile } from '../api/auth/tenant_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
+import '../styles/pretty_scrollbar.css'
+import '../styles/custom_font.css'
 
 
 class AppRoot extends Component {

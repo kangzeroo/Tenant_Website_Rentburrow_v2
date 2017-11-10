@@ -76,7 +76,7 @@ class ImageGallery extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div className='pretty_scrollbar' style={comStyles().container}>
         <Image
           src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
           width='100%'

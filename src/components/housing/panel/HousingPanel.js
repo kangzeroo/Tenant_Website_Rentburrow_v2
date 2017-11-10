@@ -192,7 +192,7 @@ class HousingPanel extends Component {
 							{
 								this.props.sublet_search_results.length > 0
 								?
-								<div id='scroll_div' onScroll={(e, d) => this.handleScroll(e, d)} style={comStyles().scroll}>
+								<div className='pretty_scrollbar' id='scroll_div' onScroll={(e, d) => this.handleScroll(e, d)} style={comStyles().scroll}>
 									{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
 										return this.renderSubletCard(sublet, index)
 									})}
@@ -217,7 +217,7 @@ class HousingPanel extends Component {
 							}
 						</div>
 						:
-						<div id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
+						<div className='pretty_scrollbar' id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
 							{
 								this.props.building_search_results.length > 0
 								?
