@@ -29,6 +29,7 @@ import ProTipsPage from './community/student_info/ProTipsPage'
 import PrizesPage from './community/student_info/PrizesPage'
 import ContactUs from './instructions/ContactUs'
 import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
+import TermsOfServicePage from './community/student_info/TermsOfServicePage'
 import HowItWorksLandlord from './community/landlord_info/HowItWorksLandlord'
 import JoinPageLandlord from './community/landlord_info/JoinPageLandlord'
 import PricingLandlord from './community/landlord_info/PricingLandlord'
@@ -296,6 +297,7 @@ class AppRoot extends Component {
                 <Route exact path='/welcome' component={LandingPage} />
                 <Route exact path='/protips' component={ProTipsPage} />
                 <Route exact path='/prizes' component={PrizesPage} />
+                <Route exact path='/terms' component={TermsOfServicePage} />
                 <Route exact path='/privacy' component={PrivacyPolicyPage} />
                 <Route exact path='/contact' component={ContactUs} />
                 <Route exact path='/how-it-works' component={HowItWorksLandlord} />

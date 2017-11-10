@@ -45,8 +45,8 @@ class Footer extends Component {
               </div>
               <div style={comStyles().col}>
                 <Link to='/protips' style={comStyles().link}>FAQ & Protips</Link>
-                <Link to='/contact' style={comStyles().link}>Contact Us</Link>
                 <Link to='/privacy' style={comStyles().link}>Privacy Policy</Link>
+                <Link to='/terms' style={comStyles().link}>Terms of Service</Link>
               </div>
             </div>
           </div>
