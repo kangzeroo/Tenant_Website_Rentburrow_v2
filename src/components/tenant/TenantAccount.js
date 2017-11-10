@@ -51,6 +51,7 @@ class TenantAccount extends Component {
         email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
         phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
       })
+      /*
       getStudentCard({ tenant_id: this.props.tenant_profile.tenant_id }).then((data) => {
         if (data) {
           getEncryptedS3Image(data.student_card, `${this.props.tenant_profile.tenant_id}/`).then((data) => {
@@ -63,7 +64,7 @@ class TenantAccount extends Component {
             student_card: ''
           })
         }
-      })
+      })*/
     } else {
       this.props.history.push('/')
     }

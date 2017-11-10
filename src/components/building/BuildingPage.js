@@ -18,6 +18,7 @@ import {
 	Label,
 	Button,
 	Form,
+	Card,
 	Input,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
@@ -51,6 +52,7 @@ import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import HomeOverview from '../home_overview/HomeOverview'
 import BuildingQuickAmenitiesBar from '../amenities/BuildingQuickAmenitiesBar'
 import StepByStepCard from '../instructions/StepByStepCard'
+import ApplyBox from '../instructions/ApplyBox'
 import AllLandlords from '../landlord/AllLandlords'
 import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 import SingularImageGallery from '../image/SingularImageGallery'
@@ -277,7 +279,7 @@ class BuildingPage extends Component {
 				</div>
 				<div style={comStyles().content_top}>
 					<div style={comStyles().content_left}>
-						<div style={comStyles().building_header}>
+						<Card fluid raised style={comStyles().building_header}>
 							<div style={comStyles().welcome_banner}>
 								<div style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</div>
 								{
@@ -299,11 +301,11 @@ class BuildingPage extends Component {
 									null
 								}
 							</div>
-						</div>
+						</Card>
 						{
 							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id
 							?
-							<div style={comStyles().amenities} >
+							<Card fluid raised style={comStyles().amenities} >
 								<BuildingQuickAmenitiesBar
 									building={this.state.building}
 									building_amenities={this.state.amenities}
@@ -312,7 +314,7 @@ class BuildingPage extends Component {
 									expandAmenities={() => this.expandAmenities()}
 									expand_amenities={this.state.expand_amenities}
 								/>
-							</div>
+							</Card>
 							:
 							null
 						}
@@ -353,7 +355,12 @@ class BuildingPage extends Component {
 						}
 					</div>
 					<div style={comStyles().content_right} >
-						<StepByStepCard
+						{/*}<StepByStepCard
+							building={this.state.building}
+							all_suites={this.state.suites}
+							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
+						/>*/}
+						<ApplyBox
 							building={this.state.building}
 							all_suites={this.state.suites}
 							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
