@@ -321,6 +321,8 @@ export const registerFacebookLoginWithCognito = (response) => {
 		    // AWS Cognito Sync to sync Facebook
 		    AWS.config.credentials.get(() => {
 			    const client = new AWS.CognitoSyncManager()
+					// console.log(generate_TENANT_IDENTITY_POOL_ID())
+					// console.log(AWS.config.credentials)
 					res(AWS.config.credentials.data.IdentityId)
 				})
 		  } else {
@@ -352,7 +354,8 @@ export const unauthRoleStudent = () => {
 		})
 		// AWS Cognito Sync to sync Facebook
 		AWS.config.credentials.get(() => {
-			const client = new AWS.CognitoSyncManager();
+			const client = new AWS.CognitoSyncManager()
+			// console.log(generate_TENANT_IDENTITY_POOL_ID())
 			// console.log(AWS.config.credentials)
 			res({
 				tenant_id: AWS.config.credentials.data.IdentityId,

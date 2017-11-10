@@ -9,11 +9,13 @@ import Rx from 'rxjs'
 import uuid from 'uuid'
 import { withRouter } from 'react-router-dom'
 import {
+	Modal,
 } from 'semantic-ui-react'
 import {
 	matchSubletsByPlaceId,
 } from '../../api/search/sublet_api'
 import SubletsList from '../sublets/SubletsList'
+import SingularImageGallery from '../image/SingularImageGallery'
 
 
 class SubletPage extends Component {
@@ -21,6 +23,10 @@ class SubletPage extends Component {
 		super()
 		this.state = {
 			sublets: [],
+
+			toggle_modal: false,
+      modal_name: '',
+      context: null,
 		}
 	}
 
@@ -29,7 +35,7 @@ class SubletPage extends Component {
     let place_id = this.props.location.pathname.slice(position_start)
     matchSubletsByPlaceId({ place_id }).then((sublets) => {
       this.setState({
-        sublets: sublets
+        sublets: sublets.slice(0, 30)
       })
     })
 	}
@@ -49,7 +55,24 @@ class SubletPage extends Component {
   }
 
 	renderAppropriateModal(modal_name, context) {
-		return null
+		if (modal_name === 'images') {
+			return (
+				<Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='large'
+				>
+	        <Modal.Content>
+						<SingularImageGallery
+							list_of_images={context}
+							image_size='none'
+						/>
+	        </Modal.Content>
+	      </Modal>
+			)
+		}
   }
 
 	render() {
@@ -57,6 +80,7 @@ class SubletPage extends Component {
 			<div style={comStyles().container}>
 				<SubletsList
 					sublets={this.state.sublets}
+					openImages={(images) => this.toggleModal(true, 'images', images)}
 				/>
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
@@ -204,6 +228,10 @@ const comStyles = () => {
 			margin: '10px 0px 10px 0px',
 			borderRadius: '2px',
 			padding: '10px',
+		},
+		image_gallery: {
+			height: '80vh',
+			maxHeight: '80vh',
 		}
 	}
 }

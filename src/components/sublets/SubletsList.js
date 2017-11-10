@@ -15,6 +15,7 @@ import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
 import MapComponent from '../map/MapComponent'
 import { searchBuildingByPlaceID, searchBuildingByAddress, } from '../../api/search/search_api'
 import { aliasToURL, shortenAddress, } from '../../api/general/general_api'
+import SingularImageGallery from '../image/SingularImageGallery'
 
 class SubletsList extends Component {
 
@@ -82,6 +83,14 @@ class SubletsList extends Component {
 		this.selectThisBuilding(this.state.building)
 	}
 
+	generateAllImages(sublets) {
+		let all_images = []
+		sublets.forEach((sublet) => {
+			all_images = all_images.concat(JSON.parse(sublet.images))
+		})
+		return all_images
+	}
+
 	render() {
 		return (
 			<div style={comStyles().container}>
@@ -100,7 +109,7 @@ class SubletsList extends Component {
 						?
 						<Button
 							primary
-							content='View Building Pictures'
+							content='View More Building Pictures'
 							style={comStyles().view_button}
 							onClick={() => this.viewBuilding()}
 						/>
@@ -111,16 +120,26 @@ class SubletsList extends Component {
 				{
 					this.props.sublets.length > 0
 					?
-					<MapComponent
-						listOfResults={this.props.sublets}
-						selected_pin={this.props.sublets[0].post_id}
-						CSS_mapWidth='100%'
-						CSS_mapHeight='300px'
-					/>
+					<div style={comStyles().map_image_row}>
+						<div style={comStyles().map_gallery}>
+							<MapComponent
+								listOfResults={this.props.sublets}
+								selected_pin={this.props.sublets[0].post_id}
+								CSS_mapWidth='100%'
+								CSS_mapHeight='300px'
+							/>
+						</div>
+						<div onClick={() => this.props.openImages(this.generateAllImages(this.props.sublets))} style={comStyles().image_gallery}>
+							<SingularImageGallery
+		            list_of_images={this.generateAllImages(this.props.sublets)}
+		            image_size='none'
+		          />
+						</div>
+					</div>
 					:
 					null
 				}
-				<div style={comStyles().scroll}>
+				<div className='pretty_scrollbar' style={comStyles().scroll}>
 					{
 						this.props.sublets.sort((a, b) => {
 		          return b.posted_date - a.posted_date
@@ -144,6 +163,7 @@ SubletsList.propTypes = {
 	history: PropTypes.object.isRequired,
 	sublets: PropTypes.array,		// passed in
 	location: PropTypes.object.isRequired,
+	openImages: PropTypes.func.isRequired,	// passed in
 }
 
 // for all optional props, define a default value
@@ -216,6 +236,24 @@ const comStyles = () => {
 			overflowY: 'scroll',
       display: 'flex',
       flexDirection: 'column',
+		},
+		map_image_row: {
+      display: 'flex',
+      flexDirection: 'row',
+			maxHeight: '300px',
+			width: '100%',
+		},
+		map_gallery: {
+			minWidth: '50%',
+			minHeight: '50%',
+			maxWidth: '100%',
+			maxHeight: '100%',
+		},
+		image_gallery: {
+			minWidth: '50%',
+			minHeight: '50%',
+			maxWidth: '100%',
+			maxHeight: '100%',
 		}
 	}
 }

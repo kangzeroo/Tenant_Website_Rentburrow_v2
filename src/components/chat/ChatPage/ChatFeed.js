@@ -26,7 +26,7 @@ class ChatFeed extends Component {
 
 	render() {
 		return (
-      <div id='chatfeed' style={comStyles(this.props.onPage).chatfeed}>
+      <div className='pretty_scrollbar' id='chatfeed' style={comStyles(this.props.onPage).chatfeed}>
         {
           this.props.showing_email_unauth
           ?

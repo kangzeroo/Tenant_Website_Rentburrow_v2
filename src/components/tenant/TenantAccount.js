@@ -51,20 +51,19 @@ class TenantAccount extends Component {
         email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
         phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
       })
-      /*
-      getStudentCard({ tenant_id: this.props.tenant_profile.tenant_id }).then((data) => {
-        if (data) {
-          getEncryptedS3Image(data.student_card, `${this.props.tenant_profile.tenant_id}/`).then((data) => {
-      			this.setState({
-      				student_card: data.image_blob
-      			})
-      		})
-        } else {
-          this.setState({
-            student_card: ''
-          })
-        }
-      })*/
+      // getStudentCard({ tenant_id: this.props.tenant_profile.tenant_id }).then((data) => {
+      //   if (data) {
+      //     getEncryptedS3Image(data.student_card, `${this.props.tenant_profile.tenant_id}/`).then((data) => {
+      // 			this.setState({
+      // 				student_card: data.image_blob
+      // 			})
+      // 		})
+      //   } else {
+      //     this.setState({
+      //       student_card: ''
+      //     })
+      //   }
+      // })
     } else {
       this.props.history.push('/')
     }
@@ -80,23 +79,29 @@ class TenantAccount extends Component {
     this.setState({
       saving: true
     }, () => {
-      uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
-  			.then((S3Obj) => {
-          return insertStudentCard({
-            tenant_id: this.props.tenant_profile.tenant_id,
-            student_card: S3Obj.Location
-          })
-  			})
-        .then(() => {
-  				return updateTenantProfile({
-            tenant_id: this.props.tenant_profile.tenant_id,
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            email: this.state.email,
-            phone: this.state.phone,
-          })
-        })
-        .then(() => {
+      // uploadImageToS3WithEncryption(this.state.student_card, `${this.props.tenant_profile.tenant_id}/`, 'student_card-')
+  			// .then((S3Obj) => {
+        //   return insertStudentCard({
+        //     tenant_id: this.props.tenant_profile.tenant_id,
+        //     student_card: S3Obj.Location
+        //   })
+  			// })
+        // .then(() => {
+  			// 	return updateTenantProfile({
+        //     tenant_id: this.props.tenant_profile.tenant_id,
+        //     first_name: this.state.first_name,
+        //     last_name: this.state.last_name,
+        //     email: this.state.email,
+        //     phone: this.state.phone,
+        //   })
+        // })
+        updateTenantProfile({
+          tenant_id: this.props.tenant_profile.tenant_id,
+          first_name: this.state.first_name,
+          last_name: this.state.last_name,
+          email: this.state.email,
+          phone: this.state.phone,
+        }).then(() => {
           this.setState({
             profile_saved: true,
             saving: false,
@@ -176,7 +181,7 @@ class TenantAccount extends Component {
                 />
               </Form.Field>
             </Form>
-            <div style={comStyles().student_card}>
+            {/*<div style={comStyles().student_card}>
               <Form.Field>
                 <Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhoto(acceptedFiles, rejectedFiles, 'student_card')} style={comStyles().bannerDropzone} multiple={false}>
                   {
@@ -200,7 +205,7 @@ class TenantAccount extends Component {
                 </Dropzone>
                 <div style={comStyles().click_image_to_change}>Click on image to change Student Card</div>
               </Form.Field>
-            </div>
+            </div>*/}
           </div>
         </div>
         <div style={comStyles().buttons_container} >
