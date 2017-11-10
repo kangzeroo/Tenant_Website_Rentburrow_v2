@@ -110,7 +110,14 @@ export const uploadBatchImagesRx = (images, s3_corporation, prefix) => {
 export const uploadImageToS3 = (image, s3_corporation, prefix) => {
 	const p = new Promise((res, rej) => {
 		const S3 = new AWS_S3()
-		const fileName = `${image.name}`;
+		const parts = image.name.split('.')
+		let fileName = parts.slice(0, parts.length - 1).join('.')
+		const extension = parts[parts.length - 1].toLowerCase()
+		if (extension === 'jpeg') {
+			fileName = fileName + '.jpg'
+		} else {
+			fileName = fileName + `.${extension}`
+		}
 		const timestamp = new Date().getTime()/1000
 
 		// S3 Folder-File syntax: corp_id/building_id/asset_type/file_name.png
@@ -143,7 +150,14 @@ export const uploadImageToS3 = (image, s3_corporation, prefix) => {
 export const uploadImageToS3WithEncryption = (image, tenant_id, prefix) => {
 	const p = new Promise((res, rej) => {
 		const S3 = new AWS_S3()
-		const fileName = `${image.name}`;
+		const parts = image.name.split('.')
+		let fileName = parts.slice(0, parts.length - 1).join('.')
+		const extension = parts[parts.length - 1].toLowerCase()
+		if (extension === 'jpeg') {
+			fileName = fileName + '.jpg'
+		} else {
+			fileName = fileName + `.${extension}`
+		}
 		const timestamp = new Date().getTime()/1000
 
 		// S3 Folder-File syntax: tenant_id/building_id/asset_type/file_name.png
