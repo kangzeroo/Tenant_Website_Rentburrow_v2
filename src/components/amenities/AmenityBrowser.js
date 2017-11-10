@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import {
   Item,
   Icon,
+  Card,
   Button,
 } from 'semantic-ui-react'
 import SingularImageGallery from '../image/SingularImageGallery'
@@ -43,8 +44,7 @@ class AmenityBrowser extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-        <div style={comStyles().box}>
+        <Card fluid raised style={comStyles().box}>
           <div style={comStyles().amen}>
             <div style={comStyles().amentity_title}>
               Amenities
@@ -92,8 +92,7 @@ class AmenityBrowser extends Component {
               <h2>No Image Proof</h2>
             </div>
           }
-        </div>
-			</div>
+        </Card>
 		)
 	}
 }
