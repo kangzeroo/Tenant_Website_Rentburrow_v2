@@ -22,7 +22,7 @@ import {
 } from '../../../api/general/general_api'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
-import { getAllImagesSizeForSpecificBuilding, getNumVirtualTours, } from '../../../api/search/search_api'
+import { getAllImagesSizeForSpecificBuilding, getNumVirtualTours, getAllSummaryImages, } from '../../../api/search/search_api'
 import RibbonLabel from '../../instructions/RibbonLabel'
 
 class BuildingPreview extends Component {
@@ -32,10 +32,19 @@ class BuildingPreview extends Component {
     this.state = {
       image_count: 0,
       vr_tour_count: 0,
+
+      summary_images: [],
     }
   }
 
   componentWillMount() {
+    getAllSummaryImages(this.props.building.building_id)
+    .then((data) => {
+      this.setState({
+        summary_images: data,
+      })
+    })
+
     getAllImagesSizeForSpecificBuilding(this.props.building.building_id)
     .then((data) => {
       this.setState({
@@ -69,12 +78,20 @@ class BuildingPreview extends Component {
           fluid
           style={comStyles().hardCard}
         >
-          {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
           <div style={comStyles().imageGallery}>
-            <SingularImageGallery
-              list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
-              image_size='hd'
-            />
+            {
+              this.state.summary_images.length === 0
+              ?
+              <SingularImageGallery
+                list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
+                image_size='hd'
+              />
+              :
+              <SingularImageGallery
+                list_of_images={this.state.summary_images.map(s => s.image_url)}
+                image_size='hd'
+              />
+            }
           </div>
          <Card.Content style={comStyles().info} >
           <div style={comStyles().details}>
@@ -203,5 +220,8 @@ const comStyles = (label) => {
     ribbon: {
       width: '10%',
     },
+    imageGallery: {
+      background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
+    }
 	}
 }

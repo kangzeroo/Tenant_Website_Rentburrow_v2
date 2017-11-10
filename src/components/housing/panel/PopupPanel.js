@@ -159,6 +159,7 @@ const comStyles = () => {
 			flexDirection: 'row',
 			flexWrap: 'wrap',
 			maxHeight: '100%',
+      minHeight: '100%',
 			width: '100%',
 			overflowY: 'scroll',
 			padding: '20px',

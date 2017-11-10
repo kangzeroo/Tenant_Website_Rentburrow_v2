@@ -24,6 +24,7 @@ import { Helmet } from 'react-helmet'
 import Header from './Header'
 import Chat from './chat/ChatPopup/Chat'
 import ProTipsPage from './community/ProTipsPage'
+import PrizesPage from './community/PrizesPage'
 import PrivacyPolicyPage from './community/PrivacyPolicyPage'
 import CommunityPage from './community/CommunityPage'
 import HousingPage from './housing/HousingPage'
@@ -273,6 +274,7 @@ class AppRoot extends Component {
                 <Route exact path='/' component={HousingPage} />
                 <Route exact path='/sandbox' component={ExampleEncryptionS3} />
                 <Route exact path='/protips' component={ProTipsPage} />
+                <Route exact path='/prizes' component={PrizesPage} />
                 <Route exact path='/privacy-policy' component={PrivacyPolicyPage} />
                 <Route exact path='/community' component={CommunityPage} />
                 <Route exact path='/logout' component={Logout} />
