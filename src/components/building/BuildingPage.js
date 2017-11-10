@@ -88,8 +88,10 @@ class BuildingPage extends Component {
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
     }
+		console.log(building_alias)
 		searchForSpecificBuildingByAlias(building_alias)
 		.then((data) => {
+			console.log(data)
 			this.setState({
 				building: data
 			})
@@ -368,14 +370,19 @@ class BuildingPage extends Component {
 						{
 							this.state.building.building_id
 							?
-							<div style={comStyles().map}>
-								<MapComponent
-									listOfResults={[this.state.building]}
-									selected_pin={this.state.building.building_id}
-									CSS_mapWidth='100%'
-									CSS_mapHeight='100%'
-								/>
-							</div>
+							<Card fluid raised style={comStyles().mapContainer} >
+								<Card fluid raised style={comStyles().map}>
+									<MapComponent
+										listOfResults={[this.state.building]}
+										selected_pin={this.state.building.building_id}
+										CSS_mapWidth='100%'
+										CSS_mapHeight='100%'
+									/>
+								</Card>
+								<div style={comStyles().addressFont} >
+									{ this.state.building.building_address }
+								</div>
+							</Card>
 							:
 							null
 						}
@@ -588,17 +595,29 @@ const comStyles = () => {
 			backgroundColor: 'white',
 			display: 'flex',
 		},
+		mapContainer: {
+			display: 'flex',
+			flexDirection: 'column',
+			height: '400px',
+		},
 		map: {
-			margin: '30px 0px 0px 0px',
 			width: '100%',
-			height: '480px',
+			height: '300px',
+		},
+		addressFont: {
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			fontSize: '1.5rem',
+			fontWeight: 'bold',
+			margin: '20px 0px 0px 0px'
 		},
 		building_header: {
 			backgroundColor: 'white',
 			display: 'flex',
 			flexDirection: 'column',
 			borderRadius: '2px',
-			padding: '10px',
+			padding: '20px',
 		},
 		welcome_banner: {
 			display: 'flex',
