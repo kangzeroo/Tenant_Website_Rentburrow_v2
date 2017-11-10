@@ -30,7 +30,13 @@ class VirtualTourCanvas extends Component {
     )
   }
 
-	renderVirtualTour_Matterport(link) {
+  renderVirtualTour_Matterport(link) {
+    return (
+      <iframe width='100%' height={`${this.state.vr_tour_height}px`} src={link} allowFullScreen></iframe>
+    )
+  }
+
+	renderVirtualTour_iGuide(link) {
     return (
       <iframe width='100%' height={`${this.state.vr_tour_height}px`} src={link} allowFullScreen></iframe>
     )
@@ -63,12 +69,22 @@ class VirtualTourCanvas extends Component {
         )
       })
     }
+    if (this.props.matterport_url) {
+      panes.push({
+        menuItem: 'Matterport Tour',
+        render: () => (
+          <Tab.Pane attached={false} style={comStyles(this.state.vr_tour_height).vrTour}>
+            { this.renderVirtualTour_Matterport(this.props.matterport_url) }
+          </Tab.Pane>
+        )
+      })
+    }
     if (this.props.iguide_url) {
       panes.push({
         menuItem: 'iGuide Tour',
         render: () => (
           <Tab.Pane attached={false} style={comStyles(this.state.vr_tour_height).vrTour}>
-            { this.renderVirtualTour_Matterport(this.props.iguide_url) }
+            { this.renderVirtualTour_iGuide(this.props.iguide_url) }
           </Tab.Pane>
         )
       })
@@ -86,38 +102,22 @@ class VirtualTourCanvas extends Component {
 		return (
 			<div id='container' style={comStyles().container}>
         {
-          this.props.istaging_url && this.props.iguide_url
+          this.props.istaging_url || this.props.iguide_url || this.props.video_url || this.props.matterport_url
           ?
           <Tab panes={panes} />
           :
           <div style={comStyles().vrTour}>
             {
-              this.props.istaging_url || this.props.iguide_url
+              this.props.istaging_url || this.props.iguide_url || this.props.matterport_url || this.props.video_url
               ?
               <div style={comStyles().hidden_loading}>
                 <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
               </div>
               :
               <div style={comStyles().hidden_loading}>
-                <h2>There is no virtual tour available for this unit. We are trying our best to book a filming with the landlord.</h2>
+                <h2>There is no virtual tour available for this unit. We are booking a filming with the landlord.</h2>
               </div>
             }
-            <div style={comStyles().visible_virtual_tour}>
-              {
-                this.props.istaging_url
-                ?
-                this.renderVirtualTour_iStaging(this.props.istaging_url)
-                :
-                null
-              }
-              {
-                this.props.iguide_url
-                ?
-                this.renderVirtualTour_Matterport(this.props.iguide_url)
-                :
-                null
-              }
-            </div>
           </div>
         }
 			</div>
@@ -131,6 +131,7 @@ VirtualTourCanvas.propTypes = {
   istaging_url: PropTypes.string,        // passed in
   iguide_url: PropTypes.string,         // passed in
   video_url: PropTypes.string,          // passed in
+  matterport_url: PropTypes.string,     // passed in
 }
 
 // for all optional props, define a default value
@@ -138,6 +139,7 @@ VirtualTourCanvas.defaultProps = {
   istaging_url: null,
   iguide_url: null,
   video_url: null,
+  matterport_url: null,
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -184,6 +186,7 @@ const comStyles = (vr_tour_height) => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+      padding: '20px',
     },
     visible_virtual_tour: {
       position: 'absolute',

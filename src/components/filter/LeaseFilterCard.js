@@ -12,6 +12,7 @@ import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRed
 import {
 	Checkbox,
 	Button,
+	Card,
 } from 'semantic-ui-react'
 import InputRange from 'react-input-range'
 require('../../styles/react-input-range.css')
@@ -56,34 +57,35 @@ class LeaseFilterCard extends Component {
 		// 	this.props.closeFilterCard()
 		// })
 		let filtered = this.props.buildings
+		console.log(filtered)
 
 		// If pricing filters have changed...
-		if (this.state.price.min !== 500 || this.state.price.max !== 900) {
+		// if (this.state.price.min !== 500 || this.state.price.max !== 900) {
 			filtered = filtered.filter((building) => {
 				return building.min_price >= this.state.price.min && building.min_price <= this.state.price.max
 			})
-		}
+		// }
 
 		// if the number of rooms filter has changed...
-		if (this.state.room_count > 1) {
+		// if (this.state.room_count > 1) {
 			filtered = filtered.filter((building) => {
 				return parseInt(building.max_rooms, 10) >= this.state.room_count
 			})
-		}
+		// }
 
 		// if ensuite_bath is true
-		if (this.state.ensuite_bath) {
+		// if (this.state.ensuite_bath) {
 			filtered = filtered.filter((building) => {
 				return building.ensuite_bath
 			})
-		}
+		// }
 
 		// if utilities_included is true
-		if (this.state.utils_incl) {
+		// if (this.state.utils_incl) {
 			filtered = filtered.filter((building) => {
 				return building.utils_incl ? true : false
 			})
-		}
+		// }
 
 		this.props.saveFilteredBuildingsToRedux(filtered)
 		this.props.saveLeaseFilterParams(this.state)
@@ -107,16 +109,7 @@ class LeaseFilterCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<Button
-					color='black'
-					basic
-					circular
-					style={comStyles().close_button}
-					icon='close'
-					size='tiny'
-					onClick={() => this.props.closeFilterCard()}
-				/>
+			<Card raised fluid style={comStyles().container}>
 				<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Price</h2>
@@ -126,7 +119,7 @@ class LeaseFilterCard extends Component {
 							step={5}
 		          maxValue={1200}
 		          minValue={300}
-		          formatLabel={(value) => `$${value}`}
+		          formatLabel={(value) => `$${value >= 1200 ? '1200+' : value}`}
 		          value={this.state.price}
 		          onChange={(value) => this.updateAttr('price', value)}
 		          onChangeComplete={value => console.log()}
@@ -212,7 +205,7 @@ class LeaseFilterCard extends Component {
 					/>
 					{/*<Button positive basic content='More options...' />*/}
 				</div>
-			</div>
+			</Card>
 		)
 	}
 }
@@ -272,7 +265,6 @@ const comStyles = () => {
 			minHeight: '300px',
 			maxHeight: '300px',
 			padding: '30px 30px 10px 30px',
-			border: 'gray solid thin',
 			zIndex: '9999',
 			backgroundColor: 'white',
 			borderRadius: '3px'

@@ -122,13 +122,14 @@ class Header extends Component {
 
   renderProfileDropdown() {
     const trigger = (
-      <span>
+      <span style={profileStyles().profile_div}>
         <Image
           src={this.props.tenant_profile.thumbnail}
           shape='circular'
           bordered
           style={comStyles().tenant_thumbnail}
         />
+        <Icon name='content' inverted size='big' />
       </span>
     )
 
@@ -312,6 +313,7 @@ const comStyles = () => {
       position: 'absolute',
       right: '0px',
       top: '5px',
+      zIndex: 100,
     },
     righterFloat: {
       color: 'white',
@@ -330,7 +332,7 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      maxWidth: '300px',
+      maxWidth: '350px',
       alignItems: 'center',
     },
     close_login: {
@@ -387,6 +389,17 @@ const profileStyles = () => {
     corpname: {
       fontSize: '0.8rem',
       width: '100%'
+    },
+    profile_div: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    menu_icon: {
+      display: '10px auto',
+      width: '100%',
+      height: '100%',
     }
   }
 }

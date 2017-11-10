@@ -23,7 +23,7 @@ class ChatPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div className='pretty_scrollbar' style={comStyles().container}>
 				<ChatsPanel messages={this.props.messages} selectThread={(thread) => this.selectThread(thread)} style={comStyles().chatspanel} />
 				<ChatsDash onPage={true} thread={this.state.currentThread} style={comStyles().chatsdash} />
 			</div>

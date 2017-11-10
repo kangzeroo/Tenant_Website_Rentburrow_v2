@@ -76,7 +76,7 @@ class PopupPanel extends Component {
         {
           this.props.rent_type === 'sublet'
           ?
-          <div style={comStyles().scroll} >
+          <div className='pretty_scrollbar' style={comStyles().scroll} >
             {
               this.props.buildings.map((building) => {
                 return this.generateSubletCard(building)
@@ -176,6 +176,7 @@ const comStyles = () => {
 		},
     back_button: {
       width: '100px',
+      minHeight: '50px',
       padding: '10px',
       margin: '10px'
     },

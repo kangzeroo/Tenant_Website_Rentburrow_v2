@@ -68,11 +68,22 @@ class BuildingCard extends Component {
             <Card.Header style={comStyles().headerPrint}>
               <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
             </Card.Header>
-            <Card.Meta>
-              {this.props.building.building_address}
-            </Card.Meta>
             <Card.Description style={comStyles().more_info}>
-              <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
+              {
+                this.props.building.min_price && this.props.building.max_price
+                ?
+                <div style={comStyles().price}>
+                  {
+                    this.props.building.min_price === this.props.building.max_price
+                    ?
+                    `Rooms from $${this.props.building.min_price}`
+                    :
+                    `Rooms from $${this.props.building.min_price} to $${this.props.building.max_price}`
+                  }
+                </div>
+                :
+                'Inquire Price'
+              }
             </Card.Description>
           </div>
           {
@@ -134,8 +145,8 @@ const comStyles = (label) => {
     hardCard: {
       minWidth: '360px',
       maxWidth: '360px',
-      minHeight: '300px',
-      maxHeight: '300px',
+      minHeight: '280px',
+      maxHeight: '280px',
       margin: '5px auto',
       ...opacityStyles,
     },
@@ -163,13 +174,17 @@ const comStyles = (label) => {
       width: '60%',
       display: 'flex',
       flexWrap: 'wrap',
+      fontSize: '1.3rem',
     },
     price: {
-      width: '40%',
+      width: '100%',
     },
     more_info: {
       display: 'flex',
       flexDirection: 'row',
     },
+    headerPrint: {
+      fontSize: '1rem',
+    }
 	}
 }

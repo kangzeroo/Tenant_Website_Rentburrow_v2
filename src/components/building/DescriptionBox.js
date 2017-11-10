@@ -30,7 +30,7 @@ class DescriptionBox extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-        <div style={comStyles(this.state.expanded).desc}>
+        <div className='pretty_scrollbar' style={comStyles(this.state.expanded).desc}>
           <div
             dangerouslySetInnerHTML={this.createMarkup(this.props.description)}
             style={comStyles().textMarkup}

@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { selectLocal } from '../../../actions/community/community_actions'
+import { selectLocal } from '../../../../actions/community/community_actions'
 import {
 	Card,
 	Image,

@@ -75,7 +75,6 @@ class ReceivedApplicationCard extends Component {
 	}
 
 	render() {
-		console.log(this.props.details)
 		return (
 			<div style={comStyles().container}>
 			<Card raised>

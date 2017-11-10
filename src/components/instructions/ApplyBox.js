@@ -137,14 +137,14 @@ class ApplyBox extends Component {
               icon='share alternate'
               color='teal'
               onClick={() => this.toggleModal(true, 'social_share')}
-              size='medium'
+              size='large'
             />
             <Button
               circular
               icon='simplybuilt'
               color='teal'
               onClick={() => this.toggleModal(true, 'virtual_tour', this.props.all_suites[0])}
-              size='medium'
+              size='large'
             />
           </div>
           <div style={comStyles().priceContainer} >
@@ -212,15 +212,14 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      minHeight: '250px',
-      maxHeight: '250px',
       padding: '20px'
     },
     priceContainer: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      margin: '30px auto',
     },
     priceFont: {
       fontSize: '2rem',

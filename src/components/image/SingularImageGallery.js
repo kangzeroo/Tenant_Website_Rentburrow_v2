@@ -166,7 +166,7 @@ SingularImageGallery.propTypes = {
 // for all optional props, define a default value
 SingularImageGallery.defaultProps = {
   list_of_images: [],
-  image_size: 'thumbnail',            // 'thumbnail', 'hd'
+  image_size: 'thumbnail',            // 'thumbnail', 'hd', 'none'
 }
 
 // Wrap the prop in Radium to allow JS styling

@@ -119,6 +119,7 @@ class ChatInput extends Component {
     return (
       <Form style={comStyles().container}>
         <TextArea
+          className='pretty_scrollbar'
           id='textInput'
           autoHeight
           value={this.state.inputText}

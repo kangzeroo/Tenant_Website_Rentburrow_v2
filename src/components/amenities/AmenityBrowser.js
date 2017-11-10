@@ -44,12 +44,13 @@ class AmenityBrowser extends Component {
 
 	render() {
 		return (
-        <Card fluid raised style={comStyles().box}>
+			<div className='pretty_scrollbar' style={comStyles().container}>
+        <div style={comStyles().box}>
           <div style={comStyles().amen}>
             <div style={comStyles().amentity_title}>
               Amenities
             </div>
-            <div style={comStyles().amenitiesGrid}>
+            <div className='pretty_scrollbar' style={comStyles().amenitiesGrid}>
               {
                 this.props.amenities.map((am, index) => {
                   return (
