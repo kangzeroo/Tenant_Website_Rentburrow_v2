@@ -1,5 +1,6 @@
 // AWS S3 (Simple Scalable Storage) for storing files on the cloud
 import Rx from 'rxjs'
+import axios from 'axios'
 import AWS from 'aws-sdk/global'
 import AWS_S3 from 'aws-sdk/clients/s3'
 import { BUCKET_NAME, ENCRYPTED_BUCKET_NAME } from './aws-profile'
@@ -256,3 +257,13 @@ export const convertUint8ArrayToImage = (uint8array) => {
 // 	})
 // 	return p
 // }
+
+
+export const getFileFromS3 = (url) => {
+	const p = new Promise((res, rej) => {
+		axios.get(url).then((data) => {
+			res(data.data)
+		})
+	})
+	return p
+}

@@ -16,6 +16,7 @@ import {
 import {
 	Checkbox,
 	Button,
+	Card,
 } from 'semantic-ui-react'
 import InputRange from 'react-input-range'
 require('../../styles/react-input-range.css')
@@ -102,16 +103,7 @@ class SubletFilterCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<Button
-					color='black'
-					basic
-					circular
-					style={comStyles().close_button}
-					icon='close'
-					size='tiny'
-					onClick={() => this.props.closeFilterCard()}
-				/>
+			<Card raised fluid style={comStyles().container}>
 				<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Price</h2>
@@ -121,7 +113,7 @@ class SubletFilterCard extends Component {
 							step={5}
 		          maxValue={1200}
 		          minValue={300}
-		          formatLabel={(value) => `$${value}`}
+		          formatLabel={(value) => `$${value >= 1200 ? '1200+' : value}`}
 		          value={this.state.price}
 		          onChange={(value) => this.updateAttr('price', value)}
 		          onChangeComplete={value => console.log(value)}
@@ -185,7 +177,7 @@ class SubletFilterCard extends Component {
 					/>
 					{/*<Button positive basic content='More options...' />*/}
 				</div>
-			</div>
+			</Card>
 		)
 	}
 }
@@ -239,7 +231,6 @@ const comStyles = () => {
 			minHeight: '300px',
 			maxHeight: '300px',
 			padding: '30px 30px 10px 30px',
-			border: 'gray solid thin',
 			zIndex: '9999',
 			backgroundColor: 'white',
 			borderRadius: '3px'

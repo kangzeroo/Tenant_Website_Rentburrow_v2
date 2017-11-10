@@ -313,6 +313,7 @@ const comStyles = () => {
       position: 'absolute',
       right: '0px',
       top: '5px',
+      zIndex: 100,
     },
     righterFloat: {
       color: 'white',

@@ -176,6 +176,7 @@ const comStyles = () => {
 		},
     back_button: {
       width: '100px',
+      minHeight: '50px',
       padding: '10px',
       margin: '10px'
     },
