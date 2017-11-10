@@ -1,4 +1,4 @@
-// Compt for copying as a template
+// Compt for copying as a HowItWorksLandlord
 // This compt is used for...
 
 import React, { Component } from 'react'
@@ -7,37 +7,34 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { selectLocal } from '../../actions/community/community_actions'
 import {
-	Button,
+
 } from 'semantic-ui-react'
 
 
-class LocalsView extends Component {
+class HowItWorksLandlord extends Component {
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Button onClick={() => this.props.selectLocal(null)} style={comStyles().backButton}>BACK</Button>
-      	<iframe className='_virtualtour' src='https://beta.babylonvr.ca/vr/239939' width='100%' height='1000px'></iframe>
+				HowItWorksLandlord
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-LocalsView.propTypes = {
+HowItWorksLandlord.propTypes = {
 	history: PropTypes.object.isRequired,
-	selectLocal: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
-LocalsView.defaultProps = {
+HowItWorksLandlord.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(LocalsView)
+const RadiumHOC = Radium(HowItWorksLandlord)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -49,7 +46,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-		selectLocal,
+
 	})(RadiumHOC)
 )
 
@@ -61,13 +58,6 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      height: '100%',
-      width: '100%',
-		},
-		backButton: {
-			position: 'absolute',
-			top: '20px',
-			left: '20px',
 		}
 	}
 }

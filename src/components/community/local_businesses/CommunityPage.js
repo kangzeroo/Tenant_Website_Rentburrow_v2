@@ -17,11 +17,11 @@ import {
   xMidBlue,
   xDeepBlue,
 	xLightBlue,
-} from '../../styles/base_colors'
+} from '../../../styles/base_colors'
 import PromoCard from './promos/PromoCard'
 import EventCard from './events/EventCard'
 import LocalsView from './LocalsView'
-import MapComponent from '../map/MapComponent'
+import MapComponent from '../../map/MapComponent'
 
 
 class CommunityPage extends Component {

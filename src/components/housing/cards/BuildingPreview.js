@@ -102,7 +102,21 @@ class BuildingPreview extends Component {
               {this.props.building.building_address}
             </Card.Meta>
             <Card.Description style={comStyles().more_info}>
-              <div style={comStyles().price}>Rooms From ${ this.props.building.min_price }</div>
+              {
+                this.props.building.min_price && this.props.building.max_price
+                ?
+                <div style={comStyles().price}>
+                  {
+                    this.props.building.min_price === this.props.building.max_price
+                    ?
+                    `Rooms from $${this.props.building.min_price}`
+                    :
+                    `Rooms from $${this.props.building.min_price} to $${this.props.building.max_price}`
+                  }
+                </div>
+                :
+                'Inquire Price'
+              }
             </Card.Description>
           </div>
           {
@@ -222,6 +236,12 @@ const comStyles = (label) => {
     },
     imageGallery: {
       background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
+    },
+    address: {
+      fontSize: '1.3rem',
+    },
+    headerPrint: {
+      fontSize: '1rem',
     }
 	}
 }

@@ -228,6 +228,7 @@ class FilterBar extends Component {
           <div style={comStyles().searchbar}>
             <div>
               <Button
+                primary
                 onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
                 content='FILTER'
               />

@@ -22,11 +22,18 @@ import {
 import locale from 'browser-locale'
 import { Helmet } from 'react-helmet'
 import Header from './Header'
+import Footer from './Footer'
 import Chat from './chat/ChatPopup/Chat'
-import ProTipsPage from './community/ProTipsPage'
-import PrizesPage from './community/PrizesPage'
-import PrivacyPolicyPage from './community/PrivacyPolicyPage'
-import CommunityPage from './community/CommunityPage'
+import LandingPage from './instructions/LandingPage'
+import ProTipsPage from './community/student_info/ProTipsPage'
+import PrizesPage from './community/student_info/PrizesPage'
+import ContactUs from './instructions/ContactUs'
+import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
+import HowItWorksLandlord from './community/landlord_info/HowItWorksLandlord'
+import JoinPageLandlord from './community/landlord_info/JoinPageLandlord'
+import PricingLandlord from './community/landlord_info/PricingLandlord'
+import FAQLandlord from './community/landlord_info/FAQLandlord'
+import CommunityPage from './community/local_businesses/CommunityPage'
 import HousingPage from './housing/HousingPage'
 import BuildingPage from './building/BuildingPage'
 import SubletPage from './sublets/SubletPage'
@@ -43,7 +50,6 @@ import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
 import Logout from './auth/Logout'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
-import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -240,42 +246,62 @@ class AppRoot extends Component {
     )
   }
 
+  forceScrollTop() {
+    const main_content = document.getElementById('main_content')
+    const all_content = document.getElementById('all_content')
+    main_content.scrollTop = 0
+    all_content.scrollTop = 0
+  }
+
   // note that we have <StyleRoot>, which must be defined in order to use Radium
   // <StyleRoot> enables Radium styling to be used in all child compts
   // hence why the most outer div uses inline styles
 	render() {
-		return (
-      <div style={
-        {
-    			width: '100vw',
-    			height: '100vh',
-        }
+    // const hideFooter = true
+    const hideFooter = this.props.location.pathname === '/' || this.props.location.pathname === '/sublets' || this.props.location.pathname === '/leases' || this.props.location.pathname === '/sublet' || this.props.location.pathname === '/lease'
+    let withFooterStyles = {
+      minHeight: '100vh',
+      maxHeight: '100vh',
+    }
+    if (!hideFooter) {
+      withFooterStyles = {
+        ...withFooterStyles,
+        minHeight: '120vh',
+        maxHeight: '120vh',
       }
-      >
+    }
+		return (
+      <div id='all_content' style={{ ...withFooterStyles }}>
         <Helmet>
           <html lang={this.props.language}></html>
         </Helmet>
         <StyleRoot>
-          <div style={comStyles().main}>
+        <div style={comStyles(hideFooter).main}>
 
-        <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
-            {
-              this.renderAppropriateModal(this.state.modal_name, this.state.context)
-            }
-        </Modal>
+          <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+              {
+                this.renderAppropriateModal(this.state.modal_name, this.state.context)
+              }
+          </Modal>
 
             <div id='language_tag' value={this.props.language} />
 
             <Header style={comStyles().header} />
 
-            <div style={comStyles().content}>
+            <div id='main_content' style={comStyles().content}>
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={ExampleEncryptionS3} />
+                {/*<Route exact path='/sandbox' component={ExampleEncryptionS3} />*/}
+                <Route exact path='/welcome' component={LandingPage} />
                 <Route exact path='/protips' component={ProTipsPage} />
                 <Route exact path='/prizes' component={PrizesPage} />
-                <Route exact path='/privacy-policy' component={PrivacyPolicyPage} />
+                <Route exact path='/privacy' component={PrivacyPolicyPage} />
+                <Route exact path='/contact' component={ContactUs} />
+                <Route exact path='/how-it-works' component={HowItWorksLandlord} />
+                <Route exact path='/pricing' component={PricingLandlord} />
+                <Route exact path='/landlord-faq' component={FAQLandlord} />
+                <Route exact path='/join-landlord' component={JoinPageLandlord} />
                 <Route exact path='/community' component={CommunityPage} />
                 <Route exact path='/logout' component={Logout} />
 
@@ -323,6 +349,14 @@ class AppRoot extends Component {
               <Chat style={comStyles().chat} />
               :
               null
+            }
+
+            {
+              hideFooter
+              ?
+              null
+              :
+              <Footer forceScrollTop={() => this.forceScrollTop()} />
             }
 
           </div>
@@ -394,15 +428,25 @@ export default withRouter(connect(mapReduxToProps, {
 
 // =============================
 
-const comStyles = () => {
+const comStyles = (hideFooter) => {
+  let withFooterStyles = {
+    minHeight: '100vh',
+    maxHeight: '100vh',
+  }
+  if (!hideFooter) {
+    withFooterStyles = {
+      ...withFooterStyles,
+      minHeight: '120vh',
+      maxHeight: '120vh',
+    }
+  }
 	return {
     main: {
-      minHeight: '100vh',
-      maxHeight: '100vh',
       minWidth: '100vw',
       maxWidth: '100vw',
       display: 'flex',
       flexDirection: 'column',
+      ...withFooterStyles,
     },
     header: {
       minHeight: '7vh',
