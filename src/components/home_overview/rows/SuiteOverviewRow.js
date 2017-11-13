@@ -203,7 +203,7 @@ class SuiteOverviewRow extends Component {
             <Button
               onClick={() => this.signAndPayOnline()}
               color='blue'
-              content='Rent Now'
+              content='Apply Now'
               style={comStyles().explore_button}
             />
 						<Button

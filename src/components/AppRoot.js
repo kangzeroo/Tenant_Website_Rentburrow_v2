@@ -29,7 +29,9 @@ import ProTipsPage from './community/student_info/ProTipsPage'
 import PrizesPage from './community/student_info/PrizesPage'
 import ContactUs from './instructions/ContactUs'
 import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
+import TermsOfServicePage from './community/student_info/TermsOfServicePage'
 import HowItWorksLandlord from './community/landlord_info/HowItWorksLandlord'
+import BookAFilmingPage from './community/landlord_info/BookAFilmingPage'
 import JoinPageLandlord from './community/landlord_info/JoinPageLandlord'
 import PricingLandlord from './community/landlord_info/PricingLandlord'
 import FAQLandlord from './community/landlord_info/FAQLandlord'
@@ -293,16 +295,18 @@ class AppRoot extends Component {
               <Switch>
                 <Route exact path='/' component={HousingPage} />
                 {/*<Route exact path='/sandbox' component={ExampleEncryptionS3} />*/}
-                <Route exact path='/welcome' component={LandingPage} />
-                <Route exact path='/protips' component={ProTipsPage} />
+                {/*<Route exact path='/welcome' component={LandingPage} />*/}
+                {/*<Route exact path='/protips' component={ProTipsPage} />*/}
                 <Route exact path='/prizes' component={PrizesPage} />
-                <Route exact path='/privacy' component={PrivacyPolicyPage} />
+                {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
+                {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
                 <Route exact path='/contact' component={ContactUs} />
-                <Route exact path='/how-it-works' component={HowItWorksLandlord} />
-                <Route exact path='/pricing' component={PricingLandlord} />
-                <Route exact path='/landlord-faq' component={FAQLandlord} />
+                <Route exact path='/book-filming' component={BookAFilmingPage} />
+                {/*<Route exact path='/how-it-works' component={HowItWorksLandlord} />*/}
+                {/*<Route exact path='/pricing' component={PricingLandlord} />*/}
+                {/*<Route exact path='/landlord-faq' component={FAQLandlord} />*/}
                 <Route exact path='/join-landlord' component={JoinPageLandlord} />
-                <Route exact path='/community' component={CommunityPage} />
+                {/*<Route exact path='/community' component={CommunityPage} />*/}
                 <Route exact path='/logout' component={Logout} />
 
                 <Route exact path='/lease' component={HousingPage} />

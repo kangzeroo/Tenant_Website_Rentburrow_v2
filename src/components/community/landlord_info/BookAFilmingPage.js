@@ -1,4 +1,4 @@
-// Compt for copying as a JoinPageLandlord
+// Compt for copying as a BookAFilmingPage
 // This compt is used for...
 
 import React, { Component } from 'react'
@@ -8,42 +8,35 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-	Header,
-	Card,
-	Form,
+	Step,
+	Icon,
+	Button,
 } from 'semantic-ui-react'
-import LandlordSignupForm from './forms/LandlordSignupForm'
+import BookPhotoshootForm from './forms/BookPhotoshootForm'
 
-
-class JoinPageLandlord extends Component {
+class BookAFilmingPage extends Component {
 
 	render() {
 		return (
 			<div style={comStyles().container}>
-				<Header
-					as='h1'
-					icon='home'
-					content='Join the Rentburrow Network'
-					subheader='See Why So Many Landlords Have Benefited'
-				/>
-				<LandlordSignupForm />
+				<BookPhotoshootForm />
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-JoinPageLandlord.propTypes = {
+BookAFilmingPage.propTypes = {
 	history: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
-JoinPageLandlord.defaultProps = {
+BookAFilmingPage.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(JoinPageLandlord)
+const RadiumHOC = Radium(BookAFilmingPage)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -67,9 +60,15 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-			justifyContent: 'center',
-			alignItems: 'center',
 			padding: '50px',
+		},
+		content: {
+			minHeight: '500px',
+			width: '100%',
+			padding: '20px',
+		},
+		next: {
+			height: '20%',
 			width: '100%',
 		}
 	}

@@ -180,6 +180,7 @@ class Header extends Component {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
+              <Icon onClick={() => this.props.history.push('/protips')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
               <Button
                 basic
                 inverted
@@ -191,6 +192,7 @@ class Header extends Component {
             </div>
             :
             <div style={comStyles().rightFloat}>
+              <Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
               <Button
                 basic
                 inverted
@@ -340,6 +342,9 @@ const comStyles = () => {
       top: '10px',
       right: '10px',
     },
+    helpIcon: {
+      cursor: 'pointer',
+    }
   }
 }
 
