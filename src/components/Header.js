@@ -192,7 +192,7 @@ class Header extends Component {
             </div>
             :
             <div style={comStyles().rightFloat}>
-              <Icon onClick={() => this.props.history.push('/protips')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
+              <Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
               <Button
                 basic
                 inverted
