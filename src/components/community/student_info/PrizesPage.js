@@ -33,7 +33,7 @@ class PrizesPage extends Component {
   }
 
   componentWillMount() {
-    getFileFromS3('https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/prizes.json')
+    getFileFromS3('https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/student_prizes.json')
       .then((data) => {
         this.setState({
           prizes: data.prizes
@@ -90,10 +90,17 @@ class PrizesPage extends Component {
     return (
       <Modal.Content>
         <Header
-          as='h2'
-          content='Apply for Rent Online'
-          subheader='All you have to do is...'
+          icon='gift'
+          as='h1'
+          content='Apply Online With Rentburrow.com'
+          subheader='And get a free housewarming gift'
         />
+        <div style={comStyles().gift_explanation}>
+          Simply click "Apply Now" on the building you want to rent and fill out the application form with your information. After you later sign the lease contract with the landlord, we will send you an email where you can tell us know which gift you want. Once the landlord has verified and paid us, your gift will be available for pickup at our booth at the SLC or Laurier Concourse. Bring more roommates in your group to unlock bigger gifts.
+        </div>
+        <div style={comStyles().okButton}>
+          <Button primary onClick={() => this.toggleModal(false)} content="That's awesome!" />
+        </div>
       </Modal.Content>
     )
   }
@@ -106,7 +113,7 @@ class PrizesPage extends Component {
           <Header
             as='h1'
             icon='gift'
-            content='Prizes'
+            content='Housewarming Gifts'
             subheader='Sign online and get a prize!'
           />
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -226,6 +233,16 @@ const comStyles = () => {
     explain_button: {
       width: '200px',
       left: '0px',
+    },
+    gift_explanation: {
+      fontSize: '1.2rem',
+      padding: '20px',
+    },
+    okButton: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      width: '100%',
     }
 	}
 }

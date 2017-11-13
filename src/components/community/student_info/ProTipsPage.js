@@ -11,6 +11,7 @@ import {
 	Header,
 	Search,
 	Accordion,
+	Tab,
 } from 'semantic-ui-react'
 import ProTipsTopic from './ProTipsTopic'
 import { getFileFromS3 } from '../../../api/aws/aws-S3'
@@ -23,7 +24,12 @@ class ProTipsPage extends Component {
 		this.state = {
 			search_string: '',
 
-			topics: [],
+			faq: [
+		  ],
+			protips: [
+			],
+			howto: [
+			]
 		}
 	}
 
@@ -31,7 +37,7 @@ class ProTipsPage extends Component {
 		getFileFromS3('https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/student_faq.json')
       .then((data) => {
         this.setState({
-          topics: data.topics
+          faq: data.topics
         })
         /*
 					data.topics = [
@@ -46,6 +52,59 @@ class ProTipsPage extends Component {
 					],
         */
       })
+		getFileFromS3('https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/student_protips.json')
+      .then((data) => {
+        this.setState({
+          protips: data.topics
+        })
+      })
+		getFileFromS3('https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/student_how_to_use_rentburrow.json')
+      .then((data) => {
+        this.setState({
+          howto: data.topics
+        })
+      })
+	}
+
+	renderAccordians(tabKey) {
+		return (
+			<div style={comStyles().tabpane}>
+				{
+					this.state[tabKey].map((topic) => {
+						let relevant = false
+						topic.tips.forEach((t) => {
+							if (t.title.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1 || t.explanation.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1) {
+								relevant = true
+							}
+						})
+						if (topic.title.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1) {
+							relevant = true
+						}
+
+						if (relevant) {
+							return (
+								<ProTipsTopic
+									topic={topic}
+									tips={topic.tips.filter((t) => {
+										return t.title.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1 || t.explanation.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1
+									})}
+								/>
+							)
+						} else {
+							return null
+						}
+					})
+				}
+			</div>
+		)
+	}
+
+	renderTabs() {
+		return [
+			{ index: 0, code: 'faq', menuItem: 'Frequently Asked Questions', render: () => <Tab.Pane attached={false}>{ this.renderAccordians('faq') }</Tab.Pane> },
+			{ index: 1, code: 'protips', menuItem: 'Tenant Pro-Tips', render: () => <Tab.Pane attached={false}>{ this.renderAccordians('protips') }</Tab.Pane> },
+			{ index: 2, code: 'howto', menuItem: 'How To Use Rentburrow', render: () => <Tab.Pane attached={false}>{ this.renderAccordians('howto') }</Tab.Pane> },
+		]
 	}
 
 	render() {
@@ -55,7 +114,7 @@ class ProTipsPage extends Component {
 					<Header
 						as='h1'
 						icon='question circle'
-						content='FAQ & Pro-Tips'
+						content='FAQ & Protips'
 						subheader='Everything you need to know about renting'
 					/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -68,32 +127,12 @@ class ProTipsPage extends Component {
 				</div>
 
 				<div style={comStyles().tips_section}>
-					{
-						this.state.topics.map((topic) => {
-							let relevant = false
-							topic.tips.forEach((t) => {
-								if (t.title.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1 || t.explanation.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1) {
-									relevant = true
-								}
-							})
-							if (topic.title.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1) {
-								relevant = true
-							}
-
-							if (relevant) {
-								return (
-									<ProTipsTopic
-										topic={topic}
-										tips={topic.tips.filter((t) => {
-											return t.title.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1 || t.explanation.toLowerCase().indexOf(this.state.search_string.toLowerCase()) > -1
-										})}
-									/>
-								)
-							} else {
-								return null
-							}
-						})
-					}
+					<Tab
+						panes={this.renderTabs()}
+						defaultActiveIndex={0}
+						onTabChange={(e, d) => this.setState({ search_string: '' })}
+						style={comStyles().tab}
+					/>
 				</div>
 			</div>
 		)
@@ -150,6 +189,13 @@ const comStyles = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			margin: '50px',
+			width: '100%',
+		},
+		tab: {
+			width: '90%',
+		},
+		tabpane: {
+			border: '0px solid black',
 		}
 	}
 }

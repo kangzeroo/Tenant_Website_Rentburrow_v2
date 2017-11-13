@@ -64,6 +64,7 @@ class Footer extends Component {
               </div>
               <div style={comStyles().col}>
                 <Link to='/join-landlord' style={comStyles().link}>Join The Network</Link>
+                <Link to='/contact' style={comStyles().link}>Book A Filming</Link>
                 <Link to='/contact' style={comStyles().link}>Contact Us</Link>
               </div>
             </div>

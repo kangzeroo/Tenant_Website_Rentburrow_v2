@@ -8,8 +8,11 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Header,
+	Card,
+	Form,
 } from 'semantic-ui-react'
+import LandlordSignupForm from './forms/LandlordSignupForm'
 
 
 class JoinPageLandlord extends Component {
@@ -17,7 +20,13 @@ class JoinPageLandlord extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-				JoinPageLandlord
+				<Header
+					as='h1'
+					icon='home'
+					content='Join the Rentburrow Network'
+					subheader='See How So Many Landlords Have Benefited'
+				/>
+				<LandlordSignupForm />
 			</div>
 		)
 	}
@@ -58,6 +67,10 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			justifyContent: 'center',
+			alignItems: 'center',
+			padding: '50px',
+			width: '100%',
 		}
 	}
 }
