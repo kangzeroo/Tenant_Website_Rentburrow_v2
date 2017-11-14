@@ -84,7 +84,7 @@ class PopupPanel extends Component {
             }
           </div>
           :
-          <div style={comStyles().BuildingPreview} >
+          <div className='pretty_scrollbar' style={comStyles().BuildingPreview} >
             {
               this.props.buildings.map((building) => {
                 return this.generateBuildingPreview(building)
@@ -138,9 +138,10 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       minWidth: '800px',
-			width: '50vw',
-      maxWidth: '50vw',
-      maxHeight: '100%',
+			width: '45vw',
+      maxWidth: '45vw',
+      maxHeight: '90%',
+      overflowY: 'scroll',
       minHeight: '100%',
 			//backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
       backgroundColor: 'white',

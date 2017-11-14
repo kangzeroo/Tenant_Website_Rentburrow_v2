@@ -25,7 +25,7 @@ import TimePicker from 'rc-time-picker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'rc-time-picker/assets/index.css'
 import { validateEmail, shortenAddress } from '../../../../api/general/general_api'
-import { saveSimpleForm } from '../../../../api/leasing/leasing_api'
+import { bookPhotoShoot } from '../../../../api/messaging/book_photoshoot_email'
 
 
 class BookPhotoshootForm extends Component {
@@ -145,22 +145,40 @@ class BookPhotoshootForm extends Component {
 	}
 
 	submitApplication() {
-		if (this.validateBuildingsApp()) {
-			this.setState({
-				submitted: true,
-        error_messages: [],
+		this.setState({
+			submitted: true,
+      error_messages: [],
+		})
+    bookPhotoShoot(this.state.buildings).then((data) => {
+      this.setState({
+				success_message: 'Done! Successfully sent message!'
 			})
-      // save the building application
-		}
+    })
 	}
-
-  validateBuildingsApp() {
-    return false
-  }
 
 	validateForm() {
 		let ok_to_proceed = true
 		const error_messages = []
+    if (this.state.filming_form.landlord_name.length === 0) {
+			error_messages.push('You must enter a name')
+			ok_to_proceed = false
+		}
+    if (this.state.filming_form.building_address.length === 0 || this.state.filming_form.building_place_id.length === 0) {
+			error_messages.push('You must enter an address')
+			ok_to_proceed = false
+		}
+		if (this.state.filming_form.building_notes.length === 0) {
+			error_messages.push('You must enter some notes for this building. Tell us about it.')
+			ok_to_proceed = false
+		}
+		if (this.state.filming_form.landlord_phone.length === 0) {
+			error_messages.push('You must enter a phone number')
+			ok_to_proceed = false
+		}
+		if (this.state.filming_form.landlord_email.length === 0 || !validateEmail(this.state.filming_form.landlord_email)) {
+			error_messages.push('The email entered is not valid')
+			ok_to_proceed = false
+		}
 		this.setState({
 			error_messages: error_messages,
 			submitted: false,
@@ -294,7 +312,10 @@ class BookPhotoshootForm extends Component {
                   {
                     this.state.success_message
                     ?
-                    <div style={comStyles().success}>SUCCESS! We have received your filming request and get in contact with you soon.</div>
+                    <div style={comStyles().success}>
+                      SUCCESS! We have received your filming request and will get in contact with you soon. <br />
+                      <Button primary fluid onClick={() => this.props.history.push('/contact')} content='Back' />
+                    </div>
                     :
                     <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
                   }
@@ -417,7 +438,7 @@ const comStyles = () => {
       width: '100%',
       padding: '20px',
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
 			fontSize: '1rem',
