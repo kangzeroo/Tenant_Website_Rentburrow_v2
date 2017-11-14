@@ -668,6 +668,9 @@ const comStyles = () => {
 		},
 		iframe_container: {
 			zoom: '0.5'
+		},
+		analyticsSummary: {
+			margin: '10px 0px 0px 0px'
 		}
 	}
 }
