@@ -19,7 +19,7 @@ import {
 	Icon,
 } from 'semantic-ui-react'
 import { validateEmail } from '../../../../api/general/general_api'
-import { saveSimpleForm } from '../../../../api/leasing/leasing_api'
+import { redeemGiftEmail } from '../../../../api/messaging/redeem_gift_email'
 
 
 class RedeemGiftForm extends Component {
@@ -54,27 +54,27 @@ class RedeemGiftForm extends Component {
 				submitted: true,
         error_messages: [],
 			})
-      // submit application
+      redeemGiftEmail(this.state.application_template).then((data) => {
+        this.setState({
+  				success_message: 'Done! Successfully sent message!'
+  			})
+      })
 		}
 	}
 
 	validateForm() {
 		let ok_to_proceed = true
 		const error_messages = []
-		if (this.state.application_template.name.length === 0 || this.state.application_template.gender.length === 0) {
+		if (this.state.application_template.name.length === 0) {
 			error_messages.push('You must enter a name and gender')
 			ok_to_proceed = false
 		}
-		if (this.state.application_template.school_and_term.length === 0) {
-			error_messages.push('You must enter your school and term')
-			ok_to_proceed = false
-		}
-		if (!validateEmail(this.state.application_template.email)) {
+		if (this.state.application_template.email.length === 0 || !validateEmail(this.state.application_template.email)) {
 			error_messages.push('The email entered is not valid')
 			ok_to_proceed = false
 		}
-		if (this.state.application_template.email.length === 0 || this.state.application_template.phone.length === 0) {
-			error_messages.push('You must enter your email and phone number')
+		if (this.state.application_template.notes.length === 0) {
+			error_messages.push('You must enter a message')
 			ok_to_proceed = false
 		}
 		this.setState({
@@ -136,14 +136,32 @@ class RedeemGiftForm extends Component {
 							})
 						}
 					</Form.Field>
-	        <Form.Field>
-	          <Button
-							fluid
-							color='blue'
-							content='Submit'
-							onClick={() => this.submitApplication()}
-						/>
-	        </Form.Field>
+          <Form.Field>
+            {
+              this.state.submitted
+              ?
+              <div style={comStyles().saving} >
+                {
+                  this.state.success_message
+                  ?
+                  <div style={comStyles().hidden_loading}>
+                    { this.state.success_message }
+                  </div>
+                  :
+                  <div style={comStyles().hidden_loading}>
+                    <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+                  </div>
+                }
+              </div>
+              :
+              <Button
+                fluid
+                color='blue'
+                content='Submit'
+                onClick={() => this.submitApplication()}
+              />
+            }
+          </Form.Field>
 	      </Form>
 			</div>
 		)

@@ -207,6 +207,7 @@ const comStyles = (label) => {
 	return {
     container: {
       ...opacityStyles,
+      width: '98%',
     },
     analyticsContainer: {
       display: 'flex',
