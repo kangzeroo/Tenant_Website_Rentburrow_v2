@@ -120,31 +120,32 @@ const comStyles = () => {
       flexDirection: 'row',
       position: 'relative',
       color: 'white',
+      bottom: '0px'
     },
     leftFloat: {
       display: 'flex',
       flexDirection: 'column',
       float: 'left',
-      minWidth: '30%',
-      maxWidth: '30%',
+      minWidth: '40%',
+      maxWidth: '40%',
       height: '100%',
     },
     desc: {
       padding: '10px',
       fontSize: '1.1rem',
+      width: '100%'
     },
     logo: {
       height: '5vh',
       width: 'auto',
       float: 'left',
-      margin: '5px'
     },
     table_of_contents: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'flex-end',
-      minWidth: '70%',
-      maxWidth: '70%',
+      minWidth: '60%',
+      maxWidth: '60%',
       float: 'right',
     },
     student_section: {
@@ -174,7 +175,7 @@ const comStyles = () => {
     col: {
       display: 'flex',
       flexDirection: 'column',
-      width: '40%',
+      width: '100%',
     }
 	}
 }
