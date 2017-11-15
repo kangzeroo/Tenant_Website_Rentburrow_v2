@@ -44,7 +44,11 @@ class LoginPopup extends Component {
         {
           this.props.rent_type === 'sublet' && this.props.force_signin
           ?
-          <h4>Rentburrow pulls sublets from Facebook. By signing in, you help make this service possible. Thank you.</h4>
+          <div>
+            <h4>Rentburrow pulls sublets from Facebook. By signing in, you help make this service possible. Thank you.</h4>
+            <br/>
+            <Button onClick={() => this.props.history.push('/lease')} primary basic content='No Thank You' />
+          </div>
           :
           null
         }
@@ -55,14 +59,14 @@ class LoginPopup extends Component {
             color='facebook'
             icon='facebook'
           />
-          <Button
+          {/*<Button
             content='Login with Google'
             color='google plus'
             icon='google plus'
             disabled
-          />
+          />*/}
         </div>
-        <Divider horizontal>Or</Divider>
+        {/*<Divider horizontal>Or</Divider>
         <Form>
           <Form.Input
             label='Email'
@@ -87,7 +91,7 @@ class LoginPopup extends Component {
               fluid
             />
           </div>
-        </Form>
+        </Form>*/}
 			</div>
 		)
 	}

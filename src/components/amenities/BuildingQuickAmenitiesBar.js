@@ -41,7 +41,7 @@ class BuildingQuickAmenitiesBar extends Component {
 				return {
 					suite_id: amenity_summary.suite_id,
 					amenities: amenity_summary.amenities.map((amenity_string) => {
-						return JSON.parse(amenity_string)
+						return amenity_string
 					})
 				}
 			})
