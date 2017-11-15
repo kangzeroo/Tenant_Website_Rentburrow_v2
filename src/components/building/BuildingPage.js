@@ -304,7 +304,7 @@ class BuildingPage extends Component {
 							</div>
 						</Card>
 						{
-							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id
+							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.promise_array_of_suite_amenities_with_id.length > 0
 							?
 							<Card fluid raised style={comStyles().amenities} >
 								<BuildingQuickAmenitiesBar

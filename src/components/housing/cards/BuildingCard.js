@@ -119,15 +119,15 @@ BuildingCard.defaultProps = {
 const RadiumHOC = Radium(BuildingCard)
 
 // Get access to state from the Redux store
-function mapStateToProps(state) {
+function mapReduxToProps(redux) {
 	return {
-    tenant_profile: state.auth.tenant_profile,
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
-	connect(mapStateToProps, {
+	connect(mapReduxToProps, {
     selectPinToRedux,
     collectIntel,
 	})(RadiumHOC)
