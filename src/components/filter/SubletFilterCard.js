@@ -103,7 +103,7 @@ class SubletFilterCard extends Component {
 
 	render() {
 		return (
-			<Card raised fluid style={comStyles().container}>
+			<Card id='SubletFilterCard' raised fluid style={comStyles().container}>
 				<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Price</h2>

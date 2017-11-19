@@ -16,7 +16,7 @@ class SubletReceipt extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SubletReceipt' style={comStyles().container}>
 				SubletReceipt
 			</div>
 		)

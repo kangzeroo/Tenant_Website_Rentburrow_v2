@@ -22,7 +22,7 @@ import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
 
 
-class SimpleTermForm extends Component {
+class SimpleTempForm extends Component {
 
 	constructor() {
     super()
@@ -149,7 +149,7 @@ class SimpleTermForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SimpleTempForm' style={comStyles().container}>
 				<div style={comStyles().title}>
 					{ this.props.title && this.props.title.toLowerCase().indexOf('waitlist') > -1 ? 'Join Waitlist' : 'Apply Online' }
 				</div>
@@ -305,7 +305,7 @@ class SimpleTermForm extends Component {
 }
 
 // defines the types of variables in this.props
-SimpleTermForm.propTypes = {
+SimpleTempForm.propTypes = {
 	history: PropTypes.object.isRequired,
   tenant_profile: PropTypes.object,
   building: PropTypes.object.isRequired,    // passed in
@@ -316,12 +316,12 @@ SimpleTermForm.propTypes = {
 }
 
 // for all optional props, define a default value
-SimpleTermForm.defaultProps = {
+SimpleTempForm.defaultProps = {
   tenant_profile: {},
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(SimpleTermForm)
+const RadiumHOC = Radium(SimpleTempForm)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {

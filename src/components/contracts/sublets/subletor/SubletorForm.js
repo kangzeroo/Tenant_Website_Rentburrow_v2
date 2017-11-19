@@ -308,7 +308,7 @@ class SubletorForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SubletorForm' style={comStyles().container}>
 				<div className='pretty_scrollbar' style={comStyles().main_contents}>
 					<Card fluid color='blue' header='Approve This Subletee' style={comStyles().sign_header} />
 
