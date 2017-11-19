@@ -314,7 +314,7 @@ const comStyles = () => {
     rightFloat: {
       position: 'absolute',
       right: '0px',
-      top: '5px',
+      alignSelf: 'center',
       zIndex: 100,
     },
     righterFloat: {

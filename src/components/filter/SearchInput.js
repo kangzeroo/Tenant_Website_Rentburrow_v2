@@ -85,6 +85,8 @@ const comStyles = () => {
       flexDirection: 'row',
       padding: '5px 0px 5px 0px',
       margin: '0px 0px 0px 20px',
+      height: '50px',
+      alignSelf: 'center',
 		}
 	}
 }
