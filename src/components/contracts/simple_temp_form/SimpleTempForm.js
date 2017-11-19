@@ -7,6 +7,7 @@ import Radium from 'radium'
 import uuid from 'uuid'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import {
   Form,
@@ -16,11 +17,14 @@ import {
 	Radio,
 	Card,
 	TextArea,
+  Dropdown,
+  Header,
 	Icon,
 } from 'semantic-ui-react'
 import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
-
+import { insertInquiry } from '../../../api/inquiries/inquiry_api'
+import { getTenantByEmail } from '../../../api/auth/tenant_api'
 
 class SimpleTempForm extends Component {
 
@@ -28,9 +32,12 @@ class SimpleTempForm extends Component {
     super()
     this.state = {
       application_template: {
-        name: '',
+        first_name: '',
+        last_name: '',
+        tenant_id: '',
 				gender: '',
-        school_and_term: '',
+        school: '',
+        program_and_term: '',
         email: '',
         phone: '',
       },
@@ -41,6 +48,11 @@ class SimpleTempForm extends Component {
 			group_error_messages: [],
 			submitted: false,
       success_message: '',
+      school_options: [
+        { key: 'uw', text: 'University of Waterloo', value: 'University of Waterloo' },
+        { key: 'wlu', text: 'Wilfrid Laurier University', value: 'Wilfrid Laurier University' }
+      ],
+      completed_at: ''
     }
   }
 
@@ -53,22 +65,39 @@ class SimpleTempForm extends Component {
     })
   }
 
+  updateApplicationType(e, data, attr) {
+    this.setState({
+      application_template: {
+        ...this.state.application_template,
+        [attr]: data.value,
+      }
+    })
+  }
+
 	addToGroup() {
 		if (this.validateForm()) {
-			this.setState({
-				group_members: this.state.group_members.concat([{
-					...this.state.application_template,
-					id: uuid.v4(),
-				}]),
-				application_template: {
-					name: '',
-					gender: '',
-	        school_and_term: '',
-	        email: '',
-	        phone: '',
-				},
-				error_messages: [],
-			})
+      getTenantByEmail(this.state.application_template.email)
+      .then((data) => {
+        console.log(data)
+        this.setState({
+  				group_members: this.state.group_members.concat([{
+  					...this.state.application_template,
+            tenant_id: data.tenant_id ? data.tenant_id : '',
+  					id: uuid.v4(),
+  				}]),
+  				application_template: {
+  					first_name: '',
+            last_name: '',
+            tenant_id: '',
+  					gender: '',
+            school: '',
+  	        program_and_term: '',
+  	        email: '',
+  	        phone: '',
+  				},
+  				error_messages: [],
+  			})
+      })
 		}
 	}
 
@@ -87,18 +116,33 @@ class SimpleTempForm extends Component {
 				group_error_messages: [],
         error_messages: [],
 			})
-      saveSimpleForm(this.state.group_members, this.props.building, this.props.landlord, this.state.group_notes).then((data) => {
+      insertInquiry({
+        group_members: this.state.group_members,
+        building_id: this.props.building.building_id,
+        group_notes: this.state.group_notes,
+      })
+      .then((data) => {
+        return saveSimpleForm(this.state.group_members.map((member) => {
+          return {
+          name: [member.first_name, member.last_name].join(' '),
+          gender: member.gender,
+          school_and_term: [member.school, member.program_and_term].join(', '),
+          email: member.email,
+          phone: member.phone,
+          id: member.id
+        }
+        }), this.props.building, this.props.landlord, this.state.group_notes)
+      })
+      .then((data) => {
         this.setState({
-          success_message: true
+          success_message: true,
+          completed_at: moment().format('MMM Do YY')
         })
         localStorage.setItem('saved_application', JSON.stringify({
           landlord_id: this.props.landlord.corporation_id,
           landlord_name: this.props.landlord.corporation_name,
           applied_at: new Date().getTime(),
         }))
-        setTimeout(() => {
-				  this.props.closeModal()
-        }, 5000)
       })
 		}
 	}
@@ -124,11 +168,11 @@ class SimpleTempForm extends Component {
 	validateForm() {
 		let ok_to_proceed = true
 		const error_messages = []
-		if (this.state.application_template.name.length === 0 || this.state.application_template.gender.length === 0) {
+		if (this.state.application_template.first_name.length === 0 || this.state.application_template.last_name.length === 0 || this.state.application_template.gender.length === 0) {
 			error_messages.push('You must enter a name and gender')
 			ok_to_proceed = false
 		}
-		if (this.state.application_template.school_and_term.length === 0) {
+		if (this.state.application_template.program_and_term.length === 0 || this.state.application_template.school.length === 0) {
 			error_messages.push('You must enter your school and term')
 			ok_to_proceed = false
 		}
@@ -155,13 +199,24 @@ class SimpleTempForm extends Component {
 				</div>
 				<div style={comStyles().body}>
 					<Form style={comStyles().form}>
-		        <Form.Field>
-		          <label>Name</label>
-		          <Input
-		            value={this.state.application_template.name}
-		            onChange={(e) => this.updateApplicationAttr(e, 'name')}
-		          />
-		        </Form.Field>
+            <Form.Group widths='equal'>
+  		        <Form.Field>
+  		          <label>First Name</label>
+  		          <Input
+  		            value={this.state.application_template.first_name}
+  		            onChange={(e) => this.updateApplicationAttr(e, 'first_name')}
+                  disabled={this.state.submitted}
+  		          />
+  		        </Form.Field>
+              <Form.Field>
+  		          <label>Last Name</label>
+  		          <Input
+  		            value={this.state.application_template.last_name}
+  		            onChange={(e) => this.updateApplicationAttr(e, 'last_name')}
+                  disabled={this.state.submitted}
+  		          />
+  		        </Form.Field>
+            </Form.Group>
 						<Form.Field>
 		          <Radio
 		            label='Male'
@@ -169,6 +224,7 @@ class SimpleTempForm extends Component {
 		            value='Male'
 		            checked={this.state.application_template.gender === 'Male'}
 		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Male' } }, 'gender')}
+                disabled={this.state.submitted}
 		          />
 							&nbsp; &nbsp;
 		          <Radio
@@ -177,20 +233,37 @@ class SimpleTempForm extends Component {
 		            value='Female'
 		            checked={this.state.application_template.gender === 'Female'}
 		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Female' } }, 'gender')}
+                disabled={this.state.submitted}
 		          />
 		        </Form.Field>
-		        <Form.Field>
-		          <label>School, Program and Term</label>
-		          <Input
-		            value={this.state.application_template.school_and_term}
-		            onChange={(e) => this.updateApplicationAttr(e, 'school_and_term')}
-		          />
-		        </Form.Field>
+            <Form.Group widths='equal' >
+              <Form.Field>
+                <label>School</label>
+                <Dropdown
+                  id='school'
+                  placeholder='School'
+                  value={this.state.application_template.school}
+                  selection
+                  options={this.state.school_options}
+                  onChange={(e, d) => { this.updateApplicationType(e, d, 'school') }}
+                  disabled={this.state.submitted}
+                />
+              </Form.Field>
+  		        <Form.Field>
+  		          <label>Program, and Term</label>
+  		          <Input
+  		            value={this.state.application_template.program_and_term}
+  		            onChange={(e) => this.updateApplicationAttr(e, 'program_and_term')}
+                  disabled={this.state.submitted}
+  		          />
+  		        </Form.Field>
+            </Form.Group>
 		        <Form.Field>
 		          <label>Email</label>
 		          <Input
 		            value={this.state.application_template.email}
 		            onChange={(e) => this.updateApplicationAttr(e, 'email')}
+                disabled={this.state.submitted}
 		          />
 		        </Form.Field>
 		        <Form.Field>
@@ -198,6 +271,7 @@ class SimpleTempForm extends Component {
 		          <Input
 		            value={this.state.application_template.phone}
 		            onChange={(e) => this.updateApplicationAttr(e, 'phone')}
+                disabled={this.state.submitted}
 		          />
 		        </Form.Field>
 						<Form.Field>
@@ -220,6 +294,7 @@ class SimpleTempForm extends Component {
 								color='blue'
 								content={this.state.group_members.length > 0 ? 'Add To Group' : 'Save'}
 								onClick={() => this.addToGroup()}
+                disabled={this.state.submitted}
 							/>
 		        </Form.Field>
 		      </Form>
@@ -239,7 +314,13 @@ class SimpleTempForm extends Component {
   												<div style={comStyles().row_member_name}>{ member.name }</div>
   												<div style={comStyles().row_member_email}>{ member.email }</div>
   												<div style={comStyles().row_member_button}>
-  													<Icon name='cancel' onClick={() => this.removeFromGroup(member.id)} />
+                            {
+                              this.state.submitted
+                              ?
+                              null
+                              :
+                              <Icon name='cancel' onClick={() => this.removeFromGroup(member.id)} />
+                            }
   												</div>
   											</div>
   										)
@@ -280,7 +361,7 @@ class SimpleTempForm extends Component {
                   {
                     this.state.success_message
                     ?
-                    <div style={comStyles().success}>SUCCESS! The landlord has received your application and you will hear back from them soon.</div>
+                    null
                     :
                     <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
                   }
@@ -289,6 +370,7 @@ class SimpleTempForm extends Component {
   							<Button
   								basic
   								fluid
+                  icon='lightning'
   								color='blue'
   								onClick={() => this.submitApplication()}
   								content='Submit Application'
@@ -299,6 +381,28 @@ class SimpleTempForm extends Component {
             null
           }
 				</div>
+        {
+          this.state.submitted && this.state.success_message
+          ?
+          <div>
+            <Message positive>
+              <Header
+                as='h3'
+                icon='checkmark box'
+                content={`Success! The landlord has received your application, you'll hear back from them soon!`}
+                subheader={`Submitted on ${this.state.completed_at} EDT, expect to hear from us soon!`}
+              />
+            </Message>
+            <Button
+              primary
+              icon='chevron left'
+              content='Back'
+              onClick={() => this.props.closeModal()}
+            />
+          </div>
+          :
+          null
+        }
 			</div>
 		)
 	}
