@@ -290,7 +290,7 @@ class AppRoot extends Component {
 
             <Header style={comStyles().header} />
 
-            <div id='main_content' style={comStyles().content}>
+            <div id='main_content' className='pretty_scrollbar' style={comStyles().content}>
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
