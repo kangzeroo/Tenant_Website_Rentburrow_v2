@@ -219,7 +219,7 @@ class FilterBar extends Component {
 	render() {
     const numberOfPropertiesShown = this.props.rent_type === 'sublet' ? this.props.sublet_search_results.length : this.props.building_search_results.length
 		return (
-			<div style={comStyles().container}>
+			<div id='FilterBar' style={comStyles().container}>
         {
           this.state.show_search_panel
           ?

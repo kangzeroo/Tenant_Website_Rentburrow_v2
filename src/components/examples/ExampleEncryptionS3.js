@@ -83,7 +83,7 @@ class ExampleEncryptionS3 extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ExampleEncryptionS3' style={comStyles().container}>
 				<label>Test Text Input</label>
 				<Input value={this.state.text} onChange={(e) => this.setState({ text: e.target.value })} />
 				<Button color='red' onClick={() => this.encryptText(this.state.text)} content='Encrypt Text' />

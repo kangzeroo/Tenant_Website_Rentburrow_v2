@@ -19,7 +19,7 @@ class SearchInput extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SearchInput' style={comStyles().container}>
 				<Input
           id='textInput'
           value={this.props.search_string}

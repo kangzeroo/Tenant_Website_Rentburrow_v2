@@ -57,7 +57,6 @@ class LeaseFilterCard extends Component {
 		// 	this.props.closeFilterCard()
 		// })
 		let filtered = this.props.buildings
-		console.log(filtered)
 
 		// If pricing filters have changed...
 		// if (this.state.price.min !== 500 || this.state.price.max !== 900) {
@@ -109,7 +108,7 @@ class LeaseFilterCard extends Component {
 
 	render() {
 		return (
-			<Card raised fluid style={comStyles().container}>
+			<Card id='LeaseFilterCard' raised fluid style={comStyles().container}>
 				<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Price</h2>

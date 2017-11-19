@@ -236,7 +236,7 @@ class SubletApplication extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SubletApplication' style={comStyles().container}>
 				{
 					this.state.current_form === 'loading'
 					?

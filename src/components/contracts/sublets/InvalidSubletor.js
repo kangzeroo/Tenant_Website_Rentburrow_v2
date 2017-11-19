@@ -18,7 +18,7 @@ class InvalidSubletor extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='InvalidSubletor' style={comStyles().container}>
 
         <div style={comStyles().message}>
 				    You do not have access to this sublet contract because you are not the original tenant ({`${convertToRegularSubletObj(this.props.sublet_post).fb_user_name}`}).
