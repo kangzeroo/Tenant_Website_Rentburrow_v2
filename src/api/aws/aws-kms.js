@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk/global'
-import { TENANT_KMS_ID } from './aws-profile'
+import { TENANT_KMS_ID, ENCRYPTED_COMMUNICATIONS_KMS_ID } from './aws-profile'
 
 
 export const encryptKMS = (string) => {
@@ -50,4 +50,51 @@ export const decryptKMS = (string) => {
 
 const decodeUint8array = (uint8array) => {
     return new TextDecoder('utf-8').decode(uint8array);
+}
+
+
+export const encryptCommunication = (jsObj) => {
+  const p = new Promise((res, rej) => {
+    AWS.config.credentials.refresh(() => {
+      const kms = new AWS.KMS()
+      // console.log()
+      const params = {
+        KeyId: ENCRYPTED_COMMUNICATIONS_KMS_ID,
+        Plaintext: JSON.stringify(jsObj),
+      }
+      kms.encrypt(params, (err, data) => {
+         if (err) {
+          //  console.log(err, err.stack)
+          rej(err)
+         } else {
+           res(data)
+         }
+      })
+    })
+  })
+  return p
+}
+
+export const decryptCommunication = () => {
+  const p = new Promise((res, rej) => {
+    AWS.config.credentials.refresh(() => {
+      const kms = new AWS.KMS()
+      // console.log()
+      const params = {
+        CiphertextBlob: string,
+      }
+      kms.decrypt(params, (err, data) => {
+         if (err) {
+          //  console.log(err, err.stack)
+          rej(err)
+         } else {
+           res({
+             ...data,
+             decoded_string: decodeUint8array(data.Plaintext)
+           })
+         }
+      })
+    })
+  })
+  return p
 }
