@@ -18,7 +18,7 @@ class SubleteeIntroModal extends Component {
 
 	render() {
 		return (
-      <div style={comStyles().container}>
+      <div id='SubleteeIntroModal' style={comStyles().container}>
         <div style={comStyles().central}>
           <Header as='h1' icon textAlign='center'>
             <Icon name='cube' size='massive' circular />

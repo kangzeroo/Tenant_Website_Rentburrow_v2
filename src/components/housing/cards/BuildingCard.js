@@ -51,6 +51,7 @@ class BuildingCard extends Component {
 	render() {
 		return (
       <Card
+        id='BuildingCard'
         onClick={() => this.selectThisBuilding(this.props.building)}
         raised
         onMouseEnter={() => this.cardOnHover(this.props.building)}

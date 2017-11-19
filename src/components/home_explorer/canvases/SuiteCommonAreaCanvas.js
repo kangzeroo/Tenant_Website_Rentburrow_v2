@@ -164,7 +164,7 @@ class SuiteCommonAreaCanvas extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SuiteCommonAreaSummary' style={comStyles().container}>
         <div id='containImage' style={comStyles().containImage}>
   				<SingularImageGallery
   					list_of_images={

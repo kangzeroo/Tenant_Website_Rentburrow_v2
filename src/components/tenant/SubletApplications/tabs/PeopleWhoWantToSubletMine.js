@@ -67,7 +67,7 @@ class PeopleWhoWantToSubletMine extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PeopleWhoWantToSubletMine' style={comStyles().container}>
         <Header as='h3'>
           <Icon name='archive' />
           Received Applications

@@ -21,7 +21,7 @@ class UseChrome extends Component {
 
 	render() {
 		return (
-      <div style={comStyles().container}>
+      <div id='UseChrome' style={comStyles().container}>
         <div style={comStyles().title}>Use the Chrome Web Browser</div>
         <div style={comStyles().image}>
           <img src='https://i.github-camo.com/448f9c5b64bd6d2f3367f53812e54be31e0644c2/68747470733a2f2f636c6f75642e67697468756275736572636f6e74656e742e636f6d2f6173736574732f313433363237312f31323636383233362f63323333613463302d633639372d313165352d386262612d3838323239316462336636352e706e67' />

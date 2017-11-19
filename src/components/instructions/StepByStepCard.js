@@ -209,7 +209,7 @@ class StepByStepCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='StepByStepCard' style={comStyles().container}>
 				<Card fluid raised>
           <Card.Content onClick={() => this.toggleModal(true, 'virtual_tour', this.props.all_suites[0])} style={comStyles().step}>
             <div style={comStyles().number}>

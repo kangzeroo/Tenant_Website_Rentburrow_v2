@@ -98,7 +98,7 @@ class HomeOverview extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container} >
+			<div id='HomeOverview' style={comStyles().container} >
 				<BuildingOverviewRow
 					key='building_overview_row'
 					building={this.props.building}

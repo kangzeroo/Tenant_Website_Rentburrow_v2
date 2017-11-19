@@ -182,6 +182,7 @@ class SuiteOverviewRow extends Component {
     const suite = this.props.suite
 		return (
       <Card
+        id='SuiteOverviewRow'
 				key={suite.suite_id}
 				raised
         onMouseEnter={() => this.rowOnHover(this.props.suite)}

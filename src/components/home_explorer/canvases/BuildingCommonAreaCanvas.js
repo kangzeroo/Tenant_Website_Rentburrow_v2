@@ -46,7 +46,7 @@ class BuildingCommonAreaCanvas extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='BuildingCommonAreaCanvas' style={comStyles().container}>
         <div id='containImage' style={comStyles().containImage}>
   				<SingularImageGallery
   					list_of_images={

@@ -129,7 +129,7 @@ class ApplyBox extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ApplyBox' style={comStyles().container}>
 				<Card fluid raised style={comStyles().applyBox}>
           <div style={comStyles().buttonsContainer} >
             <Button

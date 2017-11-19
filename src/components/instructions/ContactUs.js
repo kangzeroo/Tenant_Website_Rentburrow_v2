@@ -180,7 +180,7 @@ class ContactUs extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ContactUs' style={comStyles().container}>
 				{
 					this.renderGeneralSupport()
 				}

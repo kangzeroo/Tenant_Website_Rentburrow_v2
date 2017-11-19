@@ -59,7 +59,7 @@ class ReceivedSentApplicationPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ReceivedApplicationCard' style={comStyles().container}>
 				<div style={comStyles().headerContainer} >
 					<div style={comStyles().headerButtonsContainer} >
 						<Button

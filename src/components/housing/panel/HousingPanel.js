@@ -173,7 +173,7 @@ class HousingPanel extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='HousingPanel' style={comStyles().container}>
 					{/*
 						generateIconStyles().map((option) => {
 							return (

@@ -22,7 +22,7 @@ class AmenityProofs extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='AmenityProofs' style={comStyles().container}>
         <AmenityBrowser
           amenities={this.props.bottomContextValue.map((am) => {
             return am.value

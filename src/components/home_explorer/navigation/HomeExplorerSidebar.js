@@ -216,7 +216,7 @@ class HomeExplorerSidebar extends Component {
 
 	render() {
 		return (
-			<div className='pretty_scrollbar' style={comStyles().container}>
+			<div id='HomeExplorerSidebar' className='pretty_scrollbar' style={comStyles().container}>
         <div style={comStyles().title} >
 				    <h2>{ this.props.building.building_alias }</h2>
         </div>

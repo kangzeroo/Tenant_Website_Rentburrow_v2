@@ -17,7 +17,7 @@ class SuiteBathSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().baths_summary}>
+			<div id='SuiteBathSummary' style={comStyles().baths_summary}>
 				{
 					this.props.baths_summary.full_baths > 0
 					?

@@ -63,7 +63,7 @@ class HousingPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='HousingPanel' style={comStyles().container}>
 				{
 					this.props.popup_buildings.length > 0
 					?

@@ -128,7 +128,7 @@ class AppRoot extends Component {
   }
 
   initiateFacebookProcess() {
-    if (localStorage.getItem('fbToken') !== null) {
+    if (localStorage.getItem('fbToken')) {
       initiateFacebook().then(() => {
         // autologin to facebook if possible
         return checkIfFacebookLoggedIn()
@@ -250,9 +250,9 @@ class AppRoot extends Component {
 
   forceScrollTop() {
     const main_content = document.getElementById('main_content')
-    const all_content = document.getElementById('all_content')
+    const app_root = document.getElementById('AppRoot')
     main_content.scrollTop = 0
-    all_content.scrollTop = 0
+    app_root.scrollTop = 0
   }
 
   // note that we have <StyleRoot>, which must be defined in order to use Radium
@@ -273,7 +273,7 @@ class AppRoot extends Component {
       }
     }
 		return (
-      <div id='all_content' style={{ ...withFooterStyles }}>
+      <div id='AppRoot' style={{ ...withFooterStyles }}>
         <Helmet>
           <html lang={this.props.language}></html>
         </Helmet>

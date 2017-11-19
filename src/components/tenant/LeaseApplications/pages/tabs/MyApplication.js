@@ -36,6 +36,7 @@ class MyApplication extends Component {
       })
     })
   }
+
   renderAboutTenant() {
 		return (
 			<Card raised fluid style={comStyles().card_style}>
@@ -123,8 +124,8 @@ class MyApplication extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-      <Form>
+			<div id='MyApplication' style={comStyles().container}>
+        <Form>
           <Card raised fluid style={comStyles().card_style}>
             <Header
               as='h2'

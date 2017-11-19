@@ -87,7 +87,7 @@ class PlacesIAppliedToLive extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PlacesIAppliedToLive' style={comStyles().container}>
         <Header as='h3'>
           <Icon name='external' />
           Active Applications
