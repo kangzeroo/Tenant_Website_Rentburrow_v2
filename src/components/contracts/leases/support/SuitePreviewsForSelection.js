@@ -165,6 +165,7 @@ class SuitePreviewsForSelection extends Component {
     const suite = this.props.suite
 		return (
       <Card
+        id='SuitePreviewsForSelection'
 				key={suite.suite_id}
 				raised
 				style={comStyles().hardCard}

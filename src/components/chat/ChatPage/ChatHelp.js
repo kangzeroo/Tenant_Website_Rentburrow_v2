@@ -42,7 +42,7 @@ class ChatHelp extends Component {
 
 	render() {
 		return (
-			<div style={comStyles(this.props.history.location.pathname).container}>
+			<div id='ChatHelp' style={comStyles(this.props.history.location.pathname).container}>
         <Header as='h2' textAlign='center' style={comStyles().header}>
           {
             this.props.history.location.pathname.indexOf('/chat') > -1

@@ -109,7 +109,7 @@ class FAQLandlord extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='FAQLandlord' style={comStyles().container}>
 				<div style={comStyles().header_search}>
 					<Header
 						as='h1'

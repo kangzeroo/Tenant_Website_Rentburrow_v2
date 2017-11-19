@@ -103,7 +103,7 @@ class WitnessForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='WitnessForm' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<Header
 						as='h2'

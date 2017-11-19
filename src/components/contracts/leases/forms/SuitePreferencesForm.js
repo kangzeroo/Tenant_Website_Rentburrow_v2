@@ -275,7 +275,7 @@ class SuitePreferenceForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SuitePreferenceForm' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>

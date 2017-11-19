@@ -36,7 +36,7 @@ class GroupMembers extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='GroupMembers' style={comStyles().container}>
 				<Card raised fluid>
           <div style={comStyles().feed_container} >
             <Header

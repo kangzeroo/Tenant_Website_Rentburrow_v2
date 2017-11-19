@@ -109,7 +109,7 @@ class ChatsPanel extends Component {
 
 	render() {
 		return (
-			<div style={comStyles(this.props.history.location.pathname).container}>
+			<div id='ChatsPanel' style={comStyles(this.props.history.location.pathname).container}>
         <div style={comStyles().top_bar}>
           <Search
               onSearchChange={(e) => this.updateAttr('search_string', e)}

@@ -86,7 +86,7 @@ class LandlordSignupForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='LandlordSignupForm' style={comStyles().container}>
 				<Form style={comStyles().form}>
 	        <Form.Field>
 	          <label>Name</label>

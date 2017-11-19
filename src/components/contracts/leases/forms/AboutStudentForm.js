@@ -95,7 +95,7 @@ class AboutStudentForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='AboutStudentForm' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<div style={comStyles().sign_header}>About Student</div>
 					<div style={comStyles().contents}>

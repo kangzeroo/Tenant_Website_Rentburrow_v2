@@ -41,7 +41,7 @@ class AnalyticsSummary extends Component {
 
 	render() {
 		return (
-			<Card style={comStyles().container}>
+			<Card id='AnalyticsSummary' style={comStyles().container}>
 				<div style={comStyles().analyticsContainer} >
 					<Statistic>
 						<Statistic.Value>

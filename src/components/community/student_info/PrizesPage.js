@@ -145,7 +145,7 @@ class PrizesPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PrizesPage' style={comStyles().container}>
         <Button onClick={() => this.toggleModal(true, 'how')} primary content='How Does This Work?' style={comStyles().explain_button} />
         <div style={comStyles().header_search}>
           <Header

@@ -115,7 +115,7 @@ class HowItWorksLandlord extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='HowItWorksLandlord' style={comStyles().container}>
 				<Step.Group>
 					{
 						this.steps.map((step, i) => {

@@ -16,7 +16,7 @@ class PromoPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PromoPage' style={comStyles().container}>
 				PromoPage
 			</div>
 		)

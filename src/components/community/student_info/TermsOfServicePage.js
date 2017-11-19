@@ -16,7 +16,7 @@ class TermsOfServicePage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='TermsOfServicePage' style={comStyles().container}>
 				TermsOfServicePage
 			</div>
 		)

@@ -38,7 +38,7 @@ class ChatsDash extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ChatsDash' style={comStyles().container}>
 				<Header as='h2' textAlign='center' style={comStyles().header}>
 					<div style={comStyles().back_button}>
 						{
