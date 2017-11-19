@@ -124,7 +124,7 @@ class TenantAccount extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='TenantAccount' style={comStyles().container}>
         {
           this.state.saving
           ?

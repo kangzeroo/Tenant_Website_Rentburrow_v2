@@ -16,7 +16,7 @@ class TenantSettings extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='TenantSettings' style={comStyles().container}>
 				TenantSettings
 			</div>
 		)

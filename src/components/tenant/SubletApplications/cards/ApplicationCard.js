@@ -87,7 +87,7 @@ class ApplicationCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ApplicationCard' style={comStyles().container}>
 				<Card raised>
           <Card.Content>
             <Card.Header>

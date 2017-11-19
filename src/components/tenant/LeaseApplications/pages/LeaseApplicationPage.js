@@ -167,7 +167,7 @@ class LeaseApplicationPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='LeaseApplicationPage' style={comStyles().container}>
           <Card raised fluid style={comStyles().card_style}>
             <div style={comStyles().headerContainer} >
               <Button

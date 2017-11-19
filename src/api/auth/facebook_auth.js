@@ -173,6 +173,7 @@ export const convertTokenIntoLongLived = (accessToken) => {
 			})
 			.catch((err) => {
 				// console.log(err)
+				localStorage.removeItem('cognito_student_token')
 				rej(err)
 			})
 	})

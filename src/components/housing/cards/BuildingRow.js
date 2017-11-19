@@ -32,7 +32,7 @@ class BuildingRow extends Component {
 
 	render() {
 		return (
-      <div onClick={() => this.selectThisBuilding(this.props.building)} onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)} style={comStyles().hardCard}>
+      <div id='BuildingRow' onClick={() => this.selectThisBuilding(this.props.building)} onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)} style={comStyles().hardCard}>
         <div style={comStyles().imageGallery}>
           <SingularImageGallery
             list_of_images={this.props.building.imgs}

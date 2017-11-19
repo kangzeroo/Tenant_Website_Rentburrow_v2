@@ -46,7 +46,7 @@ class SubletCard extends Component {
 
 	render() {
 		return (
-      <Card key={this.props.sublet.post_id} onClick={() => this.selectThisPost(this.props.sublet)} onMouseEnter={() => this.props.selectPinToRedux(this.props.sublet.post_id)} raised style={comStyles().hardCard}>
+      <Card id='SubletCard' key={this.props.sublet.post_id} onClick={() => this.selectThisPost(this.props.sublet)} onMouseEnter={() => this.props.selectPinToRedux(this.props.sublet.post_id)} raised style={comStyles().hardCard}>
 
 				<div id='infobar' style={comStyles().infobar}>
 					{/* Profile Picture */}

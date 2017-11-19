@@ -57,7 +57,7 @@ class TenantLeaseApplications extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='TenantLeaseApplications' style={comStyles().container}>
 				<div style={comStyles().tabsContainer} >
 					{
 						this.state.fully_loaded

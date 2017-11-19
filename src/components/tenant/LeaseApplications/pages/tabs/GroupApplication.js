@@ -54,7 +54,7 @@ class GroupApplication extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='GroupApplication' style={comStyles().container}>
         <div style={comStyles().row_one} >
           <div style={comStyles().building_image} >
     				<Image

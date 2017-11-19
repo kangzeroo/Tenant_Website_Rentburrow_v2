@@ -112,7 +112,7 @@ class HomeExplorerCanvas extends Component {
 
 	render() {
 		return (
-			<div className='pretty_scrollbar' style={comStyles().container}>
+			<div id='HomeExplorerCanvas' className='pretty_scrollbar' style={comStyles().container}>
 				{
 					this.renderAppropriateCanvas()
 				}

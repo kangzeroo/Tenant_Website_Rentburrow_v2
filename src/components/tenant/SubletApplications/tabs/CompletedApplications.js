@@ -18,7 +18,7 @@ class CompletedApplications extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='CompletedApplications' style={comStyles().container}>
         <Header as='h3'>
           <Icon name='checkmark box' />
           Completed Applications

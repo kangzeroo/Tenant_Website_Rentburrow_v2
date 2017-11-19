@@ -71,7 +71,7 @@ class BuildingPreview extends Component {
 
 	render() {
 		return (
-      <div style={comStyles(this.props.building.label).container} >
+      <div id='BuildingPreview' style={comStyles(this.props.building.label).container} >
         <Card
           onClick={() => this.selectThisBuilding(this.props.building)}
           onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)}

@@ -100,7 +100,7 @@ class VirtualTourCanvas extends Component {
       })
     }
 		return (
-			<div id='container' style={comStyles().container}>
+			<div id='VirtualTourCanvas' style={comStyles().container}>
         {
           this.props.istaging_url || this.props.iguide_url || this.props.video_url || this.props.matterport_url
           ?

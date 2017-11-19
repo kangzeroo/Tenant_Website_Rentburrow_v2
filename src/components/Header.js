@@ -155,7 +155,7 @@ class Header extends Component {
 
   render() {
     return (
-        <div style={comStyles().header}>
+        <div id='Header' style={comStyles().header}>
           <div style={comStyles().leftFloat}>
             <Link to='/' onClick={() => this.refreshEverything()}>
               <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />

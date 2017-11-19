@@ -100,7 +100,7 @@ class SubletDetailed extends Component {
 
 	render() {
 		return (
-      <Card key={this.props.sublet.post_id} raised style={this.props.onlyForShow ? comStyles().softCard : comStyles().hardCard}>
+      <Card id='SubletDetailed' key={this.props.sublet.post_id} raised style={this.props.onlyForShow ? comStyles().softCard : comStyles().hardCard}>
 
         <div style={comStyles().left}>
   				<div id='infobar' style={comStyles().infobar}>

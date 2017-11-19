@@ -21,6 +21,7 @@ class BuildingOverviewRow extends Component {
     const building = this.props.building
 		return (
       <Card
+        id='BuildingOverviewRow'
         key={building.building_id}
         raised
         style={comStyles().hardCard}
