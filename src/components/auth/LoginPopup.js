@@ -44,11 +44,7 @@ class LoginPopup extends Component {
         {
           this.props.rent_type === 'sublet' && this.props.force_signin
           ?
-          <div>
-            <h4>Rentburrow pulls sublets from Facebook. By signing in, you help make this service possible. Thank you.</h4>
-            <br/>
-            <Button onClick={() => this.props.history.push('/lease')} primary basic content='No Thank You' />
-          </div>
+          <h4>Rentburrow pulls sublets from Facebook. By signing in, you help make this service possible. Thank you.</h4>
           :
           null
         }
