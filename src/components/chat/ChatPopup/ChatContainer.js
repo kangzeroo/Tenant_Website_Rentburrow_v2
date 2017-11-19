@@ -76,7 +76,7 @@ class ChatContainer extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ChatContainer' style={comStyles().container}>
 				{
 					this.renderAppropriateView()
 				}

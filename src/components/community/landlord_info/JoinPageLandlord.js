@@ -19,7 +19,7 @@ class JoinPageLandlord extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='JoinPageLandlord' style={comStyles().container}>
 				<Header
 					as='h1'
 					icon='home'

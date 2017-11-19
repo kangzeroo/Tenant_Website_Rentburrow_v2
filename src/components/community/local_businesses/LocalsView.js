@@ -17,7 +17,7 @@ class LocalsView extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='LocalsView' style={comStyles().container}>
 				<Button onClick={() => this.props.selectLocal(null)} style={comStyles().backButton}>BACK</Button>
       	<iframe className='_virtualtour' src='https://beta.babylonvr.ca/vr/239939' width='100%' height='1000px'></iframe>
 			</div>

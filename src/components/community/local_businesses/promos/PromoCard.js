@@ -21,7 +21,7 @@ class PromoCard extends Component {
 	render() {
 		const { promo } = this.props
 		return (
-			<Card onClick={() => this.props.selectLocal(promo)} raised key={promo.promo_id} style={comStyles().container}>
+			<Card id='PromoCard' onClick={() => this.props.selectLocal(promo)} raised key={promo.promo_id} style={comStyles().container}>
 				<Image fluid src={promo.img} style={comStyles().image}/>
 				<Card.Content>
 					<Card.Header>

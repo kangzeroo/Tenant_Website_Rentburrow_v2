@@ -25,7 +25,7 @@ class Chat extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='Chat' style={comStyles().container}>
 				{
 					this.state.chat_open
 					?

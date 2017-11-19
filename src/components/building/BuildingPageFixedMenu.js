@@ -16,7 +16,7 @@ class BuildingPageFixedMenu extends Component {
 
 	render() {
 		return (
-			<div style={comStyles(this.props.positionStyle).container}>
+			<div id='BuildingPageFixedMenu' style={comStyles(this.props.positionStyle).container}>
 				<Button
 					onClick={() => this.props.goToSection('description')}
 					content='Description'

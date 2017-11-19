@@ -115,7 +115,7 @@ class JoinedGroup extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='JoinedGroup' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<Header
 						as='h1'

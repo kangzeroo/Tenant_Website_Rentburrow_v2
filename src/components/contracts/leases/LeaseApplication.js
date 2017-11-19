@@ -319,7 +319,7 @@ class LeaseApplication extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='LeaseApplication' style={comStyles().container}>
         <div style={imageBackground(this.props.applied_building.cover_photo).grayscale}>
         </div>
         {

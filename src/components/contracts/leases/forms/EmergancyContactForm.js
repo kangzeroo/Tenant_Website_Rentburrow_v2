@@ -96,7 +96,7 @@ class EmergancyContactForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='EmergancyContactForm' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<div style={comStyles().sign_header}>Emergancy Contacts</div>
 					<div style={comStyles().contents}>

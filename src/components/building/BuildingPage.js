@@ -261,7 +261,7 @@ class BuildingPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='BuildingPage' style={comStyles().container}>
 				<div style={loadStyles(renderProcessedImage(this.state.building.cover_photo)).cover_photo}>
 					{
 						this.state.building.istaging_url || this.state.building.iguide_url

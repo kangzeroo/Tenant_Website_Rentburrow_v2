@@ -86,7 +86,7 @@ class ContactUsForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ContactUsForm' style={comStyles().container}>
 				<div style={comStyles().title}>
 					Contact Us
 				</div>

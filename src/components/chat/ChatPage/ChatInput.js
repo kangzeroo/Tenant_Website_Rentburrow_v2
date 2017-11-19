@@ -117,7 +117,7 @@ class ChatInput extends Component {
 
 	render() {
     return (
-      <Form style={comStyles().container}>
+      <Form id='ChatInput' style={comStyles().container}>
         <TextArea
           className='pretty_scrollbar'
           id='textInput'

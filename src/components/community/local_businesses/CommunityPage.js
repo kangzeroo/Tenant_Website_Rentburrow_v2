@@ -28,7 +28,7 @@ class CommunityPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='CommunityPage' style={comStyles().container}>
 
 				<div style={comStyles().community}>
 					{

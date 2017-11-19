@@ -18,7 +18,7 @@ class BookAFilmingPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='BookAFilmingPage' style={comStyles().container}>
 				<BookPhotoshootForm />
 			</div>
 		)

@@ -83,7 +83,7 @@ class BuildingQuickAmenitiesBar extends Component {
 
 	render() {
 		return (
-      <div style={comStyles().container}>
+      <div id='BuildingQuickAmenitiesBar' style={comStyles().container}>
   			<div style={comStyles().amenities_container}>
           <div style={comStyles().iconBox}>
             {/*}<img

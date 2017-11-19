@@ -20,7 +20,7 @@ class Logout extends Component {
 
 	render() {
 		return (
-			<div>
+			<div id='Logout'>
 				<p>Sorry to see you go...</p>
 			</div>
 		)

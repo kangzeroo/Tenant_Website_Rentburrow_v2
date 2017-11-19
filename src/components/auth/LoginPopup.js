@@ -40,7 +40,7 @@ class LoginPopup extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='LoginPopup' style={comStyles().container}>
         {
           this.props.rent_type === 'sublet' && this.props.force_signin
           ?

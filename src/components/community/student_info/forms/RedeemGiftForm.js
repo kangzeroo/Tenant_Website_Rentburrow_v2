@@ -86,7 +86,7 @@ class RedeemGiftForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='RedeemGiftForm' style={comStyles().container}>
 				<div style={comStyles().title}>
 					Redeem Your Gift
 				</div>

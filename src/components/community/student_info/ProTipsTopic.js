@@ -25,7 +25,7 @@ class ProTipsTopic extends Component {
 
 	render() {
 		return (
-      <Accordion fluid key={this.props.topic.key} styled style={comStyles().container}>
+      <Accordion id='ProTipsTopic' fluid key={this.props.topic.key} styled style={comStyles().container}>
         <Accordion.Title active={this.state.activeIndex === 0} style={comStyles().grand_title}>
           { this.props.topic.title }
         </Accordion.Title>
