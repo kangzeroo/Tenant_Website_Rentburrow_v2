@@ -181,25 +181,25 @@ class Header extends Component {
             ?
             <div style={comStyles().user_container} >
               <Icon onClick={() => this.props.history.push('/protips')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
-              <Button
+              {/*}<Button
                 basic
                 inverted
                 content='Request a Photoshoot'
                 style={comStyles().login}
                 onClick={() => this.toggleModal(true, 'request')}
-              />
+              />*/}
               { this.renderProfileDropdown() }
             </div>
             :
             <div style={comStyles().rightFloat}>
               <Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
-              <Button
+              {/*}<Button
                 basic
                 inverted
                 content='Request a Photoshoot'
                 style={comStyles().login}
                 onClick={() => this.toggleModal(true, 'request')}
-              />
+              />*/}
               <Button
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
