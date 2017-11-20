@@ -78,7 +78,6 @@ class SimpleTempForm extends Component {
 		if (this.validateForm()) {
       getTenantByEmail(this.state.application_template.email)
       .then((data) => {
-        console.log(data)
         this.setState({
   				group_members: this.state.group_members.concat([{
   					...this.state.application_template,
@@ -194,6 +193,15 @@ class SimpleTempForm extends Component {
 	render() {
 		return (
 			<div id='SimpleTempForm' style={comStyles().container}>
+         {
+          this.props.building.prize
+          ?
+          null
+          :
+          <div>
+            * This property is not eligible for a prize.
+          </div>
+        }
 				<div style={comStyles().title}>
 					{ this.props.title && this.props.title.toLowerCase().indexOf('waitlist') > -1 ? 'Join Waitlist' : 'Apply Online' }
 				</div>
