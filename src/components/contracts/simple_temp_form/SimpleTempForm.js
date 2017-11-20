@@ -193,7 +193,6 @@ class SimpleTermForm extends Component {
 	render() {
 		return (
 			<div style={comStyles().container}>
-      {console.log(this.props.building)}
         {
           this.props.building.prize
           ?
