@@ -60,7 +60,7 @@ class HomeExplorer extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='HomeExplorer' style={comStyles().container}>
         {
           this.state.topContextValue
           ?

@@ -131,7 +131,7 @@ class SubmitLeaseApplication extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SubmitLeaseApplication' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<div style={comStyles().contents}>
 						<div style={comStyles().form_contents}>

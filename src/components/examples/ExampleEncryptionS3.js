@@ -13,7 +13,7 @@ import {
 	Button,
 	Image,
 } from 'semantic-ui-react'
-import { encryptKMS, decryptKMS } from '../../api/aws/aws-kms'
+import { encryptKMS, decryptKMS, encryptCommunication } from '../../api/aws/aws-kms'
 import { filterNonImages } from '../../api/aws/aws-S3'
 import { uploadImageToS3WithEncryption, getEncryptedS3Image } from '../../api/aws/aws-S3'
 
@@ -23,7 +23,8 @@ class ExampleEncryptionS3 extends Component {
 	constructor() {
 		super()
 		this.state = {
-			text: '',
+			text1: '',
+			text2: '',
 			encrypted_text: '',
 			decrypted_text: '',
 			image: '',
@@ -32,9 +33,19 @@ class ExampleEncryptionS3 extends Component {
 		}
 	}
 
-	encryptText(text) {
+	encryptText1(text) {
 		console.log(text)
 		encryptKMS(text).then((data) => {
+			console.log(data)
+			this.setState({
+				encrypted_text: data.CiphertextBlob
+			})
+		})
+	}
+
+	encryptText2(text) {
+		console.log(text)
+		encryptCommunication(text).then((data) => {
 			console.log(data)
 			this.setState({
 				encrypted_text: data.CiphertextBlob
@@ -83,10 +94,14 @@ class ExampleEncryptionS3 extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
-				<label>Test Text Input</label>
-				<Input value={this.state.text} onChange={(e) => this.setState({ text: e.target.value })} />
-				<Button color='red' onClick={() => this.encryptText(this.state.text)} content='Encrypt Text' />
+			<div id='ExampleEncryptionS3' style={comStyles().container}>
+				<label>Test Text Input 1</label>
+				<Input value={this.state.text1} onChange={(e) => this.setState({ text1: e.target.value })} />
+				<Button color='red' onClick={() => this.encryptText1(this.state.text1)} content='Encrypt Text 1' />
+				<br /><br /><br />
+				<label>Test Text Input 2</label>
+				<Input value={this.state.text2} onChange={(e) => this.setState({ text2: e.target.value })} />
+				<Button color='red' onClick={() => this.encryptText2(this.state.text2)} content='Encrypt Text 2' />
 				<br /><br /><br />
 				<Button color='blue' onClick={() => this.decryptText(this.state.encrypted_text)} content='Decrypt Text' />
 				{

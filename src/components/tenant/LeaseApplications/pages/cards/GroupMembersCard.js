@@ -43,7 +43,7 @@ class GroupMembersCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='GroupMembersCard' style={comStyles().container}>
 				<Card.Group>
           <div style={comStyles().feed_container} >
             <Header

@@ -38,7 +38,7 @@ class SubletorDone extends Component {
 
 	render() {
 		return (
-			<Card style={comStyles().container}>
+			<Card id='SubletorDone' style={comStyles().container}>
 				'DONE! All recipients must sign online via their email'
         <Button
           content='View Contract'

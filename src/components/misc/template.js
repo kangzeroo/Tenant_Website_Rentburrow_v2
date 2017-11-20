@@ -16,7 +16,7 @@ class Template extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='Template' style={comStyles().container}>
 				Template
 			</div>
 		)

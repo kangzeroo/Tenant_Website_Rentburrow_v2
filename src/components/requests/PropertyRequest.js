@@ -82,7 +82,7 @@ class PropertyRequest extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PropertyRequest' style={comStyles().container}>
         <div style={comStyles().headerContainer} >
   				<Header
             as='h1'

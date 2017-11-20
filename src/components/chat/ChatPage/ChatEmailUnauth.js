@@ -71,7 +71,7 @@ class ChatEmailUnauth extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ChatEmailUnauth' style={comStyles().container}>
         <div style={comStyles().signin_message}>
           Without signing in, your messages will not be saved if you clear your history.
           &nbsp;

@@ -16,7 +16,7 @@ class LandingPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='LandingPage' style={comStyles().container}>
 				LandingPage
 			</div>
 		)

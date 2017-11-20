@@ -40,7 +40,7 @@ class ApplicationContract extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ApplicationContract' style={comStyles().container}>
         <div style={comStyles().headerContainer} >
           <div style={comStyles().headerStatus}>
             {

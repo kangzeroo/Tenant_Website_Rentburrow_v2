@@ -96,7 +96,7 @@ class EmploymentForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='EmploymentForm' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<div style={comStyles().sign_header}>Employment History</div>
 					<div style={comStyles().contents}>

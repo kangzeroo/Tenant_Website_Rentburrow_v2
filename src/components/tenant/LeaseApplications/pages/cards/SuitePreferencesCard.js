@@ -57,7 +57,7 @@ class SuitePreferencesCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SuitePreferencesCard' style={comStyles().container}>
         <Header
           as='h2'
           content='Suite Preferences'

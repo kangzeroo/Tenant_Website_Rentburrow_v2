@@ -28,7 +28,7 @@ class RibbonLabel extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='RibbonLabel' style={comStyles().container}>
         <Label color={this.determineColor(this.props.label)} ribbon='right'>{ this.props.label }</Label>
 			</div>
 		)

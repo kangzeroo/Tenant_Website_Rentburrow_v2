@@ -44,7 +44,7 @@ class AmenityBrowser extends Component {
 
 	render() {
 		return (
-			<Card className='pretty_scrollbar' style={comStyles().container}>
+			<Card id='AmenityBrowser' className='pretty_scrollbar' style={comStyles().container}>
         <div style={comStyles().box}>
           <div style={comStyles().amen}>
             <div style={comStyles().amentity_title}>

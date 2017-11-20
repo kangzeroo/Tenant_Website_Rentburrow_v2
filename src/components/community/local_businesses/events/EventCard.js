@@ -21,7 +21,7 @@ class EventCard extends Component {
 	render() {
 		const { event } = this.props
 		return (
-			<Card onClick={() => this.props.selectLocal(event)} raised key={event.event_id} style={comStyles().container}>
+			<Card id='EventCard' onClick={() => this.props.selectLocal(event)} raised key={event.event_id} style={comStyles().container}>
 				<Image fluid src={event.img} style={comStyles().image}/>
 				<Card.Content>
 					<Card.Header>

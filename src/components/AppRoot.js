@@ -52,6 +52,7 @@ import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
 import Logout from './auth/Logout'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
+import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -128,7 +129,7 @@ class AppRoot extends Component {
   }
 
   initiateFacebookProcess() {
-    if (localStorage.getItem('fbToken') !== null) {
+    if (localStorage.getItem('fbToken')) {
       initiateFacebook().then(() => {
         // autologin to facebook if possible
         return checkIfFacebookLoggedIn()
@@ -250,9 +251,9 @@ class AppRoot extends Component {
 
   forceScrollTop() {
     const main_content = document.getElementById('main_content')
-    const all_content = document.getElementById('all_content')
+    const app_root = document.getElementById('AppRoot')
     main_content.scrollTop = 0
-    all_content.scrollTop = 0
+    app_root.scrollTop = 0
   }
 
   // note that we have <StyleRoot>, which must be defined in order to use Radium
@@ -261,19 +262,8 @@ class AppRoot extends Component {
 	render() {
     // const hideFooter = true
     const hideFooter = this.props.location.pathname === '/' || this.props.location.pathname === '/sublets' || this.props.location.pathname === '/leases' || this.props.location.pathname === '/sublet' || this.props.location.pathname === '/lease'
-    let withFooterStyles = {
-      minHeight: '100vh',
-      maxHeight: '100vh',
-    }
-    if (!hideFooter) {
-      withFooterStyles = {
-        ...withFooterStyles,
-        minHeight: '120vh',
-        maxHeight: '120vh',
-      }
-    }
 		return (
-      <div id='all_content' style={{ ...withFooterStyles }}>
+      <div id='AppRoot' style={comStyles().main}>
         <Helmet>
           <html lang={this.props.language}></html>
         </Helmet>
@@ -290,11 +280,11 @@ class AppRoot extends Component {
 
             <Header style={comStyles().header} />
 
-            <div id='main_content' style={comStyles().content}>
+            <div id='main_content' className='pretty_scrollbar' style={comStyles().content}>
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                {/*<Route exact path='/sandbox' component={ExampleEncryptionS3} />*/}
+                <Route exact path='/sandbox' component={ExampleEncryptionS3} />
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}
                 <Route exact path='/prizes' component={PrizesPage} />
@@ -345,6 +335,14 @@ class AppRoot extends Component {
                 {/* Route Mobile Site to Here .... */}
               </Switch>
 
+              {
+                hideFooter
+                ?
+                null
+                :
+                <Footer forceScrollTop={() => this.forceScrollTop()} />
+              }
+
             </div>
 
             {
@@ -353,14 +351,6 @@ class AppRoot extends Component {
               <Chat style={comStyles().chat} />
               :
               null
-            }
-
-            {
-              hideFooter
-              ?
-              null
-              :
-              <Footer forceScrollTop={() => this.forceScrollTop()} />
             }
 
           </div>
@@ -432,25 +422,15 @@ export default withRouter(connect(mapReduxToProps, {
 
 // =============================
 
-const comStyles = (hideFooter) => {
-  let withFooterStyles = {
-    minHeight: '100vh',
-    maxHeight: '100vh',
-  }
-  if (!hideFooter) {
-    withFooterStyles = {
-      ...withFooterStyles,
-      minHeight: '120vh',
-      maxHeight: '120vh',
-    }
-  }
+const comStyles = () => {
 	return {
     main: {
       minWidth: '100vw',
       maxWidth: '100vw',
       display: 'flex',
       flexDirection: 'column',
-      ...withFooterStyles,
+      minHeight: '100vh',
+      maxHeight: '100vh',
     },
     header: {
       minHeight: '7vh',
@@ -463,7 +443,8 @@ const comStyles = (hideFooter) => {
       maxHeight: '93vh',
       minWidth: '100vw',
       maxWidth: '100vw',
-      overflowY: 'scroll'
+      overflowY: 'scroll',
+      overflowX: 'hidden',
     },
     chat: {
 

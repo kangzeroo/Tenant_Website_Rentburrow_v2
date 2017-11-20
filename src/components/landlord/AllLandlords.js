@@ -16,7 +16,7 @@ class AllLandlords extends Component {
 
 	render() {
 		return (
-			<Card style={comStyles().container}>
+			<Card id='AllLandlords' style={comStyles().container}>
 				AllLandlords - This component should display all landlords/property managers. For example 30 Hickory St W has many suites managed by Domus and Atlas and small independent landlords.
         This component should also display sublets scrapped from facebook.
 			</Card>

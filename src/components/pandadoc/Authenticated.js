@@ -30,7 +30,7 @@ class Authenticated extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='Authenticated' style={comStyles().container}>
 				Authenticated
 			</div>
 		)

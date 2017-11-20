@@ -19,7 +19,7 @@ class SearchInput extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SearchInput' style={comStyles().container}>
 				<Input
           id='textInput'
           value={this.props.search_string}
@@ -85,6 +85,8 @@ const comStyles = () => {
       flexDirection: 'row',
       padding: '5px 0px 5px 0px',
       margin: '0px 0px 0px 20px',
+      height: '50px',
+      alignSelf: 'center',
 		}
 	}
 }

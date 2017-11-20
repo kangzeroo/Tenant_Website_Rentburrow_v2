@@ -44,7 +44,7 @@ class LeaseApplicationsTab extends Component {
 
 	render() {
 		return (
-      <div style={comStyles().container}>
+      <div id='LeaseApplicationsTab' style={comStyles().container}>
         <Header
           as='h3'
           icon='file text'

@@ -16,6 +16,7 @@ const studentData = {
 }
 
 export const TENANT_KMS_ID = '2157ccf4-5dc3-442e-b49a-02e6077eadcb'
+export const ENCRYPTED_COMMUNICATIONS_KMS_ID = '10212ee5-c669-4bb0-95e7-2145a32e3463'
 
 export const BUCKET_NAME = 'rentburrow3-images'
 export const ENCRYPTED_BUCKET_NAME = 'rentburrow3-tenant-images'

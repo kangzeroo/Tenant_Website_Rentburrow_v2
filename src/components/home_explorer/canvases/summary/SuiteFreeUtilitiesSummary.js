@@ -16,7 +16,7 @@ class SuiteFreeUtilitiesSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().free_utilities_summary}>
+			<div id='SuiteFreeUtilitiesSummary' style={comStyles().free_utilities_summary}>
 				{
 					this.props.free_utilities_summary.electric
 					?

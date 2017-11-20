@@ -41,7 +41,7 @@ class ChatIcon extends Component {
 
 	render() {
 		return (
-			<div onClick={()=> this.iconClicked()} style={comStyles().container}>
+			<div id='ChatIcon' onClick={()=> this.iconClicked()} style={comStyles().container}>
         {
           this.props.chat_open
           ?

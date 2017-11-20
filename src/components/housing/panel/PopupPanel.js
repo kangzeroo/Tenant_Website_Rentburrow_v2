@@ -64,7 +64,7 @@ class PopupPanel extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PopupPanel' style={comStyles().container}>
         <Button
           primary
           basic

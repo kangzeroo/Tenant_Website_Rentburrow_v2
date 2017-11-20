@@ -17,7 +17,7 @@ class SuiteBedSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().rooms_summary}>
+			<div id='SuiteBedSummary' style={comStyles().rooms_summary}>
 				{
 					this.props.rooms_summary.total_rooms
 					?

@@ -96,7 +96,7 @@ class MedicalHistoryForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='MedicalHistoryForm' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<div style={comStyles().sign_header}>Medical History</div>
 					<div style={comStyles().contents}>

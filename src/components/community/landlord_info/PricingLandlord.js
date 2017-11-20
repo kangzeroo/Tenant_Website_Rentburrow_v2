@@ -16,7 +16,7 @@ class PricingLandlord extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PricingLandlord' style={comStyles().container}>
 				PricingLandlord
 			</div>
 		)

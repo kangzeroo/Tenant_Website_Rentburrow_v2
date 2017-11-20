@@ -31,7 +31,7 @@ class Authenticate extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='Authenticate' style={comStyles().container}>
         <div style={comStyles().button_container} >
           <Button
             content='Authenticate'

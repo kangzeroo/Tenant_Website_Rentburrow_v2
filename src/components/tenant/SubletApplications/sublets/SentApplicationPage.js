@@ -58,7 +58,7 @@ class SentApplicationPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SentApplicationPage' style={comStyles().container}>
 				<div style={comStyles().headerContainer} >
 					<div style={comStyles().headerButtonsContainer} >
 						<Button

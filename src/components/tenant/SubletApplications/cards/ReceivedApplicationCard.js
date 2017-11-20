@@ -76,7 +76,7 @@ class ReceivedApplicationCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='ReceivedApplicationCard' style={comStyles().container}>
 			<Card raised>
 				<Card.Content>
 					<Card.Header>

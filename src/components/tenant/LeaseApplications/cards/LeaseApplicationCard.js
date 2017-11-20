@@ -77,7 +77,7 @@ class LeaseApplicationCard extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='LeaseApplicationCard' style={comStyles().container}>
 				<Card raised style={comStyles().card_styles} onClick={() => this.goToPage(this.props.details.group_id)}>
           <Image
             fluid

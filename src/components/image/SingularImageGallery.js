@@ -107,7 +107,7 @@ class SingularImageGallery extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SingularImageGallery' style={comStyles().container}>
         <div style={comStyles().imageContainer}>
           {/*<Transition visible={this.state.visible} animation='scale' duration='300'>*/}
             <Image

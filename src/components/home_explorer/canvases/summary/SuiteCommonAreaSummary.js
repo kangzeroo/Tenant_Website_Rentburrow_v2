@@ -16,7 +16,7 @@ class SuiteCommonAreaSummary extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().common_areas_summary}>
+			<div id='SuiteCommonAreaSummary' style={comStyles().common_areas_summary}>
 				{
 					this.props.common_areas_summary.kitchen
 					?

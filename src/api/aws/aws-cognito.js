@@ -62,6 +62,7 @@ export const LoginStudent = ({ email, password }) => {
 				rej({
 					message: err
 				})
+				localStorage.removeItem('cognito_student_token')
 			})
 	})
 	return p
@@ -322,7 +323,10 @@ export const registerFacebookLoginWithCognito = (response) => {
 		    AWS.config.credentials.get(() => {
 			    const client = new AWS.CognitoSyncManager()
 					// console.log(generate_TENANT_IDENTITY_POOL_ID())
-					// console.log(AWS.config.credentials)
+					console.log(AWS.config.credentials)
+					if (AWS.config.credentials.expired) {
+						localStorage.removeItem('fbToken')
+					}
 					res(AWS.config.credentials.data.IdentityId)
 				})
 		  } else {
@@ -356,7 +360,10 @@ export const unauthRoleStudent = () => {
 		AWS.config.credentials.get(() => {
 			const client = new AWS.CognitoSyncManager()
 			// console.log(generate_TENANT_IDENTITY_POOL_ID())
-			// console.log(AWS.config.credentials)
+			console.log(AWS.config.credentials)
+			if (AWS.config.credentials.expired) {
+				localStorage.removeItem('fbToken')
+			}
 			res({
 				tenant_id: AWS.config.credentials.data.IdentityId,
 				first_name: 'Student on Rentburrow.com',

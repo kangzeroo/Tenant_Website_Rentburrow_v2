@@ -96,7 +96,7 @@ class PersonalityForm extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PersonalityForm' style={comStyles().container}>
 				<div style={comStyles().main_contents}>
 					<div style={comStyles().sign_header}>Personality</div>
 					<div style={comStyles().contents}>

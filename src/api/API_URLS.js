@@ -17,20 +17,20 @@
 // export const AWS_FEDERATED_IDENTITY_ENV = 'development'
 
 // // PROD
-export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
-export const FB_APP_ID = '1492022030811505'
-
-export const SEARCH_MICROSERVICE = 'https://rentburrow.com:3002'
-export const CORP_MICROSERVICE = 'https://rentburrow.com:3001'
-export const REGISTER_MICROSERVICE = 'https://rentburrow.com:3001'
-export const GENERIC_MICROSERVICE = 'https://rentburrow.com:3001'
-export const FB_PARSER_MICROSERVICE = 'https://rentburrow.com:3002'
-
-export const INTEL_MICROSERVICE = 'https://rentburrow.com:3004'
-export const SUBLETTING_MICROSERVICE = 'https://rentburrow.com:3005'
-export const CONTRACTING_MICROSERVICE = 'https://rentburrow.com:3005'
-export const FIREBASE_VERSION = 'production'
-export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
+// export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
+// export const FB_APP_ID = '1492022030811505'
+//
+// export const SEARCH_MICROSERVICE = 'https://rentburrow.com:3002'
+// export const CORP_MICROSERVICE = 'https://rentburrow.com:3001'
+// export const REGISTER_MICROSERVICE = 'https://rentburrow.com:3001'
+// export const GENERIC_MICROSERVICE = 'https://rentburrow.com:3001'
+// export const FB_PARSER_MICROSERVICE = 'https://rentburrow.com:3002'
+//
+// export const INTEL_MICROSERVICE = 'https://rentburrow.com:3004'
+// export const SUBLETTING_MICROSERVICE = 'https://rentburrow.com:3005'
+// export const CONTRACTING_MICROSERVICE = 'https://rentburrow.com:3005'
+// export const FIREBASE_VERSION = 'production'
+// export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
 
 
 // PRIVATE SUBNET
@@ -48,5 +48,20 @@ export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD 
 // export const FIREBASE_VERSION = 'production'
 // export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
 //
+
+// STAGING
+export const MESSAGING_MICROSERVICE = 'https://34.227.163.199:3001'
+export const FB_APP_ID = '115765432474914'
+
+export const SEARCH_MICROSERVICE = 'https://34.227.163.199:3002'
+export const CORP_MICROSERVICE = 'https://34.227.163.199:3001'
+export const REGISTER_MICROSERVICE = 'https://34.227.163.199:3001'
+export const GENERIC_MICROSERVICE = 'https://34.227.163.199:3001'
+export const FB_PARSER_MICROSERVICE = 'https://34.227.163.199:3002'
+export const INTEL_MICROSERVICE = 'https://34.227.163.199:3004'
+export const SUBLETTING_MICROSERVICE = 'https://34.227.163.199:3005'
+export const CONTRACTING_MICROSERVICE = 'https://34.227.163.199:3005'
+export const FIREBASE_VERSION = 'development'
+export const AWS_FEDERATED_IDENTITY_ENV = 'production'
 
 // export const EC2_CONTAINER_IP_ADDRESS = '34.195.86.132'

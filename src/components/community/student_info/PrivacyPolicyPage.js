@@ -16,7 +16,7 @@ class PrivacyPolicyPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='PrivacyPolicyPage' style={comStyles().container}>
 				PrivacyPolicyPage
 			</div>
 		)

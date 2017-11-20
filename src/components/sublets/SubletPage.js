@@ -77,7 +77,7 @@ class SubletPage extends Component {
 
 	render() {
 		return (
-			<div style={comStyles().container}>
+			<div id='SubletPage' style={comStyles().container}>
 				<SubletsList
 					sublets={this.state.sublets}
 					openImages={(images) => this.toggleModal(true, 'images', images)}
