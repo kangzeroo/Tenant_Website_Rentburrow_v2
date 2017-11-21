@@ -214,7 +214,7 @@ class AppRoot extends Component {
   beginCollectingIntel() {
     setInterval(() => {
       this.props.saveIntelToCloud()
-      // this.props.clearIntelList()
+      this.props.clearIntelList()
     }, 10000)
   }
 

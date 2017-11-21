@@ -116,7 +116,7 @@ class SubletFilterCard extends Component {
 		          formatLabel={(value) => `$${value >= 1200 ? '1200+' : value}`}
 		          value={this.state.price}
 		          onChange={(value) => this.updateAttr('price', value)}
-		          onChangeComplete={value => console.log(value)}
+		          onChangeComplete={value => console.log()}
 						/>
 					</div>
 				</div>

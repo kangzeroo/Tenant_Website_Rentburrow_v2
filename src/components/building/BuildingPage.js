@@ -62,7 +62,7 @@ import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
 import PhoneCallForm from '../contracts/simple_temp_form/PhoneCallForm'
-import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
+import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
 
 class BuildingPage extends Component {
@@ -293,6 +293,21 @@ class BuildingPage extends Component {
     window.open(`${window.location.origin}/sublet/${sublet.place_id}`, '_blank')
   }
 
+	checkOutSublet() {
+		this.selectThisPost(this.state.sublets[0])
+		this.props.collectIntel({
+	    'TableName': BUILDING_INTERACTIONS,
+	    'Item': {
+	      'ACTION': 'BUILDING_CHECK_SUBLETS',
+	      'DATE': new Date().getTime(),
+	      'BUILDING_ID': this.state.building.building_id,
+	      'ADDRESS': this.state.building.building_address,
+	      'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				'SUBLET_COUNT': this.state.sublets.length,
+	    }
+	  })
+	}
+
 	render() {
 		return (
 			<div id='BuildingPage' style={comStyles().container}>
@@ -425,7 +440,7 @@ class BuildingPage extends Component {
 							?
 							<div style={comStyles().four_month_sublet}>
 								<h3>Prefer a 4 month lease?</h3>
-								<Button onClick={() => this.selectThisPost(this.state.sublets[0])} basic fluid primary style={comStyles().facebook_sublets}>
+								<Button onClick={() => this.checkOutSublet()} basic fluid primary style={comStyles().facebook_sublets}>
 									View {this.state.sublets.length} sublets from Facebook <br />
 									{
 										calculateCheapestSublet(this.state.sublets)
