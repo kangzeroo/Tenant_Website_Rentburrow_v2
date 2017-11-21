@@ -234,10 +234,6 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			width: '100%',
-			height: '75vh',
-			justifyContent: 'center',
-			alignItems: 'center',
-			padding: '100px',
 		},
 		card: {
 			margin: '20px auto',

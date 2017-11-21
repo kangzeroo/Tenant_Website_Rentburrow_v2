@@ -301,7 +301,8 @@ const comStyles = () => {
       height: '5vh',
       width: 'auto',
       float: 'left',
-      margin: '5px'
+      margin: '5px',
+      marginBottom: '15px'
     },
     login: {
       height: 'auto',

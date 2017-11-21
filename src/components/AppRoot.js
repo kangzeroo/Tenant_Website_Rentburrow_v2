@@ -441,6 +441,7 @@ const comStyles = () => {
     content: {
       overflowY: 'scroll',
       overflowX: 'hidden',
+      height: '-webkit-fill-available'
     },
     chat: {
 
