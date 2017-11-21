@@ -156,7 +156,7 @@ class Header extends Component {
 
   render() {
     return (
-        <div id='Header' style={[comStyles().header, comStyles().fadeInDown]}>
+        <div id='Header' style={comStyles().header}>
           <div style={comStyles().leftFloat}>
             <Link to='/' onClick={() => this.refreshEverything()}>
               <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
@@ -287,7 +287,7 @@ const comStyles = () => {
     header: {
       backgroundColor: xMidBlue,
       padding: '0px',
-      height: '5vh',
+      height: '7vh',
       width: '100%',
       zIndex: '1',
       display: 'flex',
@@ -304,7 +304,7 @@ const comStyles = () => {
       margin: '5px'
     },
     login: {
-      height: '4vh',
+      height: '5vh',
       width: 'auto',
     },
     tenant_thumbnail: {

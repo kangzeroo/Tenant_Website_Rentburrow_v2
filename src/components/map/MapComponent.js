@@ -298,7 +298,7 @@ class MapComponent extends Component {
 
 	render() {
 		return (
-			<div id='MapComponent' style={[comStyles({}).mapContainer, comStyles({}).slideInRight]}>
+			<div id='MapComponent' style={comStyles({}).mapContainer}>
 				<div
 					id='mapTarget'
 					style={comStyles({ CSS_mapWidth: this.props.CSS_mapWidth, CSS_mapHeight: this.props.CSS_mapHeight }).mapTarget}
