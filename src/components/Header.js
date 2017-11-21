@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
+import { fadeInDown } from 'react-animations'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import firebase from 'firebase'
@@ -155,7 +156,7 @@ class Header extends Component {
 
   render() {
     return (
-        <div id='Header' style={comStyles().header}>
+        <div id='Header' style={[comStyles().header, comStyles().fadeInDown]}>
           <div style={comStyles().leftFloat}>
             <Link to='/' onClick={() => this.refreshEverything()}>
               <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
@@ -279,10 +280,14 @@ export default withRouter(
 
 const comStyles = () => {
   return {
+    fadeInDown: {
+      animation: 'x 1.5s',
+      animationName: Radium.keyframes(fadeInDown, 'fadeInDown')
+    },
     header: {
       backgroundColor: xMidBlue,
       padding: '0px',
-      height: '7vh',
+      height: '5vh',
       width: '100%',
       zIndex: '1',
       display: 'flex',
@@ -293,13 +298,13 @@ const comStyles = () => {
       float: 'left',
     },
     logo: {
-      height: '5vh',
+      height: '3.5vh',
       width: 'auto',
       float: 'left',
       margin: '5px'
     },
     login: {
-      height: '5vh',
+      height: '4vh',
       width: 'auto',
     },
     tenant_thumbnail: {

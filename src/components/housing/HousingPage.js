@@ -63,7 +63,7 @@ class HousingPage extends Component {
 
 	render() {
 		return (
-			<div id='HousingPanel' style={comStyles().container}>
+			<div id='HousingPage' style={comStyles().container}>
 				{
 					this.props.popup_buildings.length > 0
 					?
@@ -156,7 +156,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
-			height: '93vh',
+			height: '95vh',
 			width: '100%',
 			position: 'relative',
 		},

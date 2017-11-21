@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { slideInRight } from 'react-animations'
 import Radium from 'radium'
 import Rx from 'rxjs'
 import { pinAlreadyPlaced, checkWherePinExistsInArray, matchPinIDFromPins, getDistanceFromLatLonInKm } from '../../api/map/map_api'
@@ -285,7 +286,7 @@ class MapComponent extends Component {
 
 	render() {
 		return (
-			<div id='MapComponent' style={comStyles({}).mapContainer}>
+			<div id='MapComponent' style={[comStyles({}).mapContainer, comStyles({}).slideInRight]}>
 				<div
 					id='mapTarget'
 					style={comStyles({ CSS_mapWidth: this.props.CSS_mapWidth, CSS_mapHeight: this.props.CSS_mapHeight }).mapTarget}
@@ -344,6 +345,10 @@ export default connect(mapReduxToProps, {
 // =====================================
 const comStyles = ({ CSS_mapWidth, CSS_mapHeight }) => {
 	return {
+		slideInRight: {
+			animation: 'x 1.5s',
+      animationName: Radium.keyframes(slideInRight, 'slideInRight')
+		},
 		mapContainer: {
 			width: '100%',
 			height: '100%'

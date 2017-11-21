@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
+import { slideInLeft } from 'react-animations'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
@@ -173,7 +174,7 @@ class HousingPanel extends Component {
 
 	render() {
 		return (
-			<div id='HousingPanel' style={comStyles().container}>
+			<div id='HousingPanel' style={[comStyles().container, comStyles().slideInLeft]}>
 					{/*
 						generateIconStyles().map((option) => {
 							return (
@@ -296,6 +297,10 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = () => {
 	return {
+		slideInLeft: {
+			animation: 'x 1.5s',
+			animationName: Radium.keyframes(slideInLeft, 'slideInLeft')
+		},
 		container: {
       display: 'flex',
       flexDirection: 'column',
