@@ -99,9 +99,6 @@ class AmenityBrowser extends Component {
             </div>
           </div>
           {
-            console.log(this.state.current_amenity)
-          }
-          {
             this.state.current_amenity.imgs && this.state.current_amenity.imgs.length > 0
             && this.state.current_amenity.imgs[0] !== null
             ?
