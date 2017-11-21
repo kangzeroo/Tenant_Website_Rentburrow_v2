@@ -192,7 +192,7 @@ class ApplyBox extends Component {
             basic
             fluid
             icon='phone'
-            content='Call Phone'
+            content='Text Landlord'
             onClick={() => this.callPhoneForm()}
             size='huge'
           />
