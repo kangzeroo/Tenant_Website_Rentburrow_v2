@@ -42,7 +42,6 @@
   "dependencies": {
     "amazon-cognito-identity-js": "1.19.0",
     "amazon-cognito-js": "1.1.0",
-    "animate.css": "^3.5.2",
     "aws-sdk": "2.80.0",
     "axios": "0.16.2",
     "bluebird": "3.5.0",
@@ -59,6 +58,7 @@
     "radium": "0.19.1",
     "rc-time-picker": "3.1.0",
     "react": "15.5.4",
+    "react-animations": "^1.0.0",
     "react-datepicker": "0.55.0",
     "react-dom": "15.5.4",
     "react-dropzone": "3.13.3",

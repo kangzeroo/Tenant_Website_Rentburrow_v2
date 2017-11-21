@@ -219,7 +219,7 @@ class FilterBar extends Component {
 	render() {
     const numberOfPropertiesShown = this.props.rent_type === 'sublet' ? this.props.sublet_search_results.length : this.props.building_search_results.length
 		return (
-			<div id='FilterBar' style={comStyles().container}>
+			<div style={comStyles().container}>
         {
           this.state.show_search_panel
           ?
@@ -243,7 +243,7 @@ class FilterBar extends Component {
                 onChange={(e, value) => this.handleRentalLengthChange(e, value)}
               />
             </div>
-            <h3>
+            <h3 style={comStyles().sortMargin}>
               {
                 this.props.rent_type === 'sublet'
                 ?
@@ -335,6 +335,9 @@ const comStyles = () => {
       padding: '10px',
       height: 'auto',
 		},
+    sortMargin: {
+      margin: '20px'
+    },
     searchbar: {
       position: 'relative',
       display: 'flex',

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
+import { Animated } from 'react-animated-css'
 import {
   xMidBlue
 } from '../../../styles/base_colors'
@@ -92,7 +93,7 @@ const comStyles = () => {
 			alignItems: 'flex-end',
 			position: 'absolute',
 			bottom: '20px',
-			right: '20px',
+			right: '50px',
       zIndex: 99999,
 		},
 		chatcontainer: {
