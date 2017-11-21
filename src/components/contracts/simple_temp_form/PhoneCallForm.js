@@ -19,12 +19,16 @@ import {
 	TextArea,
   Dropdown,
   Header,
+  Image,
 	Icon,
+  Dimmer,
+  Loader,
 } from 'semantic-ui-react'
 import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
-import { insertInquiry } from '../../../api/inquiries/inquiry_api'
+import { insertInquiry, tenantFilledInquiry } from '../../../api/inquiries/inquiry_api'
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
+import { getLandlordInfo } from '../../../api/search/search_api'
 
 class PhoneCallForm extends Component {
 
@@ -43,7 +47,7 @@ class PhoneCallForm extends Component {
       },
 			error_messages: [],
 			submitted: false,
-      success_message: '',
+      sucessful: false,
       school_options: [
         { key: 'uw', text: 'University of Waterloo', value: 'University of Waterloo' },
         { key: 'wlu', text: 'Wilfrid Laurier University', value: 'Wilfrid Laurier University' }
@@ -57,8 +61,34 @@ class PhoneCallForm extends Component {
         { key: 'five', text: '5', value: 5 },
         { key: 'plus', text: '5+', value: 6 },
       ],
-      completed_at: ''
+
+      landlord: {},
+      show_immediately: false,
+      loading: false,
     }
+  }
+
+  componentWillMount() {
+    this.setState({
+      loading: true,
+    })
+    tenantFilledInquiry(this.props.tenant_profile.tenant_id, this.props.building.building_id)
+    .then((data) => {
+      if (data.tenant_id === this.props.tenant_profile.tenant_id) {
+        getLandlordInfo(this.props.building.building_id)
+        .then((data) => {
+          this.setState({
+            show_immediately: true,
+            landlord: data,
+            loading: false,
+          })
+        })
+      } else {
+        this.setState({
+          loading: false,
+        })
+      }
+    })
   }
 
 	updateApplicationAttr(e, attr) {
@@ -86,27 +116,38 @@ class PhoneCallForm extends Component {
 				group_error_messages: [],
         error_messages: [],
 			})
+      const id = uuid.v4()
       insertInquiry({
-        group_members: this.state.group_members,
+        id: id,
+        tenant_id: this.props.tenant_profile.tenant_id,
+        first_name: this.state.application_template.first_name,
+        last_name: this.state.application_template.last_name,
+        school: this.state.application_template.school,
+        program_and_term: this.state.application_template.program_and_term,
+        email: this.state.application_template.email,
+        phone: this.state.application_template.phone,
+        group_size: this.state.application_template.group_size,
         building_id: this.props.building.building_id,
         group_notes: this.state.group_notes,
       })
       .then((data) => {
-        return saveSimpleForm(this.state.group_members.map((member) => {
-          return {
-          name: [member.first_name, member.last_name].join(' '),
-          gender: member.gender,
-          school_and_term: [member.school, member.program_and_term].join(', '),
-          email: member.email,
-          phone: member.phone,
-          id: member.id
-        }
-        }), this.props.building, this.props.landlord, this.state.group_notes)
+        return saveSimpleForm(data.group_id,
+          [{
+            name: [this.state.application_template.first_name, this.state.application_template.last_name].join(' '),
+            gender: this.state.application_template.gender,
+            school_and_term: [this.state.application_template.school, this.state.application_template.program_and_term].join(' '),
+            email: this.state.application_template.email,
+            phone: this.state.application_template.phone,
+            id: id,
+          }], this.props.building, this.props.landlord, this.state.group_notes)
+      })
+      .then((data) => {
+        return getLandlordInfo(this.props.building.building_id)
       })
       .then((data) => {
         this.setState({
-          success_message: true,
-          completed_at: moment().format('MMM Do YY')
+          sucessful: true,
+          landlord: data,
         })
         localStorage.setItem('saved_application', JSON.stringify({
           landlord_id: this.props.landlord.corporation_id,
@@ -118,7 +159,7 @@ class PhoneCallForm extends Component {
 	}
 
   showPhoneNumber() {
-
+    this.submitApplication()
   }
 
 	validateForm() {
@@ -151,33 +192,61 @@ class PhoneCallForm extends Component {
 		return ok_to_proceed
 	}
 
-	render() {
-		return (
-			<div id='PhoneCallForm' style={comStyles().container}>
-				<div style={comStyles().title}>
-					Before You Call...
-				</div>
-				<div style={comStyles().body}>
-					<Form style={comStyles().form}>
+  renderPhone() {
+    return (
+      <div style={comStyles().phoneContainer} >
+        <Image
+          style={comStyles().landlordThumbnail}
+          src={this.state.landlord.thumbnail}
+        />
+        <div style={comStyles().contactContainer} >
+          <Header
+            as='h1'
+            icon='info circle'
+            content='Property Contact Information'
+          />
+          <Header
+            as='h2'
+            icon='user'
+            content={this.state.landlord.corporation_name}
+          />
+          <Header
+            as='h2'
+            icon='phone'
+            content={this.state.landlord.phone}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  renderForm() {
+    return (
+      <div>
+        <div style={comStyles().title}>
+          Give The Landlord Permission To Call Back
+        </div>
+        <div style={comStyles().body}>
+          <Form style={comStyles().form}>
             <Form.Group widths='equal'>
-  		        <Form.Field>
-  		          <label>First Name</label>
-  		          <Input
-  		            value={this.state.application_template.first_name}
-  		            onChange={(e) => this.updateApplicationAttr(e, 'first_name')}
-                  disabled={this.state.submitted}
-  		          />
-  		        </Form.Field>
               <Form.Field>
-  		          <label>Last Name</label>
-  		          <Input
-  		            value={this.state.application_template.last_name}
-  		            onChange={(e) => this.updateApplicationAttr(e, 'last_name')}
+                <label>First Name</label>
+                <Input
+                  value={this.state.application_template.first_name}
+                  onChange={(e) => this.updateApplicationAttr(e, 'first_name')}
                   disabled={this.state.submitted}
-  		          />
-  		        </Form.Field>
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Last Name</label>
+                <Input
+                  value={this.state.application_template.last_name}
+                  onChange={(e) => this.updateApplicationAttr(e, 'last_name')}
+                  disabled={this.state.submitted}
+                />
+              </Form.Field>
             </Form.Group>
-						<Form.Field style={comStyles().row_field}>
+            <Form.Field style={comStyles().row_field}>
               <div>
                 <label>Group Size</label> &nbsp; &nbsp;
                 <Dropdown
@@ -192,24 +261,24 @@ class PhoneCallForm extends Component {
                 />
               </div>
               &nbsp; &nbsp; &nbsp;
-		          <Radio
-		            label='Male'
-		            name='gender'
-		            value='Male'
-		            checked={this.state.application_template.gender === 'Male'}
-		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Male' } }, 'gender')}
+              <Radio
+                label='Male'
+                name='gender'
+                value='Male'
+                checked={this.state.application_template.gender === 'Male'}
+                onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Male' } }, 'gender')}
                 disabled={this.state.submitted}
-		          />
-							&nbsp; &nbsp;
-		          <Radio
-		            label='Female'
-		            name='gender'
-		            value='Female'
-		            checked={this.state.application_template.gender === 'Female'}
-		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Female' } }, 'gender')}
+              />
+              &nbsp; &nbsp;
+              <Radio
+                label='Female'
+                name='gender'
+                value='Female'
+                checked={this.state.application_template.gender === 'Female'}
+                onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Female' } }, 'gender')}
                 disabled={this.state.submitted}
-		          />
-		        </Form.Field>
+              />
+            </Form.Field>
             <Form.Group widths='equal' >
               <Form.Field>
                 <label>School</label>
@@ -223,89 +292,98 @@ class PhoneCallForm extends Component {
                   disabled={this.state.submitted}
                 />
               </Form.Field>
-  		        <Form.Field>
-  		          <label>Program, and Term</label>
-  		          <Input
-  		            value={this.state.application_template.program_and_term}
-  		            onChange={(e) => this.updateApplicationAttr(e, 'program_and_term')}
+              <Form.Field>
+                <label>Program, and Term</label>
+                <Input
+                  value={this.state.application_template.program_and_term}
+                  onChange={(e) => this.updateApplicationAttr(e, 'program_and_term')}
                   disabled={this.state.submitted}
-  		          />
-  		        </Form.Field>
+                />
+              </Form.Field>
             </Form.Group>
-		        <Form.Field>
-		          <label>Email</label>
-		          <Input
-		            value={this.state.application_template.email}
-		            onChange={(e) => this.updateApplicationAttr(e, 'email')}
+            <Form.Field>
+              <label>Email</label>
+              <Input
+                value={this.state.application_template.email}
+                onChange={(e) => this.updateApplicationAttr(e, 'email')}
                 disabled={this.state.submitted}
-		          />
-		        </Form.Field>
-		        <Form.Field>
-		          <label>Phone</label>
-		          <Input
-		            value={this.state.application_template.phone}
-		            onChange={(e) => this.updateApplicationAttr(e, 'phone')}
-                disabled={this.state.submitted}
-		          />
-		        </Form.Field>
-						<Form.Field>
-							{
-								this.state.error_messages.map((err, index) => {
-									return (
-										<Message
-											visible
-											key={index}
-											error
-											content={err}
-										/>
-									)
-								})
-							}
-						</Form.Field>
-		      </Form>
-        </div>
-				{
-					this.state.submitted
-					?
-					<div style={comStyles().hidden_loading}>
-            {
-              this.state.success_message
-              ?
-              null
-              :
-              <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
-            }
-					</div>
-					:
-          <Button
-            fluid
-            color='blue'
-            content='Ok Show Me The Phone Number'
-            onClick={() => this.showPhoneNumber()}
-            disabled={this.state.submitted}
-          />
-				}
-        {
-          this.state.submitted && this.state.success_message
-          ?
-          <div>
-            <Message positive>
-              <Header
-                as='h3'
-                icon='checkmark box'
-                content={`Success! The landlord has received your application, you'll hear back from them soon!`}
-                subheader={`Submitted on ${this.state.completed_at} EDT, expect to hear from us soon!`}
               />
-            </Message>
-            <Button
-              primary
-              icon='chevron left'
-              content='Back'
-              onClick={() => this.props.closeModal()}
-            />
-          </div>
+            </Form.Field>
+            <Form.Field>
+              <label>Phone</label>
+              <Input
+                value={this.state.application_template.phone}
+                onChange={(e) => this.updateApplicationAttr(e, 'phone')}
+                disabled={this.state.submitted}
+              />
+            </Form.Field>
+            <Form.Field>
+              {
+                this.state.error_messages.map((err, index) => {
+                  return (
+                    <Message
+                      visible
+                      key={index}
+                      error
+                      content={err}
+                    />
+                  )
+                })
+              }
+            </Form.Field>
+          </Form>
+        </div>
+      </div>
+    )
+  }
+
+	render() {
+		return (
+			<div id='PhoneCallForm' style={comStyles().container}>
+        {
+          this.state.loading
+          ?
+          <Dimmer active={this.state.loading} inverted>
+            <Loader inverted content='Loading' />
+          </Dimmer>
           :
           null
+        }
+				{
+          (this.state.submitted && this.state.sucessful) || this.state.show_immediately
+          ?
+          this.renderPhone()
+          :
+          this.renderForm()
+        }
+        {
+          this.state.show_immediately
+          ?
+          null
+          :
+          <div>
+  				{
+  					this.state.submitted
+  					?
+  					<div style={comStyles().hidden_loading}>
+              {
+                this.state.sucessful
+                ?
+                null
+                :
+                <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
+              }
+  					</div>
+  					:
+            <Button
+              fluid
+              color='blue'
+              content='Ok Show Me The Phone Number'
+              onClick={() => this.showPhoneNumber()}
+              disabled={this.state.submitted}
+            />
+  				}
+          </div>
         }
 			</div>
 		)
@@ -432,6 +510,23 @@ const comStyles = () => {
     },
     groupSize: {
       width: '100px',
+    },
+    phoneContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+    contactContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: '10px 30px 10px 30px'
+    },
+    landlordThumbnail: {
+      height: '200px',
+      width: 'auto'
     }
 	}
 }
