@@ -213,6 +213,7 @@ class BuildingPage extends Component {
 						<PhoneCallForm
 							building={this.state.building}
 							landlord={this.props.selected_landlord}
+							landlord={this.props.selected_landlord}
 							title={this.state.building.label}
 							closeModal={() => this.toggleModal(false)}
 						/>

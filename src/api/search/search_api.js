@@ -165,3 +165,17 @@ export const getSpecificLandlord = ({ building_id }) => {
   })
   return p
 }
+
+export const getLandlordInfo = (building_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SEARCH_MICROSERVICE}/get_landlord_info`, { building_id }) // { httpsAgent: agent })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
