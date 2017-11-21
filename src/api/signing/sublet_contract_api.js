@@ -91,19 +91,19 @@ export const getSubleteeProfile = (subletee_id) => {
   return p
 }
 
-// export const getContractLink = (contract_id) => {
-//   const p = new Promise((res, rej) => {
-//     axios.post(`${SUBLETTING_MICROSERVICE}/get_contract_link`, { contract_id })
-//       .then((data) => {
-//         // once we have the response, only then do we dispatch an action to Redux
-//         res(data.data)
-//       })
-//       .catch((err) => {
-//         rej(err)
-//       })
-//   })
-//   return p
-// }
+export const getContractLink = (contract_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_contract_link`, { contract_id })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
 
 export const convertToRegularSubletObj = (sublet) => {
   return {
