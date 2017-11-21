@@ -31,6 +31,17 @@ class BuildingCard extends Component {
     } else {
       window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
     }
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'BUILDING_CARD_CLICKED',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': building.building_id,
+        'ADDRESS': building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'CORP_ID': building.corporation_id,
+      }
+    })
     // console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
   }
 
@@ -43,7 +54,8 @@ class BuildingCard extends Component {
         'DATE': new Date().getTime(),
         'BUILDING_ID': building.building_id,
         'ADDRESS': building.building_address,
-        'USER_ID': this.props.tenant_profile.id || 'NONE',
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'CORP_ID': building.corporation_id,
       }
     })
   }

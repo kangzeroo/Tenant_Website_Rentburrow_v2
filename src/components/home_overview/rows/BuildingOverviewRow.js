@@ -13,9 +13,25 @@ import {
 } from 'semantic-ui-react'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { xGreyText, xBootstrapRed } from '../../../styles/base_colors'
+import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../../actions/intel/intel_actions'
 
 
 class BuildingOverviewRow extends Component {
+
+  exploreProperty(building) {
+    this.props.toggleModal(true, 'building', building)
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'EXPLORE_BUILDING_BUTTON_CLICKED',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': building.building_id,
+        'ADDRESS': building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+      }
+    })
+  }
 
 	render() {
     const building = this.props.building
@@ -34,7 +50,7 @@ class BuildingOverviewRow extends Component {
           <div style={comStyles().left_bottom}>
             <Button
               fluid
-              onClick={() => this.props.toggleModal(true, 'building', building)}
+              onClick={() => this.exploreProperty(building)}
               color='blue'
               content='Explore Property'
               icon='building'
@@ -48,6 +64,8 @@ class BuildingOverviewRow extends Component {
             <SingularImageGallery
               list_of_images={building.imgs}
               image_size='hd'
+              intel_action='BUILDING_COMMON_AREA_PHOTO_VIEWED'
+              intel_id={building.building_id}
             />
           </div>
         </div>
@@ -61,11 +79,12 @@ BuildingOverviewRow.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   toggleModal: PropTypes.func.isRequired,   // passed in
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
 BuildingOverviewRow.defaultProps = {
-
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -74,14 +93,14 @@ const RadiumHOC = Radium(BuildingOverviewRow)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    collectIntel,
 	})(RadiumHOC)
 )
 

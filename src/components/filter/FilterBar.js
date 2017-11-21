@@ -194,7 +194,7 @@ class FilterBar extends Component {
         'ACTION': 'CHANGED_RENT_TYPE',
         'DATE': new Date().getTime(),
         'RENT_TYPE': value.value,
-        'USER_ID': this.props.tenant_profile.id || 'NONE'
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE'
       }
     })
   }

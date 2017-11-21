@@ -14,6 +14,8 @@ import {
   Button,
 } from 'semantic-ui-react'
 import SingularImageGallery from '../image/SingularImageGallery'
+import { AMENITY_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../actions/intel/intel_actions'
 
 
 class AmenityBrowser extends Component {
@@ -42,6 +44,31 @@ class AmenityBrowser extends Component {
     }
   }
 
+  clickedAmenity(am) {
+    this.setState({ current_amenity: am })
+    this.props.collectIntel({
+      'TableName': AMENITY_INTERACTIONS,
+      'Item': {
+        'ACTION': this.props.intel_action,
+        'DATE': new Date().getTime(),
+        'REFERENCE_ID': this.props.intel_id,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'AMENITY': am.amenity_alias,
+      }
+    })
+    this.props.collectIntel({
+      // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
+      'TableName': IMAGE_INTERACTIONS,
+      'Item': {
+        'ACTION': 'BUILDING_AMENITY_PHOTO_VIEWED',
+        'REFERENCE_ID': this.props.building.building_id,
+        'DATE': new Date().getTime(),
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'IMAGE_URL': this.state.current_amenity.imgs[0],
+      }
+    })
+  }
+
 	render() {
 		return (
 			<Card id='AmenityBrowser' className='pretty_scrollbar' style={comStyles().container}>
@@ -55,9 +82,7 @@ class AmenityBrowser extends Component {
                 this.props.amenities.map((am, index) => {
                   return (
                     <Item
-                      onClick={() => {
-                        this.setState({ current_amenity: am })
-                      }}
+                      onClick={() => this.clickedAmenity(am)}
                       key={am.amenity_alias || index}
                       style={amenityStyles(this.state.current_amenity, am).amenity}
                     >
@@ -81,6 +106,8 @@ class AmenityBrowser extends Component {
               <SingularImageGallery
                 list_of_images={this.state.current_amenity.imgs}
                 image_size='hd'
+                intel_action='BUILDING_AMENITY_PHOTO_VIEWED'
+                intel_id={this.props.building.building_id}
               />
             </div>
             :
@@ -104,6 +131,10 @@ AmenityBrowser.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,
   amenities: PropTypes.array,
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+  intel_action: PropTypes.string.isRequired,    // passed in
+  intel_id: PropTypes.string.isRequired,        // passed in
 }
 
 // for all optional props, define a default value
@@ -117,14 +148,14 @@ const RadiumHOC = Radium(AmenityBrowser)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    collectIntel,
 	})(RadiumHOC)
 )
 

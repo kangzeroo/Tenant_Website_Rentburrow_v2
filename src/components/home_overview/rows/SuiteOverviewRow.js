@@ -165,7 +165,7 @@ class SuiteOverviewRow extends Component {
         'DATE': new Date().getTime(),
         'SUITE_ID': suite.suite_id,
         'SUITE_NAME': suite.suite_alias,
-        'USER_ID': this.props.tenant_profile.id || 'NONE',
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'BUILDING_ID': this.props.building.building_id,
         'BUILDING_NAME': this.props.building.building_address,
       }
