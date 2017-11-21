@@ -287,7 +287,7 @@ const comStyles = () => {
     header: {
       backgroundColor: xMidBlue,
       padding: '0px',
-      height: '5vh',
+      height: 'auto',
       width: '100%',
       zIndex: '1',
       display: 'flex',
@@ -298,13 +298,13 @@ const comStyles = () => {
       float: 'left',
     },
     logo: {
-      height: '3.5vh',
+      height: '5vh',
       width: 'auto',
       float: 'left',
       margin: '5px'
     },
     login: {
-      height: '4vh',
+      height: 'auto',
       width: 'auto',
     },
     tenant_thumbnail: {
