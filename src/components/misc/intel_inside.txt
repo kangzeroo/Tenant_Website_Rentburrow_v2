@@ -1,4 +1,5 @@
 
+import { IMAGE_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
 
 
@@ -9,7 +10,7 @@ this.props.collectIntel({
     'DATE': new Date().getTime(),
     'BUILDING_ID': building.building_id,
     'ADDRESS': building.building_address,
-    'USER_ID': this.props.tenant_profile.id || 'NONE',
+    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
   }
 })
 
@@ -28,7 +29,6 @@ function mapStateToProps(state) {
 
 export default withRouter(
 	connect(mapStateToProps, {
-    selectPinToRedux,
     collectIntel,
 	})(RadiumHOC)
 )

@@ -10,6 +10,8 @@ import { setCurrentGPSCenter, saveBuildingsToRedux, saveSubletsToRedux, selectPi
 import {
 	queryBuildingsInArea,
 } from '../../api/search/search_api'
+import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../actions/intel/intel_actions'
 
 class MapComponent extends Component {
 
@@ -200,6 +202,16 @@ class MapComponent extends Component {
 					// setTimeout(() => {
 					// 	marker.infowindow.close()
 					// }, 2000)
+					this.props.collectIntel({
+					  'TableName': BUILDING_INTERACTIONS,
+					  'Item': {
+					    'ACTION': 'BUILDING_PIN_CLICKED',
+					    'DATE': new Date().getTime(),
+					    'BUILDING_ID': n.building_id,
+					    'ADDRESS': n.building_address,
+					    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+					  }
+					})
         })
 				// save the pins
 				if (marker) {
@@ -310,6 +322,8 @@ MapComponent.propTypes = {
 	rent_type: PropTypes.string.isRequired,
 	saveBuildingsToRedux: PropTypes.func.isRequired,
 	saveSubletsToRedux: PropTypes.func.isRequired,
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -328,6 +342,7 @@ const mapReduxToProps = (redux) => {
     lease_filter_params: redux.filter.lease_filter_params,
     sublet_filter_params: redux.filter.sublet_filter_params,
 		rent_type: redux.filter.rent_type,
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
@@ -338,6 +353,7 @@ export default connect(mapReduxToProps, {
 	saveBuildingsToRedux,
 	saveSubletsToRedux,
 	changeSearchRadius,
+	collectIntel,
 })(RadiumHOC)
 
 
