@@ -30,6 +30,31 @@ export const sendSimpleApplicationEmailToRentburrow = ({ group_members }, buildi
 	return p
 }
 
+// For Text button
+export const sendSimpleTextEmailToRentburrow = (leasingObj, building, landlord_name) => {
+  const ses = new AWS_SES({
+		region: 'us-east-1',
+	})
+  const p = new Promise((res, rej) => {
+		const params = createInquiryParamsConfig(building.building_alias, landlord_name, leasingObj.group_size, generateHTMLInquiryEmail([leasingObj]))
+    // console.log(params)
+		// console.log('Sending email with attached params!')
+		AWS.config.credentials.refresh(() => {
+			// console.log(AWS.config.credentials)
+			ses.sendEmail(params, (err, data) => {
+			  if (err) {
+			  	 // console.log(err, err.stack); // an error occurred
+			  	 rej(err)
+			  } else {
+			  	// console.log(data);           // successful response
+				res('Success! Email sent')
+			  }
+			})
+		})
+	})
+	return p
+}
+
 const createInquiryParamsConfig = (building_alias, landlord_name, group_members_count, HTML_Email) => {
   const params = {
 	  Destination: { /* required */
@@ -106,7 +131,7 @@ const generateHTMLInquiryEmail = (group_members) => {
                      }
 		                <tr style='background-color:#74a9d8; font-size: 1rem; border: 1px solid red'>
 		                    <td align='center' valign='top'>
-		                       ${group_members[0].group_notes}
+		                       ${group_members[0].group_notes ? group_members[0].group_notes : ''}
 		                    </td>
 		                </tr>
 		            </table>

@@ -31,6 +31,7 @@ import { getTenantByEmail } from '../../../api/auth/tenant_api'
 import { getLandlordInfo } from '../../../api/search/search_api'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
+import { sendSimpleTextEmailToRentburrow, } from '../../../api/messaging/simple_application_email'
 
 class PhoneCallForm extends Component {
 
@@ -67,6 +68,8 @@ class PhoneCallForm extends Component {
       landlord: {},
       show_immediately: false,
       loading: false,
+
+      tenant_inquiry: {},
     }
   }
 
@@ -77,6 +80,16 @@ class PhoneCallForm extends Component {
     tenantFilledInquiry(this.props.tenant_profile.tenant_id, this.props.building.building_id)
     .then((data) => {
       if (data.tenant_id === this.props.tenant_profile.tenant_id) {
+        sendSimpleTextEmailToRentburrow({
+          name: [data.first_name, data.last_name].join(' '),
+          gender: data.gender,
+          school_and_term: [data.school, data.program_and_term].join(' '),
+          email: data.email,
+          phone: data.phone,
+          id: data.id,
+          group_size: data.group_size,
+          building_alias: this.props.building.building_alias,
+        }, this.props.building, this.props.landlord)
         getLandlordInfo(this.props.building.building_id)
         .then((data) => {
           this.setState({
@@ -124,6 +137,7 @@ class PhoneCallForm extends Component {
         tenant_id: this.props.tenant_profile.tenant_id,
         first_name: this.state.application_template.first_name,
         last_name: this.state.application_template.last_name,
+        gender: this.state.application_template.gender,
         school: this.state.application_template.school,
         program_and_term: this.state.application_template.program_and_term,
         email: this.state.application_template.email,
@@ -133,15 +147,15 @@ class PhoneCallForm extends Component {
         group_notes: this.state.group_notes,
       })
       .then((data) => {
-        return saveSimpleForm(data.group_id,
-          [{
+        return sendSimpleTextEmailToRentburrow(
+          {
             name: [this.state.application_template.first_name, this.state.application_template.last_name].join(' '),
             gender: this.state.application_template.gender,
             school_and_term: [this.state.application_template.school, this.state.application_template.program_and_term].join(' '),
             email: this.state.application_template.email,
             phone: this.state.application_template.phone,
             id: id,
-          }], this.props.building, this.props.landlord, this.state.group_notes)
+          }, this.props.building, this.props.landlord)
       })
       .then((data) => {
         return getLandlordInfo(this.props.building.building_id)
