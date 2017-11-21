@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
-import { Animated } from 'react-animated-css'
 import {
   xMidBlue
 } from '../../../styles/base_colors'
