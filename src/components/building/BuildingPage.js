@@ -232,6 +232,7 @@ class BuildingPage extends Component {
 					src={building.istaging_url}
 					frameBorder='0'
 					allowFullScreen
+					scrolling='no'
 					style={comStyles().iframe_container}
 				/>
 			)
