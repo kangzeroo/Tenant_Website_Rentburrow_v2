@@ -59,32 +59,32 @@ class LeaseFilterCard extends Component {
 		let filtered = this.props.buildings
 
 		// If pricing filters have changed...
-		// if (this.state.price.min !== 500 || this.state.price.max !== 900) {
+		if (this.state.price.min !== 500 || this.state.price.max !== 900) {
 			filtered = filtered.filter((building) => {
 				return building.min_price >= this.state.price.min && building.min_price <= this.state.price.max
 			})
-		// }
+		}
 
 		// if the number of rooms filter has changed...
-		// if (this.state.room_count > 1) {
+		if (this.state.room_count > 1) {
 			filtered = filtered.filter((building) => {
 				return parseInt(building.max_rooms, 10) >= this.state.room_count
 			})
-		// }
+		}
 
 		// if ensuite_bath is true
-		// if (this.state.ensuite_bath) {
+		if (this.state.ensuite_bath) {
 			filtered = filtered.filter((building) => {
 				return building.ensuite_bath
 			})
-		// }
+		}
 
 		// if utilities_included is true
-		// if (this.state.utils_incl) {
+		if (this.state.utils_incl) {
 			filtered = filtered.filter((building) => {
 				return building.utils_incl ? true : false
 			})
-		// }
+		}
 
 		this.props.saveFilteredBuildingsToRedux(filtered)
 		this.props.saveLeaseFilterParams(this.state)

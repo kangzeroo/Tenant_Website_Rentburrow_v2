@@ -5,6 +5,8 @@ import React, { Component } from 'react'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import {
   Image,
   Icon,
@@ -15,6 +17,8 @@ import {
   renderProcessedImage,
   renderProcessedThumbnail,
 } from '../../api/general/general_api'
+import { collectIntel } from '../../actions/intel/intel_actions'
+import { IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 
 class SingularImageGallery extends Component {
 
@@ -57,6 +61,17 @@ class SingularImageGallery extends Component {
     if (event) {
       event.stopPropagation()
     }
+    this.props.collectIntel({
+      // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
+      'TableName': IMAGE_INTERACTIONS,
+      'Item': {
+        'ACTION': this.props.intel_action,
+        'REFERENCE_ID': this.props.intel_id,
+        'DATE': new Date().getTime(),
+        'USER_ID': this.props.tenant_profile.tenant_id,
+        'IMAGE_URL': this.state.all_images[this.state.current_image_position],
+      }
+    })
     if (this.props.image_size === 'hd') {
       this.setState({
         visible: false,
@@ -161,19 +176,36 @@ class SingularImageGallery extends Component {
 SingularImageGallery.propTypes = {
   list_of_images: PropTypes.array,
   image_size: PropTypes.string,       // passed in
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+  intel_action: PropTypes.string.isRequired,  // passed in
+  intel_id: PropTypes.string.isRequired,      // passed in
 }
 
 // for all optional props, define a default value
 SingularImageGallery.defaultProps = {
   list_of_images: [],
   image_size: 'thumbnail',            // 'thumbnail', 'hd', 'none'
+  intel_action: 'OTHER_IMAGE',
+  intel_id: 'other',
 }
 
 // Wrap the prop in Radium to allow JS styling
 const RadiumHOC = Radium(SingularImageGallery)
 
+// Get access to state from the Redux store
+const mapReduxToProps = (redux) => {
+	return {
+    tenant_profile: redux.auth.tenant_profile,
+	}
+}
+
 // Connect together the Redux store with this React component
-export default RadiumHOC
+export default withRouter(
+	connect(mapReduxToProps, {
+    collectIntel,
+	})(RadiumHOC)
+)
 
 // ===============================
 

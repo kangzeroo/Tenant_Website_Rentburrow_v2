@@ -92,14 +92,14 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
   return p
 }
 
-export const saveSimpleForm = (group_members, building, landlord, group_notes) => {
+export const saveSimpleForm = (group_id, group_members, building, landlord, group_notes) => {
   const p = new Promise((res, rej) => {
-    const group_id = uuid.v4()
+    // const group_id = uuid.v4()
     const leaseOjb = {
       group_members: group_members.map((mem) => {
         return {
           ...mem,
-          id: uuid.v4(),
+            // id: uuid.v4(),
           group_id: group_id,
           building_id: building.building_id,
           building_alias: building.building_alias,

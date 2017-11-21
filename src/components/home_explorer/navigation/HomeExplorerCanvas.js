@@ -98,6 +98,7 @@ class HomeExplorerCanvas extends Component {
 					<AmenityProofs
 						building={this.props.building}
 						bottomContextValue={this.props.bottomContextValue && typeof this.props.bottomContextValue === 'array' ? JSON.parse(this.props.bottomContextValue) : [] }
+						for_suites={JSON.parse(this.props.bottomContextValue).suite_id}
 					/>
 				)
 			}

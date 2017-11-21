@@ -28,6 +28,8 @@ class AmenityProofs extends Component {
             return am.value
           })}
           building={this.props.building}
+          intel_action={this.props.for_suites ? 'SUITE_AMENITY_CLICKED' : 'BUILDING_AMENITY_CLICKED'}
+          intel_id={this.props.for_suites}
         />
 				{/*<SingularImageGallery
 					list_of_images={this.props.bottomContextValue.imgs || this.props.bottomContextValue.image_urls}
@@ -44,11 +46,13 @@ AmenityProofs.propTypes = {
 	history: PropTypes.object.isRequired,
 	bottomContextValue: PropTypes.array,	             // passed in
 	building: PropTypes.object.isRequired,						// passed in
+  for_suites: PropTypes.string,                     // passed in
 }
 
 // for all optional props, define a default value
 AmenityProofs.defaultProps = {
   bottomContextValue: {},
+  for_suites: '',
 }
 
 // Wrap the prop in Radium to allow JS styling

@@ -24,6 +24,8 @@ import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
 import { getAllImagesSizeForSpecificBuilding, getNumVirtualTours, getAllSummaryImages, } from '../../../api/search/search_api'
 import RibbonLabel from '../../instructions/RibbonLabel'
+import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../../actions/intel/intel_actions'
 
 class BuildingPreview extends Component {
 
@@ -67,6 +69,32 @@ class BuildingPreview extends Component {
     } else {
       window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
     }
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'BUILDING_CARD_CLICKED',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': building.building_id,
+        'ADDRESS': building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'CORP_ID': building.corporation_id,
+      }
+    })
+  }
+
+  cardOnHover(building) {
+    this.props.selectPinToRedux(building.building_id)
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'BUILDING_CARD_HOVER',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': building.building_id,
+        'ADDRESS': building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'CORP_ID': building.corporation_id,
+      }
+    })
   }
 
 	render() {
@@ -74,7 +102,7 @@ class BuildingPreview extends Component {
       <div id='BuildingPreview' style={comStyles(this.props.building.label).container} >
         <Card
           onClick={() => this.selectThisBuilding(this.props.building)}
-          onMouseEnter={() => this.props.selectPinToRedux(this.props.building.building_id)}
+          onMouseEnter={() => this.cardOnHover(this.props.building)}
           fluid
           style={comStyles().hardCard}
         >
@@ -173,6 +201,8 @@ BuildingPreview.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+  collectIntel: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -186,6 +216,7 @@ const RadiumHOC = Radium(BuildingPreview)
 // Get access to state from the Redux store
 function mapStateToProps(state) {
 	return {
+    tenant_profile: state.auth.tenant_profile,
 	}
 }
 
@@ -193,6 +224,7 @@ function mapStateToProps(state) {
 export default withRouter(
 	connect(mapStateToProps, {
     selectPinToRedux,
+    collectIntel,
 	})(RadiumHOC)
 )
 

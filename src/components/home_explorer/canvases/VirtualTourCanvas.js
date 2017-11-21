@@ -18,7 +18,7 @@ class VirtualTourCanvas extends Component {
 
   componentDidMount() {
     this.setState({
-      vr_tour_height: document.getElementById('container').clientHeight
+      vr_tour_height: document.getElementById('VirtualTourCanvas').clientHeight
     })
     // console.log(this.props.istaging_url)
     // console.log(this.props.iguide_url)

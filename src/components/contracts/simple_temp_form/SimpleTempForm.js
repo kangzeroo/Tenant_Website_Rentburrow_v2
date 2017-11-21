@@ -23,7 +23,7 @@ import {
 } from 'semantic-ui-react'
 import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
-import { insertInquiry } from '../../../api/inquiries/inquiry_api'
+import { insertInquiries } from '../../../api/inquiries/inquiry_api'
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
 
 class SimpleTempForm extends Component {
@@ -115,13 +115,14 @@ class SimpleTempForm extends Component {
 				group_error_messages: [],
         error_messages: [],
 			})
-      insertInquiry({
+      insertInquiries({
         group_members: this.state.group_members,
         building_id: this.props.building.building_id,
         group_notes: this.state.group_notes,
+        group_size: this.state.group_members.length,
       })
       .then((data) => {
-        return saveSimpleForm(this.state.group_members.map((member) => {
+        return saveSimpleForm(data.group_id, this.state.group_members.map((member) => {
           return {
           name: [member.first_name, member.last_name].join(' '),
           gender: member.gender,
@@ -318,7 +319,7 @@ class SimpleTempForm extends Component {
   								{
   									this.state.group_members.map((member) => {
   										return (
-  											<div style={comStyles().row_member}>
+  											<div style={comStyles().row_member} key={member.id}>
   												<div style={comStyles().row_member_name}>{ member.name }</div>
   												<div style={comStyles().row_member_email}>{ member.email }</div>
   												<div style={comStyles().row_member_button}>

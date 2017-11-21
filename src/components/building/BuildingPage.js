@@ -62,6 +62,8 @@ import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
 import PhoneCallForm from '../contracts/simple_temp_form/PhoneCallForm'
+import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../actions/intel/intel_actions'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -90,49 +92,59 @@ class BuildingPage extends Component {
       building_alias = building_alias.slice(0, -1)
 		}
 		searchForSpecificBuildingByAlias(building_alias)
-		.then((data) => {
-			this.setState({
-				building: data
+			.then((data) => {
+				this.setState({
+					building: data
+				})
+				return this.getImagesForBuilding()
 			})
-			return this.getImagesForBuilding()
-		})
-		.then(() => {
-			return this.getAmenitiesForBuilding()
-		})
-		.then(() => {
-			return getAvailableSuites({
-	      building_id: this.state.building.building_id,
-	    })
-		})
-		.then((data) => {
-			const suites = data
-			this.setState({
-				suites: suites,
-				promise_array_of_suite_amenities_with_id: suites.map((suite) => {
-					return getAmenitiesForSuite({
-						building_id: this.state.building.building_id,
-						suite_id: suite.suite_id,
-					}).then((data) => {
-						return Promise.resolve({
+			.then(() => {
+				return this.getAmenitiesForBuilding()
+			})
+			.then(() => {
+				return getAvailableSuites({
+		      building_id: this.state.building.building_id,
+		    })
+			})
+			.then((data) => {
+				const suites = data
+				this.setState({
+					suites: suites,
+					promise_array_of_suite_amenities_with_id: suites.map((suite) => {
+						return getAmenitiesForSuite({
+							building_id: this.state.building.building_id,
 							suite_id: suite.suite_id,
-							amenities: data,
+						}).then((data) => {
+							return Promise.resolve({
+								suite_id: suite.suite_id,
+								amenities: data,
+							})
 						})
 					})
 				})
+				return matchSubletsByPlaceId({ place_id: this.state.building.place_id })
 			})
-			return matchSubletsByPlaceId({ place_id: this.state.building.place_id })
-		})
-		.then((sublets) => {
-			this.setState({
-				sublets: sublets,
+			.then((sublets) => {
+				this.setState({
+					sublets: sublets,
+				})
+				// console.log('getSpecificLandlord', this.state.building.building_id)
+				return getSpecificLandlord({ building_id: this.state.building.building_id })
 			})
-			// console.log('getSpecificLandlord', this.state.building.building_id)
-			return getSpecificLandlord({ building_id: this.state.building.building_id })
-		})
-		.then((corporation) => {
-			// console.log(corporation)
-			this.props.selectCorporation(corporation)
-		})
+			.then((corporation) => {
+				// console.log(corporation)
+				this.props.selectCorporation(corporation)
+				this.props.collectIntel({
+				  'TableName': BUILDING_INTERACTIONS,
+				  'Item': {
+				    'ACTION': 'BUILDING_PAGE_LOADED',
+				    'DATE': new Date().getTime(),
+				    'BUILDING_ID': this.state.building.building_id,
+				    'ADDRESS': this.state.building.building_address,
+				    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				  }
+				})
+			})
 	}
 
 	getImagesForBuilding() {
@@ -212,6 +224,7 @@ class BuildingPage extends Component {
 	        <Modal.Content>
 						<PhoneCallForm
 							building={this.state.building}
+							landlord={this.props.selected_landlord}
 							landlord={this.props.selected_landlord}
 							title={this.state.building.label}
 							closeModal={() => this.toggleModal(false)}
@@ -438,6 +451,8 @@ class BuildingPage extends Component {
 						<AmenityBrowser
 							building={this.state.building}
 							amenities={this.state.amenities}
+							intel_action='BUILDING_AMENITY_CLICKED'
+							intel_id={this.state.building.building_id}
 						/>
 						:
 						null
@@ -483,6 +498,8 @@ BuildingPage.propTypes = {
 	selectChatThread: PropTypes.func.isRequired,
 	tenant_profile: PropTypes.object.isRequired,
 	selected_landlord: PropTypes.object.isRequired,
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -507,6 +524,7 @@ export default withRouter(
 		selectBuilding,
 		selectChatThread,
 		selectCorporation,
+		collectIntel,
 	})(RadiumHOC)
 )
 
