@@ -52,6 +52,10 @@ class ApplyBox extends Component {
     this.props.toggleTemporaryCollectionFrom()
   }
 
+  callPhoneForm() {
+    this.props.togglePhoneCallForm()
+  }
+
   toggleModal(bool, attr, context) {
     this.setState({
       toggle_modal: bool,
@@ -151,12 +155,23 @@ class ApplyBox extends Component {
             <div>Rooms Starting from</div>
             <div style={comStyles().priceFont}>$ {this.props.building.min_price}</div>
           </div>
+          <br /><br />
           <Button
             primary
             fluid
             icon={this.generateText(this.props.building.label) === 'Apply Now' ? 'send outline' : 'wait'}
             content={this.generateText(this.props.building.label)}
             onClick={() => this.signAndPayOnline()}
+            size='huge'
+            style={comStyles().applyNowButton}
+          />
+          <Button
+            primary
+            basic
+            fluid
+            icon='phone'
+            content='Call Phone'
+            onClick={() => this.callPhoneForm()}
             size='huge'
           />
         </Card>
@@ -173,8 +188,8 @@ ApplyBox.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   all_suites: PropTypes.array.isRequired,  // passed in
-  applyToLiveAtThisBuilding: PropTypes.func.isRequired,
   toggleTemporaryCollectionFrom: PropTypes.func.isRequired, // passed in
+  togglePhoneCallForm: PropTypes.func.isRequired,           // passed in
 }
 
 // for all optional props, define a default value
@@ -212,8 +227,8 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      minHeight: '250px',
-      maxHeight: '250px',
+      minHeight: '270px',
+      maxHeight: '270px',
       padding: '20px'
     },
     priceContainer: {
@@ -235,6 +250,9 @@ const comStyles = () => {
     shareContainer: {
       display: 'flex',
       flexDirection: 'row'
+    },
+    applyNowButton: {
+      margin: '0px 0px 5px 0px'
     }
 	}
 }

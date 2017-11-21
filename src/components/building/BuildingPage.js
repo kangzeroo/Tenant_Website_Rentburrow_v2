@@ -61,6 +61,7 @@ import DescriptionBox from './DescriptionBox'
 import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
+import PhoneCallForm from '../contracts/simple_temp_form/PhoneCallForm'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -195,6 +196,25 @@ class BuildingPage extends Component {
 							suites={this.state.suites}
 							closeModal={() => this.toggleModal(false)}
 							title={this.state.building.label}
+						/>
+	        </Modal.Content>
+	      </Modal>
+	    )
+		} else if (modal_name === 'phone') {
+			return (
+	      <Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='large'
+				>
+	        <Modal.Content>
+						<PhoneCallForm
+							building={this.state.building}
+							landlord={this.props.selected_landlord}
+							title={this.state.building.label}
+							closeModal={() => this.toggleModal(false)}
 						/>
 	        </Modal.Content>
 	      </Modal>
@@ -366,6 +386,7 @@ class BuildingPage extends Component {
 							building={this.state.building}
 							all_suites={this.state.suites}
 							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
+							togglePhoneCallForm={() => this.toggleModal(true, 'phone')}
 						/>
 						{
 							this.state.building.building_id

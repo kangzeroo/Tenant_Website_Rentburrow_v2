@@ -6,15 +6,15 @@ export const MESSAGING_MICROSERVICE = 'https://localhost:3001'
 export const FB_APP_ID = '115765432474914'
 
 export const SEARCH_MICROSERVICE = 'https://localhost:3002'
-export const CORP_MICROSERVICE = 'https://localhost:3001'
-export const REGISTER_MICROSERVICE = 'https://localhost:3001'
-export const GENERIC_MICROSERVICE = 'https://localhost:3001'
-export const FB_PARSER_MICROSERVICE = 'https://localhost:3002'
-export const INTEL_MICROSERVICE = 'https://localhost:3004'
-export const SUBLETTING_MICROSERVICE = 'https://localhost:3005'
-export const CONTRACTING_MICROSERVICE = 'https://localhost:3005'
-export const FIREBASE_VERSION = 'development'
-export const AWS_FEDERATED_IDENTITY_ENV = 'development'
+// export const CORP_MICROSERVICE = 'https://localhost:3001'
+// export const REGISTER_MICROSERVICE = 'https://localhost:3001'
+// export const GENERIC_MICROSERVICE = 'https://localhost:3001'
+// export const FB_PARSER_MICROSERVICE = 'https://localhost:3002'
+// export const INTEL_MICROSERVICE = 'https://localhost:3004'
+// export const SUBLETTING_MICROSERVICE = 'https://localhost:3005'
+// export const CONTRACTING_MICROSERVICE = 'https://localhost:3005'
+// export const FIREBASE_VERSION = 'development'
+// export const AWS_FEDERATED_IDENTITY_ENV = 'development'
 
 // // PROD
 // export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
@@ -50,6 +50,20 @@ export const AWS_FEDERATED_IDENTITY_ENV = 'development'
 //
 
 // STAGING
+export const MESSAGING_MICROSERVICE = 'https://34.227.163.199:3001'
+export const FB_APP_ID = '115765432474914'
+
+// export const SEARCH_MICROSERVICE = 'https://34.227.163.199:3002'
+export const CORP_MICROSERVICE = 'https://34.227.163.199:3001'
+export const REGISTER_MICROSERVICE = 'https://34.227.163.199:3001'
+export const GENERIC_MICROSERVICE = 'https://34.227.163.199:3001'
+export const FB_PARSER_MICROSERVICE = 'https://34.227.163.199:3002'
+export const INTEL_MICROSERVICE = 'https://34.227.163.199:3004'
+export const SUBLETTING_MICROSERVICE = 'https://34.227.163.199:3005'
+export const CONTRACTING_MICROSERVICE = 'https://34.227.163.199:3005'
+export const FIREBASE_VERSION = 'development'
+export const AWS_FEDERATED_IDENTITY_ENV = 'production'
+
 // export const MESSAGING_MICROSERVICE = 'https://34.227.163.199:3001'
 // export const FB_APP_ID = '115765432474914'
 //

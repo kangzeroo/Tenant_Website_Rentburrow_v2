@@ -75,7 +75,7 @@ export const encryptCommunication = (jsObj) => {
   return p
 }
 
-export const decryptCommunication = () => {
+export const decryptCommunication = (string) => {
   const p = new Promise((res, rej) => {
     AWS.config.credentials.refresh(() => {
       const kms = new AWS.KMS()

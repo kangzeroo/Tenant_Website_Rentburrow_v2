@@ -45,7 +45,7 @@ class ExampleEncryptionS3 extends Component {
 
 	encryptText2(text) {
 		console.log(text)
-		encryptCommunication(text).then((data) => {
+		encryptCommunication({ value: text }).then((data) => {
 			console.log(data)
 			this.setState({
 				encrypted_text: data.CiphertextBlob
