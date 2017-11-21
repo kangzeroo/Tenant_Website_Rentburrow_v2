@@ -163,17 +163,17 @@ class GuarantorForm extends Component {
 		})
 		if (this.validateForm()) {
 			// uploadImageToS3WithEncryption(this.state.government_id, `${this.props.tenant_profile.tenant_id}/`, 'guarantor-government_id-')
-			console.log({
-				guarantor_id: this.state.guarantor_id,
-				application_id: this.props.my_application_id,
-				tenant_id: this.props.tenant_profile.tenant_id,
-				first_name: this.state.first_name,
-				last_name: this.state.last_name,
-				email: this.state.email,
-				relationship: this.state.relationship,
-				guarantor_is_in_canada: this.state.guarantor_is_in_canada,
-				lacking_guarantor: this.state.lacking_guarantor,
-			})
+			// console.log({
+			// 	guarantor_id: this.state.guarantor_id,
+			// 	application_id: this.props.my_application_id,
+			// 	tenant_id: this.props.tenant_profile.tenant_id,
+			// 	first_name: this.state.first_name,
+			// 	last_name: this.state.last_name,
+			// 	email: this.state.email,
+			// 	relationship: this.state.relationship,
+			// 	guarantor_is_in_canada: this.state.guarantor_is_in_canada,
+			// 	lacking_guarantor: this.state.lacking_guarantor,
+			// })
 			return insertGuarantorProfile({
 				guarantor_id: this.state.guarantor_id,
 				application_id: this.props.my_application_id,
@@ -220,7 +220,7 @@ class GuarantorForm extends Component {
 				error_messages: error_messages
 			})
 		}
-		console.log(ok_to_proceed)
+		// console.log(ok_to_proceed)
 		return ok_to_proceed
 	}
 

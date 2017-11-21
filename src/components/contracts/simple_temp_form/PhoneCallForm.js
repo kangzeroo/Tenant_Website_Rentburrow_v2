@@ -29,6 +29,8 @@ import { saveSimpleForm } from '../../../api/leasing/leasing_api'
 import { insertInquiry, tenantFilledInquiry } from '../../../api/inquiries/inquiry_api'
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
 import { getLandlordInfo } from '../../../api/search/search_api'
+import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../../actions/intel/intel_actions'
 
 class PhoneCallForm extends Component {
 
@@ -160,6 +162,17 @@ class PhoneCallForm extends Component {
 
   showPhoneNumber() {
     this.submitApplication()
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'SUBMITTED_PHONE_CALL_BACK_FORM',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': this.props.building.building_id,
+        'ADDRESS': this.props.building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'DATA': JSON.stringify(this.state.application_template)
+      }
+    })
   }
 
 	validateForm() {
@@ -397,6 +410,7 @@ PhoneCallForm.propTypes = {
   building: PropTypes.object.isRequired,    // passed in
 	closeModal: PropTypes.func.isRequired,		// passed in
   landlord: PropTypes.object.isRequired,    // passed in
+  collectIntel: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -410,6 +424,7 @@ const RadiumHOC = Radium(PhoneCallForm)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
+    collectIntel: PropTypes.func.isRequired,
     tenant_profile: redux.auth.tenant_profile,
 	}
 }
@@ -417,7 +432,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    collectIntel,
 	})(RadiumHOC)
 )
 
