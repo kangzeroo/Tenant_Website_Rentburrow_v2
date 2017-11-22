@@ -15,6 +15,8 @@ import {
   Icon,
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
+import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../actions/intel/intel_actions'
 
 class ApplyBox extends Component {
 
@@ -50,10 +52,30 @@ class ApplyBox extends Component {
     // localStorage.removeItem('leasing_group_id')
     // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
     this.props.toggleTemporaryCollectionFrom()
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'APPLY_NOW_BUTTON_BUILDING',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': this.props.building.building_id,
+        'ADDRESS': this.props.building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+      }
+    })
   }
 
   callPhoneForm() {
     this.props.togglePhoneCallForm()
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'CALL_LANDLORD_BUTTON',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': this.props.building.building_id,
+        'ADDRESS': this.props.building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+      }
+    })
   }
 
   toggleModal(bool, attr, context) {
@@ -170,7 +192,7 @@ class ApplyBox extends Component {
             basic
             fluid
             icon='phone'
-            content='Call Phone'
+            content='Text Landlord'
             onClick={() => this.callPhoneForm()}
             size='huge'
           />
@@ -190,6 +212,8 @@ ApplyBox.propTypes = {
   all_suites: PropTypes.array.isRequired,  // passed in
   toggleTemporaryCollectionFrom: PropTypes.func.isRequired, // passed in
   togglePhoneCallForm: PropTypes.func.isRequired,           // passed in
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -203,14 +227,14 @@ const RadiumHOC = Radium(ApplyBox)
 // Get access to state from the Redux store
 const mapReduxToProps = (state) => {
 	return {
-
+    tenant_profile: state.auth.tenant_profile,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    collectIntel,
 	})(RadiumHOC)
 )
 

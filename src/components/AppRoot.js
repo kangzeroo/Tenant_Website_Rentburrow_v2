@@ -214,7 +214,7 @@ class AppRoot extends Component {
   beginCollectingIntel() {
     setInterval(() => {
       this.props.saveIntelToCloud()
-      // this.props.clearIntelList()
+      this.props.clearIntelList()
     }, 10000)
   }
 
@@ -439,6 +439,10 @@ const comStyles = () => {
       maxWidth: '100vw',
     },
     content: {
+      minHeight: '93vh',
+      maxHeight: '93vh',
+      minWidth: '100vw',
+      maxWidth: '100vw',
       overflowY: 'scroll',
       overflowX: 'hidden',
       height: '-webkit-fill-available'

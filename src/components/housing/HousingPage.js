@@ -156,7 +156,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
-			height: '95vh',
+			height: '93vh',
 			width: '100%',
 			position: 'relative',
 		},

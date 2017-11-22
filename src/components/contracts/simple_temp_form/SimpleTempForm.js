@@ -25,6 +25,8 @@ import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
 import { insertInquiries } from '../../../api/inquiries/inquiry_api'
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
+import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../../actions/intel/intel_actions'
 
 class SimpleTempForm extends Component {
 
@@ -143,6 +145,17 @@ class SimpleTempForm extends Component {
           landlord_name: this.props.landlord.corporation_name,
           applied_at: new Date().getTime(),
         }))
+        this.props.collectIntel({
+          'TableName': BUILDING_INTERACTIONS,
+          'Item': {
+            'ACTION': 'SUBMITTED_BUILDING_APPLICATION',
+            'DATE': new Date().getTime(),
+            'BUILDING_ID': this.props.building.building_id,
+            'ADDRESS': this.props.building.building_address,
+            'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+            'DATA': JSON.stringify(this.state.group_members)
+          }
+        })
       })
 		}
 	}
@@ -320,7 +333,7 @@ class SimpleTempForm extends Component {
   									this.state.group_members.map((member) => {
   										return (
   											<div style={comStyles().row_member} key={member.id}>
-  												<div style={comStyles().row_member_name}>{ member.name }</div>
+  												<div style={comStyles().row_member_name}>{ member.first_name }</div>
   												<div style={comStyles().row_member_email}>{ member.email }</div>
   												<div style={comStyles().row_member_button}>
                             {
@@ -426,6 +439,7 @@ SimpleTempForm.propTypes = {
 	closeModal: PropTypes.func.isRequired,		// passed in
 	title: PropTypes.string.isRequired,				// passed in
   landlord: PropTypes.object.isRequired,    // passed in
+  collectIntel: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -446,7 +460,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    collectIntel,
 	})(RadiumHOC)
 )
 

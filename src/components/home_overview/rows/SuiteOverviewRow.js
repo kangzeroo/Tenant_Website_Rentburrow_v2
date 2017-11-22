@@ -172,10 +172,38 @@ class SuiteOverviewRow extends Component {
     })
   }
 
-  signAndPayOnline() {
+  signAndPayOnline(suite) {
     // localStorage.removeItem('leasing_group_id')
     // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
     this.props.toggleTemporaryCollectionFrom()
+    this.props.collectIntel({
+      'TableName': SUITE_INTERACTIONS,
+      'Item': {
+        'ACTION': 'APPLY_NOW_BUTTON_SUITE',
+        'DATE': new Date().getTime(),
+        'SUITE_ID': suite.suite_id,
+        'SUITE_NAME': suite.suite_alias,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'BUILDING_ID': this.props.building.building_id,
+        'BUILDING_NAME': this.props.building.building_address,
+      }
+    })
+  }
+
+  viewVirtualTour(suite) {
+    this.props.toggleModal(true, 'suite', suite)
+    this.props.collectIntel({
+      'TableName': SUITE_INTERACTIONS,
+      'Item': {
+        'ACTION': 'EXPLORE_SUITE_BUTTON_CLICKED',
+        'DATE': new Date().getTime(),
+        'SUITE_ID': suite.suite_id,
+        'SUITE_NAME': suite.suite_alias,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'BUILDING_ID': this.props.building.building_id,
+        'BUILDING_NAME': this.props.building.building_address,
+      }
+    })
   }
 
 	render() {
@@ -202,14 +230,14 @@ class SuiteOverviewRow extends Component {
 					</div>
 					<div style={comStyles().left_bottom}>
             <Button
-              onClick={() => this.signAndPayOnline()}
+              onClick={() => this.signAndPayOnline(suite)}
               color='blue'
               content='Apply Now'
               style={comStyles().explore_button}
             />
 						<Button
               basic
-							onClick={() => this.props.toggleModal(true, 'suite', suite)}
+							onClick={() => this.viewVirtualTour(suite)}
 							color='blue'
 							content='Virtual Tour'
 							style={comStyles().explore_button}
@@ -222,6 +250,8 @@ class SuiteOverviewRow extends Component {
 						<SingularImageGallery
 							list_of_images={[suite.cover_photo].concat(suite.imgs)}
 							image_size='hd'
+              intel_action='SUITE_PHOTO_VIEWED'
+              intel_id={suite.suite_id}
 						/>
 					</div>
 				</div>

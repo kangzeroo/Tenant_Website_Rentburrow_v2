@@ -4,7 +4,7 @@
 importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
 
-console.log('Successfully initialized service worker!')
+// console.log('Successfully initialized service worker!')
 
 // Initialize the Firebase app in the service worker by passing in the
 // messagingSenderId.
@@ -23,7 +23,7 @@ const messaging = firebase.messaging()
 
 messaging.setBackgroundMessageHandler((payload) => {
   // only for fcm messages that use 'data' instead of 'notification'
-  console.log(payload)
+  // console.log(payload)
   const title = 'hello world'
   const options = {
     body: payload.data.status,

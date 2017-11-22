@@ -174,7 +174,7 @@ class HousingPanel extends Component {
 
 	render() {
 		return (
-			<div id='HousingPanel' style={[comStyles().container, comStyles().slideInLeft]}>
+			<div id='HousingPanel' style={comStyles().container}>
 					{/*
 						generateIconStyles().map((option) => {
 							return (
