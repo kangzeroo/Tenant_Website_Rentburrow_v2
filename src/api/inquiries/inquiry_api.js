@@ -43,3 +43,17 @@ export const tenantFilledInquiry = (tenant_id, building_id) => {
   })
   return p
 }
+
+export const insertTenantFromApplication = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/insert_tenant_from_application`, obj)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}

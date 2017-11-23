@@ -26,7 +26,7 @@ import {
 } from 'semantic-ui-react'
 import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
-import { insertInquiry, tenantFilledInquiry } from '../../../api/inquiries/inquiry_api'
+import { insertInquiry, tenantFilledInquiry, insertTenantFromApplication } from '../../../api/inquiries/inquiry_api'
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
 import { getLandlordInfo } from '../../../api/search/search_api'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
@@ -154,8 +154,21 @@ class PhoneCallForm extends Component {
             school_and_term: [this.state.application_template.school, this.state.application_template.program_and_term].join(' '),
             email: this.state.application_template.email,
             phone: this.state.application_template.phone,
+            group_size: this.state.application_template.group_size,
+            building_alias: this.props.building.building_alias,
             id: id,
           }, this.props.building, this.props.landlord)
+      })
+      .then((data) => {
+        return insertTenantFromApplication({
+          tenant_id: this.props.tenant_profile.tenant_id,
+          first_name: this.state.application_template.first_name,
+          last_name: this.state.application_template.last_name,
+          email: this.state.application_template.email,
+          phone: this.state.application_template.phone,
+          school: this.state.application_template.school,
+          program_and_term: this.state.application_template.program_and_term,
+        })
       })
       .then((data) => {
         return getLandlordInfo(this.props.building.building_id)
