@@ -439,8 +439,8 @@ const comStyles = () => {
       maxWidth: '100vw',
     },
     content: {
-      minHeight: '93vh',
-      maxHeight: '93vh',
+      minHeight: '94vh',
+      maxHeight: '94vh',
       minWidth: '100vw',
       maxWidth: '100vw',
       overflowY: 'scroll',

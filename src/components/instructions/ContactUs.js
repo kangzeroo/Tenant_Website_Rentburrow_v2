@@ -234,6 +234,8 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			width: '100%',
+			height: '-webkit-fill-available',
+			justifyContent: 'center'
 		},
 		card: {
 			margin: '20px auto',

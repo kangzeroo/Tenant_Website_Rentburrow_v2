@@ -115,12 +115,7 @@ const comStyles = () => {
       minHeight: '20vh',
       maxHeight: '20vh',
       width: '100%',
-      zIndex: '1',
-      display: 'flex',
-      flexDirection: 'row',
-      position: 'relative',
       color: 'white',
-      bottom: '0px'
     },
     leftFloat: {
       display: 'flex',
