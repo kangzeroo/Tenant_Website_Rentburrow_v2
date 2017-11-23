@@ -136,15 +136,6 @@ class SimpleTempForm extends Component {
         }), this.props.building, this.props.landlord, this.state.group_notes)
       })
       .then((data) => {
-        console.log({
-          tenant_id: this.props.tenant_profile.tenant_id,
-          first_name: this.state.group_members[0].first_name,
-          last_name: this.state.group_members[0].last_name,
-          email: this.state.group_members[0].email,
-          phone: this.state.group_members[0].phone,
-          school: this.state.group_members[0].school,
-          program_and_term: this.state.group_members[0].program_and_term,
-        })
         return insertTenantFromApplication({
           tenant_id: this.props.tenant_profile.tenant_id,
           first_name: this.state.group_members[0].first_name,
