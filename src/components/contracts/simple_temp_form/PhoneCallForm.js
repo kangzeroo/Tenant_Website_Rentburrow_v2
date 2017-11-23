@@ -26,7 +26,7 @@ import {
 } from 'semantic-ui-react'
 import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
-import { insertInquiry, tenantFilledInquiry, insertTenantFromApplication } from '../../../api/inquiries/inquiry_api'
+import { insertInquiry, tenantFilledInquiry, tenantFilledInquiryForBuilding, insertTenantFromApplication } from '../../../api/inquiries/inquiry_api'
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
 import { getLandlordInfo } from '../../../api/search/search_api'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
@@ -77,19 +77,11 @@ class PhoneCallForm extends Component {
     this.setState({
       loading: true,
     })
-    tenantFilledInquiry(this.props.tenant_profile.tenant_id, this.props.building.building_id)
-    .then((data) => {
-      if (data.tenant_id === this.props.tenant_profile.tenant_id) {
-        sendSimpleTextEmailToRentburrow({
-          name: [data.first_name, data.last_name].join(' '),
-          gender: data.gender,
-          school_and_term: [data.school, data.program_and_term].join(' '),
-          email: data.email,
-          phone: data.phone,
-          id: data.id,
-          group_size: data.group_size,
-          building_alias: this.props.building.building_alias,
-        }, this.props.building, this.props.landlord)
+    tenantFilledInquiryForBuilding(this.props.tenant_profile.tenant_id, this.props.building.building_id)
+    .then((inquiry) => {
+      console.log(inquiry)
+      if (inquiry.building_id === this.props.building.building_id) {
+        console.log('qwjkdnkqwjdnqwkjdnqwjkd')
         getLandlordInfo(this.props.building.building_id)
         .then((data) => {
           this.setState({
@@ -99,8 +91,28 @@ class PhoneCallForm extends Component {
           })
         })
       } else {
-        this.setState({
-          loading: false,
+        tenantFilledInquiry(this.props.tenant_profile.tenant_id)
+        .then((data) => {
+          if (data.tenant_id === this.props.tenant_profile.tenant_id) {
+            this.setState({
+              application_template: {
+                first_name: data.first_name,
+                last_name: data.last_name,
+                gender: data.gender,
+                tenant_id: data.tenant_id,
+                school: data.school,
+                program_and_term: data.program_and_term,
+                email: data.email,
+                phone: data.phone,
+                group_size: data.group_size,
+              },
+              loading: false,
+            })
+          } else {
+            this.setState({
+              loading: false,
+            })
+          }
         })
       }
     })
