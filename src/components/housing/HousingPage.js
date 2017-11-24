@@ -31,6 +31,7 @@ class HousingPage extends Component {
 		super()
 		this.state = {
 			buildings: [],
+			loaded: false,
 		}
 	}
 
@@ -50,6 +51,7 @@ class HousingPage extends Component {
 			this.props.saveBuildingsToRedux(buildings.sort((a, b) => { return 0.5 - Math.random() }))
 			this.setState({
 				buildings,
+				loaded: true,
 			})
 			return querySubletsInArea({
 				...this.props.current_gps_center,
@@ -65,33 +67,44 @@ class HousingPage extends Component {
 		return (
 			<div id='HousingPage' style={comStyles().container}>
 				{
-					this.props.popup_buildings.length > 0
+					this.state.loaded
 					?
-					<PopupPanel
-						buildings={this.props.popup_buildings}
-						style={comStyles().popupPanel}
-					/>
+					<div style={comStyles().container}>
+						{
+							this.props.popup_buildings.length > 0
+							?
+							<PopupPanel
+								buildings={this.props.popup_buildings}
+								style={comStyles().popupPanel}
+							/>
+							:
+							null
+						}
+						<HousingPanel
+							refresh={() => this.refreshBuildings()}
+							buildings={this.state.buildings}
+						/>
+						<MapComponent
+							listOfResults={
+								this.props.rent_type === 'sublet'
+								?
+								this.props.sublet_search_results
+								:
+								this.props.building_search_results
+							}
+							selected_pin={this.props.selected_pin}
+						/>
+						<div style={comStyles().beta_tag_container}>
+							<img style={comStyles().beta_tag} src='https://s3.amazonaws.com/rentburrow-static-assets/Images/beta_tag.png' alt='logo' />
+						</div>
+					</div>
 					:
-					null
+					<div className='ui segment' style={comStyles().fullWidth}>
+						<div className='ui active inverted dimmer'>
+							<div className='ui massive text loader'>Loading</div>
+						</div>
+					</div>
 				}
-				<HousingPanel
-					refresh={() => this.refreshBuildings()}
-					buildings={this.state.buildings}
-				/>
-				<MapComponent
-					listOfResults={
-						this.props.rent_type === 'sublet'
-						?
-						this.props.sublet_search_results
-						:
-						this.props.building_search_results
-					}
-					selected_pin={this.props.selected_pin}
-					style={comStyles().map}
-				/>
-				<div style={comStyles().beta_tag_container}>
-					<img style={comStyles().beta_tag} src='https://s3.amazonaws.com/rentburrow-static-assets/Images/beta_tag.png' alt='logo' />
-				</div>
 			</div>
 		)
 	}
@@ -160,8 +173,8 @@ const comStyles = () => {
 			width: '100%',
 			position: 'relative',
 		},
-		map: {
-			width: '100vw',
+		fullWidth: {
+			width: '100%',
 		},
 		popupPanel: {
 			position: 'absolute',
