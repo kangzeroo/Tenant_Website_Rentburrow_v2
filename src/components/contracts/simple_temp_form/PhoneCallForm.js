@@ -41,6 +41,7 @@ class PhoneCallForm extends Component {
       application_template: {
         first_name: '',
         last_name: '',
+        gender: '',
         tenant_id: '',
         school: '',
         program_and_term: '',
@@ -48,6 +49,9 @@ class PhoneCallForm extends Component {
         phone: '',
         group_size: 1,
       },
+
+      group_notes: '',
+
 			error_messages: [],
 			submitted: false,
       sucessful: false,
@@ -79,9 +83,7 @@ class PhoneCallForm extends Component {
     })
     tenantFilledInquiryForBuilding(this.props.tenant_profile.tenant_id, this.props.building.building_id)
     .then((inquiry) => {
-      console.log(inquiry)
       if (inquiry.building_id === this.props.building.building_id) {
-        console.log('qwjkdnkqwjdnqwkjdnqwjkd')
         getLandlordInfo(this.props.building.building_id)
         .then((data) => {
           this.setState({
@@ -96,14 +98,14 @@ class PhoneCallForm extends Component {
           if (data.tenant_id === this.props.tenant_profile.tenant_id) {
             this.setState({
               application_template: {
-                first_name: data.first_name,
-                last_name: data.last_name,
-                gender: data.gender,
+                first_name: data.first_name ? data.first_name : '',
+                last_name: data.last_name ? data.last_name : '',
+                gender: data.gender ? data.gender : '',
                 tenant_id: data.tenant_id,
-                school: data.school,
-                program_and_term: data.program_and_term,
-                email: data.email,
-                phone: data.phone,
+                school: data.school ? data.school : '',
+                program_and_term: data.program_and_term ? data.program_and_term : '',
+                email: data.email ? data.email : '',
+                phone: data.phone ? data.phone : '',
                 group_size: data.group_size,
               },
               loading: false,
@@ -367,6 +369,16 @@ class PhoneCallForm extends Component {
                 value={this.state.application_template.phone}
                 onChange={(e) => this.updateApplicationAttr(e, 'phone')}
                 disabled={this.state.submitted}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Notes For Landlord</label>
+              <TextArea
+                rows={4}
+                value={this.state.group_notes}
+                placeholder='Eg. Give as much info as possible. Which suites we you ok with? Will your group change? Do you want the landlord to match you with only female roommates? ...etc'
+                onChange={(e) => this.setState({ group_notes: e.target.value })}
+                style={comStyles().textArea}
               />
             </Form.Field>
             <Form.Field>
