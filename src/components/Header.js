@@ -286,8 +286,7 @@ const comStyles = () => {
     },
     header: {
       backgroundColor: xMidBlue,
-      padding: '0px',
-      height: 'auto',
+      height: '6vh',
       width: '100%',
       zIndex: '1',
       display: 'flex',
@@ -298,11 +297,11 @@ const comStyles = () => {
       float: 'left',
     },
     logo: {
-      height: '5vh',
+      height: '100%',
+      display: 'inline-block',
       width: 'auto',
       float: 'left',
-      margin: '5px',
-      marginBottom: '15px'
+      padding: '5px'
     },
     login: {
       height: 'auto',
