@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import { fadeOut } from 'react-animations'
 import { withRouter } from 'react-router-dom'
 import {
 
@@ -29,9 +30,12 @@ class HousingPage extends Component {
 
 	constructor() {
 		super()
+		this.arrayOfTips = ['Rent with Confidence', 'Harley Barley', 'Did you know? What you dont know?', 'Looking for rent should be like planning a vacation', 'Cash me outside, howbout dat', 'Rent Burrow for the win']
+
 		this.state = {
 			buildings: [],
 			loaded: false,
+			tip: this.arrayOfTips[Math.floor(Math.random() * this.arrayOfTips.length)]
 		}
 	}
 
@@ -66,45 +70,43 @@ class HousingPage extends Component {
 	render() {
 		return (
 			<div id='HousingPage' style={comStyles().container}>
-				{
-					this.state.loaded
-					?
-					<div style={comStyles().container}>
-						{
-							this.props.popup_buildings.length > 0
+				<div style={comStyles().container}>
+					{
+						this.props.popup_buildings.length > 0
+						?
+						<PopupPanel
+							buildings={this.props.popup_buildings}
+							style={comStyles().popupPanel}
+						/>
+						:
+						null
+					}
+					<HousingPanel
+						refresh={() => this.refreshBuildings()}
+						buildings={this.state.buildings}
+					/>
+					<MapComponent
+						listOfResults={
+							this.props.rent_type === 'sublet'
 							?
-							<PopupPanel
-								buildings={this.props.popup_buildings}
-								style={comStyles().popupPanel}
-							/>
+							this.props.sublet_search_results
 							:
-							null
+							this.props.building_search_results
 						}
-						<HousingPanel
-							refresh={() => this.refreshBuildings()}
-							buildings={this.state.buildings}
-						/>
-						<MapComponent
-							listOfResults={
-								this.props.rent_type === 'sublet'
-								?
-								this.props.sublet_search_results
-								:
-								this.props.building_search_results
-							}
-							selected_pin={this.props.selected_pin}
-						/>
-						<div style={comStyles().beta_tag_container}>
-							<img style={comStyles().beta_tag} src='https://s3.amazonaws.com/rentburrow-static-assets/Images/beta_tag.png' alt='logo' />
-						</div>
+						selected_pin={this.props.selected_pin}
+					/>
+					<div style={comStyles().beta_tag_container}>
+						<img style={comStyles().beta_tag} src='https://s3.amazonaws.com/rentburrow-static-assets/Images/beta_tag.png' alt='logo' />
 					</div>
-					:
-					<div className='ui segment' style={comStyles().fullWidth}>
+
+
+					<div className='ui segment' style={[loadingStyles(this.state.loaded).absolutely, loadingStyles().fadeOut]}>
 						<div className='ui active inverted dimmer'>
-							<div className='ui massive text loader'>Loading</div>
+							<div className='ui massive text loader'>{this.state.tip}</div>
 						</div>
 					</div>
-				}
+
+				</div>
 			</div>
 		)
 	}
@@ -173,9 +175,6 @@ const comStyles = () => {
 			width: '100%',
 			position: 'relative',
 		},
-		fullWidth: {
-			width: '100%',
-		},
 		popupPanel: {
 			position: 'absolute',
 			zIndex: 100,
@@ -190,5 +189,29 @@ const comStyles = () => {
 			width: '120px',
 			height: '120px',
 		},
+	}
+}
+
+const loadingStyles = (loaded) => {
+	let loadedStyles = {
+		position: 'absolute',
+		zIndex: 10,
+		width: '-webkit-fill-available',
+		height: '-webkit-fill-available',
+		margin: 0
+	}
+	if (loaded) {
+		loadedStyles = {
+			display: 'none',
+		}
+	}
+	return {
+		absolutely: {
+			...loadedStyles
+		},
+		fadeOut: {
+			animation: 'x 25s',
+			animationName: Radium.keyframes(fadeOut, 'fadeOut')
+		}
 	}
 }
