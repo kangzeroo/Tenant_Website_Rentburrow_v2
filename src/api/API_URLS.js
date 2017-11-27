@@ -31,7 +31,7 @@ export const SUBLETTING_MICROSERVICE = 'https://rentburrow.com:3005'
 export const CONTRACTING_MICROSERVICE = 'https://rentburrow.com:3005'
 export const FIREBASE_VERSION = 'production'
 export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
-
+//
 
 // PRIVATE SUBNET
 // export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
