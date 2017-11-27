@@ -181,7 +181,7 @@ class Header extends Component {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
-              <Icon onClick={() => this.props.history.push('/protips')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
+              <Icon onClick={() => this.props.history.push('/contract')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
               {/*}<Button
                 basic
                 inverted
