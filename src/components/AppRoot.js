@@ -27,6 +27,7 @@ import Chat from './chat/ChatPopup/Chat'
 import LandingPage from './instructions/LandingPage'
 import ProTipsPage from './community/student_info/ProTipsPage'
 import PrizesPage from './community/student_info/PrizesPage'
+import UberSignup from './instructions/UberSignup'
 import ContactUs from './instructions/ContactUs'
 import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
 import TermsOfServicePage from './community/student_info/TermsOfServicePage'
@@ -284,9 +285,10 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={ExampleEncryptionS3} />
+                <Route exact path='/sandbox' component={UberSignup} />
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}
+                <Route exact path='/uber' component={UberSignup} />
                 <Route exact path='/prizes' component={PrizesPage} />
                 {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
