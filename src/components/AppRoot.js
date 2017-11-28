@@ -29,6 +29,7 @@ import ProTipsPage from './community/student_info/ProTipsPage'
 import PrizesPage from './community/student_info/PrizesPage'
 import UberSignup from './scheduling/uber/UberSignup'
 import ScheduleTour from './scheduling/timing/ScheduleTour'
+import LandlordTourConfirmation from './scheduling/timing/LandlordTourConfirmation'
 import ContactUs from './instructions/ContactUs'
 import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
 import TermsOfServicePage from './community/student_info/TermsOfServicePage'
@@ -204,7 +205,7 @@ class AppRoot extends Component {
       // use PossibleRoutes.js when you have a path that is publically available
       this.props.forwardUrlLocation(pathname + search)
       // if not, then we do nothing
-      redirectPath(pathname).then(({ path, actions }) => {
+      redirectPath(pathname + search).then(({ path, actions }) => {
         // path = '/sage-5'
         // actions = [ { type, payload }, { type, payload } ]
         this.props.dispatchActionsToRedux(actions)
@@ -295,6 +296,8 @@ class AppRoot extends Component {
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
                 <Route exact path='/contact' component={ContactUs} />
                 <Route exact path='/book-filming' component={BookAFilmingPage} />
+                <Route exact path='/book-tour' component={ScheduleTour} />
+                <Route exact path='/landlord-confirm-tour' component={LandlordTourConfirmation} />
                 {/*<Route exact path='/how-it-works' component={HowItWorksLandlord} />*/}
                 {/*<Route exact path='/pricing' component={PricingLandlord} />*/}
                 {/*<Route exact path='/landlord-faq' component={FAQLandlord} />*/}

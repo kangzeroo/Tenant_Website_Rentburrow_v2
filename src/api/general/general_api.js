@@ -27,31 +27,51 @@ export const shortenTimestamp = (timestamp) => {
 export const redirectPath = (urlPath) => {
 	const p = new Promise((res, rej) => {
 		searchForSpecificBuildingByAlias(URLToAlias(urlPath)).then((building) => {
-			res({
-				// re-route to a different path if needed
-				path: urlPath,
-				// a set of redux actions to conduct if needed (eg. saving a selected file)
-				actions: [{
-					type: SELECT_BUILDING,
-					payload: building,
-				}],
-			})
-		}).catch((err) => {
-			const partOfRoutes = checkIfPartOfRoutes(urlPath)
-			if (partOfRoutes) {
+			if (building) {
 				res({
-					path: partOfRoutes.path,
-					actions: partOfRoutes.actions
+					// re-route to a different path if needed
+					path: urlPath,
+					// a set of redux actions to conduct if needed (eg. saving a selected file)
+					actions: [{
+						type: SELECT_BUILDING,
+						payload: building,
+					}],
 				})
 			} else {
-				res({
-					path: '/',
-					actions: []
-				})
+				const altURL = redirectToAnotherRoute(urlPath)
+				if (altURL.success) {
+					res(altURL)
+				} else {
+					rej(altURL)
+				}
+			}
+		}).catch((err) => {
+			const altURL = redirectToAnotherRoute(urlPath)
+			if (altURL.success) {
+				res(altURL)
+			} else {
+				rej(altURL)
 			}
 		})
 	})
 	return p
+}
+
+const redirectToAnotherRoute = (urlPath) => {
+	const partOfRoutes = checkIfPartOfRoutes(urlPath)
+	if (partOfRoutes) {
+		return ({
+			success: true,
+			path: partOfRoutes.path,
+			actions: partOfRoutes.actions
+		})
+	} else {
+		return ({
+			success: false,
+			path: '/',
+			actions: []
+		})
+	}
 }
 
 // convert the browser language locale into a standard language code

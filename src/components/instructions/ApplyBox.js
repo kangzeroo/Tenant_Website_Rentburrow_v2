@@ -190,10 +190,17 @@ class ApplyBox extends Component {
           <Button
             primary
             basic
-            fluid
             icon='phone'
             content='Text Landlord'
             onClick={() => this.callPhoneForm()}
+            size='huge'
+          />
+          <Button
+            primary
+            basic
+            icon='phone'
+            content='Book A Tour'
+            onClick={() => this.props.history.push(`/book-tour?building=${this.props.building.building_id}`)}
             size='huge'
           />
         </Card>
