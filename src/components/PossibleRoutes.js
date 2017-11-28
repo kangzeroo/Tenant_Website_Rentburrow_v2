@@ -10,5 +10,8 @@ export default [
   '/lease',
   '/signing/lease',
   '/applications',
+  '/sublet_applications',
+  '/contact',
+  '/book-filming',
   '/book-tour'
 ]

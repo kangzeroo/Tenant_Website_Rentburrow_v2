@@ -21,6 +21,8 @@ class RibbonLabel extends Component {
       return 'blue'
     } else if (label === 'Sold Out') {
       return 'red'
+    } else if (label.toLowerCase().indexOf('not yet') > -1) {
+      return 'purple'
     } else {
       return 'yellow'
     }
