@@ -19,10 +19,10 @@ import {
   Radio,
 } from 'semantic-ui-react'
 import InputRange from 'react-input-range'
-require('../../styles/react-input-range.css')
-import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
-import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
-import { saveTenantProfile, getTenantProfile } from '../../api/auth/tenant_api'
+require('../../../styles/react-input-range.css')
+import { loginFacebook, insertUser, initiateFacebook } from '../../../api/auth/facebook_auth'
+import { saveTenantToRedux, triggerForcedSignin } from '../../../actions/auth/auth_actions'
+import { saveTenantProfile, getTenantProfile } from '../../../api/auth/tenant_api'
 
 
 class UberSignup extends Component {
@@ -327,8 +327,9 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      height: '90vh',
+      height: 'auto',
       width: '100vw',
+      padding: '20px',
       justifyContent: 'center',
       alignItems: 'center',
 		}

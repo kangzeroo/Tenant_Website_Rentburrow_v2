@@ -27,7 +27,8 @@ import Chat from './chat/ChatPopup/Chat'
 import LandingPage from './instructions/LandingPage'
 import ProTipsPage from './community/student_info/ProTipsPage'
 import PrizesPage from './community/student_info/PrizesPage'
-import UberSignup from './instructions/UberSignup'
+import UberSignup from './scheduling/uber/UberSignup'
+import ScheduleTour from './scheduling/timing/ScheduleTour'
 import ContactUs from './instructions/ContactUs'
 import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
 import TermsOfServicePage from './community/student_info/TermsOfServicePage'
@@ -285,7 +286,7 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={UberSignup} />
+                <Route exact path='/sandbox' component={ScheduleTour} />
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}
                 <Route exact path='/uber' component={UberSignup} />
