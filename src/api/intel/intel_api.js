@@ -1,6 +1,7 @@
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
 import { INTEL_MICROSERVICE } from '../API_URLS'
+// import authHeaders from '../authHeaders'
 
 // send to API
 export const sendOffToDynamoDB = (organizedCollection) => {
