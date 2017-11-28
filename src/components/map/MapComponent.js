@@ -123,7 +123,7 @@ class MapComponent extends Component {
 					{
 						styles: this.clusterStyles,
 						// imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-						maxZoom: 17,
+						maxZoom: 16,
 						minimumClusterSize: 10,
 						zoomOnClick: true,
 					}
