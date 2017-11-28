@@ -29,8 +29,15 @@ class AmenityBrowser extends Component {
 
   componentWillMount() {
     if (this.props.amenities.length > 0) {
+      const amenitiesWithImages = this.props.amenities.filter((am) => {
+        return am.imgs[0]
+      })
+      const amenitiesWithoutImages = this.props.amenities.filter((am) => {
+        return !am.imgs[0]
+      })
+      const orderedAmenities = amenitiesWithImages.concat(amenitiesWithoutImages)
       this.setState({
-        current_amenity: this.props.amenities[0]
+        current_amenity: orderedAmenities[0]
       })
     }
   }
@@ -70,6 +77,13 @@ class AmenityBrowser extends Component {
   }
 
 	render() {
+    const amenitiesWithImages = this.props.amenities.filter((am) => {
+      return am.imgs[0]
+    })
+    const amenitiesWithoutImages = this.props.amenities.filter((am) => {
+      return !am.imgs[0]
+    })
+    const orderedAmenities = amenitiesWithImages.concat(amenitiesWithoutImages)
 		return (
 			<Card id='AmenityBrowser' className='pretty_scrollbar' style={comStyles().container}>
         <div style={comStyles().box}>
@@ -79,7 +93,7 @@ class AmenityBrowser extends Component {
             </div>
             <div className='pretty_scrollbar' style={comStyles().amenitiesGrid}>
               {
-                this.props.amenities.map((am, index) => {
+                orderedAmenities.map((am, index) => {
                   return (
                     <Item
                       onClick={() => this.clickedAmenity(am)}
