@@ -11,7 +11,7 @@ export const sendChatMessageToLandlord = (tenant_name, tenant_email, landlord_em
 		region: 'us-east-1',
 	})
   const p = new Promise((res, rej) => {
-		const params = createInquiryParamsConfig(tenant_name, tenant_email, landlord_email, building, generateHTMLInquiryEmail(tenant_name, building, message))
+		const params = createInquiryParamsConfig(tenant_name, tenant_email, landlord_email, building, generateHTMLInquiryEmail(tenant_name, building, message, tenant_email))
     // console.log(params)
 		// console.log('Sending email with attached params!')
 		AWS.config.credentials.refresh(() => {
@@ -86,7 +86,7 @@ const createInquiryParamsConfig = (tenant_name, tenant_email, landlord_email, bu
 	return params
 }
 
-const generateHTMLInquiryEmail = (tenant_name, building, message) => {
+const generateHTMLInquiryEmail = (tenant_name, building, message, tenant_email) => {
   const building_url = `https://rentburrow.com/${building && building.building_alias ? aliasToURL(building.building_alias) : ''}`
   return `
 		<!DOCTYPE html>
@@ -124,6 +124,11 @@ const generateHTMLInquiryEmail = (tenant_name, building, message) => {
 		                            <tr style='border: 1px solid red; font-size: 1.2rem'>
 		                                <td align='center' valign='top'>
 		                                    <p>${message}</p>
+		                                </td>
+		                            </tr>
+		                            <tr style='border: 1px solid red; font-size: 1.2rem'>
+		                                <td align='center' valign='top'>
+		                                    <p>Tenant Email: ${tenant_email}</p>
 		                                </td>
 		                            </tr>
 		                        </table>
