@@ -62,6 +62,7 @@ export const LoginStudent = ({ email, password }) => {
 				rej({
 					message: err
 				})
+				console.log('REMOVING cognito_student_token')
 				localStorage.removeItem('cognito_student_token')
 			})
 	})
@@ -74,6 +75,7 @@ const authenticateStudent = (cognitoUser, authenticationDetails) => {
 	        onSuccess: (result) => {
 	            // console.log('access token + ' + result.getAccessToken().getJwtToken());
 	            // localStorage.setItem('cognito_student_token', result.getAccessToken().getJwtToken());
+							console.log('SETTING cognito_student_token')
 	            localStorage.setItem('cognito_student_token', result.accessToken.jwtToken);
 	            // console.log('======== VIEW THE REFRESH TOKEN =========')
 	            // console.log(localStorage.getItem('cognito_student_token'))
@@ -270,6 +272,7 @@ export const retrieveStaffFromLocalStorage = () => {
             }
             // console.log('session validity: ' + session.isValid());
             // console.log(session);
+						console.log('SETTING cognito_student_token')
             localStorage.setItem('cognito_student_token', session.getAccessToken().getJwtToken());
             // console.log(localStorage.getItem('cognito_student_token'))
             // Edge case, AWS Cognito does not allow for the Logins attr to be dynamically generated. So we must create the loginsObj beforehand
