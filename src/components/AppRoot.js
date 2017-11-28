@@ -28,7 +28,6 @@ import LandingPage from './instructions/LandingPage'
 import ProTipsPage from './community/student_info/ProTipsPage'
 import PrizesPage from './community/student_info/PrizesPage'
 import UberSignup from './scheduling/uber/UberSignup'
-import ScheduleTour from './scheduling/timing/ScheduleTour'
 import LandlordTourConfirmation from './scheduling/timing/LandlordTourConfirmation'
 import ContactUs from './instructions/ContactUs'
 import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
@@ -51,6 +50,7 @@ import LeaseApplication from './contracts/leases/LeaseApplication'
 import LeaseApplicationPage from './tenant/LeaseApplications/pages/LeaseApplicationPage'
 import SentApplicationPage from './tenant/SubletApplications/sublets/SentApplicationPage'
 import ReceivedApplicationPage from './tenant/SubletApplications/sublets/ReceivedApplicationPage'
+import InvalidPage from './invalid/InvalidPage'
 import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
 import Logout from './auth/Logout'
@@ -289,7 +289,8 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={ScheduleTour} />
+                <Route exact path='/sandbox' component={HousingPage} />
+                <Route exact path='/invalid' component={InvalidPage} />
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}
                 <Route exact path='/uber' component={UberSignup} />
@@ -298,8 +299,7 @@ class AppRoot extends Component {
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
                 <Route exact path='/contact' component={ContactUs} />
                 <Route exact path='/book-filming' component={BookAFilmingPage} />
-                <Route exact path='/book-tour' component={ScheduleTour} />
-                <Route exact path='/landlord-confirm-tour' component={LandlordTourConfirmation} />
+                <Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />
                 {/*<Route exact path='/how-it-works' component={HowItWorksLandlord} />*/}
                 {/*<Route exact path='/pricing' component={PricingLandlord} />*/}
                 {/*<Route exact path='/landlord-faq' component={FAQLandlord} />*/}
