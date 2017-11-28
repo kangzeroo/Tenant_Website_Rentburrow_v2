@@ -18,6 +18,7 @@ import {
   Form,
   Message,
 } from 'semantic-ui-react'
+import { getBuildingById } from '../../../api/building/building_api'
 
 
 class ScheduleTour extends Component {
@@ -34,9 +35,21 @@ class ScheduleTour extends Component {
       time_2: moment().hour(0).minute(0),
       time_3: moment().hour(0).minute(0),
 
+      building: {},
       submitted: false,
       error_messages: [],
     }
+  }
+
+  componentWillMount() {
+    console.log(this.props.location)
+    const building_id = this.props.location.search.slice('/building='.length)
+    getBuildingById(building_id).then((data) => {
+      console.log(data)
+      this.setState({
+        building: data
+      })
+    })
   }
 
   updateDate(date, attr) {
@@ -78,7 +91,7 @@ class ScheduleTour extends Component {
 	render() {
 		return (
 			<div id='ScheduleTour' style={comStyles().container}>
-        <Header as='h1' content='Rank 3 Dates You Can Tour' subheader='The Landlord will confirm which time is available. Only 1 person needs to go. All tours must be at least 36 hours in advance to allow current tenants to be notified.' style={comStyles().sign_header} />
+        <Header as='h1' content={`Rank 3 Dates You Can Tour for ${this.state.building.building_alias || this.state.building.building_address}`} subheader='The Landlord will confirm which time is available. Only 1 person needs to go. All tours must be at least 36 hours in advance to allow current tenants to be notified.' style={comStyles().sign_header} />
         <Form.Field>
           <label>Tour Date 1</label>
           <div style={comStyles().datetime}>

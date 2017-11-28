@@ -1,4 +1,5 @@
 // these routes should match those in AppRoot.js
+// add routes here when they need ?id=something params in the URL
 
 export default [
   '/community',
@@ -9,4 +10,5 @@ export default [
   '/lease',
   '/signing/lease',
   '/applications',
+  '/book-tour'
 ]
