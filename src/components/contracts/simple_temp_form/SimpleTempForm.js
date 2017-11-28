@@ -27,6 +27,8 @@ import { insertInquiries, insertTenantFromApplication } from '../../../api/inqui
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
+import ScheduleTour from '../../scheduling/timing/ScheduleTour'
+import ApplicationComplete from './ApplicationComplete'
 
 class SimpleTempForm extends Component {
 
@@ -54,7 +56,7 @@ class SimpleTempForm extends Component {
         { key: 'uw', text: 'University of Waterloo', value: 'University of Waterloo' },
         { key: 'wlu', text: 'Wilfrid Laurier University', value: 'Wilfrid Laurier University' }
       ],
-      completed_at: ''
+      completed_at: '',
     }
   }
 
@@ -149,7 +151,7 @@ class SimpleTempForm extends Component {
       .then((data) => {
         this.setState({
           success_message: true,
-          completed_at: moment().format('MMM Do YY')
+          completed_at: moment().format('MMM Do YY'),
         })
         localStorage.setItem('saved_application', JSON.stringify({
           landlord_id: this.props.landlord.corporation_id,
@@ -215,60 +217,51 @@ class SimpleTempForm extends Component {
 		return ok_to_proceed
 	}
 
-	render() {
-		return (
-			<div id='SimpleTempForm' style={comStyles().container}>
-         {
-          this.props.building.prize
-          ?
-          null
-          :
-          <div>
-            * This property is not eligible for a prize.
-          </div>
-        }
-				<div style={comStyles().title}>
-					{ this.props.title && this.props.title.toLowerCase().indexOf('waitlist') > -1 ? 'Join Waitlist' : 'Apply Online' }
-				</div>
-				<div style={comStyles().body}>
-					<Form style={comStyles().form}>
+  renderApplicationForm() {
+    return (
+      <div>
+        <div style={comStyles().title}>
+          { this.props.title && this.props.title.toLowerCase().indexOf('waitlist') > -1 ? 'Join Waitlist' : 'Apply Online' }
+        </div>
+        <div style={comStyles().body}>
+          <Form style={comStyles().form}>
             <Form.Group widths='equal'>
-  		        <Form.Field>
-  		          <label>First Name</label>
-  		          <Input
-  		            value={this.state.application_template.first_name}
-  		            onChange={(e) => this.updateApplicationAttr(e, 'first_name')}
-                  disabled={this.state.submitted}
-  		          />
-  		        </Form.Field>
               <Form.Field>
-  		          <label>Last Name</label>
-  		          <Input
-  		            value={this.state.application_template.last_name}
-  		            onChange={(e) => this.updateApplicationAttr(e, 'last_name')}
+                <label>First Name</label>
+                <Input
+                  value={this.state.application_template.first_name}
+                  onChange={(e) => this.updateApplicationAttr(e, 'first_name')}
                   disabled={this.state.submitted}
-  		          />
-  		        </Form.Field>
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Last Name</label>
+                <Input
+                  value={this.state.application_template.last_name}
+                  onChange={(e) => this.updateApplicationAttr(e, 'last_name')}
+                  disabled={this.state.submitted}
+                />
+              </Form.Field>
             </Form.Group>
-						<Form.Field>
-		          <Radio
-		            label='Male'
-		            name='gender'
-		            value='Male'
-		            checked={this.state.application_template.gender === 'Male'}
-		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Male' } }, 'gender')}
+            <Form.Field>
+              <Radio
+                label='Male'
+                name='gender'
+                value='Male'
+                checked={this.state.application_template.gender === 'Male'}
+                onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Male' } }, 'gender')}
                 disabled={this.state.submitted}
-		          />
-							&nbsp; &nbsp;
-		          <Radio
-		            label='Female'
-		            name='gender'
-		            value='Female'
-		            checked={this.state.application_template.gender === 'Female'}
-		            onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Female' } }, 'gender')}
+              />
+              &nbsp; &nbsp;
+              <Radio
+                label='Female'
+                name='gender'
+                value='Female'
+                checked={this.state.application_template.gender === 'Female'}
+                onChange={(e, d) => this.updateApplicationAttr({ target: { value: 'Female' } }, 'gender')}
                 disabled={this.state.submitted}
-		          />
-		        </Form.Field>
+              />
+            </Form.Field>
             <Form.Group widths='equal' >
               <Form.Field>
                 <label>School</label>
@@ -282,71 +275,71 @@ class SimpleTempForm extends Component {
                   disabled={this.state.submitted}
                 />
               </Form.Field>
-  		        <Form.Field>
-  		          <label>Program, and Term</label>
-  		          <Input
-  		            value={this.state.application_template.program_and_term}
-  		            onChange={(e) => this.updateApplicationAttr(e, 'program_and_term')}
+              <Form.Field>
+                <label>Program, and Term</label>
+                <Input
+                  value={this.state.application_template.program_and_term}
+                  onChange={(e) => this.updateApplicationAttr(e, 'program_and_term')}
                   disabled={this.state.submitted}
-  		          />
-  		        </Form.Field>
+                />
+              </Form.Field>
             </Form.Group>
-		        <Form.Field>
-		          <label>Email</label>
-		          <Input
-		            value={this.state.application_template.email}
-		            onChange={(e) => this.updateApplicationAttr(e, 'email')}
+            <Form.Field>
+              <label>Email</label>
+              <Input
+                value={this.state.application_template.email}
+                onChange={(e) => this.updateApplicationAttr(e, 'email')}
                 disabled={this.state.submitted}
-		          />
-		        </Form.Field>
-		        <Form.Field>
-		          <label>Phone</label>
-		          <Input
-		            value={this.state.application_template.phone}
-		            onChange={(e) => this.updateApplicationAttr(e, 'phone')}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Phone</label>
+              <Input
+                value={this.state.application_template.phone}
+                onChange={(e) => this.updateApplicationAttr(e, 'phone')}
                 disabled={this.state.submitted}
-		          />
-		        </Form.Field>
-						<Form.Field>
-							{
-								this.state.error_messages.map((err, index) => {
-									return (
-										<Message
-											visible
-											key={index}
-											error
-											content={err}
-										/>
-									)
-								})
-							}
-						</Form.Field>
-		        <Form.Field>
-		          <Button
-								fluid
-								color='blue'
-								content={this.state.group_members.length > 0 ? 'Add To Group' : 'Save'}
-								onClick={() => this.addToGroup()}
+              />
+            </Form.Field>
+            <Form.Field>
+              {
+                this.state.error_messages.map((err, index) => {
+                  return (
+                    <Message
+                      visible
+                      key={index}
+                      error
+                      content={err}
+                    />
+                  )
+                })
+              }
+            </Form.Field>
+            <Form.Field>
+              <Button
+                fluid
+                color='blue'
+                content={this.state.group_members.length > 0 ? 'Add To Group' : 'Save'}
+                onClick={() => this.addToGroup()}
                 disabled={this.state.submitted}
-							/>
-		        </Form.Field>
-		      </Form>
+              />
+            </Form.Field>
+          </Form>
           {
             this.state.group_members.length > 0
             ?
-  					<div style={comStyles().summary}>
-  						<Card raised fluid>
-  							<Card.Header style={comStyles().card_header}>
-  								Group Members
-  							</Card.Header>
-  							<div style={comStyles().member_list}>
-  								{
-  									this.state.group_members.map((member) => {
-  										return (
-  											<div style={comStyles().row_member} key={member.id}>
-  												<div style={comStyles().row_member_name}>{ member.first_name }</div>
-  												<div style={comStyles().row_member_email}>{ member.email }</div>
-  												<div style={comStyles().row_member_button}>
+            <div style={comStyles().summary}>
+              <Card raised fluid>
+                <Card.Header style={comStyles().card_header}>
+                  Group Members
+                </Card.Header>
+                <div style={comStyles().member_list}>
+                  {
+                    this.state.group_members.map((member) => {
+                      return (
+                        <div style={comStyles().row_member} key={member.id}>
+                          <div style={comStyles().row_member_name}>{ member.first_name }</div>
+                          <div style={comStyles().row_member_email}>{ member.email }</div>
+                          <div style={comStyles().row_member_button}>
                             {
                               this.state.submitted
                               ?
@@ -354,43 +347,43 @@ class SimpleTempForm extends Component {
                               :
                               <Icon name='cancel' onClick={() => this.removeFromGroup(member.id)} />
                             }
-  												</div>
-  											</div>
-  										)
-  									})
-  								}
-  							</div>
-  						</Card>
-  						<Card raised fluid>
-  							<Card.Header style={comStyles().card_header}>
-  								Group Notes for Landlord
-  							</Card.Header>
-  							<TextArea
-  								rows={4}
-  		            value={this.state.group_notes}
-  								placeholder='Eg. Give as much info as possible. Which suites we you ok with? Will your group change? Do you want the landlord to match you with only female roommates? ...etc'
-  		            onChange={(e) => this.setState({ group_notes: e.target.value })}
-  								style={comStyles().textArea}
-  		          />
-  						</Card>
-  						<Form.Field>
-  							{
-  								this.state.group_error_messages.map((err, index) => {
-  									return (
-  										<Message
-  											visible
-  											key={index}
-  											error
-  											content={err}
-  										/>
-  									)
-  								})
-  							}
-  						</Form.Field>
-  						{
-  							this.state.submitted
-  							?
-  							<div style={comStyles().hidden_loading}>
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+              </Card>
+              <Card raised fluid>
+                <Card.Header style={comStyles().card_header}>
+                  Group Notes for Landlord
+                </Card.Header>
+                <TextArea
+                  rows={4}
+                  value={this.state.group_notes}
+                  placeholder='Eg. Give as much info as possible. Which suites we you ok with? Will your group change? Do you want the landlord to match you with only female roommates? ...etc'
+                  onChange={(e) => this.setState({ group_notes: e.target.value })}
+                  style={comStyles().textArea}
+                />
+              </Card>
+              <Form.Field>
+                {
+                  this.state.group_error_messages.map((err, index) => {
+                    return (
+                      <Message
+                        visible
+                        key={index}
+                        error
+                        content={err}
+                      />
+                    )
+                  })
+                }
+              </Form.Field>
+              {
+                this.state.submitted
+                ?
+                <div style={comStyles().hidden_loading}>
                   {
                     this.state.success_message
                     ?
@@ -398,43 +391,55 @@ class SimpleTempForm extends Component {
                     :
                     <img src='https://s3.amazonaws.com/rentburrow-static-assets/Loading+Icons/loading-blue-clock.gif' width='50px' height='auto' />
                   }
-  							</div>
-  							:
-  							<Button
-  								basic
-  								fluid
+                </div>
+                :
+                <Button
+                  basic
+                  fluid
                   icon='lightning'
-  								color='blue'
-  								onClick={() => this.submitApplication()}
-  								content='Submit Application'
-  							/>
-  						}
-  					</div>
+                  color='blue'
+                  onClick={() => this.submitApplication()}
+                  content='Submit Application'
+                />
+              }
+            </div>
             :
             null
           }
-				</div>
+        </div>
+      </div>
+    )
+  }
+
+  renderApplicationComplete() {
+    return (
+      <ApplicationComplete
+        building={this.props.building}
+        closeModal={() => this.props.closeModal()}
+        application={this.state.group_members[0]}
+        completed_at={this.state.completed_at}
+      />
+    )
+  }
+
+	render() {
+		return (
+			<div id='SimpleTempForm' style={comStyles().container}>
+         {
+          this.props.building.prize
+          ?
+          null
+          :
+          <div>
+            * This property is not eligible for a prize.
+          </div>
+        }
         {
           this.state.submitted && this.state.success_message
           ?
-          <div>
-            <Message positive>
-              <Header
-                as='h3'
-                icon='checkmark box'
-                content={`Success! The landlord has received your application, you'll hear back from them soon!`}
-                subheader={`Submitted on ${this.state.completed_at} EDT, expect to hear from us soon!`}
-              />
-            </Message>
-            <Button
-              primary
-              icon='chevron left'
-              content='Back'
-              onClick={() => this.props.closeModal()}
-            />
-          </div>
+          this.renderApplicationComplete()
           :
-          null
+          this.renderApplicationForm()
         }
 			</div>
 		)

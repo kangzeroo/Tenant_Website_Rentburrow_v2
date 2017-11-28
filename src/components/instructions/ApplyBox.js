@@ -157,7 +157,7 @@ class ApplyBox extends Component {
 		return (
 			<div id='ApplyBox' style={comStyles().container}>
 				<Card fluid raised style={comStyles().applyBox}>
-          <div style={comStyles().buttonsContainer} >
+          <div style={comStyles().headerContainer} >
             <Button
               circular
               icon='share alternate'
@@ -178,31 +178,27 @@ class ApplyBox extends Component {
             <div style={comStyles().priceFont}>$ {this.props.building.min_price}</div>
           </div>
           <br /><br />
-          <Button
-            primary
-            fluid
-            icon={this.generateText(this.props.building.label) === 'Apply Now' ? 'send outline' : 'wait'}
-            content={this.generateText(this.props.building.label)}
-            onClick={() => this.signAndPayOnline()}
-            size='huge'
-            style={comStyles().applyNowButton}
-          />
-          <Button
-            primary
-            basic
-            icon='phone'
-            content='Text Landlord'
-            onClick={() => this.callPhoneForm()}
-            size='huge'
-          />
-          <Button
-            primary
-            basic
-            icon='phone'
-            content='Book A Tour'
-            onClick={() => this.props.history.push(`/book-tour?building=${this.props.building.building_id}`)}
-            size='huge'
-          />
+          <div>
+            <Button
+              primary
+              fluid
+              icon={this.generateText(this.props.building.label) === 'Apply Now' ? 'lightning' : 'wait'}
+              content={this.generateText(this.props.building.label)}
+              onClick={() => this.signAndPayOnline()}
+              size='huge'
+              style={comStyles().button}
+            />
+            <Button
+              primary
+              basic
+              fluid
+              icon='phone'
+              content='Text Landlord'
+              onClick={() => this.callPhoneForm()}
+              size='huge'
+              style={comStyles().button}
+            />
+          </div>
         </Card>
         {
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
@@ -282,8 +278,14 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row'
     },
-    applyNowButton: {
+    button: {
       margin: '0px 0px 5px 0px'
+    },
+    buttonsContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      height: '400px'
     }
 	}
 }
