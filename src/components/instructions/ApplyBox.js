@@ -13,6 +13,7 @@ import {
   Input,
   Modal,
   Icon,
+  Popup,
 } from 'semantic-ui-react'
 import HomeExplorer from '../home_explorer/HomeExplorer'
 import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
@@ -74,6 +75,25 @@ class ApplyBox extends Component {
         'BUILDING_ID': this.props.building.building_id,
         'ADDRESS': this.props.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+      }
+    })
+  }
+
+  selectThisPost(sublet) {
+    window.open(`${window.location.origin}/sublet/${sublet.place_id}`, '_blank')
+  }
+
+  checkOutSublet() {
+    this.selectThisPost(this.props.sublets[0])
+    this.props.collectIntel({
+      'TableName': BUILDING_INTERACTIONS,
+      'Item': {
+        'ACTION': 'BUILDING_CHECK_SUBLETS',
+        'DATE': new Date().getTime(),
+        'BUILDING_ID': this.state.building.building_id,
+        'ADDRESS': this.state.building.building_address,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'SUBLET_COUNT': this.props.sublets.length,
       }
     })
   }
@@ -158,20 +178,43 @@ class ApplyBox extends Component {
 			<div id='ApplyBox' style={comStyles().container}>
 				<Card fluid raised style={comStyles().applyBox}>
           <div style={comStyles().headerContainer} >
-            <Button
-              circular
-              icon='share alternate'
-              color='teal'
-              onClick={() => this.toggleModal(true, 'social_share')}
-              size='medium'
-            />
-            <Button
-              circular
-              icon='simplybuilt'
-              color='teal'
-              onClick={() => this.toggleModal(true, 'virtual_tour', this.props.all_suites[0])}
-              size='medium'
-            />
+            <div>
+              <Popup
+                trigger={<Button
+                          circular
+                          icon='share alternate'
+                          color='teal'
+                          onClick={() => this.toggleModal(true, 'social_share')}
+                          size='medium'
+                        />}
+                basic
+                content='Share this property'
+              />
+              <Popup
+                trigger={<Button
+                          circular
+                          icon='simplybuilt'
+                          color='teal'
+                          onClick={() => this.toggleModal(true, 'virtual_tour', this.props.all_suites[0])}
+                          size='medium'
+                        />}
+                basic
+                content='Open Home Explorer'
+              />
+            </div>
+            <div>
+              {
+                this.props.sublets.length > 0
+                ?
+                <Popup
+                  trigger={<Button circular icon='users' color='teal' onClick={() => this.checkOutSublet()} size='medium' />}
+                  basic
+                  content={`View ${this.props.sublets.length} sublets from Facebook.`}
+                />
+                :
+                null
+              }
+            </div>
           </div>
           <div style={comStyles().priceContainer} >
             <div>Rooms Starting from</div>
@@ -215,6 +258,7 @@ ApplyBox.propTypes = {
   all_suites: PropTypes.array.isRequired,  // passed in
   toggleTemporaryCollectionFrom: PropTypes.func.isRequired, // passed in
   togglePhoneCallForm: PropTypes.func.isRequired,           // passed in
+  sublets: PropTypes.array.isRequired,                      // passed in
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 }
@@ -257,6 +301,11 @@ const comStyles = () => {
       minHeight: '270px',
       maxHeight: '270px',
       padding: '20px'
+    },
+    headerContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between'
     },
     priceContainer: {
       display: 'flex',

@@ -415,6 +415,7 @@ class BuildingPage extends Component {
 							all_suites={this.state.suites}
 							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
 							togglePhoneCallForm={() => this.toggleModal(true, 'phone')}
+							sublets={this.state.sublets}
 						/>
 						{
 							this.state.building.building_id
@@ -435,7 +436,7 @@ class BuildingPage extends Component {
 							:
 							null
 						}
-						{
+						{/*
 							this.state.sublets.length > 0
 							?
 							<div style={comStyles().four_month_sublet}>
@@ -455,7 +456,7 @@ class BuildingPage extends Component {
 							<div style={comStyles().four_month_sublet}>
 								<h3>No 4 month sublets available</h3>
 							</div>
-						}
+						*/}
 					</div>
 				</div>
 
