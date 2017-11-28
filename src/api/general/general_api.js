@@ -42,7 +42,7 @@ export const redirectPath = (urlPath) => {
 				if (altURL.success) {
 					res(altURL)
 				} else {
-					rej(altURL)
+					res(altURL)
 				}
 			}
 		}).catch((err) => {
@@ -50,7 +50,7 @@ export const redirectPath = (urlPath) => {
 			if (altURL.success) {
 				res(altURL)
 			} else {
-				rej(altURL)
+				res(altURL)
 			}
 		})
 	})
@@ -66,6 +66,7 @@ const redirectToAnotherRoute = (urlPath) => {
 			actions: partOfRoutes.actions
 		})
 	} else {
+		console.log('ROUTE DOESNT BELONG ANYWHERE')
 		return ({
 			success: false,
 			path: '/',
@@ -96,7 +97,7 @@ export const setLanguageFromLocale = (country_code) => {
 }
 
 // checks if the url path is part of the defined routes in AppRoot.js
-const checkIfPartOfRoutes = (urlPath) => {
+export const checkIfPartOfRoutes = (urlPath) => {
 	let exists = false
 	PossibleRoutes.forEach((route) => {
 		if (urlPath.indexOf(route) > -1) {

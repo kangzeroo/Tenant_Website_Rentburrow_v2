@@ -57,7 +57,7 @@ import Logout from './auth/Logout'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
-import { redirectPath, setLanguageFromLocale } from '../api/general/general_api'
+import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin, forwardUrlLocation } from '../actions/auth/auth_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
@@ -152,7 +152,9 @@ class AppRoot extends Component {
         this.props.saveTenantToRedux(data)
           // use location_forwarding when you have a path that requires a login first (privately available)
           // use PossibleRoutes.js when you have a path that is publically available
-        this.props.history.push(this.props.location_forwarding)
+          if (checkIfPartOfRoutes(this.props.location_forwarding)) {
+            this.props.history.push(this.props.location_forwarding)
+          }
       })
       .catch((err) => {
         // no facebook login, use AWS Cognito Unauth role

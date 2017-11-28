@@ -26,6 +26,7 @@ import { getAllImagesSizeForSpecificBuilding, getNumVirtualTours, getAllSummaryI
 import RibbonLabel from '../../instructions/RibbonLabel'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
+import { check_if_building_accessible } from '../../../api/label/building_label_api'
 
 class BuildingPreview extends Component {
 
@@ -64,10 +65,10 @@ class BuildingPreview extends Component {
 
   selectThisBuilding(building) {
     // console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
-    if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
-      // do nothing
-    } else {
+    if (check_if_building_accessible(building.label)) {
       window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
+    } else {
+      // do nothing
     }
     this.props.collectIntel({
       'TableName': BUILDING_INTERACTIONS,
@@ -233,7 +234,7 @@ export default withRouter(
 // the JS function that returns Radium JS styling
 const comStyles = (label) => {
   let opacityStyles = {}
-  if (label && label.toLowerCase().indexOf('sold out') > -1) {
+  if (!check_if_building_accessible(label)) {
     opacityStyles.opacity = 0.5
   }
 	return {

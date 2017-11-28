@@ -13,6 +13,7 @@ import {
 } from '../../api/search/search_api'
 import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
+import { check_if_building_accessible } from '../../api/label/building_label_api'
 
 class MapComponent extends Component {
 
@@ -20,12 +21,14 @@ class MapComponent extends Component {
 		super()
 		this.state = {
 			mapTarget: null,
-			mapEvents: null
+			mapEvents: null,
+			indicatorPin: null,
 		}
 		// this.pins holds the actual pins to be placed on the map
 		// note that only 1 pin is added per gps coord. if multiple properties with the same gps coords exist, then they will all share 1 pin
 		// matching a property to a pin is done by matching gps coords, not property ids. this is done for performance
 		this.pins = []
+		this.markerCluster = null
 		// this.recenteredPins holds the new pins that were received from server
 		// we use this.recenteredPins as a holding array so that we can diff old pins (held in this.pins) with new pins (held in this.recenteredPins)
 		// diffing like this improved performance
@@ -33,7 +36,6 @@ class MapComponent extends Component {
 		this.prevCenterCoords = null
 
 		this.paintPins.bind(this)
-		this.highlightPin.bind(this)
 		this.refreshPins.bind(this)
 
 
@@ -44,6 +46,27 @@ class MapComponent extends Component {
 		this.grey_map_pin = 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/gray-dot.png'
 		this.red_map_pin = 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/red-dot.png'
 		this.blue_map_pin = 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/blue-dot.png'
+		this.clusterStyles = [
+		 {
+		    textColor: 'black',
+		    url: 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/m3.png',
+		    height: 35,
+		    width: 35,
+				textSize: 15,
+	   },
+		 // {
+		 //    textColor: 'white',
+		 //    url: 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/m2.png',
+		 //    height: 53,
+		 //    width: 52
+		 //  },
+		 //  {
+		 //    textColor: 'white',
+		 //    url: 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/m1.png',
+		 //    height: 65,
+		 //    width: 66
+		 //  },
+		]
 	}
 
 	componentWillMount() {
@@ -64,15 +87,22 @@ class MapComponent extends Component {
 		let change = false
 		if (this.props.listOfResults !== prevProps.listOfResults) {
 			change = true
+			if (this.markerCluster && prevProps.listOfResults.map((l) => l.building_id) !== this.props.listOfResults.map((l) => l.building_id)) {
+				this.markerCluster.clearMarkers()
+				// this.markerCluster.setMap(null)
+				this.destroyBlueIndicatorPin()
+				this.pins = []
+			}
 		}
 		if (this.props.selected_pin !== prevProps.selected_pin) {
+			this.destroyBlueIndicatorPin()
 			change = true
 		}
 		return change
 	}
 
-	componentDidUpdate() {
-		this.refreshPins(this.props.listOfResults)
+	componentDidUpdate(prevProps, prevState) {
+		this.refreshPins(prevProps, this.props)
 		this.prevCenterCoords = this.props.current_gps_center
 	}
 
@@ -86,7 +116,18 @@ class MapComponent extends Component {
     self.setState({
     	mapTarget: mapTarget
     }, () => {
-		    self.refreshPins(self.props.listOfResults)
+		    self.refreshPins(self.props, self.props)
+				self.markerCluster = new MarkerClusterer(
+					this.state.mapTarget,
+					this.pins,
+					{
+						styles: this.clusterStyles,
+						// imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+						maxZoom: 17,
+						minimumClusterSize: 10,
+						zoomOnClick: true,
+					}
+				)
     })
 		// Observable on google maps 'center_changed' event, with debounceTime() to limit server calls
 		self.state.mapEvents.debounceTime(500).subscribe(
@@ -117,16 +158,18 @@ class MapComponent extends Component {
 		)
 		// listen to the google map event 'center_changed' and pass it along to the Observable `self.state.mapEvents`
 		google.maps.event.addListener(mapTarget, 'center_changed', () => {
-			self.state.mapEvents.next(mapTarget)
+			// disabled for performance reasons
+			// self.state.mapEvents.next(mapTarget)
 		})
 		// listen to the google map event 'zoom_changed' and pass it along to the Observable `self.state.mapEvents`
 		google.maps.event.addListener(mapTarget, 'zoom_changed', () => {
-			const zoomDiff = this.state.mapTarget.getZoom() - 15
-			let newRadius = 1000
-			if (zoomDiff < 0) {
-				newRadius = 1000 * (zoomDiff * -1) * Math.pow(2, (zoomDiff * -1))
-			}
-			this.props.changeSearchRadius(newRadius)
+			// disabled for performance reasons
+			// const zoomDiff = this.state.mapTarget.getZoom() - 15
+			// let newRadius = 1000
+			// if (zoomDiff < 0) {
+			// 	newRadius = 1000 * (zoomDiff * -1) * Math.pow(2, (zoomDiff * -1))
+			// }
+			// this.props.changeSearchRadius(newRadius)
 		})
 	}
 
@@ -164,42 +207,58 @@ class MapComponent extends Component {
 		return coords
 	}
 
-	// map the pins on every update
-	refreshPins(listOfResults) {
+	// map the pins on every update (optimized before clustering was implemented, diffs markers for performance)
+	refreshPins(prevProps, { selected_pin, listOfResults }) {
 		const self = this
 		listOfResults.forEach((n, i) => {
 			if (!pinAlreadyPlaced(n, self.pins)) {
 				let marker
         // let infowindow
-				if (n.label && n.label.toLowerCase().indexOf('sold out') > -1) {
-	        marker = new google.maps.Marker({
-	            position: new google.maps.LatLng(n.gps_x, n.gps_y),
-	            pin_type: 'building',
-							icon: this.grey_map_pin,
-	        })
-	        marker.pin_id = n.building_id || n.post_id
-					marker.label = n.label
-          // marker.infowindow = new google.maps.InfoWindow({
-          //   content: `<div>$${n.min_price}+</div>`
-          // })
-	      } else {
+				if (this.props.rent_type === 'lease') {
+					if (!check_if_building_accessible(n.label)) {
+		        marker = new google.maps.Marker({
+		            position: new google.maps.LatLng(n.gps_x, n.gps_y),
+		            pin_type: 'building',
+								icon: this.grey_map_pin,
+								zIndex: 1,
+		        })
+		        marker.pin_id = n.building_id || n.post_id
+						marker.label = n.label
+	          // marker.infowindow = new google.maps.InfoWindow({
+	          //   content: `<div>$${n.min_price}+</div>`
+	          // })
+		      } else {
+						marker = new google.maps.Marker({
+		            position: new google.maps.LatLng(n.gps_x, n.gps_y),
+		            pin_type: 'building',
+								icon: this.red_map_pin,
+								zIndex: 10,
+		        })
+		        marker.pin_id = n.building_id || n.post_id
+						marker.label = n.label
+	          // marker.infowindow = new google.maps.InfoWindow({
+	          //   content: `<div>$${n.min_price}+</div>`
+	          // })
+					}
+				} else {
 					marker = new google.maps.Marker({
-	            position: new google.maps.LatLng(n.gps_x, n.gps_y),
-	            pin_type: 'building',
+							position: new google.maps.LatLng(n.gps_x, n.gps_y),
+							pin_type: 'building',
 							icon: this.red_map_pin,
-	        })
-	        marker.pin_id = n.building_id || n.post_id
+							zIndex: 10,
+					})
+					marker.pin_id = n.building_id || n.post_id
 					marker.label = n.label
-          // marker.infowindow = new google.maps.InfoWindow({
-          //   content: `<div>$${n.min_price}+</div>`
-          // })
+					// marker.infowindow = new google.maps.InfoWindow({
+					//   content: `<div>$${n.min_price}+</div>`
+					// })
 				}
         // listen to marker click
         marker.addListener('click', (event) => {
           // marker.infowindow.open(self.state.mapTarget, marker)
 					self.props.selectPinToRedux(marker.pin_id)
 					self.props.selectPopupBuilding(n)
-					this.highlightPin(marker)
+					this.paintPins(marker)
 					// setTimeout(() => {
 					// 	marker.infowindow.close()
 					// }, 2000)
@@ -216,7 +275,7 @@ class MapComponent extends Component {
         })
 				// save the pins
 				if (marker) {
-					marker.setMap(self.state.mapTarget)
+					// marker.setMap(self.state.mapTarget)
 					self.pins.push(marker)
 				}
 			}
@@ -234,18 +293,41 @@ class MapComponent extends Component {
 			}
 		})
 		// recolor appropriate pins
-		if (self.props.selected_pin) {
-			self.highlightPin({
+		if (prevProps.selected_pin !== self.props.selected_pin) {
+			self.paintPins({
 				pin_id: self.props.selected_pin
 			})
 		} else {
 			self.paintPins()
 		}
+		if (self.markerCluster) {
+			self.markerCluster.addMarkers(this.pins)
+		}
 	}
 
-	// set the pin to a bouncing blue pin
-	highlightPin(marker) {
-		this.paintPins(marker)
+	createBlueIndicatorPin(pin) {
+		this.destroyBlueIndicatorPin()
+		let indicatorPin = new google.maps.Marker({
+				position: pin.position,
+				pin_type: pin.pin_type,
+				icon: this.blue_map_pin,
+				zIndex: 12,
+				pin_id: pin.pin_id,
+		})
+		indicatorPin.setAnimation(google.maps.Animation.BOUNCE)
+		this.setState({
+			indicatorPin: indicatorPin
+		}, () => this.state.indicatorPin.setMap(this.state.mapTarget))
+	}
+
+	destroyBlueIndicatorPin() {
+		if (this.state.indicatorPin) {
+			// get rid of any old bouncing blue pins
+			this.state.indicatorPin.setMap(null)
+			this.setState({
+				indicatorPin: null
+			})
+		}
 	}
 
 	// this command is to efficiently recolor the pins to their appropriate colors (blue, red, gray)
@@ -264,32 +346,30 @@ class MapComponent extends Component {
 				// 	alreadyClicked = true
 				// }
 				// found a pin thats already clicked
-        if (alreadyClicked) {
-					// if the icon is not a gray pin, set it to one
-					if ((this.pins[m].icon !== this.grey_map_pin) || (this.pins[m].animating)) {
-          	this.pins[m].setIcon(this.grey_map_pin)
-						this.pins[m].setAnimation(null)
-						// this.pins[m].infowindow.close()
-					}
-				} else {
+        // if (alreadyClicked) {
+				// 	// if the icon is not a gray pin, set it to one
+				// 	if ((this.pins[m].icon !== this.grey_map_pin) || (this.pins[m].animating)) {
+        //   	this.pins[m].setIcon(this.grey_map_pin)
+				// 		this.pins[m].setAnimation(null)
+				// 		// this.pins[m].infowindow.close()
+				// 	}
+				// } else {
 					// found a pin that has not yet been clicked
-					if ((this.pins[m].icon !== this.red_map_pin) || (this.pins[m].animating)) {
-						if (this.pins[m].label && this.pins[m].label.toLowerCase().indexOf('sold out') > -1) {
-							this.pins[m].setIcon(this.grey_map_pin)
-						} else {
-							this.pins[m].setIcon(this.red_map_pin)
-						}
-						this.pins[m].setAnimation(null)
-						// this.pins[m].infowindow.close()
-					}
-        }
+					// if (this.pins[m].animating) {
+					// 	if (!check_if_building_accessible(this.pins[m].label)) {
+					// 		this.pins[m].setIcon(this.grey_map_pin)
+					// 	} else {
+					// 		this.pins[m].setIcon(this.red_map_pin)
+					// 	}
+					// 	this.pins[m].setAnimation(null)
+					// 	// this.pins[m].infowindow.close()
+					// }
+        // }
 				// check if there is a marker passed in
 				if (marker) {
-					// check if the pin is the one highlighted and set the color to blue and bouncing animation
+					// check if the pin is the one highlighted and set a new pin with the color to blue and bouncing animation
 					if (this.props.rent_type === 'sublet' ? matchPinIDFromPins(marker.pin_id, this.pins, this.props.listOfResults) === this.pins[m].pin_id : this.pins[m].pin_id === marker.pin_id) {
-	          this.pins[m].setIcon(this.blue_map_pin)
-						this.pins[m].setZIndex(12)
-						this.pins[m].setAnimation(google.maps.Animation.BOUNCE)
+						this.createBlueIndicatorPin(this.pins[m])
 	        }
 				}
 	    }
