@@ -40,6 +40,8 @@ class ScheduleTour extends Component {
       time_2_end: '',
       time_3_end: '',
 
+      notes: '',
+
       saving: false,
       submitted: false,
       error_messages: [],
@@ -65,6 +67,12 @@ class ScheduleTour extends Component {
         { key: '1830', text: '6:30 PM', value: '1830' }
       ]
     }
+  }
+
+  updateAttr(event, attr) {
+    this.setState({
+      [attr]: event.target.value
+    })
   }
 
   updateDate(date, attr) {
@@ -137,6 +145,7 @@ class ScheduleTour extends Component {
         time_1_end: this.state.time_1_end,
         time_2_end: this.state.time_2_end,
         time_3_end: this.state.time_3_end,
+        notes: this.state.notes,
       })
       .then((data) => {
         this.setState({
@@ -266,6 +275,13 @@ class ScheduleTour extends Component {
             </Form.Field>
           </Form.Group>
           <br/>
+          <Form.Field>
+            <label>Notes for Landlord</label>
+            <Form.TextArea
+              placeholder='I have a group of 5 wanting to tour unit 101...'
+              onChange={(e) => { this.updateAttr(e, 'notes') }}
+            />
+          </Form.Field>
           <Form.Field>
             {
               this.state.error_messages.map((err, index) => {
