@@ -20,13 +20,17 @@ import {
   Message,
   Icon,
 } from 'semantic-ui-react'
-import { insertTour, } from '../../../api/tour/tour_api'
+import { insertTour, sendTourEmailToLandlord, } from '../../../api/tour/tour_api'
+import { getLandlordInfo, } from '../../../api/search/search_api'
 
 class ScheduleTour extends Component {
 
   constructor() {
     super()
     this.state = {
+
+      landlord: {},
+
 			date_1: moment().add(36, 'h'),
 			date_2: moment().add(36, 'h'),
 			date_3: moment().add(36, 'h'),
@@ -48,25 +52,61 @@ class ScheduleTour extends Component {
 
       time_options: [
         { key: '1000', text: '10:00 AM', value: '1000' },
+        { key: '1015', text: '10:15 AM', value: '1015' },
         { key: '1030', text: '10:30 AM', value: '1030' },
+        { key: '1045', text: '10:45 AM', value: '1045' },
         { key: '1100', text: '11:00 AM', value: '1100' },
+        { key: '1115', text: '11:15 AM', value: '1115' },
         { key: '1130', text: '11:30 AM', value: '1130' },
+        { key: '1145', text: '11:45 AM', value: '1145' },
         { key: '1200', text: '12:00 PM', value: '1200' },
+        { key: '1215', text: '12:15 PM', value: '1215' },
         { key: '1230', text: '12:30 PM', value: '1230' },
+        { key: '1245', text: '12:45 PM', value: '1245' },
         { key: '1300', text: '1:00 PM', value: '1300' },
+        { key: '1315', text: '1:15 PM', value: '1315' },
         { key: '1330', text: '1:30 PM', value: '1330' },
+        { key: '1345', text: '1:45 PM', value: '1345' },
         { key: '1400', text: '2:00 PM', value: '1400' },
+        { key: '1415', text: '2:15 PM', value: '1415' },
         { key: '1430', text: '2:30 PM', value: '1430' },
+        { key: '1445', text: '2:45 PM', value: '1445' },
         { key: '1500', text: '3:00 PM', value: '1500' },
+        { key: '1515', text: '3:15 PM', value: '1515' },
         { key: '1530', text: '3:30 PM', value: '1530' },
+        { key: '1545', text: '3:45 PM', value: '1545' },
         { key: '1600', text: '4:00 PM', value: '1600' },
+        { key: '1615', text: '4:15 PM', value: '1615' },
         { key: '1630', text: '4:30 PM', value: '1630' },
+        { key: '1645', text: '4:45 PM', value: '1645' },
         { key: '1700', text: '5:00 PM', value: '1700' },
+        { key: '1715', text: '5:15 PM', value: '1715' },
         { key: '1730', text: '5:30 PM', value: '1730' },
+        { key: '1745', text: '5:45 PM', value: '1745' },
         { key: '1800', text: '6:00 PM', value: '1800' },
+        { key: '1815', text: '6:15 PM', value: '1815' },
         { key: '1830', text: '6:30 PM', value: '1830' }
       ]
     }
+  }
+
+  componentWillMount() {
+    console.log(this.props.building)
+    console.log('===============')
+    getLandlordInfo({ building_id: this.props.building.building_id })
+    .then((data) => {
+      if (data) {
+        this.setState({
+          landlord: data,
+        })
+      } else {
+        this.setState({
+           landlord: {
+             email: 'support@rentburrow.com'
+           }
+        })
+      }
+    })
   }
 
   updateAttr(event, attr) {
@@ -112,9 +152,9 @@ class ScheduleTour extends Component {
         (moment(this.state.date_1.format('L')).isSame(moment(this.state.date_3.format('L'))) && (this.state.time_3_begin === this.state.time_1_begin))) {
       error_messages.push('Conflicting preferred tour date and time')
     }
-    if (moment(this.state.time_1_begin, 'HH:mm').isAfter(moment(this.state.time_1_end, 'HH:mm')) ||
-        moment(this.state.time_2_begin, 'HH:mm').isAfter(moment(this.state.time_2_end, 'HH:mm')) ||
-        moment(this.state.time_3_begin, 'HH:mm').isAfter(moment(this.state.time_2_end, 'HH:mm'))) {
+    if ((this.state.time_1_begin > this.state.time_1_end) ||
+        (this.state.time_2_begin > this.state.time_2_end) ||
+        (this.state.time_3_begin > this.state.time_3_end)) {
       error_messages.push('Begin time cannot be after End time')
     }
     this.setState({
@@ -146,6 +186,11 @@ class ScheduleTour extends Component {
         time_2_end: this.state.time_2_end,
         time_3_end: this.state.time_3_end,
         notes: this.state.notes,
+      })
+      .then((data) => {
+        console.log(this.state.landlord.email)
+        const tour_id = data.tour_id
+        return sendTourEmailToLandlord({ tour_id: tour_id, corp_email: this.state.landlord.email, }, this.props.building)
       })
       .then((data) => {
         this.setState({
@@ -279,6 +324,7 @@ class ScheduleTour extends Component {
             <label>Notes for Landlord</label>
             <Form.TextArea
               placeholder='I have a group of 5 wanting to tour unit 101...'
+              value={this.state.notes}
               onChange={(e) => { this.updateAttr(e, 'notes') }}
             />
           </Form.Field>
