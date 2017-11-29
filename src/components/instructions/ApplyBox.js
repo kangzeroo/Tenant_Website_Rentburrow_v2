@@ -216,7 +216,7 @@ class ApplyBox extends Component {
               }
             </div>
           </div>
-          <div style={comStyles().priceContainer} >
+          <div style={comStyles().priceContainer}>
             <div>Rooms Starting from</div>
             <div style={comStyles().priceFont}>$ {this.props.building.min_price}</div>
           </div>
@@ -231,16 +231,29 @@ class ApplyBox extends Component {
               size='huge'
               style={comStyles().button}
             />
-            <Button
-              primary
-              basic
-              fluid
-              icon='phone'
-              content='Text Landlord'
-              onClick={() => this.callPhoneForm()}
-              size='huge'
-              style={comStyles().button}
-            />
+            <div style={comStyles().lowerButtonRow}>
+              <Button
+                primary
+                fluid
+                basic
+                icon='phone'
+                content='Text Landlord'
+                onClick={() => this.callPhoneForm()}
+                size='large'
+                style={comStyles().button}
+              />
+              &nbsp;
+              <Button
+                primary
+                fluid
+                basic
+                icon='home'
+                content='Book a Tour'
+                onClick={() => this.signAndPayOnline()}
+                size='large'
+                style={comStyles().button}
+              />
+            </div>
           </div>
         </Card>
         {
@@ -335,6 +348,12 @@ const comStyles = () => {
       flexDirection: 'column',
       justifyContent: 'space-between',
       height: '400px'
+    },
+    lowerButtonRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
     }
 	}
 }
