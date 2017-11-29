@@ -13,5 +13,6 @@ export default [
   '/sublet_applications',
   '/contact',
   '/book-filming',
-  '/book-tour'
+  '/book-tour',
+  '/landlord-confirm-tour'
 ]

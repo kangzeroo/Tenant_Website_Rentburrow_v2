@@ -16,13 +16,15 @@ import {
   Modal,
   Input,
   Message,
+  Dropdown,
   Checkbox,
   Segment,
+  Card,
   Dimmer,
   Loader,
 } from 'semantic-ui-react'
 import {
-  getTourById, insertTourDetails, getTourDetailsById,
+  getTourById, insertTourDetails, getTourDetailsById, sendTourConfirmationEmailToTenant,
 } from '../../../api/tour/tour_api'
 import {
   getBuildingById,
@@ -58,6 +60,44 @@ class LandlordTourConfirmation extends Component {
 
       error_messages: [],
       loading: true,
+
+      time_options: [
+        { key: '1000', text: '10:00 AM', value: '1000' },
+        { key: '1015', text: '10:15 AM', value: '1015' },
+        { key: '1030', text: '10:30 AM', value: '1030' },
+        { key: '1045', text: '10:45 AM', value: '1045' },
+        { key: '1100', text: '11:00 AM', value: '1100' },
+        { key: '1115', text: '11:15 AM', value: '1115' },
+        { key: '1130', text: '11:30 AM', value: '1130' },
+        { key: '1145', text: '11:45 AM', value: '1145' },
+        { key: '1200', text: '12:00 PM', value: '1200' },
+        { key: '1215', text: '12:15 PM', value: '1215' },
+        { key: '1230', text: '12:30 PM', value: '1230' },
+        { key: '1245', text: '12:45 PM', value: '1245' },
+        { key: '1300', text: '1:00 PM', value: '1300' },
+        { key: '1315', text: '1:15 PM', value: '1315' },
+        { key: '1330', text: '1:30 PM', value: '1330' },
+        { key: '1345', text: '1:45 PM', value: '1345' },
+        { key: '1400', text: '2:00 PM', value: '1400' },
+        { key: '1415', text: '2:15 PM', value: '1415' },
+        { key: '1430', text: '2:30 PM', value: '1430' },
+        { key: '1445', text: '2:45 PM', value: '1445' },
+        { key: '1500', text: '3:00 PM', value: '1500' },
+        { key: '1515', text: '3:15 PM', value: '1515' },
+        { key: '1530', text: '3:30 PM', value: '1530' },
+        { key: '1545', text: '3:45 PM', value: '1545' },
+        { key: '1600', text: '4:00 PM', value: '1600' },
+        { key: '1615', text: '4:15 PM', value: '1615' },
+        { key: '1630', text: '4:30 PM', value: '1630' },
+        { key: '1645', text: '4:45 PM', value: '1645' },
+        { key: '1700', text: '5:00 PM', value: '1700' },
+        { key: '1715', text: '5:15 PM', value: '1715' },
+        { key: '1730', text: '5:30 PM', value: '1730' },
+        { key: '1745', text: '5:45 PM', value: '1745' },
+        { key: '1800', text: '6:00 PM', value: '1800' },
+        { key: '1815', text: '6:15 PM', value: '1815' },
+        { key: '1830', text: '6:30 PM', value: '1830' }
+      ]
     }
   }
 
@@ -134,6 +174,15 @@ class LandlordTourConfirmation extends Component {
     })
   }
 
+  updateTime(event, data, attr) {
+    this.setState({
+      selected_slot: {
+        ...this.state.selected_slot,
+        [attr]: data.value,
+      }
+    })
+  }
+
   confirmTimeSelection() {
     this.setState({
       saving: true,
@@ -153,6 +202,18 @@ class LandlordTourConfirmation extends Component {
         time_end: this.state.selected_slot.time_end,
         notes: this.state.selected_slot.notes,
         meetup_address: meetup_address,
+      })
+      .then((data) => {
+        const tourObj = {
+          meetup_address: meetup_address,
+          date: this.state.selected_slot.date,
+          time_begin: this.state.selected_slot.time_begin,
+          time_end: this.state.selected_slot.time_end,
+          notes: this.state.notes,
+        }
+        const mailObj = { email: this.state.tour.email, }
+
+        return sendTourConfirmationEmailToTenant(tourObj, mailObj, this.state.building)
       })
       .then((data) => {
         this.setState({
@@ -246,8 +307,35 @@ class LandlordTourConfirmation extends Component {
             />
           </Modal.Header>
           <Modal.Content>
-            <p>{`Confirming Tour for ${moment(context.date).format('MMMM Do YYYY')} from ${moment(context.time_begin, 'HHmm').format('h:mm a')} to ${moment(context.time_end, 'HHmm').format('h:mm a')}`}</p>
-
+            <p>{`Confirming Tour for ${moment(context.date).format('MMMM Do YYYY')} from`}</p>
+            <Form>
+              <Form.Group widths='equal'>
+                <Form.Field>
+                  <label>Begin Time</label>
+                  <Dropdown
+                    id='time_2_begin'
+                    placeholder='Time Begin'
+                    selection
+                    compact
+                    options={this.state.time_options}
+                    value={this.state.selected_slot.time_begin}
+                    onChange={(e, d) => { this.updateTime(e, d, 'time_begin') }}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>End Time</label>
+                  <Dropdown
+                    id='time_2_begin'
+                    placeholder='Time End'
+                    selection
+                    compact
+                    options={this.state.time_options}
+                    value={this.state.selected_slot.time_end}
+                    onChange={(e, d) => { this.updateTime(e, d, 'time_end') }}
+                  />
+                </Form.Field>
+              </Form.Group>
+            </Form>
             <div style={comStyles().meetContainer}>
               <label>Where should {this.state.tour.first_name} meet you?</label>
               <Checkbox
@@ -359,6 +447,7 @@ class LandlordTourConfirmation extends Component {
             </Form.Field>
           </Form>
         </div>
+        <Card raised fluid>
         <Form style={comStyles().scheduleContainer} >
           <Form.Group widths='equal'>
             <Form.Field>
@@ -424,6 +513,7 @@ class LandlordTourConfirmation extends Component {
             </Form.Field>
           </Form.Group>
         </Form>
+        </Card>
       </div>
     )
   }
