@@ -179,7 +179,7 @@ const comStyles = (vr_tour_height) => {
     },
     hidden_loading: {
       position: 'absolute',
-      zIndex: 5,
+      // zIndex: 5,
       minWidth: '100%',
       minHeight: '100%',
       display: 'flex',
