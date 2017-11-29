@@ -226,7 +226,7 @@ const comStyles = () => {
 		},
     image: {
       height: 'auto',
-      zIndex: 5,
+      // zIndex: 5,
     },
     imageContainer: {
       width: '100%',

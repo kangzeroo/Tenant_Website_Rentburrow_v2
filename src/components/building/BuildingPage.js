@@ -47,6 +47,7 @@ import {
   xLightBlue,
   xDeepBlue,
 } from '../../styles/base_colors'
+import PrizeBlowup from '../instructions/PrizeBlowup'
 import AmenityBrowser from '../amenities/AmenityBrowser'
 import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import HomeOverview from '../home_overview/HomeOverview'
@@ -493,8 +494,8 @@ class BuildingPage extends Component {
 						image_size='hd'
 					/>
 				</div>*/}
-				<div style={comStyles().content_bottom}>
-					{/*<AllLandlords />*/}
+				<div style={prizeStyles().popup_icon}>
+					<PrizeBlowup />
 				</div>
 
 				{
@@ -571,7 +572,7 @@ const comStyles = () => {
 		},
     hidden_loading: {
       position: 'absolute',
-      zIndex: 5,
+      // zIndex: 5,
       minWidth: '100%',
       minHeight: '100%',
       display: 'flex',
@@ -616,7 +617,7 @@ const comStyles = () => {
 		content_bottom: {
 			display: 'flex',
 			flexDirection: 'row',
-			// height: '800px',
+			height: '800px',
 			width: '100%',
 		},
 		content_left: {
@@ -727,6 +728,16 @@ const comStyles = () => {
 		},
 		analyticsSummary: {
 			margin: '10px 0px 0px 0px'
+		}
+	}
+}
+
+const prizeStyles = () => {
+	return {
+		popup_icon: {
+			position: 'fixed',
+			bottom: '0px',
+			zIndex: 30,
 		}
 	}
 }
