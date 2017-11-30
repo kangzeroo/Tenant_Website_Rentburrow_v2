@@ -86,11 +86,21 @@ class PhoneCallForm extends Component {
       if (inquiry.building_id === this.props.building.building_id) {
         getLandlordInfo(this.props.building.building_id)
         .then((data) => {
-          this.setState({
-            show_immediately: true,
-            landlord: data,
-            loading: false,
-          })
+          if (data) {
+            this.setState({
+              show_immediately: true,
+              landlord: data,
+              loading: false,
+            })
+          } else {
+            this.setState({
+              show_immediately: true,
+              landlord: {
+                email: 'support@rentburrow.com'
+              },
+              loading: false,
+            })
+          }
         })
       } else {
         tenantFilledInquiry(this.props.tenant_profile.tenant_id)
@@ -171,7 +181,7 @@ class PhoneCallForm extends Component {
             group_size: this.state.application_template.group_size,
             building_alias: this.props.building.building_alias,
             id: id,
-          }, this.props.building, this.props.landlord)
+          }, this.props.building, this.state.landlord)
       })
       .then((data) => {
         return insertTenantFromApplication({

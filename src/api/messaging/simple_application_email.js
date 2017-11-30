@@ -6,12 +6,12 @@ import { BUCKET_NAME } from '../aws/aws-profile'
 import { aliasToURL } from '../general/general_api'
 
 
-export const sendSimpleApplicationEmailToRentburrow = ({ group_members }, building_alias, landlord_name) => {
+export const sendSimpleApplicationEmailToRentburrow = ({ group_members }, building_alias, landlord) => {
   const ses = new AWS_SES({
 		region: 'us-east-1',
 	})
   const p = new Promise((res, rej) => {
-		const params = createInquiryParamsConfig(building_alias, landlord_name, group_members.length, generateHTMLInquiryEmail(group_members))
+		const params = createInquiryParamsConfig(building_alias, landlord, group_members.length, generateHTMLInquiryEmail(group_members))
     // console.log(params)
 		// console.log('Sending email with attached params!')
 		AWS.config.credentials.refresh(() => {
@@ -31,12 +31,12 @@ export const sendSimpleApplicationEmailToRentburrow = ({ group_members }, buildi
 }
 
 // For Text button
-export const sendSimpleTextEmailToRentburrow = (leasingObj, building, landlord_name) => {
+export const sendSimpleTextEmailToRentburrow = (leasingObj, building, landlord) => {
   const ses = new AWS_SES({
 		region: 'us-east-1',
 	})
   const p = new Promise((res, rej) => {
-		const params = createInquiryParamsConfig(building.building_alias, landlord_name, leasingObj.group_size, generateHTMLInquiryEmail([leasingObj]))
+		const params = createInquiryParamsConfig(building.building_alias, landlord, leasingObj.group_size, generateHTMLInquiryEmail([leasingObj]))
     // console.log(params)
 		// console.log('Sending email with attached params!')
 		AWS.config.credentials.refresh(() => {
@@ -55,17 +55,19 @@ export const sendSimpleTextEmailToRentburrow = (leasingObj, building, landlord_n
 	return p
 }
 
-const createInquiryParamsConfig = (building_alias, landlord_name, group_members_count, HTML_Email) => {
+const createInquiryParamsConfig = (building_alias, landlord, group_members_count, HTML_Email) => {
+  console.log(landlord)
   const params = {
 	  Destination: { /* required */
 	    BccAddresses: [
 	      /* more items */
+        'email.records.rentburrow@gmail.com'
 	    ],
 	    CcAddresses: [
 	      /* more items */
 	    ],
 	    ToAddresses: [
-	      'support@rentburrow.com'
+	      landlord.email
 	      /* more items */
 	    ]
 	  },

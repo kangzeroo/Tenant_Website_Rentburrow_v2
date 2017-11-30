@@ -105,6 +105,7 @@ const createInquiryParamsConfig = (tourObj, building, HTML_Email) => {
 	  Destination: { /* required */
 	    BccAddresses: [
 	      /* more items */
+        'email.records.rentburrow@gmail.com'
 	    ],
 	    CcAddresses: [
 	      /* more items */
@@ -155,6 +156,7 @@ const createInquiryResponseParamsConfig = (building, mailObj, HTML_Email) => {
   const params = {
 	  Destination: { /* required */
 	    BccAddresses: [
+        'email.records.rentburrow@gmail.com'
 	      /* more items */
 	    ],
 	    CcAddresses: [
