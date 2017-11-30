@@ -109,7 +109,7 @@ export const saveSimpleForm = (group_id, group_members, building, landlord, grou
         }
       })
     }
-    sendSimpleApplicationEmailToRentburrow(leaseOjb, building.building_alias, landlord.corporation_name)
+    sendSimpleApplicationEmailToRentburrow(leaseOjb, building.building_alias, landlord)
     // axios.post(`${CONTRACTING_MICROSERVICE}/save_simple_application`, leaseOjb)
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux

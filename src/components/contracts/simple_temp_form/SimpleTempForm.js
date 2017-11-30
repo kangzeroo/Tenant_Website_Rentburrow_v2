@@ -27,6 +27,7 @@ import { insertInquiries, insertTenantFromApplication } from '../../../api/inqui
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
+import { getLandlordInfo } from '../../../api/search/search_api'
 import ScheduleTour from '../../scheduling/timing/ScheduleTour'
 import ApplicationComplete from './ApplicationComplete'
 
@@ -45,6 +46,8 @@ class SimpleTempForm extends Component {
         email: '',
         phone: '',
       },
+
+      landlord: {},
       my_group_may_change: false,
 			group_notes: '',
       group_members: [],
@@ -58,6 +61,27 @@ class SimpleTempForm extends Component {
       ],
       completed_at: '',
     }
+  }
+
+  componentWillMount() {
+    getLandlordInfo(this.props.building.building_id)
+    .then((data) => {
+      if (data) {
+        this.setState({
+          show_immediately: true,
+          landlord: data,
+          loading: false,
+        })
+      } else {
+        this.setState({
+          show_immediately: true,
+          landlord: {
+            email: 'support@rentburrow.com'
+          },
+          loading: false,
+        })
+      }
+    })
   }
 
 	updateApplicationAttr(e, attr) {
@@ -126,6 +150,7 @@ class SimpleTempForm extends Component {
         group_size: this.state.group_members.length,
       })
       .then((data) => {
+        console.log(this.state.landlord)
         return saveSimpleForm(data.group_id, this.state.group_members.map((member) => {
           return {
           name: [member.first_name, member.last_name].join(' '),
@@ -135,7 +160,7 @@ class SimpleTempForm extends Component {
           phone: member.phone,
           id: member.id
         }
-        }), this.props.building, this.props.landlord, this.state.group_notes)
+      }), this.props.building, this.state.landlord, this.state.group_notes)
       })
       .then((data) => {
         return insertTenantFromApplication({

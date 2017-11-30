@@ -494,9 +494,9 @@ class BuildingPage extends Component {
 						image_size='hd'
 					/>
 				</div>*/}
-				<div style={prizeStyles().popup_icon}>
+				{/*<div style={prizeStyles().popup_icon}>
 					<PrizeBlowup />
-				</div>
+				</div>*/}
 
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)

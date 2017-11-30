@@ -91,8 +91,6 @@ class ScheduleTour extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.building)
-    console.log('===============')
     getLandlordInfo({ building_id: this.props.building.building_id })
     .then((data) => {
       if (data) {
@@ -188,7 +186,6 @@ class ScheduleTour extends Component {
         notes: this.state.notes,
       })
       .then((data) => {
-        console.log(this.state.landlord.email)
         const tour_id = data.tour_id
         return sendTourEmailToLandlord({ tour_id: tour_id, corp_email: this.state.landlord.email, }, this.props.building)
       })

@@ -231,7 +231,17 @@ class ApplyBox extends Component {
               size='huge'
               style={comStyles().button}
             />
-            <div style={comStyles().lowerButtonRow}>
+            <Button
+              primary
+              fluid
+              basic
+              icon='phone'
+              content='Text Property Manager'
+              onClick={() => this.callPhoneForm()}
+              size='large'
+              style={comStyles().button}
+            />
+          {/*  <div style={comStyles().lowerButtonRow}>
               <Button
                 primary
                 fluid
@@ -253,7 +263,7 @@ class ApplyBox extends Component {
                 size='large'
                 style={comStyles().button}
               />
-            </div>
+            </div>*/}
           </div>
         </Card>
         {
