@@ -48,7 +48,7 @@ class MapComponent extends Component {
 		this.blue_map_pin = 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/blue-dot.png'
 		this.clusterStyles = [
 		 {
-		    textColor: 'black',
+		    textColor: 'white',
 		    url: 'https://s3.amazonaws.com/rentburrow-static-assets/Icons/m3.png',
 		    height: 35,
 		    width: 35,

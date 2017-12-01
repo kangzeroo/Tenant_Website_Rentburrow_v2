@@ -24,7 +24,7 @@ class Footer extends Component {
             <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
           </Link>
           <div style={comStyles().desc}>
-            Rentburrow.com is the marketplace for student housing.<br/>Tour, sign & pay for your rent online.
+            Rentburrow.com is the marketplace for student housing.<br/>Tour & apply for your rent online.
           </div>
           <div style={comStyles().copyright}>
             &nbsp; &nbsp; &copy; 2017 Bytenectar Inc
