@@ -34,6 +34,20 @@ export const insertTourDetails = ({ tour_id, date, time_begin, time_end, notes, 
   return p
 }
 
+export const insertRideForTour = ({ tour_id, pickup_address, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/insert_ride_for_tour`, { tour_id, pickup_address, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const getTourById = (tour_id) => {
   const p = new Promise((res, rej) => {
     axios.post(`${CONTRACTING_MICROSERVICE}/get_tour_by_id`, { tour_id, })

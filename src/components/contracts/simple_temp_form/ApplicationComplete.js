@@ -35,8 +35,8 @@ class ApplicationComplete extends Component {
           <Message.Header>Next Steps</Message.Header>
           <Message.List>
             <Message.Item>The Landlord is confirming renewals right now, expect to hear from them soon</Message.Item>
-            <Message.Item>Book a physical tour</Message.Item>
-            <Message.Item>Every user will receive one free Uber ride to and back a property for a tour!</Message.Item>
+            <Message.Item>Book a physical tour through Rentburrow</Message.Item>
+            <Message.Item>Every user will receive one FREE Uber ride to and back a property for a tour!</Message.Item>
           </Message.List>
         </Message>
         <div style={comStyles().mainButtonContainer} >
@@ -54,16 +54,6 @@ class ApplicationComplete extends Component {
             content={`No I don't need a tour`}
             onClick={() => this.props.closeModal()}
             style={comStyles().button}
-          />
-        </div>
-        <div style={comStyles().successContainer}>
-          <Button
-            primary
-            fluid
-            icon='cancel'
-            content='Close'
-            onClick={() => this.props.closeModal()}
-            style={comStyles().bottomButton}
           />
         </div>
       </div>
