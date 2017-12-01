@@ -150,7 +150,6 @@ class SimpleTempForm extends Component {
         group_size: this.state.group_members.length,
       })
       .then((data) => {
-        console.log(this.state.landlord)
         return saveSimpleForm(data.group_id, this.state.group_members.map((member) => {
           return {
           name: [member.first_name, member.last_name].join(' '),
