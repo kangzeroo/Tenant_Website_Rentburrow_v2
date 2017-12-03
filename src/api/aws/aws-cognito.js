@@ -54,7 +54,6 @@ export const RegisterStudent = ({ email, phone_number, password, first_name, las
 
 export const LoginStudent = ({ email, password }) => {
 	const p = new Promise((res, rej) => {
-		console.log('LoginStudent')
 		const authenticationDetails = new AuthenticationDetails({
 			Username: email,
 			Password: password
@@ -73,24 +72,19 @@ export const LoginStudent = ({ email, password }) => {
 		// })
 		authenticateStudent(cognitoUser, authenticationDetails)
 			.then(() => {
-				console.log('buildUserObject')
 				return buildUserObject(cognitoUser)
 			})
     	.then((staffObject) => {
-				console.log('staffProfileObject')
 				staffProfileObject = staffObject
 				return Promise.resolve()
     	})
 			.then((msg) => {
-				console.log(staffProfileObject)
 				res(staffProfileObject)
 			})
 			.catch((err) => {
-				console.log(err)
 				rej({
 					message: err
 				})
-				console.log('REMOVING cognito_student_token')
 				localStorage.removeItem('cognito_student_token')
 			})
 	})
@@ -101,10 +95,8 @@ const authenticateStudent = (cognitoUser, authenticationDetails) => {
 	const p = new Promise((res, rej) => {
 		cognitoUser.authenticateUser(authenticationDetails, {
 	        onSuccess: (result) => {
-						console.log('authenticateStudent onSuccess')
 	            // console.log('access token + ' + result.getAccessToken().getJwtToken());
 	            // localStorage.setItem('cognito_student_token', result.getAccessToken().getJwtToken());
-							console.log('SETTING cognito_student_token')
 	            localStorage.setItem('cognito_student_token', result.accessToken.jwtToken);
 	            // console.log('======== VIEW THE REFRESH TOKEN =========')
 	            // console.log(localStorage.getItem('cognito_student_token'))
@@ -124,8 +116,6 @@ const authenticateStudent = (cognitoUser, authenticationDetails) => {
 	            })
 	        },
 	        onFailure: (err) => {
-						console.log('authenticateStudent onFailure')
-	            console.log(err)
 	            rej(err)
 	        },
 					// mfaRequired: (codeDeliveryDetails) => {
@@ -140,15 +130,11 @@ const authenticateStudent = (cognitoUser, authenticationDetails) => {
 
 export const buildUserObject = (cognitoUser) => {
 	const p = new Promise((res, rej) => {
-		console.log('buildUserObject')
-		console.log('getUserAttributes')
 		cognitoUser.getUserAttributes((err, result) => {
       if (err) {
-          console.log(err);
   		rej(err)
           return;
       }
-			console.log(result)
       let staffProfileObject = {}
 			for (let i = 0; i < result.length; i++) {
 	      if (result[i].getName().indexOf('custom:') >= 0) {
@@ -165,7 +151,6 @@ export const buildUserObject = (cognitoUser) => {
 	    	}
 	    }
 			staffProfileObject['id'] = result.sub
-			console.log(staffProfileObject)
       res(staffProfileObject)
     })
 	})
@@ -298,7 +283,7 @@ export const resetVerificationPIN = ({ email }) => {
 	return p
 }
 
-export const retrieveStaffFromLocalStorage = () => {
+export const retrieveTenantFromLocalStorage = () => {
 	const p = new Promise((res, rej) => {
 	    const cognitoUser = studentPool.getCurrentUser();
 	    // console.log('Getting cognitoUser from local storage...')
@@ -311,7 +296,6 @@ export const retrieveStaffFromLocalStorage = () => {
             }
             // console.log('session validity: ' + session.isValid());
             // console.log(session);
-						console.log('SETTING cognito_student_token')
             localStorage.setItem('cognito_student_token', session.getAccessToken().getJwtToken());
             // console.log(localStorage.getItem('cognito_student_token'))
             // Edge case, AWS Cognito does not allow for the Logins attr to be dynamically generated. So we must create the loginsObj beforehand
@@ -330,7 +314,7 @@ export const retrieveStaffFromLocalStorage = () => {
 		        })
 	    } else {
 	    	rej({
-					message: 'Failed to retrieve corporation from localStorage'
+					message: 'Failed to retrieve tenant from localStorage'
 				})
 	    }
 	})

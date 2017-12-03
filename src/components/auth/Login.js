@@ -20,6 +20,7 @@ import { STUDENT_USERPOOL_ID, generate_TENANT_IDENTITY_POOL_ID } from '../../api
 
 import { LoginStudent, buildUserObject } from '../../api/aws/aws-cognito'
 import { getTenantProfile, } from '../../api/auth/tenant_api'
+import { saveTenantToRedux } from '../../actions/auth/auth_actions'
 
 class Login extends Component {
 
@@ -32,7 +33,7 @@ class Login extends Component {
 			errorMessage: null,							// error message to be shown
 			verified_modal: false,					// flag for popup modal to tell user they're verified
 			reset_modal: false,					// flag for popup modal to tell user their password was reset
-		},
+		}
 		this.cognitoUser = null
 	}
 
@@ -88,7 +89,6 @@ class Login extends Component {
 		})
 		// login to aws cognito and get the staff details back
 		LoginStudent(state).then((data) => {
-			console.log(data)
 			// reflect successful login in UI
 			this.setState({
 				submitted_staff: true,
@@ -98,19 +98,17 @@ class Login extends Component {
 			this.props.closeModal()
 				// get the full staff details using the staff_id from AWS Cognito
 				getTenantProfile({ tenant_id: data.sub })
-					.then((fullStaff) => {
-						console.log(fullStaff)
+					.then((data) => {
 						// save the authenticated staff to Redux state
-						this.saveStaffProfile(fullStaff)
+		        this.props.saveTenantToRedux(data)
+						this.props.history.push('/')
 					})
 					.catch((err) => {
 						this.setState({
 							errorMessage: 'Error logging in.'
 						})
-						this.props.toggleAuthLoading(false)
 					})
 		}).catch((err) => {
-			console.log(err)
 			// this.props.toggleAuthLoading(false)
 			this.setState({
 				errorMessage: err.message,
@@ -200,8 +198,7 @@ class Login extends Component {
 
 Login.propTypes = {
   history: PropTypes.object,
-	toggleAuthLoading: PropTypes.func.isRequired,
-	forwardUrlLocation: PropTypes.func.isRequired,
+	saveTenantToRedux: PropTypes.func.isRequired,
 	closeModal: PropTypes.func,					// passed in
 }
 
@@ -220,6 +217,7 @@ const mapStateToProps = (state) => {
 
 export default withRouter(
 	connect(mapStateToProps, {
+		saveTenantToRedux,
 	})(RadiumHOC)
 )
 
