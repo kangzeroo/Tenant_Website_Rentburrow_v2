@@ -68,7 +68,8 @@ class Register extends Component {
 					const registerJSON = {
 						tenant_id: cognito_id,
 						email,
-						name: `${this.state.first_name} ${this.state.last_name}`,
+						first_name: this.state.first_name,
+						last_name: this.state.last_name,
 						phone: this.state.phone_number,
 					}
 					this.props.history.push('/register/verify')
