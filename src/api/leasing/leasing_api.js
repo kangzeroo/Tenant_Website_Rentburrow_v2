@@ -2,11 +2,12 @@ import uuid from 'uuid'
 import axios from 'axios'
 import { sendSimpleApplicationEmailToRentburrow } from '../messaging/simple_application_email'
 import { CONTRACTING_MICROSERVICE } from '../API_URLS'
+import authHeaders from '../authHeaders'
 
 
 export const checkWhatLandlordWantsFromTenant = (building_id) => {
   const p = new Promise((res, rej) => {
-    // axios.post(`${CONTRACTING_MICROSERVICE}/check_what_landlord_wants_in_application`, { building_id })
+    // axios.post(`${CONTRACTING_MICROSERVICE}/check_what_landlord_wants_in_application`, { building_id }, authHeaders())
     //   .then((data) => {
     //     // once we have the response, only then do we dispatch an action to Redux
     //     res(data.data)
@@ -110,7 +111,7 @@ export const saveSimpleForm = (group_id, group_members, building, landlord, grou
       })
     }
     sendSimpleApplicationEmailToRentburrow(leaseOjb, building.building_alias, landlord)
-    // axios.post(`${CONTRACTING_MICROSERVICE}/save_simple_application`, leaseOjb)
+    // axios.post(`${CONTRACTING_MICROSERVICE}/save_simple_application`, leaseOjb, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

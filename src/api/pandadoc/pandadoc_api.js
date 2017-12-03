@@ -1,10 +1,11 @@
 import axios from 'axios'
 import FileDownload from 'react-file-download'
 import { SUBLETTING_MICROSERVICE } from '../API_URLS'
+import authHeaders from '../authHeaders'
 
 export const generateSubletContract = (contract_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/generate_sublet_contract`, { contract_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_sublet_contract`, { contract_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -18,7 +19,7 @@ export const generateSubletContract = (contract_id) => {
 
 export const generateLeaseContract = (application_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/generate_lease_contract`, { application_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_lease_contract`, { application_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -32,7 +33,7 @@ export const generateLeaseContract = (application_id) => {
 
 export const authenticatePandaDoc = (code) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/pandadoc_authentication`, { code })
+    axios.post(`${SUBLETTING_MICROSERVICE}/pandadoc_authentication`, { code }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -46,7 +47,7 @@ export const authenticatePandaDoc = (code) => {
 
 export const generateNewTokens = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_tokens`, obj)
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_tokens`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -60,7 +61,7 @@ export const generateNewTokens = (obj) => {
 
 export const generateNewSubleteeSession = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_subletee_session`, obj)
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_subletee_session`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -74,7 +75,7 @@ export const generateNewSubleteeSession = (obj) => {
 
 export const generateNewSubletorSession = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_subletor_session`, obj)
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_subletor_session`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -88,7 +89,7 @@ export const generateNewSubletorSession = (obj) => {
 
 export const generateNewLeaseSession = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_lease_session`, obj)
+    axios.post(`${SUBLETTING_MICROSERVICE}/generate_new_lease_session`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -102,7 +103,7 @@ export const generateNewLeaseSession = (obj) => {
 
 export const updateDocumentStatus = (tenant_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/update_document_status`, { tenant_id, })
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_document_status`, { tenant_id, }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -116,7 +117,7 @@ export const updateDocumentStatus = (tenant_id) => {
 
 export const updateLeaseDocumentStatus = (tenant_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/update_lease_document_status`, { tenant_id, })
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_lease_document_status`, { tenant_id, }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -130,7 +131,7 @@ export const updateLeaseDocumentStatus = (tenant_id) => {
 
 export const uploadHello = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/upload_hello`, obj)
+    axios.post(`${SUBLETTING_MICROSERVICE}/upload_hello`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

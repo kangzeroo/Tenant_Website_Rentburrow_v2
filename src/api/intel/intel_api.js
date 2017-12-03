@@ -1,13 +1,13 @@
 import axios from 'axios'
 import CryptoJS from 'crypto-js'
 import { INTEL_MICROSERVICE } from '../API_URLS'
-// import authHeaders from '../authHeaders'
+import authHeaders from '../authHeaders'
 
 // send to API
 export const sendOffToDynamoDB = (organizedCollection) => {
   const p = new Promise((res, rej) => {
     const encryptedIntel = CryptoJS.AES.encrypt(JSON.stringify(organizedCollection), 'heartbeatIsStronk').toString()
-    axios.post(`${INTEL_MICROSERVICE}/heartbeat`, { heartbeat: encryptedIntel })
+    axios.post(`${INTEL_MICROSERVICE}/heartbeat`, { heartbeat: encryptedIntel }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
