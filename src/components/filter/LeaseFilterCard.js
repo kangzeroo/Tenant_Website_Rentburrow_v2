@@ -27,7 +27,10 @@ class LeaseFilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			room_count: 1,
+			room_count: {
+				min: 1,
+				max: 5,
+			},
 			ensuite_bath: false,
 			utils_incl: false,
 			parking_avail: false,
@@ -125,7 +128,7 @@ class LeaseFilterCard extends Component {
 						/>
 					</div>
 				</div>
-				<div style={comStyles().roomCountBox}>
+				{/*<div style={comStyles().roomCountBox}>
 					<div style={comStyles().label}>
 						<h2>Bedrooms</h2>
 					</div>
@@ -148,6 +151,22 @@ class LeaseFilterCard extends Component {
 							icon='plus'
 							onClick={() => this.updateAttr('room_count', this.state.room_count + 1)}
 							disabled={this.state.room_count >= 10}
+						/>
+					</div>
+				</div>*/}
+				<div style={comStyles().sliderBox}>
+					<div style={comStyles().label}>
+						<h2>Bedrooms</h2>
+					</div>
+					<div style={comStyles().slider}>
+						<InputRange
+							step={1}
+		          maxValue={5}
+		          minValue={1}
+		          formatLabel={(value) => `${value >= 5 ? '5+' : value}`}
+		          value={this.state.room_count}
+		          onChange={(value) => this.updateAttr('room_count', value)}
+		          onChangeComplete={value => console.log()}
 						/>
 					</div>
 				</div>
@@ -297,7 +316,6 @@ const comStyles = () => {
 			display: 'flex',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-			height: '50px',
 		},
 		roomCountBox: {
 			padding: '20px 10px 20px 10px',

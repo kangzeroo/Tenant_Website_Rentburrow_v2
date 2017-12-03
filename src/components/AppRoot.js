@@ -60,6 +60,11 @@ import ForgotPassword from './auth/ForgotPassword'
 import AccountVerification from './auth/AccountVerification'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
+
+import MobileHeader from './mobile/components/MobileHeader'
+import MobilePage from './mobile/MobilePage'
+import MobileBuildingPage from './mobile/components/buildings/MobileBuildingPage'
+
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -85,6 +90,8 @@ class AppRoot extends Component {
       toggle_modal: false,
       modal_name: '',              // name of the modal
       context: {},
+
+      mobile: false,
     }
   }
 
@@ -121,7 +128,10 @@ class AppRoot extends Component {
   checkIfMobile() {
     if (screen.width <= 600 || screen.height <= 740) {
 			// window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
-		}
+      this.setState({
+        mobile: true,
+      })
+    }
   }
 
   autoSetLanguage() {
@@ -265,20 +275,11 @@ class AppRoot extends Component {
     app_root.scrollTop = 0
   }
 
-  // note that we have <StyleRoot>, which must be defined in order to use Radium
-  // <StyleRoot> enables Radium styling to be used in all child compts
-  // hence why the most outer div uses inline styles
-	render() {
-    // const hideFooter = true
+  renderMainSite() {
     const hideFooter = this.props.location.pathname === '/' || this.props.location.pathname === '/sublets' || this.props.location.pathname === '/leases' || this.props.location.pathname === '/sublet' || this.props.location.pathname === '/lease'
-		return (
-      <div id='AppRoot' style={comStyles().main}>
-        <Helmet>
-          <html lang={this.props.language}></html>
-        </Helmet>
-        <StyleRoot>
+    return (
+      <StyleRoot>
         <div style={comStyles(hideFooter).main}>
-
           <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
               {
                 this.renderAppropriateModal(this.state.modal_name, this.state.context)
@@ -352,25 +353,74 @@ class AppRoot extends Component {
               </Switch>
 
               {
-                hideFooter
+                this.props.tenant_profile.tenant_id
                 ?
-                null
+                <Switch>
+                  <Route path='/signing/sublet' component={SubletApplication} />
+                  <Route path='/signing/lease/:building_id' component={LeaseApplication} />
+                  <Route exact path='/signing/example/paperwork/sublet' component={ExampleSubletPaperwork} />
+                </Switch>
                 :
-                <Footer forceScrollTop={() => this.forceScrollTop()} />
+                null
               }
 
-            </div>
+              {/* Route Mobile Site to Here .... */}
+            </Switch>
 
             {
-              this.props.tenant_profile && this.props.tenant_profile.tenant_id
+              hideFooter
               ?
-              <Chat style={comStyles().chat} />
-              :
               null
+              :
+              <Footer forceScrollTop={() => this.forceScrollTop()} />
             }
 
           </div>
-        </StyleRoot>
+
+          {
+            this.props.tenant_profile && this.props.tenant_profile.tenant_id
+            ?
+            <Chat style={comStyles().chat} />
+            :
+            null
+          }
+
+        </div>
+      </StyleRoot>
+    )
+  }
+
+  renderMobileSite() {
+    return (
+      <div>
+        <MobileHeader style={comStyles().header} />
+        <div id='main_content' className='pretty_scrollbar' style={comStyles().content}>
+          <Switch>
+            <Route exact path='/' component={MobilePage} />
+            <Route exact path='/:building_alias' component={MobileBuildingPage} />
+          </Switch>
+        </div>
+      </div>
+    )
+  }
+
+  // note that we have <StyleRoot>, which must be defined in order to use Radium
+  // <StyleRoot> enables Radium styling to be used in all child compts
+  // hence why the most outer div uses inline styles
+	render() {
+    // const hideFooter = true
+		return (
+      <div id='AppRoot' style={comStyles().main}>
+        <Helmet>
+          <html lang={this.props.language}></html>
+        </Helmet>
+        {
+          this.state.mobile
+          ?
+          this.renderMobileSite()
+          :
+          this.renderMainSite()
+        }
       </div>
 		)
 	}

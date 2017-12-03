@@ -39,11 +39,13 @@ class HousingPage extends Component {
 		this.props.selectHelpThread()
 	}
 
+	/* {
+		...this.props.current_gps_center,
+		filterParams: this.props.lease_filter_params,
+	}*/
+
 	refreshBuildings() {
-		queryBuildingsInArea({
-			...this.props.current_gps_center,
-			filterParams: this.props.lease_filter_params,
-		})
+		queryBuildingsInArea()
 		.then((data) => {
 			const buildings = data
 			// Sort the buildings randomly
