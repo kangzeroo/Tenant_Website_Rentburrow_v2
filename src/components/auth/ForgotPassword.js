@@ -108,7 +108,7 @@ class ForgotPassword extends Component {
 	render() {
 		return (
 			<div id='ForgotPassword' style={comStyles().container}>
-				<p>RESET PASSWORD</p>
+				<h2>RESET PASSWORD</h2>
 				{
 					this.state.errorMessage
 					?
@@ -175,6 +175,8 @@ const comStyles = () => {
 		container: {
 			display: 'flex',
 			flexDirection: 'column',
+			height: '80vh',
+			padding: '50px',
 		},
 		sendResetEmail: {
 			display: 'flex',

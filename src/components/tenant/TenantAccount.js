@@ -257,6 +257,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      height: '80vh',
 		},
     success: {
       display: 'flex',

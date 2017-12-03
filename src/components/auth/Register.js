@@ -114,7 +114,7 @@ class Register extends Component {
 	render() {
 		return (
 			<div id='Register' style={comStyles().container}>
-				<p>REGISTER PAGE</p>
+				<h2>ACCOUNT REGISTRATION</h2>
 				<Input value={this.state.first_name} onChange={(e) => this.updateAttr(e, 'first_name')} type='text' placeholder='First Name' />
 				<Input value={this.state.last_name} onChange={(e) => this.updateAttr(e, 'last_name')} type='text' placeholder='Last Name' />
 				<Input value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='text' placeholder='Email' />
@@ -162,6 +162,9 @@ const comStyles = () => {
 		container: {
 			display: 'flex',
 			flexDirection: 'column',
+			height: '80vh',
+			padding: '50px',
+			justifyContent: 'space-between',
 		}
 	}
 }

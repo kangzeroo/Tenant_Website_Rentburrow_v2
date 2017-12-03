@@ -128,7 +128,7 @@ class AccountVerification extends Component {
 	render() {
 		return (
 			<div id='AccountVerification' style={comStyles().container}>
-				<p>VERIFY ACCOUNT</p>
+				<h2>VERIFY ACCOUNT</h2>
 				<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='text' placeholder='Email Address' />
 				<Input id='pin_input' value={this.state.pin} onChange={(e) => this.updateAttr(e, 'pin')} type='text' placeholder='Verification PIN' />
 				{
@@ -185,6 +185,8 @@ const comStyles = () => {
 		container: {
 			display: 'flex',
 			flexDirection: 'column',
+			height: '80vh',
+			padding: '50px',
 		}
 	}
 }
