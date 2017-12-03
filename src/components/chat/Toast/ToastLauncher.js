@@ -93,7 +93,7 @@ const comStyles = (link) => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			position: 'absolute',
-			bottom: '20px',
+			bottom: '50px',
 			right: '55px',
       zIndex: 99999,
       height: 'auto',
