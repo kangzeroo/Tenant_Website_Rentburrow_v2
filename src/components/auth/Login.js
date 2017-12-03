@@ -178,8 +178,8 @@ class Login extends Component {
 						    Login
 						  </Button>
 						}
-						<Link to='/login/forgot'>Forgot Password</Link>
-						<Link to='/register'>Sign Up</Link>
+						<Link to='/login/forgot' onClick={() => this.props.closeModal()}>Forgot Password</Link>
+						<Link to='/register' onClick={() => this.props.closeModal()}>Sign Up</Link>
 
 						{ this.renderVerifiedModal() }
 						{ this.renderResetModal() }

@@ -402,7 +402,6 @@ export const unauthRoleStudent = () => {
 		AWS.config.credentials.get(() => {
 			const client = new AWS.CognitoSyncManager()
 			// console.log(generate_TENANT_IDENTITY_POOL_ID())
-			// console.log(AWS.config.credentials)
 			if (AWS.config.credentials.expired) {
 				localStorage.removeItem('fbToken')
 			}
