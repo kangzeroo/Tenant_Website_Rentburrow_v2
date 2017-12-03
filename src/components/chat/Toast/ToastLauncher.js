@@ -32,10 +32,10 @@ class ToastLauncher extends Component {
                 icon={toast.icon ? toast.icon : false}
                 header={toast.title}
                 content={toast.text}
-                onClick={toast.link ? () => console.log(toast.link) : () => {}}
+                onClick={toast.link ? () => window.open(toast.link, '_blank') : () => {}}
                 color={toast.color}
                 onDismiss={(e) => this.dismissToast(e, toast.id)}
-                style={comStyles().toast}
+                style={comStyles(toast.link).toast}
               />
             )
           })
@@ -77,7 +77,14 @@ export default withRouter(
 // ===============================
 
 // the JS function that returns Radium JS styling
-const comStyles = () => {
+const comStyles = (link) => {
+  let toastStyles = {}
+  if (link) {
+    toastStyles = {
+      ...toastStyles,
+      cursor: 'pointer'
+    }
+  }
 	return {
     container: {
 			display: 'flex',
@@ -94,6 +101,7 @@ const comStyles = () => {
     toast: {
       margin: '5px auto',
       pointerEvents: 'auto',
+      ...toastStyles,
     }
 	}
 }

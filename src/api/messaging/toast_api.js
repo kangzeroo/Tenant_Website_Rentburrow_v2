@@ -19,6 +19,17 @@ export const getInitialToastMessages = (location) => {
         icon: 'home'
       }
     ]
+  } else if (location.pathname.indexOf('sublet') > -1) {
+    return [
+      {
+        id: 'sublets-did-you-know',
+        title: 'You Can Find 12 Month Leases Too!',
+        text: 'Click here to start home hunting',
+        color: 'blue',
+        icon: 'home',
+        link: 'https://rentburrow.com/lease'
+      }
+    ]
   } else {
     return []
   }
