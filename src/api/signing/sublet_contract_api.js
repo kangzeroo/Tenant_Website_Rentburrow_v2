@@ -1,10 +1,11 @@
 import axios from 'axios'
 import { SUBLETTING_MICROSERVICE } from '../API_URLS'
+import authHeaders from '../authHeaders'
 
 // get sublet from dynamodb based off facebook post_id
 export const getSubletPostById = (post_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/get_sublet_by_post_id`, { post_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_sublet_by_post_id`, { post_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data.data)
@@ -19,7 +20,7 @@ export const getSubletPostById = (post_id) => {
 // save sublettee form to database
 export const saveSubleteeFormToDb = (form) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/save_subletee_form`, form)
+    axios.post(`${SUBLETTING_MICROSERVICE}/save_subletee_form`, form, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -34,7 +35,7 @@ export const saveSubleteeFormToDb = (form) => {
 // save subletor form to database
 export const saveSubletorFormToDb = (form) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/save_subletor_form`, form)
+    axios.post(`${SUBLETTING_MICROSERVICE}/save_subletor_form`, form, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -49,7 +50,7 @@ export const saveSubletorFormToDb = (form) => {
 // get the subletee form from db
 export const getSubleteeContractForSubletor = (contract_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/get_subletee_contract`, { contract_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_subletee_contract`, { contract_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data[0])
@@ -64,7 +65,7 @@ export const getSubleteeContractForSubletor = (contract_id) => {
 // get the subletor form from db
 export const getSubletorContractForReview = (contract_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/get_subletor_contract`, { contract_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_subletor_contract`, { contract_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data[0])
@@ -79,7 +80,7 @@ export const getSubletorContractForReview = (contract_id) => {
 // get the subletee profile
 export const getSubleteeProfile = (subletee_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/get_subletee_profile`, { subletee_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_subletee_profile`, { subletee_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data[0])
@@ -93,7 +94,7 @@ export const getSubleteeProfile = (subletee_id) => {
 
 export const getContractLink = (contract_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SUBLETTING_MICROSERVICE}/get_contract_link`, { contract_id })
+    axios.post(`${SUBLETTING_MICROSERVICE}/get_contract_link`, { contract_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

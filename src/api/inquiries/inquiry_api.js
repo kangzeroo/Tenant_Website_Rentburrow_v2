@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { CONTRACTING_MICROSERVICE } from '../API_URLS'
+import authHeaders from '../authHeaders'
 
 export const insertInquiries = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/insert_inquiries`, obj)
+    axios.post(`${CONTRACTING_MICROSERVICE}/insert_inquiries`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -18,7 +19,7 @@ export const insertInquiries = (obj) => {
 
 export const insertInquiry = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/insert_inquiry`, obj)
+    axios.post(`${CONTRACTING_MICROSERVICE}/insert_inquiry`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -32,7 +33,7 @@ export const insertInquiry = (obj) => {
 
 export const tenantFilledInquiry = (tenant_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/tenant_completed_inquiry`, { tenant_id, })
+    axios.post(`${CONTRACTING_MICROSERVICE}/tenant_completed_inquiry`, { tenant_id, }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -46,7 +47,7 @@ export const tenantFilledInquiry = (tenant_id) => {
 
 export const tenantFilledInquiryForBuilding = (tenant_id, building_id) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/tenant_completed_inquiry_for_building`, { tenant_id, building_id, })
+    axios.post(`${CONTRACTING_MICROSERVICE}/tenant_completed_inquiry_for_building`, { tenant_id, building_id, }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
@@ -60,7 +61,7 @@ export const tenantFilledInquiryForBuilding = (tenant_id, building_id) => {
 
 export const insertTenantFromApplication = (obj) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${CONTRACTING_MICROSERVICE}/insert_tenant_from_application`, obj)
+    axios.post(`${CONTRACTING_MICROSERVICE}/insert_tenant_from_application`, obj, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

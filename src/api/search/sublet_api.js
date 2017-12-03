@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { SEARCH_MICROSERVICE } from '../API_URLS'
+import authHeaders from '../authHeaders'
 
 export const querySubletsInArea = ({ lat, lng, filterParams }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/get_sublets`, { lat, lng, filterParams })
+    axios.post(`${SEARCH_MICROSERVICE}/get_sublets`, { lat, lng, filterParams }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data.map((sublet) => {
@@ -21,7 +22,7 @@ export const querySubletsInArea = ({ lat, lng, filterParams }) => {
 
 export const matchSubletsByPlaceId = ({ place_id }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets`, { place_id })
+    axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets`, { place_id }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         // console.log(data)
@@ -38,7 +39,7 @@ export const matchSubletsByPlaceId = ({ place_id }) => {
 
 export const matchSubletsByAddress = ({ address }) => {
   const p = new Promise((res, rej) => {
-    axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets_by_address`, { address })
+    axios.post(`${SEARCH_MICROSERVICE}/get_matching_sublets_by_address`, { address }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         // console.log(data)
