@@ -365,7 +365,6 @@ class AppRoot extends Component {
               }
 
               {/* Route Mobile Site to Here .... */}
-            </Switch>
 
             {
               hideFooter
