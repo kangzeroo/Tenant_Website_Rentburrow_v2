@@ -9,8 +9,10 @@ import {
   SELECT_POPUP_BUILDING,
   FILTERED_SUBLETS,
   TOGGLE_HIDE_SOLD_OUTS,
+  SORTED_BUILDINGS,
 } from '../../actions/action_types'
 import { findAllMatchingGPS } from '../../api/map/map_api'
+import { check_if_building_accessible, } from '../../api/label/building_label_api'
 
 const INITIAL_STATE = {
   search_string: '',
@@ -36,7 +38,7 @@ export default (state = INITIAL_STATE, action) => {
         }).filter((building) => {
           if (building.label) {
             if (state.hide_sold_outs) {
-              return building.label.toLowerCase().indexOf('sold out') === -1
+              return building.label.toLowerCase().indexOf('sold out') === -1 || building.label.toLowerCase().indexOf('not yet') === -1
             } else {
               return true
             }
@@ -44,7 +46,7 @@ export default (state = INITIAL_STATE, action) => {
             return true
           }
         }).sort((building) => {
-          if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+          if (building.label && (building.label.toLowerCase().indexOf('sold out') > -1 || building.label.toLowerCase().indexOf('not yet') > -1)) {
             return 1
           } else {
             return -1
@@ -60,7 +62,7 @@ export default (state = INITIAL_STATE, action) => {
         building_search_results: action.payload.filter((building) => {
           if (building.label) {
             if (state.hide_sold_outs) {
-              return building.label.toLowerCase().indexOf('sold out') === -1
+              return building.label.toLowerCase().indexOf('sold out') === -1 || building.label.toLowerCase().indexOf('not yet') === -1
             } else {
               return true
             }
@@ -68,7 +70,7 @@ export default (state = INITIAL_STATE, action) => {
             return true
           }
         }).sort((building) => {
-          if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+          if (building.label && (building.label.toLowerCase().indexOf('sold out') > -1 || building.label.toLowerCase().indexOf('not yet') > -1)) {
             return 1
           } else {
             return -1
@@ -82,7 +84,7 @@ export default (state = INITIAL_STATE, action) => {
         building_search_results: action.payload.filter((building) => {
           if (building.label) {
             if (state.hide_sold_outs) {
-              return building.label.toLowerCase().indexOf('sold out') === -1
+              return building.label.toLowerCase().indexOf('sold out') === -1 || building.label.toLowerCase().indexOf('not yet') > -1
             } else {
               return true
             }
@@ -90,12 +92,18 @@ export default (state = INITIAL_STATE, action) => {
             return true
           }
         }).sort((building) => {
-          if (building.label && building.label.toLowerCase().indexOf('sold out') > -1) {
+          if (building.label && (building.label.toLowerCase().indexOf('sold out') > -1 || building.label.toLowerCase().indexOf('not yet') > -1)) {
             return 1
           } else {
             return -1
           }
         }),
+      }
+    case SORTED_BUILDINGS:
+      return {
+        ...state,
+        building_search_results: action.payload,
+        buildings: action.payload,
       }
     case CHANGE_SEARCH_STYLE:
       return {

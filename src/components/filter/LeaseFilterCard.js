@@ -27,10 +27,7 @@ class LeaseFilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			room_count: {
-				min: 1,
-				max: 5,
-			},
+			room_count: 1,
 			ensuite_bath: false,
 			utils_incl: false,
 			parking_avail: false,
@@ -71,7 +68,7 @@ class LeaseFilterCard extends Component {
 		// if the number of rooms filter has changed...
 		if (this.state.room_count > 1) {
 			filtered = filtered.filter((building) => {
-				return parseInt(building.max_rooms, 10) >= this.state.room_count
+				return parseInt(building.max_rooms, 10) >= this.state.room_count && parseInt(building.min_rooms, 10) <= this.state.room_count
 			})
 		}
 
@@ -128,7 +125,7 @@ class LeaseFilterCard extends Component {
 						/>
 					</div>
 				</div>
-				{/*<div style={comStyles().roomCountBox}>
+				<div style={comStyles().roomCountBox}>
 					<div style={comStyles().label}>
 						<h2>Bedrooms</h2>
 					</div>
@@ -142,7 +139,7 @@ class LeaseFilterCard extends Component {
 							disabled={this.state.room_count <= 1}
 						/>
 						<div style={comStyles().room_text} >
-							{this.state.room_count}+
+							{this.state.room_count} Rooms
 						</div>
 						<Button
 							circular
@@ -153,23 +150,23 @@ class LeaseFilterCard extends Component {
 							disabled={this.state.room_count >= 10}
 						/>
 					</div>
-				</div>*/}
-				<div style={comStyles().sliderBox}>
+				</div>
+				{/*<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Bedrooms</h2>
 					</div>
 					<div style={comStyles().slider}>
 						<InputRange
 							step={1}
-		          maxValue={5}
+		          maxValue={6}
 		          minValue={1}
-		          formatLabel={(value) => `${value >= 5 ? '5+' : value}`}
+		          formatLabel={(value) => `${value >= 6 ? '5+' : value}`}
 		          value={this.state.room_count}
 		          onChange={(value) => this.updateAttr('room_count', value)}
 		          onChangeComplete={value => console.log()}
 						/>
 					</div>
-				</div>
+				</div>*/}
 				{/*<div style={comStyles().sliderBox}>
 					<div style={comStyles().label}>
 						<h2>Lease Length</h2>
@@ -192,11 +189,11 @@ class LeaseFilterCard extends Component {
 						checked={this.state.ensuite_bath}
 						onChange={(e, x) => this.updateAttr('ensuite_bath', x.checked)}
 						toggle />
-					<Checkbox
+					{/*}<Checkbox
 						label='Utilities Included'
 						checked={this.state.utils_incl}
 						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
-						toggle />
+						toggle />*/}
 					<Checkbox
 						label='Hide Sold Outs'
 						checked={this.props.hide_sold_outs}
@@ -280,8 +277,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-			minHeight: '300px',
-			maxHeight: '300px',
+			minHeight: '260px',
+			maxHeight: '260px',
 			padding: '30px 30px 10px 30px',
 			zIndex: '9999',
 			backgroundColor: 'white',

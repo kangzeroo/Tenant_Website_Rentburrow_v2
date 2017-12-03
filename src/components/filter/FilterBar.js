@@ -23,6 +23,7 @@ import {
 } from '../../api/filter/filter_api'
 import {
   saveBuildingsToRedux,
+  saveSortedBuildingsToRedux,
   saveSubletsToRedux,
   changeRentType,
 } from '../../actions/search/search_actions'
@@ -153,29 +154,29 @@ class FilterBar extends Component {
           sorted_buildings = this.props.building_search_results.sort((a, b) => {
             let a_price
             let b_price
-            if (isNaN(a.min_price)) {
+            if (isNaN(a.max_price)) {
               a_price = 0
             } else {
-              a_price = parseInt(a.min_price, 10)
+              a_price = parseInt(a.max_price, 10)
             }
 
-            if (isNaN(b.min_price)) {
+            if (isNaN(b.max_price)) {
               b_price = 0
             } else {
-              b_price = parseInt(b.min_price, 10)
+              b_price = parseInt(b.max_price, 10)
             }
             return b_price - a_price
           })
-        } else if (value.value === 'datenew') {
+        } else if (value.value === 'dateold') {
           sorted_buildings = this.props.building_search_results.sort((a, b) => {
             return Date.parse(a.created_at) - Date.parse(b.created_at)
           })
-        } else if (value.value === 'dateold') {
+        } else if (value.value === 'datenew') {
           sorted_buildings = this.props.building_search_results.sort((a, b) => {
             return Date.parse(b.created_at) - Date.parse(a.created_at)
           })
         }
-        this.props.saveBuildingsToRedux(sorted_buildings)
+        this.props.saveSortedBuildingsToRedux(sorted_buildings)
       }
     })
   }
@@ -280,6 +281,7 @@ FilterBar.propTypes = {
   building_search_results: PropTypes.array.isRequired,
   sublet_search_results: PropTypes.array.isRequired,
   saveBuildingsToRedux: PropTypes.func.isRequired,
+  saveSortedBuildingsToRedux: PropTypes.func.isRequired,
   saveSubletsToRedux: PropTypes.func.isRequired,
   changeRentType: PropTypes.func.isRequired,
   rent_type: PropTypes.string.isRequired,
@@ -315,6 +317,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
     saveBuildingsToRedux,
+    saveSortedBuildingsToRedux,
     saveSubletsToRedux,
     changeRentType,
     collectIntel,

@@ -12,6 +12,7 @@ import {
   FILTERED_SUBLETS,
   UPDATE_SEARCH_RADIUS,
   TOGGLE_HIDE_SOLD_OUTS,
+  SORTED_BUILDINGS,
 } from '../action_types'
 
 // if there is a failure, we send this to Redux
@@ -20,6 +21,24 @@ export const saveBuildingsToRedux = (buildings) => {
   return (dispatch) => {
     dispatch({
       type: FOUND_BUILDINGS,
+      payload: buildings.map((x) => {
+        return {
+          ...x,
+          gps_x: parseFloat(x.gps_x),
+          gps_y: parseFloat(x.gps_y),
+          max_price: parseFloat(x.max_price),
+          min_price: parseFloat(x.min_price),
+        }
+      }),
+    })
+  }
+}
+
+export const saveSortedBuildingsToRedux = (buildings) => {
+  // dispatch lets you send actions to Redux
+  return (dispatch) => {
+    dispatch({
+      type: SORTED_BUILDINGS,
       payload: buildings.map((x) => {
         return {
           ...x,
