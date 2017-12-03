@@ -24,6 +24,7 @@ import { Helmet } from 'react-helmet'
 import Header from './Header'
 import Footer from './Footer'
 import Chat from './chat/ChatPopup/Chat'
+import ToastLauncher from './chat/Toast/ToastLauncher'
 import LandingPage from './instructions/LandingPage'
 import ProTipsPage from './community/student_info/ProTipsPage'
 import PrizesPage from './community/student_info/PrizesPage'
@@ -67,8 +68,10 @@ import MobileBuildingPage from './mobile/components/buildings/MobileBuildingPage
 
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
+import { getInitialToastMessages } from '../api/messaging/toast_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin, forwardUrlLocation } from '../actions/auth/auth_actions'
+import { addToastMessage, removeToastMessage } from '../actions/messaging/toast_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
 import { changeRentType, saveSubletsToRedux } from '../actions/search/search_actions'
@@ -112,6 +115,8 @@ class AppRoot extends Component {
     this.beginCollectingIntel()
     // set the zoom level so that CSS displays well
     this.setZoomLevel()
+    // execute initial Toast messages
+    this.launchToasts()
   }
 
   detectBrowser() {
@@ -256,6 +261,22 @@ class AppRoot extends Component {
     }, 10000)
   }
 
+  launchToasts() {
+    setTimeout(() => {
+      getInitialToastMessages(this.props.location).forEach((toast, index) => {
+        const time = index * 1000
+        setTimeout(() => {
+          this.props.addToastMessage(toast)
+        }, time)
+      })
+    }, 5000)
+    setTimeout(() => {
+      getInitialToastMessages(this.props.location).forEach((toast) => {
+        this.props.removeToastMessage(toast.id)
+      })
+    }, 15000)
+  }
+
   setZoomLevel() {
     // const scale = 'scale(0.9)';
     // document.body.style.webkitTransform =  scale;    // Chrome, Opera, Safari
@@ -396,12 +417,14 @@ class AppRoot extends Component {
           </div>
 
           {
-            this.props.tenant_profile && this.props.tenant_profile.tenant_id
+            this.props.tenant_profile && this.props.tenant_profile.tenant_id && false
             ?
             <Chat style={comStyles().chat} />
             :
             null
           }
+
+          <ToastLauncher style={comStyles().toast_launcher} />
 
         </div>
       </StyleRoot>
@@ -466,6 +489,8 @@ AppRoot.propTypes = {
   location_forwarding: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   saveIntelToCloud: PropTypes.func.isRequired,
+  addToastMessage: PropTypes.func.isRequired,
+  removeToastMessage: PropTypes.func.isRequired,
   selected_building_to_apply_for: PropTypes.object,
 }
 
@@ -502,6 +527,8 @@ export default withRouter(connect(mapReduxToProps, {
   clearIntelList,
   forwardUrlLocation,
   saveIntelToCloud,
+  addToastMessage,
+  removeToastMessage,
 })(RadiumHOC))
 
 // =============================

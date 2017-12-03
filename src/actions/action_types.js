@@ -44,6 +44,8 @@ export const CHAT_HELP = 'CHAT_HELP'
 export const LISTEN_TO_FIREBASE_DB = 'LISTEN_TO_FIREBASE_DB'
 export const ADD_ALL_MESSAGES = 'ADD_ALL_MESSAGES'
 export const MARK_AS_READ = 'MARK_AS_READ'
+export const ADD_TOAST = 'ADD_TOAST'
+export const REMOVE_TOAST = 'REMOVE_TOAST'
 
 // Actions related to collecting intel
 export const COLLECT_INTEL = 'COLLECT_INTEL'

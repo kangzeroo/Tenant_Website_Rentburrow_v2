@@ -6,6 +6,7 @@ import searchReducer from './search/search_reducer'
 import filterReducer from './search/filter_reducer'
 import selectionReducer from './selection/selection_reducer'
 import messageReducer from './messaging/messaging_reducer'
+import toastsReducer from './messaging/toasts_reducer'
 import intelReducer from './intel/intel_reducer'
 import appReducer from './app/app_reducer'
 import leaseAppReducer from './contract/lease_application_reducer'
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	auth: authReducer,
 	community: communityReducer,
 	messaging: messageReducer,
+	toasts: toastsReducer,
 	search: searchReducer,
 	filter: filterReducer,
 	selection: selectionReducer,
