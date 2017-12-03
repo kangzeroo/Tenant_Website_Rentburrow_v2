@@ -13,7 +13,7 @@ export const getInitialToastMessages = (location) => {
     return [
       {
         id: 'new-building',
-        title: 'New Buildings Added Every Week',
+        title: 'New Buildings Filmed Every Week',
         text: 'Be sure to check back often',
         color: 'blue',
         icon: 'home'
