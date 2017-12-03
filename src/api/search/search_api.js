@@ -6,7 +6,7 @@ const agent = new https.Agent({
   rejectUnauthorized: false
 })
 
-export const queryBuildingsInArea = ({ lat, lng, filterParams }) => {
+export const queryBuildingsInArea = () => { //{ lat, lng, filterParams }) => {
   const p = new Promise((res, rej) => {
     // axios.post(`${SEARCH_MICROSERVICE}/search_buildings`, { lat, long })
     axios.post(`${SEARCH_MICROSERVICE}/get_all_active_buildings`, {}) // { httpsAgent: agent })

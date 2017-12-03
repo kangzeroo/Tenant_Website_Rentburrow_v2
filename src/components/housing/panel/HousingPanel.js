@@ -13,6 +13,8 @@ import {
 } from '../../../styles/base_colors'
 import {
 	Button,
+	Dimmer,
+	Segment,
 	Image,
 } from 'semantic-ui-react'
 import {
@@ -38,6 +40,8 @@ class HousingPanel extends Component {
 			page_start: 0,
 			page_end: 50,
 			page_number: 1,
+
+			dimmer: false,
 		}
 		this.scrollStream = null
 	}
@@ -140,6 +144,18 @@ class HousingPanel extends Component {
 		}
 	}
 
+	turnOnDimmer() {
+		this.setState({
+			dimmer: true,
+		})
+	}
+
+	turnOffDimmer() {
+		this.setState({
+			dimmer: false,
+		})
+	}
+
 	renderSubletCard(sublet, index) {
 		return (
 			<SubletCard
@@ -182,69 +198,69 @@ class HousingPanel extends Component {
 							)
 						})
 					*/}
-					<FilterBar
-						rent_type={this.props.rent_type}
-						buildings={this.props.buildings}
-					/>
-					{
-						this.props.rent_type === 'sublet'
-						?
-						<div style={comStyles().regular_nonscroll}>
-							{
-								this.props.sublet_search_results.length > 0
-								?
-								<div className='pretty_scrollbar' id='scroll_div' onScroll={(e, d) => this.handleScroll(e, d)} style={comStyles().scroll}>
-									{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
-										return this.renderSubletCard(sublet, index)
-									})}
-								</div>
-								:
-								<div style={comStyles().panel_background}>
-									{
-										this.props.sublets.length === 0
-										?
-										this.renderTimeout()
-										:
-										<div style={comStyles().no_matches_container} >
-											<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
-											<Button
-												primary
-												content='Go Back'
-												onClick={() => this.props.refresh()}
-											/>
-										</div>
-									}
-								</div>
-							}
-						</div>
-						:
-						<div className='pretty_scrollbar' id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
-							{
-								this.props.building_search_results.length > 0
-								?
-								this.props.building_search_results.map((building) => {
-									return this.generateCard(building)
-								})
-								:
-								<div style={comStyles().panel_background}>
-									{
-										this.props.buildings.length === 0
-										?
-										this.renderTimeout()
-										:
-										<div style={comStyles().no_matches_container} >
-											<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
-											<Button
-												primary
-												content='Go Back'
-												onClick={() => this.props.refresh()}
-											/>
-										</div>
-									}
-								</div>
-							}
-						</div>
-					}
+						<FilterBar
+							rent_type={this.props.rent_type}
+							buildings={this.props.buildings}
+						/>
+						{
+							this.props.rent_type === 'sublet'
+							?
+							<div style={comStyles().regular_nonscroll}>
+								{
+									this.props.sublet_search_results.length > 0
+									?
+									<div className='pretty_scrollbar' id='scroll_div' onScroll={(e, d) => this.handleScroll(e, d)} style={comStyles().scroll}>
+										{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
+											return this.renderSubletCard(sublet, index)
+										})}
+									</div>
+									:
+									<div style={comStyles().panel_background}>
+										{
+											this.props.sublets.length === 0
+											?
+											this.renderTimeout()
+											:
+											<div style={comStyles().no_matches_container} >
+												<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
+												<Button
+													primary
+													content='Go Back'
+													onClick={() => this.props.refresh()}
+												/>
+											</div>
+										}
+									</div>
+								}
+							</div>
+							:
+							<div className='pretty_scrollbar' id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
+								{
+									this.props.building_search_results.length > 0
+									?
+									this.props.building_search_results.map((building) => {
+										return this.generateCard(building)
+									})
+									:
+									<div style={comStyles().panel_background}>
+										{
+											this.props.buildings.length === 0
+											?
+											this.renderTimeout()
+											:
+											<div style={comStyles().no_matches_container} >
+												<h1 style={comStyles().no_matches}>No Matches Found :( </h1>
+												<Button
+													primary
+													content='Go Back'
+													onClick={() => this.props.refresh()}
+												/>
+											</div>
+										}
+									</div>
+								}
+							</div>
+						}
 			</div>
 		)
 	}

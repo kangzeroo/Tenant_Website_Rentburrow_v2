@@ -56,6 +56,11 @@ import Authenticated from './pandadoc/Authenticated'
 import Logout from './auth/Logout'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
+
+import MobileHeader from './mobile/components/MobileHeader'
+import MobilePage from './mobile/MobilePage'
+import MobileBuildingPage from './mobile/components/buildings/MobileBuildingPage'
+
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
@@ -81,6 +86,8 @@ class AppRoot extends Component {
       toggle_modal: false,
       modal_name: '',              // name of the modal
       context: {},
+
+      mobile: false,
     }
   }
 
@@ -117,7 +124,10 @@ class AppRoot extends Component {
   checkIfMobile() {
     if (screen.width <= 600 || screen.height <= 740) {
 			// window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
-		}
+      this.setState({
+        mobile: true,
+      })
+    }
   }
 
   autoSetLanguage() {
@@ -261,108 +271,134 @@ class AppRoot extends Component {
     app_root.scrollTop = 0
   }
 
+  renderMainSite() {
+    const hideFooter = this.props.location.pathname === '/' || this.props.location.pathname === '/sublets' || this.props.location.pathname === '/leases' || this.props.location.pathname === '/sublet' || this.props.location.pathname === '/lease'
+    return (
+      <StyleRoot>
+        <div style={comStyles(hideFooter).main}>
+
+        <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+            {
+              this.renderAppropriateModal(this.state.modal_name, this.state.context)
+            }
+        </Modal>
+
+          <div id='language_tag' value={this.props.language} />
+
+          <Header style={comStyles().header} />
+
+          <div id='main_content' className='pretty_scrollbar' style={comStyles().content}>
+
+            <Switch>
+              <Route exact path='/' component={HousingPage} />
+              <Route exact path='/sandbox' component={HousingPage} />
+              <Route exact path='/invalid' component={InvalidPage} />
+              {/*<Route exact path='/welcome' component={LandingPage} />*/}
+              {/*<Route exact path='/protips' component={ProTipsPage} />*/}
+              <Route exact path='/uber' component={UberSignup} />
+              <Route exact path='/prizes' component={PrizesPage} />
+              {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
+              {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
+              <Route exact path='/contact' component={ContactUs} />
+              <Route exact path='/book-filming' component={BookAFilmingPage} />
+              <Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />
+              {/*<Route exact path='/how-it-works' component={HowItWorksLandlord} />*/}
+              {/*<Route exact path='/pricing' component={PricingLandlord} />*/}
+              {/*<Route exact path='/landlord-faq' component={FAQLandlord} />*/}
+              <Route exact path='/join-landlord' component={JoinPageLandlord} />
+              {/*<Route exact path='/community' component={CommunityPage} />*/}
+              <Route exact path='/logout' component={Logout} />
+
+              <Route exact path='/lease' component={HousingPage} />
+              <Route exact path='/leases' component={HousingPage} />
+
+              <Route exact path='/sublet' component={HousingPage} />
+              <Route exact path='/sublets' component={HousingPage} />
+
+              <Route exact path='/authenticate' component={Authenticate} />
+              <Route exact path='/authenticated' component={Authenticated} />
+
+              <Route exact path='/sublet/:sublet_id' component={SubletPage} />
+
+              <Route exact path='/account' component={TenantAccount} />
+              <Route exact path='/sublet_applications' component={SubletApplications} />
+              <Route exact path='/lease_applications' component={TenantLeaseApplications} />
+              <Route exact path='/applications/lease/:group_id' component={LeaseApplicationPage} />
+              <Route exact path='/applications/subletee/:subletee_id' component={SentApplicationPage} />
+              <Route exact path='/applications/subletor/:subletor_id' component={ReceivedApplicationPage} />
+              <Route exact path='/settings' component={TenantSettings} />
+
+              <Route exact path='/:building_alias' component={BuildingPage} />
+
+              {
+                this.props.tenant_profile.tenant_id
+                ?
+                <Switch>
+                  <Route path='/signing/sublet' component={SubletApplication} />
+                  <Route path='/signing/lease/:building_id' component={LeaseApplication} />
+                  <Route exact path='/signing/example/paperwork/sublet' component={ExampleSubletPaperwork} />
+                </Switch>
+                :
+                null
+              }
+
+              {/* Route Mobile Site to Here .... */}
+            </Switch>
+
+            {
+              hideFooter
+              ?
+              null
+              :
+              <Footer forceScrollTop={() => this.forceScrollTop()} />
+            }
+
+          </div>
+
+          {
+            this.props.tenant_profile && this.props.tenant_profile.tenant_id
+            ?
+            <Chat style={comStyles().chat} />
+            :
+            null
+          }
+
+        </div>
+      </StyleRoot>
+    )
+  }
+
+  renderMobileSite() {
+    return (
+      <div>
+        <MobileHeader style={comStyles().header} />
+        <div id='main_content' className='pretty_scrollbar' style={comStyles().content}>
+          <Switch>
+            <Route exact path='/' component={MobilePage} />
+            <Route exact path='/:building_alias' component={MobileBuildingPage} />
+          </Switch>
+        </div>
+      </div>
+    )
+  }
+
   // note that we have <StyleRoot>, which must be defined in order to use Radium
   // <StyleRoot> enables Radium styling to be used in all child compts
   // hence why the most outer div uses inline styles
 	render() {
     // const hideFooter = true
-    const hideFooter = this.props.location.pathname === '/' || this.props.location.pathname === '/sublets' || this.props.location.pathname === '/leases' || this.props.location.pathname === '/sublet' || this.props.location.pathname === '/lease'
 		return (
       <div id='AppRoot' style={comStyles().main}>
         <Helmet>
           <html lang={this.props.language}></html>
         </Helmet>
-        <StyleRoot>
-        <div style={comStyles(hideFooter).main}>
-
-          <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
-              {
-                this.renderAppropriateModal(this.state.modal_name, this.state.context)
-              }
-          </Modal>
-
-            <div id='language_tag' value={this.props.language} />
-
-            <Header style={comStyles().header} />
-
-            <div id='main_content' className='pretty_scrollbar' style={comStyles().content}>
-
-              <Switch>
-                <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={HousingPage} />
-                <Route exact path='/invalid' component={InvalidPage} />
-                {/*<Route exact path='/welcome' component={LandingPage} />*/}
-                {/*<Route exact path='/protips' component={ProTipsPage} />*/}
-                <Route exact path='/uber' component={UberSignup} />
-                <Route exact path='/prizes' component={PrizesPage} />
-                {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
-                {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
-                <Route exact path='/contact' component={ContactUs} />
-                <Route exact path='/book-filming' component={BookAFilmingPage} />
-                <Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />
-                {/*<Route exact path='/how-it-works' component={HowItWorksLandlord} />*/}
-                {/*<Route exact path='/pricing' component={PricingLandlord} />*/}
-                {/*<Route exact path='/landlord-faq' component={FAQLandlord} />*/}
-                <Route exact path='/join-landlord' component={JoinPageLandlord} />
-                {/*<Route exact path='/community' component={CommunityPage} />*/}
-                <Route exact path='/logout' component={Logout} />
-
-                <Route exact path='/lease' component={HousingPage} />
-                <Route exact path='/leases' component={HousingPage} />
-
-                <Route exact path='/sublet' component={HousingPage} />
-                <Route exact path='/sublets' component={HousingPage} />
-
-                <Route exact path='/authenticate' component={Authenticate} />
-                <Route exact path='/authenticated' component={Authenticated} />
-
-                <Route exact path='/sublet/:sublet_id' component={SubletPage} />
-
-                <Route exact path='/account' component={TenantAccount} />
-                <Route exact path='/sublet_applications' component={SubletApplications} />
-                <Route exact path='/lease_applications' component={TenantLeaseApplications} />
-                <Route exact path='/applications/lease/:group_id' component={LeaseApplicationPage} />
-                <Route exact path='/applications/subletee/:subletee_id' component={SentApplicationPage} />
-                <Route exact path='/applications/subletor/:subletor_id' component={ReceivedApplicationPage} />
-                <Route exact path='/settings' component={TenantSettings} />
-
-                <Route exact path='/:building_alias' component={BuildingPage} />
-
-                {
-                  this.props.tenant_profile.tenant_id
-                  ?
-                  <Switch>
-                    <Route path='/signing/sublet' component={SubletApplication} />
-                    <Route path='/signing/lease/:building_id' component={LeaseApplication} />
-            				<Route exact path='/signing/example/paperwork/sublet' component={ExampleSubletPaperwork} />
-                  </Switch>
-                  :
-                  null
-                }
-
-                {/* Route Mobile Site to Here .... */}
-              </Switch>
-
-              {
-                hideFooter
-                ?
-                null
-                :
-                <Footer forceScrollTop={() => this.forceScrollTop()} />
-              }
-
-            </div>
-
-            {
-              this.props.tenant_profile && this.props.tenant_profile.tenant_id
-              ?
-              <Chat style={comStyles().chat} />
-              :
-              null
-            }
-
-          </div>
-        </StyleRoot>
+        {
+          this.state.mobile
+          ?
+          this.renderMobileSite()
+          :
+          this.renderMainSite()
+        }
       </div>
 		)
 	}

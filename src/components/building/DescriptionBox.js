@@ -39,7 +39,7 @@ class DescriptionBox extends Component {
         {
           this.props.description.length > 1000
           ?
-          <div onClick={() => this.setState({ expanded: !this.state.expanded })} style={comStyles().expand}>
+          <div primary basic onClick={() => this.setState({ expanded: !this.state.expanded })} style={comStyles().expand}>
             {
               this.state.expanded
               ?
