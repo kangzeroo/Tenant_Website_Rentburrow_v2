@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import { xMidBlue } from '../../../styles/base_colors'
 import {
   Message,
+  Transition,
 } from 'semantic-ui-react'
 import { removeToastMessage } from '../../../actions/messaging/toast_actions'
 
@@ -23,24 +24,24 @@ class ToastLauncher extends Component {
 
 	render() {
 		return (
-			<div id='ToastLauncher' style={comStyles().container}>
-				{
-          this.props.toasts.map((toast) => {
-            return (
-              <Message
-                key={toast.id}
-                icon={toast.icon ? toast.icon : false}
-                header={toast.title}
-                content={toast.text}
-                onClick={toast.link ? () => window.open(toast.link, '_blank') : () => {}}
-                color={toast.color}
-                onDismiss={(e) => this.dismissToast(e, toast.id)}
-                style={comStyles(toast.link).toast}
-              />
-            )
-          })
-        }
-			</div>
+    			<div id='ToastLauncher' style={comStyles().container}>
+        				{
+                  this.props.toasts.map((toast) => {
+                    return (
+                        <Message
+                          key={toast.id}
+                          icon={toast.icon ? toast.icon : false}
+                          header={toast.title}
+                          content={toast.text}
+                          onClick={toast.link ? () => window.open(toast.link, '_blank') : () => {}}
+                          color={toast.color}
+                          onDismiss={(e) => this.dismissToast(e, toast.id)}
+                          style={comStyles(toast.link).toast}
+                        />
+                    )
+                  })
+                }
+    			</div>
 		)
 	}
 }
@@ -101,6 +102,7 @@ const comStyles = (link) => {
     toast: {
       margin: '5px auto',
       pointerEvents: 'auto',
+      width: 'auto',
       ...toastStyles,
     }
 	}

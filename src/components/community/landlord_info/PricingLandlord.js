@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Card,
 } from 'semantic-ui-react'
 
 
@@ -17,7 +17,18 @@ class PricingLandlord extends Component {
 	render() {
 		return (
 			<div id='PricingLandlord' style={comStyles().container}>
-				PricingLandlord
+				<Card id='step1' style={comStyles().stepCard}>
+					Photoshoot
+				</Card>
+				<Card id='step2' style={comStyles().stepCard}>
+					Virtual Tour
+				</Card>
+				<Card id='step3' style={comStyles().stepCard}>
+					Drive To Building
+				</Card>
+				<Card id='step4' style={comStyles().stepCard}>
+					Sale & Commission
+				</Card>
 			</div>
 		)
 	}
@@ -58,6 +69,11 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+			height: '90vh',
+			padding: '50px',
+		},
+		stepCard: {
+			margin: '5px auto',
 		}
 	}
 }
