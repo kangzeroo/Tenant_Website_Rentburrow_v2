@@ -66,7 +66,7 @@ class MobileBuildingCard extends Component {
         <div style={comStyles().imageGallery}>
           <SingularImageGallery
             list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
-            image_size='hd'
+            image_size='thumbnail'
           />
         </div>
         <Card.Content style={comStyles().info}>
@@ -156,6 +156,35 @@ const comStyles = (label) => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    info: {
+      backgroundColor: 'rgba(0,0,0,0)',
+      display: 'flex',
+      flexDirection: 'row',
+      // padding: '30px 10px 10px 10px',
+    },
+    details: {
+      color: 'black',
+      display: 'flex',
+      flexDirection: 'column',
+      width: '90%',
+    },
+    ribbon: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '10%',
+    },
+    address: {
+      width: '60%',
+      display: 'flex',
+      flexWrap: 'wrap',
+      fontSize: '1.3rem',
+    },
+    price: {
+      width: '100%',
+    },
+    headerPrint: {
+      fontSize: '1rem',
     }
 	}
 }

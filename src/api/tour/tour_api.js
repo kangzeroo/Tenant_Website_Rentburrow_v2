@@ -234,7 +234,7 @@ const generateHTMLTourRequestEmail = (tourObj, building) => {
 		        <td align='center' valign='top'>
 		            <table border='0' cellpadding='20' cellspacing='0' width='600' id='emailContainer'>
                   <h1>Viewing Requested for ${building.building_alias} </h1>
-                  <p>Please Select a timeslot at https://localhost:8081/landlord-confirm-tour/${tourObj.tour_id}</p>
+                  <p>Please Select a timeslot at https://rentburrow.com/landlord-confirm-tour/${tourObj.tour_id}</p>
 		            </table>
 		        </td>
 		    </tr>
