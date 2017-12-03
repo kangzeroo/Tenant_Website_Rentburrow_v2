@@ -54,7 +54,7 @@ import ReceivedApplicationPage from './tenant/SubletApplications/sublets/Receive
 import InvalidPage from './invalid/InvalidPage'
 import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
-import Login from './auth/Login'
+import LoginPage from './auth/LoginPage'
 import Logout from './auth/Logout'
 import Register from './auth/Register'
 import ForgotPassword from './auth/ForgotPassword'
@@ -308,13 +308,6 @@ class AppRoot extends Component {
     )
   }
 
-  forceScrollTop() {
-    const main_content = document.getElementById('main_content')
-    const app_root = document.getElementById('AppRoot')
-    main_content.scrollTop = 0
-    app_root.scrollTop = 0
-  }
-
   renderMainSite() {
     const hideFooter = this.props.location.pathname === '/' || this.props.location.pathname === '/sublets' || this.props.location.pathname === '/leases' || this.props.location.pathname === '/sublet' || this.props.location.pathname === '/lease'
     return (
@@ -353,7 +346,7 @@ class AppRoot extends Component {
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/register/verify' component={AccountVerification} />
                 <Route exact path='/login/forgot' component={ForgotPassword} />
-                <Route exact path='/login' component={Login} />
+                <Route exact path='/login' component={LoginPage} />
                 <Route exact path='/logout' component={Logout} />
 
                 <Route exact path='/lease' component={HousingPage} />
@@ -411,7 +404,7 @@ class AppRoot extends Component {
               ?
               null
               :
-              <Footer forceScrollTop={() => this.forceScrollTop()} />
+              <Footer />
             }
 
           </div>

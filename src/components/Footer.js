@@ -41,7 +41,7 @@ class Footer extends Component {
               <div style={comStyles().col}>
                 <Link to='/lease' onClick={() => this.props.changeRentType('lease')} style={comStyles().link}>Browse Leases</Link>
                 <Link to='/sublet' onClick={() => this.props.changeRentType('sublet')} style={comStyles().link}>Browse Sublets</Link>
-                <Link to='/prizes' onClick={() => this.props.forceScrollTop()} style={comStyles().link}>Signing Prizes</Link>
+                <Link to='/prizes' style={comStyles().link}>Signing Prizes</Link>
               </div>
               {/*<div style={comStyles().col}>
                 <Link to='/protips' style={comStyles().link}>FAQ & Protips</Link>
@@ -79,7 +79,6 @@ class Footer extends Component {
 Footer.propTypes = {
 	history: PropTypes.object.isRequired,
   changeRentType: PropTypes.func.isRequired,
-  forceScrollTop: PropTypes.func.isRequired,    // passed in
 }
 
 // for all optional props, define a default value
