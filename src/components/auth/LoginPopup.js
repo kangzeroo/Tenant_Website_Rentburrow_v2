@@ -15,6 +15,7 @@ import {
 import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
 import { saveTenantProfile, getTenantProfile } from '../../api/auth/tenant_api'
+import Login from './Login'
 
 class LoginPopup extends Component {
 
@@ -62,32 +63,10 @@ class LoginPopup extends Component {
             disabled
           />*/}
         </div>
-        {/*<Divider horizontal>Or</Divider>
-        <Form>
-          <Form.Input
-            label='Email'
-            disabled
-          />
-          <Form.Input
-            label='Password'
-            disabled
-          />
-          <div style={comStyles().buttons_container}>
-            <Button
-              primary
-              basic
-              content='Cancel'
-              fluid
-              onClick={() => this.props.toggleModal(false)}
-            />
-            <Button
-              primary
-              content='Sign In'
-              disabled
-              fluid
-            />
-          </div>
-        </Form>*/}
+        <Divider horizontal>Or</Divider>
+        <Login
+          closeModal={() => this.props.toggleModal(false)}
+        />
 			</div>
 		)
 	}

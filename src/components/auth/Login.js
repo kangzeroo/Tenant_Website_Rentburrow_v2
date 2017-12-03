@@ -94,6 +94,7 @@ class Login extends Component {
 				errorMessage: '',
 				login_loading: false,
 			})
+			this.props.closeModal()
 				// get the full staff details using the staff_id from AWS Cognito
 				// getStaffInfo(staff.sub)
 				// 	.then((fullStaff) => {
@@ -157,7 +158,7 @@ class Login extends Component {
 			<div id='Login' style={comStyles().container} >
 				<div style={comStyles().loginContainer} >
 
-					<div style={comStyles().loginText} ><h3>Log-in to Rentburrow</h3></div>
+					<div style={comStyles().loginText} ><h3>Email Login</h3></div>
 					<div style={comStyles().login}>
 						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
 						<Input id='password_input' value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
@@ -200,6 +201,12 @@ Login.propTypes = {
   history: PropTypes.object,
 	toggleAuthLoading: PropTypes.func.isRequired,
 	forwardUrlLocation: PropTypes.func.isRequired,
+	closeModal: PropTypes.func,					// passed in
+}
+
+// for all optional props, define a default value
+Login.defaultProps = {
+  closeModal: () => {},
 }
 
 const RadiumHOC = Radium(Login)
