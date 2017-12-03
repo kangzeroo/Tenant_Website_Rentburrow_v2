@@ -180,3 +180,10 @@ export const getLandlordInfo = (building_id) => {
   })
   return p
 }
+
+export const locallyFindBuildingById = (id, listOfResults) => {
+  const founds = listOfResults.filter((l) => {
+    return l.building_id === id || l.post_id === id
+  })
+  return founds[0]
+}
