@@ -75,7 +75,7 @@ import { changeRentType, saveSubletsToRedux } from '../actions/search/search_act
 import { querySubletsInArea } from '../api/search/sublet_api'
 import UseChrome from './instructions/UseChrome'
 import { clearIntelList, saveIntelToCloud } from '../actions/intel/intel_actions'
-import { unauthRoleStudent, } from '../api/aws/aws-cognito'
+import { unauthRoleStudent, retrieveTenantFromLocalStorage } from '../api/aws/aws-cognito'
 import { saveTenantProfile, getTenantProfile } from '../api/auth/tenant_api'
 import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
 import '../styles/pretty_scrollbar.css'
@@ -182,15 +182,34 @@ class AppRoot extends Component {
         }, 300000)
       })
     } else {
-      unauthRoleStudent().then((unauthUser) => {
-        // console.log(unauthUser)
-        this.props.saveTenantToRedux(unauthUser)
-      })
-      // in X seconds, force login popup
-      setTimeout(() => {
-        this.props.triggerForcedSignin(true)
-      }, 300000)
+      this.checkIfTenantLoggedIn()
     }
+  }
+
+  checkIfTenantLoggedIn() {
+    // grab the url that was given, will be used in this.saveStaffProfile()
+    let location = this.props.location.pathname + this.props.location.search
+    if (location === '/login') {
+      location = '/'
+    }
+    retrieveTenantFromLocalStorage()
+			.then((data) => {
+        return getTenantProfile({ tenant_id: data.sub })
+			})
+      .then((tenant) => {
+        this.props.saveTenantToRedux(tenant)
+      })
+			.catch((err) => {
+				// if not, then we do nothing
+        unauthRoleStudent().then((unauthUser) => {
+          // console.log(unauthUser)
+          this.props.saveTenantToRedux(unauthUser)
+        })
+        // in X seconds, force login popup
+        setTimeout(() => {
+          this.props.triggerForcedSignin(true)
+        }, 300000)
+			})
   }
 
   executeOnSubletOrLease() {
