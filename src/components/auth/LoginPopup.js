@@ -63,10 +63,18 @@ class LoginPopup extends Component {
             disabled
           />*/}
         </div>
-        <Divider horizontal>Or</Divider>
-        <Login
-          closeModal={() => this.props.toggleModal(false)}
-        />
+        {
+          this.props.rent_type === 'sublet' && this.props.force_signin
+          ?
+          null
+          :
+          <div>
+            <Divider horizontal>Or</Divider>
+            <Login
+              closeModal={() => this.props.toggleModal(false)}
+            />
+          </div>
+        }
 			</div>
 		)
 	}

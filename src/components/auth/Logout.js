@@ -6,7 +6,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { logoutTenant } from '../../actions/auth/auth_actions'
-import { signOutLandlord } from '../../api/aws/aws-cognito'
+import { signOutLandlord, signOutStudent } from '../../api/aws/aws-cognito'
 import { logoutFacebook } from '../../api/auth/facebook_auth'
 
 
@@ -15,6 +15,7 @@ class Logout extends Component {
 	componentWillMount() {
 		this.props.logoutTenant()
 		logoutFacebook()
+		signOutStudent()
 		this.props.history.push('/')
 	}
 

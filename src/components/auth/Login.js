@@ -200,6 +200,7 @@ Login.propTypes = {
   history: PropTypes.object,
 	saveTenantToRedux: PropTypes.func.isRequired,
 	closeModal: PropTypes.func,					// passed in
+	facebook_only: PropTypes.bool,			// passed in
 }
 
 // for all optional props, define a default value

@@ -17,4 +17,5 @@ export default [
   '/landlord-confirm-tour',
   '/register',
   '/login',
+  '/account',
 ]
