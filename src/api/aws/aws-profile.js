@@ -4,8 +4,8 @@ import AWS from 'aws-sdk/global'
 import { AWS_FEDERATED_IDENTITY_ENV } from '../API_URLS'
 
 const REGION = 'us-east-1'
-const USER_POOL_ID = 'us-east-1_CbdIjfPig'
-const CLIENT_ID = '58vh7b29qsg6r6p0hdbi8qeci5'
+const USER_POOL_ID = 'us-east-1_YSySxXy4r'
+const CLIENT_ID = '71lguiml06s1j9i7ub1k8skirp'
 
 AWS.config.update({
 	region: REGION

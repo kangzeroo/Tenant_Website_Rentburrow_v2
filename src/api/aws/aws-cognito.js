@@ -11,19 +11,35 @@ import { studentPool, STUDENT_USERPOOL_ID, generate_TENANT_IDENTITY_POOL_ID } fr
 // https://github.com/aws/amazon-cognito-js/
 // entire cognito sync
 
-export const RegisterStudent = ({ email, password }) => {
+export const RegisterStudent = ({ email, phone_number, password, first_name, last_name }) => {
 	const p = new Promise((res, rej) => {
 		const attributeList = []
+
 		const dataEmail = {
 		    Name: 'email',
 		    Value: email,
 		}
 		const attributeEmail = new CognitoUserAttribute(dataEmail)
-
 		attributeList.push(attributeEmail)
+
+		const dataName = {
+		    Name: 'name',
+		    Value: `${first_name} ${last_name}`,
+		}
+		const attributeName = new CognitoUserAttribute(dataName)
+		attributeList.push(attributeName)
+
+		if (phone_number) {
+			const dataPhone = {
+			    Name: 'phone_number',
+			    Value: `+1${phone_number}`,
+			}
+			const attributePhone = new CognitoUserAttribute(dataPhone)
+			attributeList.push(attributePhone)
+		}
+
 		studentPool.signUp(email, password, attributeList, null, (err, result) => {
 		    if (err) {
-		        // console.log(err);
 		        rej(err)
 		        return;
 		    }
@@ -38,6 +54,7 @@ export const RegisterStudent = ({ email, password }) => {
 
 export const LoginStudent = ({ email, password }) => {
 	const p = new Promise((res, rej) => {
+		console.log('LoginStudent')
 		const authenticationDetails = new AuthenticationDetails({
 			Username: email,
 			Password: password
@@ -48,17 +65,28 @@ export const LoginStudent = ({ email, password }) => {
 		}
 		const cognitoUser = new CognitoUser(userData)
 		let staffProfileObject
+		// console.log('authenticateStudent')
+		// res({
+		// 	AWS: AWS,
+		// 	cognitoUser: cognitoUser,
+		// 	authenticationDetails: authenticationDetails,
+		// })
 		authenticateStudent(cognitoUser, authenticationDetails)
 			.then(() => {
+				console.log('buildUserObject')
 				return buildUserObject(cognitoUser)
 			})
     	.then((staffObject) => {
+				console.log('staffProfileObject')
 				staffProfileObject = staffObject
+				return Promise.resolve()
     	})
 			.then((msg) => {
+				console.log(staffProfileObject)
 				res(staffProfileObject)
 			})
 			.catch((err) => {
+				console.log(err)
 				rej({
 					message: err
 				})
@@ -73,6 +101,7 @@ const authenticateStudent = (cognitoUser, authenticationDetails) => {
 	const p = new Promise((res, rej) => {
 		cognitoUser.authenticateUser(authenticationDetails, {
 	        onSuccess: (result) => {
+						console.log('authenticateStudent onSuccess')
 	            // console.log('access token + ' + result.getAccessToken().getJwtToken());
 	            // localStorage.setItem('cognito_student_token', result.getAccessToken().getJwtToken());
 							console.log('SETTING cognito_student_token')
@@ -95,22 +124,31 @@ const authenticateStudent = (cognitoUser, authenticationDetails) => {
 	            })
 	        },
 	        onFailure: (err) => {
-	            // console.log(err)
+						console.log('authenticateStudent onFailure')
+	            console.log(err)
 	            rej(err)
 	        },
+					// mfaRequired: (codeDeliveryDetails) => {
+					// 	console.log('authenticateStudent mfaRequired')
+          //     const verificationCode = prompt('Please input verification code', '')
+          //     cognitoUser.sendMFACode(verificationCode, cognitoUser)
+          // }
 	    })
 	})
 	return p
 }
 
-const buildUserObject = (cognitoUser) => {
+export const buildUserObject = (cognitoUser) => {
 	const p = new Promise((res, rej) => {
+		console.log('buildUserObject')
+		console.log('getUserAttributes')
 		cognitoUser.getUserAttributes((err, result) => {
       if (err) {
-          // console.log(err);
+          console.log(err);
   		rej(err)
           return;
       }
+			console.log(result)
       let staffProfileObject = {}
 			for (let i = 0; i < result.length; i++) {
 	      if (result[i].getName().indexOf('custom:') >= 0) {
@@ -127,6 +165,7 @@ const buildUserObject = (cognitoUser) => {
 	    	}
 	    }
 			staffProfileObject['id'] = result.sub
+			console.log(staffProfileObject)
       res(staffProfileObject)
     })
 	})

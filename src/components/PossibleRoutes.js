@@ -14,5 +14,7 @@ export default [
   '/contact',
   '/book-filming',
   '/book-tour',
-  '/landlord-confirm-tour'
+  '/landlord-confirm-tour',
+  '/register',
+  '/login',
 ]

@@ -53,7 +53,11 @@ import ReceivedApplicationPage from './tenant/SubletApplications/sublets/Receive
 import InvalidPage from './invalid/InvalidPage'
 import Authenticate from './pandadoc/Authenticate'
 import Authenticated from './pandadoc/Authenticated'
+import Login from './auth/Login'
 import Logout from './auth/Logout'
+import Register from './auth/Register'
+import ForgotPassword from './auth/ForgotPassword'
+import AccountVerification from './auth/AccountVerification'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
@@ -305,6 +309,10 @@ class AppRoot extends Component {
                 {/*<Route exact path='/landlord-faq' component={FAQLandlord} />*/}
                 <Route exact path='/join-landlord' component={JoinPageLandlord} />
                 {/*<Route exact path='/community' component={CommunityPage} />*/}
+                <Route exact path='/register' component={Register} />
+                <Route exact path='/register/verify' component={AccountVerification} />
+                <Route exact path='/login/forgot' component={ForgotPassword} />
+                <Route exact path='/login' component={Login} />
                 <Route exact path='/logout' component={Logout} />
 
                 <Route exact path='/lease' component={HousingPage} />
