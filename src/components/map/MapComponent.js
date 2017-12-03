@@ -10,6 +10,7 @@ import { selectPopupBuilding } from '../../actions/selection/selection_actions'
 import { setCurrentGPSCenter, saveBuildingsToRedux, saveSubletsToRedux, selectPinToRedux, changeSearchRadius, } from '../../actions/search/search_actions'
 import {
 	queryBuildingsInArea,
+	locallyFindBuildingById,
 } from '../../api/search/search_api'
 import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
@@ -315,6 +316,25 @@ class MapComponent extends Component {
 				pin_id: pin.pin_id,
 		})
 		indicatorPin.setAnimation(google.maps.Animation.BOUNCE)
+		indicatorPin.addListener('click', (event) => {
+			// marker.infowindow.open(self.state.mapTarget, marker)
+			this.props.selectPinToRedux(indicatorPin.pin_id)
+			const b = locallyFindBuildingById(indicatorPin.pin_id, this.props.listOfResults)
+			this.props.selectPopupBuilding(b)
+			// setTimeout(() => {
+			// 	marker.infowindow.close()
+			// }, 2000)
+			this.props.collectIntel({
+				'TableName': BUILDING_INTERACTIONS,
+				'Item': {
+					'ACTION': 'BUILDING_PIN_CLICKED',
+					'DATE': new Date().getTime(),
+					'BUILDING_ID': b.building_id,
+					'ADDRESS': b.building_address,
+					'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				}
+			})
+		})
 		this.setState({
 			indicatorPin: indicatorPin
 		}, () => this.state.indicatorPin.setMap(this.state.mapTarget))
