@@ -18,9 +18,11 @@ import {
   Form,
   Dropdown,
   Message,
+  Input,
   Icon,
+  Checkbox,
 } from 'semantic-ui-react'
-import { insertTour, sendTourEmailToLandlord, } from '../../../api/tour/tour_api'
+import { insertTour, sendTourEmailToLandlord, insertRideForTour } from '../../../api/tour/tour_api'
 import { getLandlordInfo, } from '../../../api/search/search_api'
 
 class ScheduleTour extends Component {
@@ -49,6 +51,9 @@ class ScheduleTour extends Component {
       saving: false,
       submitted: false,
       error_messages: [],
+
+      free_ride: false,
+      pickup_address: '',
 
       time_options: [
         { key: '1000', text: '10:00 AM', value: '1000' },
@@ -107,6 +112,32 @@ class ScheduleTour extends Component {
     })
   }
 
+  fillInAddress() {
+    const place = this.autocomplete.getPlace()
+
+    this.setState({
+      pickup_address: place.formatted_address,
+    })
+  }
+
+  initiateGoogleAddress() {
+    // google address autocomplete
+    setTimeout(() => {
+      this.autocomplete = new google.maps.places.Autocomplete(
+              /** @type {!HTMLInputElement} */(document.getElementById('pickup_address')),
+              { types: ['geocode'] });
+      // When the user selects an address from the dropdown, populate the address
+      // fields in the form.
+      this.autocomplete.addListener('place_changed', this.fillInAddress.bind(this));
+    }, 100)
+  }
+
+  anotherLocationCheck() {
+    this.setState({
+      free_ride: !this.state.free_ride,
+    }, () => this.initiateGoogleAddress())
+  }
+
   updateAttr(event, attr) {
     this.setState({
       [attr]: event.target.value
@@ -155,6 +186,9 @@ class ScheduleTour extends Component {
         (this.state.time_3_begin > this.state.time_3_end)) {
       error_messages.push('Begin time cannot be after End time')
     }
+    if (this.state.free_ride && this.state.pickup_address && this.state.pickup_address.length === 0) {
+      error_messages.push('You must enter a pickup address')
+    }
     this.setState({
       error_messages: error_messages
     })
@@ -187,6 +221,12 @@ class ScheduleTour extends Component {
       })
       .then((data) => {
         const tour_id = data.tour_id
+        if (this.state.free_ride && this.state.pickup_address) {
+          insertRideForTour({
+            tour_id: tour_id,
+            pickup_address: this.state.pickup_address,
+          })
+        }
         return sendTourEmailToLandlord({ tour_id: tour_id, corp_email: this.state.landlord.email, }, this.props.building)
       })
       .then((data) => {
@@ -326,6 +366,41 @@ class ScheduleTour extends Component {
             />
           </Form.Field>
           <Form.Field>
+            <Checkbox
+              label='I want a free ride to the property and back'
+              checked={this.state.free_ride}
+              onClick={() => this.anotherLocationCheck()}
+            />
+          </Form.Field>
+          {
+            this.state.free_ride
+            ?
+            <div>
+              <Message info floating>
+                <Message.Content>
+                  <Message.Header>Each Student gets 1 FREE ride to the property and back</Message.Header>
+                  <Message.List>
+                    <Message.Item>Each ride can have up to 4 students</Message.Item>
+                    <Message.Item>You will recieve a ride confirmation</Message.Item>
+                  </Message.List>
+                </Message.Content>
+              </Message>
+              <Form.Field>
+                <label>Pickup Address</label>
+                <Input
+                  id='pickup_address'
+                  value={this.state.pickup_address}
+                  onChange={(e) => { this.updateAttr(e, 'pickup_address') }}
+                  type='text'
+                  placeholder='Pickup Address'
+                  style={comStyles().textArea}
+                />
+              </Form.Field>
+            </div>
+            :
+            null
+          }
+          <Form.Field>
             {
               this.state.error_messages.map((err, index) => {
                 return (
@@ -367,7 +442,7 @@ class ScheduleTour extends Component {
             primary
             fluid
             loading={this.state.saving}
-            content='Book Tours'
+            content='Book Tour'
             onClick={() => this.submitSchedule()}
           />
         }

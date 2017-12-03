@@ -56,7 +56,6 @@ export const sendSimpleTextEmailToRentburrow = (leasingObj, building, landlord) 
 }
 
 const createInquiryParamsConfig = (building_alias, landlord, group_members_count, HTML_Email) => {
-  console.log(landlord)
   const params = {
 	  Destination: { /* required */
 	    BccAddresses: [
