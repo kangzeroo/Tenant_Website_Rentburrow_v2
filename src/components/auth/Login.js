@@ -19,6 +19,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { STUDENT_USERPOOL_ID, generate_TENANT_IDENTITY_POOL_ID } from '../../api/aws/aws-profile'
 
 import { LoginStudent, buildUserObject } from '../../api/aws/aws-cognito'
+import { getTenantProfile, } from '../../api/auth/tenant_api'
 
 class Login extends Component {
 
@@ -96,18 +97,18 @@ class Login extends Component {
 			})
 			this.props.closeModal()
 				// get the full staff details using the staff_id from AWS Cognito
-				// getStaffInfo(staff.sub)
-				// 	.then((fullStaff) => {
-				// 		console.log(fullStaff)
-				// 		// save the authenticated staff to Redux state
-				// 		this.saveStaffProfile(fullStaff)
-				// 	})
-				// 	.catch((err) => {
-				// 		this.setState({
-				// 			errorMessage: 'Error logging in.'
-				// 		})
-				// 		this.props.toggleAuthLoading(false)
-				// 	})
+				getTenantProfile({ tenant_id: data.sub })
+					.then((fullStaff) => {
+						console.log(fullStaff)
+						// save the authenticated staff to Redux state
+						this.saveStaffProfile(fullStaff)
+					})
+					.catch((err) => {
+						this.setState({
+							errorMessage: 'Error logging in.'
+						})
+						this.props.toggleAuthLoading(false)
+					})
 		}).catch((err) => {
 			console.log(err)
 			// this.props.toggleAuthLoading(false)
