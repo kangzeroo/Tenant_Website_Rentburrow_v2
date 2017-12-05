@@ -202,7 +202,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '100vw'
+      width: '100vw',
+			height: '100%'
 		},
 		buttonsContainer: {
 			display: 'flex',
