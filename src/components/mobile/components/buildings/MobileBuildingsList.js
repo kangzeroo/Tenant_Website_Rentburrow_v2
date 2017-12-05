@@ -22,7 +22,7 @@ class MobileBuildingsList extends Component {
 			running: true,
 
 			page_start: 0,
-			page_end: 50,
+			page_end: 20,
 			page_number: 1,
 
 			dimmer: false,
@@ -74,11 +74,13 @@ class MobileBuildingsList extends Component {
 	nextPage(direction, scrollTop, scrollHeight, target) {
 		if (this.state.page_number + direction !== 0) {
 			// edge case where scroll up does not work when you have already reached the end of all sublets
-      if (this.props.building_search_results.length > this.state.page_end) {
+      if (this.props.building_search_results.length >= this.state.page_end) {
+        console.log(this.state.page_start)
+        console.log(this.state.page_end)
 				this.setState({
-					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 40),
-					page_end: this.state.page_end + (direction * 50),
-					page_number: this.state.page_number + (direction)
+					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 20),
+					page_end: this.state.page_end + (direction * 20),
+					page_number: this.state.page_number + direction
 				}, () => {
 					if (direction > 0) {
 						target.scrollTop = target.scrollHeight * 0.2
@@ -95,7 +97,7 @@ class MobileBuildingsList extends Component {
       <div id='MobileBuildingsList' style={comStyles().container} >
   			<div className='pretty_scrollbar' id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
   				{
-            this.props.building_search_results.map((building) => {
+            this.props.building_search_results.slice(this.state.page_start, this.state.page_end).map((building) => {
               return (
                 <MobileBuildingCard
                   key={building.building_id}
@@ -113,13 +115,13 @@ class MobileBuildingsList extends Component {
 // defines the types of variables in this.props
 MobileBuildingsList.propTypes = {
 	history: PropTypes.object.isRequired,
-  building_search_results: PropTypes.array,
+  building_search_results: PropTypes.array.isRequired,
   buildings: PropTypes.array.isRequired,        // passed in
 }
 
 // for all optional props, define a default value
 MobileBuildingsList.defaultProps = {
-  building_search_results: []
+  // building_search_results: []
 }
 
 // Wrap the prop in Radium to allow JS styling
