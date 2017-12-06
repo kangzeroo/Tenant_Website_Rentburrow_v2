@@ -46,6 +46,9 @@ class SimpleTempForm extends Component {
         email: '',
         phone: '',
       },
+      group_size_filled: false,
+      group_size: 1,
+      allow_matching: true,
 
       landlord: {},
       my_group_may_change: false,
@@ -54,13 +57,23 @@ class SimpleTempForm extends Component {
 			error_messages: [],
 			group_error_messages: [],
 			submitted: false,
+      adding_roommate: false,
       success_message: '',
-      school_options: [
-        { key: 'uw', text: 'University of Waterloo', value: 'University of Waterloo' },
-        { key: 'wlu', text: 'Wilfrid Laurier University', value: 'Wilfrid Laurier University' }
-      ],
       completed_at: '',
     }
+    this.group_size_options = [
+      { key: 'unknown', text: 'Unknown', value: 0 },
+      { key: 'one', text: '1', value: 1 },
+      { key: 'two', text: '2', value: 2 },
+      { key: 'three', text: '3', value: 3 },
+      { key: 'four', text: '4', value: 4 },
+      { key: 'five', text: '5', value: 5 },
+      { key: 'plus', text: '5+', value: 6 },
+    ]
+    this.school_options = [
+      { key: 'uw', text: 'University of Waterloo', value: 'University of Waterloo' },
+      { key: 'wlu', text: 'Wilfrid Laurier University', value: 'Wilfrid Laurier University' }
+    ]
   }
 
   componentWillMount() {
@@ -93,16 +106,22 @@ class SimpleTempForm extends Component {
     })
   }
 
-  updateApplicationType(e, data, attr) {
+  updateAttr(e, attr) {
     this.setState({
-      application_template: {
-        ...this.state.application_template,
-        [attr]: data.value,
-      }
+      [attr]: e.target.value
+    })
+  }
+
+  updateGroupSize(e, data, attr) {
+    this.setState({
+      group_size: data.value,
     })
   }
 
 	addToGroup() {
+    this.setState({
+      adding_roommate: true,
+    })
 		if (this.validateForm()) {
       getTenantByEmail(this.state.application_template.email)
       .then((data) => {
@@ -123,6 +142,7 @@ class SimpleTempForm extends Component {
   	        phone: '',
   				},
   				error_messages: [],
+          adding_roommate: false,
   			})
       })
 		}
@@ -237,9 +257,61 @@ class SimpleTempForm extends Component {
 		this.setState({
 			error_messages: error_messages,
 			submitted: false,
+      adding_roommate: false,
 		})
 		return ok_to_proceed
 	}
+
+  renderInitialQuestion() {
+    return (
+      <div>
+        <div style={comStyles().title}>
+          { this.props.title && this.props.title.toLowerCase().indexOf('waitlist') > -1 ? 'Join Waitlist' : 'Apply Online' }
+        </div>
+        <div style={comStyles().group_size_initial_form}>
+          <Form.Field>
+            <div style={comStyles().group_size_option}>
+              <label>Group Size</label>
+              <Dropdown
+                id='Group Size'
+                placeholder='1'
+                value={this.state.group_size}
+                selection
+                options={this.group_size_options}
+                onChange={(e, d) => { this.updateGroupSize(e, d, 'group_size') }}
+                disabled={this.state.submitted}
+                style={comStyles().groupSize}
+              />
+            </div>
+          </Form.Field>
+          <br/>
+          <Form.Field>
+            <div style={comStyles().allow_matching}>
+              <Radio
+                label='I have enough roommates to fill up a suite'
+                name='match_me'
+                checked={!this.state.allow_matching}
+                onChange={(e, d) => this.updateAttr({ target: { value: false } }, 'allow_matching')}
+                disabled={this.state.submitted}
+              />
+              &nbsp; &nbsp;
+              <Radio
+                label='Let the landlord match me with other roommates if our group does not have enough people'
+                name='match_me'
+                checked={this.state.allow_matching}
+                onChange={(e, d) => this.updateAttr({ target: { value: true } }, 'allow_matching')}
+                disabled={this.state.submitted}
+              />
+            </div>
+          </Form.Field>
+        </div>
+        <br/>
+        <div style={comStyles().button_initial}>
+          <Button primary onClick={() => this.setState({ group_size_filled: true })} content='Next' />
+        </div>
+      </div>
+    )
+  }
 
   renderApplicationForm() {
     return (
@@ -294,8 +366,8 @@ class SimpleTempForm extends Component {
                   placeholder='School'
                   value={this.state.application_template.school}
                   selection
-                  options={this.state.school_options}
-                  onChange={(e, d) => { this.updateApplicationType(e, d, 'school') }}
+                  options={this.school_options}
+                  onChange={(e, d) => { this.updateApplicationAttr({ target: { value: d.value } }, 'school') }}
                   disabled={this.state.submitted}
                 />
               </Form.Field>
@@ -319,6 +391,7 @@ class SimpleTempForm extends Component {
             <Form.Field>
               <label>Phone</label>
               <Input
+                type='number'
                 value={this.state.application_template.phone}
                 onChange={(e) => this.updateApplicationAttr(e, 'phone')}
                 disabled={this.state.submitted}
@@ -341,6 +414,7 @@ class SimpleTempForm extends Component {
             <Form.Field>
               <Button
                 fluid
+                loading={this.state.adding_roommate}
                 color='blue'
                 content={this.state.group_members.length > 0 ? 'Add To Group' : 'Save'}
                 onClick={() => this.addToGroup()}
@@ -463,7 +537,15 @@ class SimpleTempForm extends Component {
           ?
           this.renderApplicationComplete()
           :
-          this.renderApplicationForm()
+          <div>
+            {
+              this.state.group_size_filled
+              ?
+              this.renderApplicationForm()
+              :
+              this.renderInitialQuestion()
+            }
+          </div>
         }
 			</div>
 		)
@@ -585,6 +667,28 @@ const comStyles = () => {
       alignItems: 'center',
 			fontSize: '1rem',
 			fontWeight: 'bold',
+    },
+    allow_matching: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    group_size_initial_form: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    group_size_option: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      width: '100%',
+    },
+    button_initial: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      width: '75%',
     }
 	}
 }
