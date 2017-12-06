@@ -74,8 +74,6 @@ class MobileBuildingsList extends Component {
 		if (this.state.page_number + direction !== 0) {
 			// edge case where scroll up does not work when you have already reached the end of all sublets
       if (this.props.building_search_results.length >= this.state.page_end) {
-        console.log(this.state.page_start)
-        console.log(this.state.page_end)
         if (this.state.page_end + (direction * 20) < this.props.building_search_results.length) {
   				this.setState({
   					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 20),
