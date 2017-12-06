@@ -62,7 +62,7 @@ import DescriptionBox from './DescriptionBox'
 import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
-import PhoneCallForm from '../contracts/simple_temp_form/PhoneCallForm'
+import Old_PhoneCallForm from '../contracts/simple_temp_form/Old_PhoneCallForm'
 import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
 import BuildingViews from '../analytics/BuildingViews'
 import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
@@ -225,19 +225,18 @@ class BuildingPage extends Component {
 					size='large'
 				>
 	        <Modal.Content>
-						{/*<PhoneCallForm
-							building={this.state.building}
-							landlord={this.props.selected_landlord}
-							landlord={this.props.selected_landlord}
-							title={this.state.building.label}
-							closeModal={() => this.toggleModal(false)}
-						/>*/}
-						<PhoneTestForm
+						<Old_PhoneCallForm
 							building={this.state.building}
 							landlord={this.props.selected_landlord}
 							title={this.state.building.label}
 							closeModal={() => this.toggleModal(false)}
 						/>
+						{/*<PhoneTestForm
+							building={this.state.building}
+							landlord={this.props.selected_landlord}
+							title={this.state.building.label}
+							closeModal={() => this.toggleModal(false)}
+						/>*/}
 	        </Modal.Content>
 	      </Modal>
 	    )
