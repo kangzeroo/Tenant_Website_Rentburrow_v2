@@ -63,6 +63,7 @@ import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
 import PhoneCallForm from '../contracts/simple_temp_form/PhoneCallForm'
+import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
 import BuildingViews from '../analytics/BuildingViews'
 import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
@@ -224,9 +225,15 @@ class BuildingPage extends Component {
 					size='large'
 				>
 	        <Modal.Content>
-						<PhoneCallForm
+						{/*<PhoneCallForm
 							building={this.state.building}
 							landlord={this.props.selected_landlord}
+							landlord={this.props.selected_landlord}
+							title={this.state.building.label}
+							closeModal={() => this.toggleModal(false)}
+						/>*/}
+						<PhoneTestForm
+							building={this.state.building}
 							landlord={this.props.selected_landlord}
 							title={this.state.building.label}
 							closeModal={() => this.toggleModal(false)}
