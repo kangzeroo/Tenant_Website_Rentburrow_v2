@@ -105,7 +105,6 @@ class MobileBuildingPage extends Component {
           })
         })
       })
-
       Promise.all(arrayOfPromises)
       .then((data) => {
         this.setState({
@@ -161,7 +160,7 @@ class MobileBuildingPage extends Component {
             />
             <Header
               as='h1'
-              content='Please Apply on your laptop using Chroms'
+              content='Please Apply on your laptop using the Chrome Browser'
             />
 	        </Modal.Content>
 	      </Modal>
@@ -236,44 +235,39 @@ class MobileBuildingPage extends Component {
   renderHeader() {
     return (
       <Card fluid raised style={comStyles().headerContainer} >
-      {
-        this.state.loading
-        ?
-        <Dimmer active inverted>
-          <Loader inverted content='Loading' />
-        </Dimmer>
-        :
-        <div>
-          {
-            parseInt(this.state.building.min_rooms, 10) === parseInt(this.state.building.max_rooms, 10)
-            ?
-            <Header
-              as='h1'
-              content={`${this.state.building.min_rooms} Bedroom Suites`}
-              subheader={this.state.building.building_address}
-              style={comStyles().headerText}
-              size='huge'
-            />
-            :
-            <Header
-              as='h1'
-              content={`${this.state.building.min_rooms} - ${this.state.building.max_rooms} Bedroom Suites`}
-              subheader={this.state.building.building_address}
-              style={comStyles().headerText}
-              size='huge'
-            />
-          }
-          {
-            <Button
-              primary
-              basic
-              content='Show More Info'
-              size='huge'
-              onClick={() => this.toggleModal(true, 'more_info')}
-            />
-          }
-        </div>
-      }
+        {
+          this.state.loading
+          ?
+          <Dimmer active inverted>
+            <Loader inverted content='Loading' />
+          </Dimmer>
+          :
+          <div style={comStyles().quick_info}>
+            {
+              parseInt(this.state.building.min_rooms, 10) === parseInt(this.state.building.max_rooms, 10)
+              ?
+              <div style={comStyles().headerText}>
+                <div style={comStyles().address_styles}>{this.state.building.building_address}</div>
+                <div style={comStyles().suite_styles}>{this.state.building.min_rooms} Bedroom Suites</div>
+              </div>
+              :
+              <div style={comStyles().headerText}>
+                <div style={comStyles().address_styles}>{this.state.building.building_address}</div>
+                <div style={comStyles().suite_styles}>{this.state.building.min_rooms} - {this.state.building.max_rooms} Bedroom Suites</div>
+              </div>
+            }
+            {
+              <Button
+                primary
+                basic
+                content='Show More Info'
+                size='massize'
+                onClick={() => this.toggleModal(true, 'more_info')}
+                style={comStyles().more_info_btn}
+              />
+            }
+          </div>
+        }
       </Card>
     )
   }
@@ -292,24 +286,21 @@ class MobileBuildingPage extends Component {
           {
             parseInt(this.state.building.min_price, 10) === parseInt(this.state.building.max_price, 10)
             ?
-            <Header
-              as='h1'
-              content={`Rooms from $${this.state.building.min_price} per month`}
-              style={comStyles().headerText}
-            />
+            <div style={comStyles().rooms_from}>
+              Rooms from {this.state.building.min_price} per month
+            </div>
             :
-            <Header
-              as='h1'
-              content={`Rooms from $${this.state.building.min_price} to $${this.state.building.max_price} per month`}
-              style={comStyles().headerText}
-            />
+            <div style={comStyles().rooms_from}>
+              Rooms from ${this.state.building.min_price} to ${this.state.building.max_price} per month
+            </div>
           }
           </div>
         }
+        <br/><br/>
         <Button
           primary
           content='Apply Now'
-          size='huge'
+          size='massive'
           onClick={() => this.toggleModal(true, 'apply')}
         />
       </Card>
@@ -319,17 +310,12 @@ class MobileBuildingPage extends Component {
   renderMapComponent() {
     return (
       <Card fluid raised style={comStyles().mapContainer} >
-        <Card fluid raised style={comStyles().map}>
-          <MapComponent
-            listOfResults={[this.state.building]}
-            selected_pin={this.state.building.building_id}
-            CSS_mapWidth='100%'
-            CSS_mapHeight='100%'
-          />
-        </Card>
-        <div style={comStyles().addressFont} >
-          { this.state.building.building_address }
-        </div>
+        <MapComponent
+          listOfResults={[this.state.building]}
+          selected_pin={this.state.building.building_id}
+          CSS_mapWidth='100%'
+          CSS_mapHeight='100%'
+        />
       </Card>
     )
   }
@@ -563,24 +549,20 @@ const comStyles = () => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      minHeight: '70px',
+      minHeight: '350px',
       maxHeight: 'auto',
-      minWidth: '90%',
-      maxWidth: '90%',
+      minWidth: '100%',
+      maxWidth: '100%',
       margin: '20px',
       padding: '10px',
     },
     headerText: {
-      fontSize: '2.8rem',
+      minHeight: '150px',
     },
     mapContainer: {
 			display: 'flex',
 			flexDirection: 'column',
 			height: '400px',
-		},
-		map: {
-			width: '100%',
-			height: '350px',
 		},
 		addressFont: {
 			display: 'flex',
@@ -593,13 +575,16 @@ const comStyles = () => {
     applyBox: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       alignItems: 'center',
-      minHeight: '100px',
+      minHeight: '200px',
       maxHeight: 'auto',
-      minWidth: '80%',
-      maxWidth: '80%',
-      padding: '20px',
+      minWidth: '100%',
+      maxWidth: '100%',
+      padding: '50px',
+    },
+    rooms_from: {
+      fontSize: '3rem',
     },
     suitePhotosHeader: {
       display: 'flex',
@@ -608,5 +593,21 @@ const comStyles = () => {
       alignItems: 'flex-end',
       width: '100%',
     },
+    address_styles: {
+      fontSize: '4rem',
+      height: '100px',
+      padding: '20px',
+    },
+    suite_styles: {
+      fontSize: '3em',
+      padding: '0px 20px 0px 20px',
+    },
+    quick_info: {
+      height: '200px',
+    },
+    more_info_btn: {
+      fontSize: '2rem',
+      margin: '20px',
+    }
 	}
 }

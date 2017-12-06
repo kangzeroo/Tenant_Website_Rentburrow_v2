@@ -13,8 +13,10 @@ import {
 	Header,
 } from 'semantic-ui-react'
 import MobileBuildingsList from './components/buildings/MobileBuildingsList'
-import MapComponent from '../map/MapComponent'
+import MobileMapComponent from './components/others/MobileMapComponent'
 import SingularImageGallery from '../image/SingularImageGallery'
+import MobileLeaseFilterCard from './components/others/MobileLeaseFilterCard'
+import MobileBuildingCard from './components/cards/MobileBuildingCard'
 import { queryBuildingsInArea, } from '../../api/search/search_api'
 import { check_if_building_accessible } from '../../api/label/building_label_api'
 import { saveBuildingsToRedux, } from '../../actions/search/search_actions'
@@ -65,70 +67,71 @@ class MobilePage extends Component {
 
 	renderBuildingPreview(buildings) {
 		const building = buildings[0]
-		return (
-			<Card fluid style={comStyles().buildingPreview} onClick={() => this.selectThisBuilding(building)} >
-				<SingularImageGallery
-					list_of_images={[building.cover_photo].concat(building.imgs)}
-					image_size='hd'
+		if (building) {
+			return (
+				<MobileBuildingCard
+					key={building.building_id}
+					building={building}
 				/>
-				<div style={comStyles().buildingPreviewInfo} >
-					<Header
-						as='h1'
-						content={building.building_alias}
-						subheader={building.building_address}
-						size='huge'
-					/>
-					{
-						building.min_price === building.max_price
-						?
-						<Header
-							as='h1'
-							content={`Rooms from $${building.min_price}`}
-							size='huge'
-						/>
-						:
-						<Header
-							as='h1'
-							content={`Rooms from $${building.min_price} to $${building.max_price}`}
-							size='huge'
-						/>
-					}
-				</div>
-			</Card>
-		)
+			)
+		} else {
+			return null
+		}
 	}
 
 	renderMapView() {
 		return (
-			<div style={comStyles().mapContainer} >
-				<MapComponent
+			<div style={comStyles().mapContainer}>
+				<MobileMapComponent
 					listOfResults={this.props.building_search_results}
 					selected_pin={this.props.selected_pin}
 					style={comStyles().map}
 				/>
 				<div style={comStyles().buildingPreviewContainer}>
-				{
-					this.props.selected_pin
-					?
-					<div>
 					{
 						this.renderBuildingPreview(this.props.building_search_results.filter((building) => {
 							return building.building_id === this.props.selected_pin
 						}))
 					}
-					</div>
-					:
-					<Header as='h1' icon='map pin' content='Please Select a Pin' size='huge' />
-				}
 				</div>
 			</div>
 		)
+	}
+
+	renderView() {
+		if (this.state.search_style === 'filter') {
+			return (
+				<MobileLeaseFilterCard
+					closeFilterCard={() => this.setState({ search_style: 'map' })}
+					buildings={this.props.building_search_results}
+				/>
+			)
+		} else if (this.state.search_style === 'list') {
+			return (
+				<MobileBuildingsList
+					buildings={this.state.buildings}
+				/>
+			)
+		} else if (this.state.search_style === 'map') {
+			return this.renderMapView()
+		} else {
+			return null
+		}
 	}
 
 	render() {
 		return (
 			<div id='MobilePage' style={comStyles().container}>
 				<Button.Group>
+					<Button
+						basic
+						primary={this.state.search_style !== 'filter'}
+						color='white'
+						icon='filter'
+						content='Filter'
+						onClick={() => this.setState({ search_style: 'filter' })}
+						style={comStyles().button}
+					/>
 					<Button
 						basic
 						primary={this.state.search_style !== 'list'}
@@ -149,13 +152,7 @@ class MobilePage extends Component {
 					/>
 				</Button.Group>
 				{
-					this.state.search_style === 'map'
-					?
-					this.renderMapView()
-					:
-					<MobileBuildingsList
-						buildings={this.state.buildings}
-	        />
+					this.renderView()
 				}
 			</div>
 		)
@@ -212,11 +209,7 @@ const comStyles = () => {
 		},
 		mapContainer: {
 			width: '100vw',
-			height: '46vh',
-		},
-		map: {
-			width: '100vw',
-			height: '46vh',
+			height: '90vh',
 		},
 		button: {
 			fontSize: '2rem'
@@ -226,7 +219,9 @@ const comStyles = () => {
 			flexDirection: 'column',
 			alignItems: 'center',
 			width: '100vw',
-			height: '46vh',
+			height: 'auto',
+			position: 'absolute',
+			bottom: '0px',
 		},
 		buildingPreview: {
 			width: '100%',
@@ -238,7 +233,9 @@ const comStyles = () => {
 			display: 'flex',
 			flexDirection: 'column',
 			alignItems: 'center',
-			padding: '10px'
+		},
+		select_a_pin: {
+			padding: '50px',
 		}
 	}
 }
