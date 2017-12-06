@@ -65,6 +65,7 @@ import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import MobileHeader from './mobile/components/MobileHeader'
 import MobilePage from './mobile/MobilePage'
 import MobileBuildingPage from './mobile/components/buildings/MobileBuildingPage'
+import MobileLandlordTourConfirmation from './mobile/scheduling/MobileLandlordTourConfirmation'
 
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
@@ -426,15 +427,16 @@ class AppRoot extends Component {
 
   renderMobileSite() {
     return (
-      <div>
+      <StyleRoot>
         <MobileHeader style={comStyles().header} />
         <div id='main_content' className='pretty_scrollbar' style={comStyles().content}>
           <Switch>
             <Route exact path='/' component={MobilePage} />
             <Route exact path='/:building_alias' component={MobileBuildingPage} />
+            <Route exact path='/landlord-confirm-tour/:tour_id' component={MobileLandlordTourConfirmation} />
           </Switch>
         </div>
-      </div>
+      </StyleRoot>
     )
   }
 
@@ -444,7 +446,7 @@ class AppRoot extends Component {
 	render() {
     // const hideFooter = true
 		return (
-      <div id='AppRoot' style={comStyles().main}>
+      <div id='AppRoot' style={this.state.mobile ? comStyles().mobile_main : comStyles().main}>
         <Helmet>
           <html lang={this.props.language}></html>
         </Helmet>
@@ -536,6 +538,15 @@ const comStyles = () => {
       minHeight: '100vh',
       maxHeight: '100vh',
     },
+    mobile_main: {
+      minWidth: '100vw',
+      maxWidth: '100vw',
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      maxHeight: '100vh',
+      overflowY: 'scroll',
+    },
     header: {
       minHeight: '7vh',
       maxHeight: '7vh',
@@ -543,8 +554,8 @@ const comStyles = () => {
       maxWidth: '100vw',
     },
     content: {
-      minHeight: '94vh',
-      maxHeight: '94vh',
+      minHeight: '93vh',
+      maxHeight: '93vh',
       minWidth: '100vw',
       maxWidth: '100vw',
       overflowY: 'scroll',

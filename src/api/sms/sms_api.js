@@ -15,3 +15,18 @@ export const sendSMSToBothParties = (contents) => {
   })
   return p
 }
+
+
+export const insertTenantLandlordSMS = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SMS_MICROSERVICE}/insert_tenant_landlord_sms`, obj)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}

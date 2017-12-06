@@ -17,6 +17,7 @@ import {
   Message,
 } from 'semantic-ui-react'
 import { getLandlordInfo } from '../../../api/search/search_api'
+import { insertTenantLandlordSMS, } from '../../../api/sms/sms_api'
 
 class PhoneTestForm extends Component {
 
