@@ -182,23 +182,23 @@ class PhoneCallForm extends Component {
         building_id: this.props.building.building_id,
         group_notes: this.state.group_notes,
       })
-      .then((data) => {
-        return sendSMSToBothParties({
-          id: id,
-          tenant_id: this.props.tenant_profile.tenant_id,
-          first_name: this.state.application_template.first_name,
-          last_name: this.state.application_template.last_name,
-          gender: this.state.application_template.gender,
-          school: this.state.application_template.school,
-          program_and_term: this.state.application_template.program_and_term,
-          email: this.state.application_template.email,
-          phone: this.state.application_template.phone,
-          group_size: this.state.application_template.group_size,
-          building_id: this.props.building.building_id,
-          building_address: this.props.building.building_address,
-          group_notes: this.state.group_notes,
-        })
-      })
+      // .then((data) => {
+      //   return sendSMSToBothParties({
+      //     id: id,
+      //     tenant_id: this.props.tenant_profile.tenant_id,
+      //     first_name: this.state.application_template.first_name,
+      //     last_name: this.state.application_template.last_name,
+      //     gender: this.state.application_template.gender,
+      //     school: this.state.application_template.school,
+      //     program_and_term: this.state.application_template.program_and_term,
+      //     email: this.state.application_template.email,
+      //     phone: this.state.application_template.phone,
+      //     group_size: this.state.application_template.group_size,
+      //     building_id: this.props.building.building_id,
+      //     building_address: this.props.building.building_address,
+      //     group_notes: this.state.group_notes,
+      //   })
+      // })
       .then((data) => {
         return sendSimpleTextEmailToRentburrow(
           {
