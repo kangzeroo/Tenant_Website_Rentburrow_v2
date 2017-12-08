@@ -79,13 +79,14 @@ const comStyles = () => {
     },
     leftFloat: {
       float: 'left',
+      padding: '0px 0px 0px 30px',
     },
     logo: {
       height: '80%',
       display: 'inline-block',
       width: 'auto',
       float: 'left',
-      padding: '5px'
+      padding: '0px 0px 0px 30px',
     },
 	}
 }

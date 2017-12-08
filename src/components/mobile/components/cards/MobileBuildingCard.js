@@ -20,7 +20,7 @@ import {
 import { selectPinToRedux } from '../../../../actions/search/search_actions'
 import { collectIntel } from '../../../../actions/intel/intel_actions'
 import { BUILDING_INTERACTIONS } from '../../../../api/intel/dynamodb_tablenames'
-import RibbonLabel from '../../../instructions/RibbonLabel'
+import MobileRibbonLabel from '../others/MobileRibbonLabel'
 import { check_if_building_accessible } from '../../../../api//label/building_label_api'
 
 class MobileBuildingCard extends Component {
@@ -82,13 +82,13 @@ class MobileBuildingCard extends Component {
                   {
                     this.props.building.min_price === this.props.building.max_price
                     ?
-                    <Header as='h2' content={`Rooms from $${this.props.building.min_price}`} />
+                    <div style={comStyles().room_price}>Rooms from ${this.props.building.min_price}</div>
                     :
-                    <Header as='h2' content={`Rooms from $${this.props.building.min_price} to $${this.props.building.max_price}`} />
+                    <div style={comStyles().room_price}>${this.props.building.min_price} to ${this.props.building.max_price}</div>
                   }
                 </div>
                 :
-                <Header as='h2' content='Inquire Price' />
+                <div style={comStyles().room_price}>Inquire Price</div>
               }
             </Card.Description>
           </div>
@@ -96,7 +96,7 @@ class MobileBuildingCard extends Component {
             this.props.building.label !== null && this.props.building.label !== ''
             ?
             <div style={comStyles().ribbon}>
-              <RibbonLabel label={this.props.building.label} />
+              <MobileRibbonLabel label={this.props.building.label} />
             </div>
             :
             null
@@ -155,8 +155,10 @@ const comStyles = (label) => {
 		},
     more_info: {
       display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+      height: 'auto',
+      padding: '25px',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
@@ -169,20 +171,27 @@ const comStyles = (label) => {
       display: 'flex',
       flexDirection: 'column',
       width: '90%',
+      height: 'auto',
     },
     ribbon: {
       display: 'flex',
       flexDirection: 'column',
-      width: '10%',
+      width: '30%',
+      marginTop: '12%',
     },
     address: {
-      width: '60%',
+      width: '100%',
       display: 'flex',
       flexWrap: 'wrap',
-      fontSize: '1.3rem',
+      fontSize: '5rem',
+      padding: '25px',
+      lineHeight: '70px',
     },
     price: {
       width: '100%',
+    },
+    room_price: {
+      fontSize: '3rem',
     },
     headerPrint: {
       fontSize: '1rem',
