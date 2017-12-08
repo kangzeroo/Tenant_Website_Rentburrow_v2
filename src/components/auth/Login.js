@@ -11,6 +11,7 @@ import {
 	Button,
 	Header,
 	Icon,
+	Form,
 	Modal,
 	Loader,
 	Dimmer,
@@ -152,45 +153,86 @@ class Login extends Component {
 		)
 	}
 
+	renderLogin() {
+		return (
+			<div style={comStyles().loginContainer} >
+
+				<div style={comStyles().loginText} ><h3>Email Login</h3></div>
+				<div style={comStyles().login}>
+					<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
+					<Input id='password_input' value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
+					{
+						this.state.errorMessage
+						?
+						<strong>{ this.state.errorMessage.message }</strong>
+						:
+						null
+					}
+					{
+						this.state.submitted_staff
+						?
+						null
+						:
+						<Button primary loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
+							Login
+						</Button>
+					}
+					<Link to='/login/forgot' onClick={() => this.props.closeModal()}>Forgot Password</Link>
+					<Link to='/register' onClick={() => this.props.closeModal()}>Sign Up</Link>
+
+					{ this.renderVerifiedModal() }
+					{ this.renderResetModal() }
+				</div>
+			</div>
+		)
+	}
+
 	render() {
 		return (
 			<div id='Login' style={comStyles().container} >
-				<div style={comStyles().loginContainer} >
-
-					<div style={comStyles().loginText} ><h3>Email Login</h3></div>
-					<div style={comStyles().login}>
+				<Form style={comStyles().emailContainer} size='medium' >
+					<Form.Field>
+						<label>Email Address</label>
 						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
+					</Form.Field>
+					<Form.Field>
+						<label>Password</label>
 						<Input id='password_input' value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
-						{
-							this.state.errorMessage
-							?
-							<strong>{ this.state.errorMessage.message }</strong>
-							:
-							null
-						}
-						{
-							this.state.submitted_staff
-							?
-							null
-							:
-							<Button primary loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
-						    Login
-						  </Button>
-						}
-						<Link to='/login/forgot' onClick={() => this.props.closeModal()}>Forgot Password</Link>
-						<Link to='/register' onClick={() => this.props.closeModal()}>Sign Up</Link>
+					</Form.Field>
+					{/*<div style={comStyles().registerContainer} >
+						<p> New to Rentburrow? </p>
+						<Link to='/register' > Register Here </Link>
+					</div>*/}
 
-						{ this.renderVerifiedModal() }
-						{ this.renderResetModal() }
-					</div>
-				</div>
+					<Form.Field>
+					{
+						this.state.errorMessage
+						?
+						<strong>{ this.state.errorMessage.message }</strong>
+						:
+						null
+					}
+					{
+						this.state.submitted_staff
+						?
+						null
+						:
+						<Button color='twitter' fluid size='medium' loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
+							Login
+						</Button>
+					}
+					</Form.Field>
+					<Form.Field>
+						<div style={comStyles().forgot} onClick={() => this.props.forgotPassword()}>Forgot Password</div>
+					</Form.Field>
+					<Form.Field style={comStyles().row}>
+						<div>{`Don't have an account?`}</div>
+						<div style={comStyles().signup} onClick={() => this.props.signupState()}>  Sign Up</div>
+					</Form.Field>
 
-				{/* Register Container
-				<div style={comStyles().registerContainer} >
-					<p> New to Rentburrow? </p>
-					<Link to='/register' > Register Here </Link>
-				</div>*/}
-
+					{ this.renderVerifiedModal() }
+					{ this.renderResetModal() }
+				</Form>
 			</div>
 		)
 	}
@@ -201,6 +243,8 @@ Login.propTypes = {
 	saveTenantToRedux: PropTypes.func.isRequired,
 	closeModal: PropTypes.func,					// passed in
 	facebook_only: PropTypes.bool,			// passed in
+	signupState: PropTypes.func.isRequired,	// passed in
+	forgotPassword: PropTypes.func.isRequired,		// passed in
 }
 
 // for all optional props, define a default value
@@ -266,6 +310,30 @@ const comStyles = () => {
 			borderRadius: '3px',
 			border: 'gray solid thin',
 		},
+		emailContainer: {
+			width: '100%'
+		},
+		row: {
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'flex-start',
+			width: '40%'
+		},
+		signup: {
+			marginLeft: '5px',
+			fontSize: '1.2rem',
+			color: '#6495ED',
+			cursor: 'pointer',
+			':hover': {
+				textDecoration: 'underline'
+			}
+		},
+		forgot: {
+			color: '#6495ED',
+			margin: '0 auto',
+			cursor: 'pointer'
+		}
 	}
 }
 

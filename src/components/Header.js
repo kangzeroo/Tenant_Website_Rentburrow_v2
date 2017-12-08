@@ -53,7 +53,9 @@ class Header extends Component {
 
   renderAppropriateModal(modal_name, context) {
     if (modal_name === 'login') {
-      return this.renderLoginSuite()
+      return this.renderLoginSuite('login')
+    } else if (modal_name === 'signup') {
+      return this.renderLoginSuite('signup')
     } else if (modal_name === 'request') {
       return this.renderRequest()
     }
@@ -69,7 +71,7 @@ class Header extends Component {
     )
   }
 
-  renderLoginSuite() {
+  renderLoginSuite(context) {
     return (
         <div style={comStyles().login_modal}>
           {
@@ -88,6 +90,7 @@ class Header extends Component {
           <Modal.Content>
             <LoginPopup
               toggleModal={() => this.toggleModal(false)}
+              context={context}
             />
           </Modal.Content>
         </div>
@@ -193,7 +196,7 @@ class Header extends Component {
             </div>
             :
             <div style={comStyles().rightFloat}>
-              <Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
+              {/*}<Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />*/}
               {/*}<Button
                 basic
                 inverted
@@ -201,13 +204,22 @@ class Header extends Component {
                 style={comStyles().login}
                 onClick={() => this.toggleModal(true, 'request')}
               />*/}
-              <Button
+            {/*  <Button
                 onClick={() => this.toggleModal(true, 'login')}
                 style={comStyles().login}
                 basic
                 inverted
                 content='Login'
-              />
+              />*/}
+              <div key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                Help
+              </div>
+              <div key='signup' style={comStyles().login} onClick={() => this.toggleModal(true, 'signup')}>
+                Sign Up
+              </div>
+              <div key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
+                Log In
+              </div>
             </div>
           }
           {
@@ -304,8 +316,15 @@ const comStyles = () => {
       padding: '5px'
     },
     login: {
-      height: 'auto',
-      width: 'auto',
+      // height: 'auto',
+      // width: 'auto',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      color: 'white',
+      fontSize: '1.2rem',
+      ':hover': {
+				textDecoration: 'underline'
+			}
     },
     tenant_thumbnail: {
       height: '6vh',
@@ -318,9 +337,13 @@ const comStyles = () => {
     },
     rightFloat: {
       position: 'absolute',
-      right: '0px',
       alignSelf: 'center',
       zIndex: 100,
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '200px',
+      right: '20px'
     },
     righterFloat: {
       color: 'white',
@@ -349,7 +372,7 @@ const comStyles = () => {
     },
     helpIcon: {
       cursor: 'pointer',
-    }
+    },
   }
 }
 

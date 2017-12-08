@@ -27,7 +27,7 @@ import {
 import { validateEmail } from '../../../api/general/general_api'
 import { saveSimpleForm } from '../../../api/leasing/leasing_api'
 import { insertInquiry, tenantFilledInquiry, tenantFilledInquiryForBuilding, insertTenantFromApplication } from '../../../api/inquiries/inquiry_api'
-import { sendSMSToBothParties } from '../../../api/sms/sms_api'
+import { sendSMSToBothParties, insertTenantLandlordSMS, } from '../../../api/sms/sms_api'
 import { getTenantByEmail } from '../../../api/auth/tenant_api'
 import { getLandlordInfo } from '../../../api/search/search_api'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
@@ -157,6 +157,17 @@ class PhoneCallForm extends Component {
         error_messages: [],
 			})
       const id = uuid.v4()
+
+      // getLandlordInfo(this.props.building.building_id)
+      // .then((data) => {
+      //   console.log(data)
+      //   insertTenantLandlordSMS({
+      //     tenant_phone: this.state.application_template.phone,
+      //     landlord_phone: data.phone,
+      //     notes: this.state.group_notes,
+      //
+      //   })
+      // })
       insertInquiry({
         id: id,
         tenant_id: this.props.tenant_profile.tenant_id,

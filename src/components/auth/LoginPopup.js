@@ -16,8 +16,26 @@ import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/face
 import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
 import { saveTenantProfile, getTenantProfile } from '../../api/auth/tenant_api'
 import Login from './Login'
+import Signup from './Signup'
+import ForgotPassword from './ForgotPassword'
 
 class LoginPopup extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      signup: false,
+      forgot_password: false,
+    }
+  }
+
+  componentWillMount() {
+    if (this.props.context === 'signup') {
+      this.setState({
+        signup: true,
+      })
+    }
+  }
 
   loginWithFacebook() {
     localStorage.removeItem('fbToken')
@@ -39,9 +57,9 @@ class LoginPopup extends Component {
     })
   }
 
-	render() {
-		return (
-			<div id='LoginPopup' style={comStyles().container}>
+  renderLoginAndSignUp() {
+    return (
+      <div>
         {
           this.props.rent_type === 'sublet' && this.props.force_signin
           ?
@@ -50,11 +68,12 @@ class LoginPopup extends Component {
           null
         }
         <div style={comStyles().social_container} >
-  				<Button
+          <Button
             onClick={() => this.loginWithFacebook()}
-            content='Login with Facebook'
+            content={this.state.signup ? 'Sign Up with Facebook' : 'Log In with Facebook'}
             color='facebook'
             icon='facebook'
+            size='medium'
           />
           {/*<Button
             content='Login with Google'
@@ -70,10 +89,42 @@ class LoginPopup extends Component {
           :
           <div>
             <Divider horizontal>Or</Divider>
-            <Login
-              closeModal={() => this.props.toggleModal(false)}
-            />
+            {
+              this.state.signup
+              ?
+              <Signup
+                loginComp={() => this.setState({ signup: false, })}
+              />
+              :
+              <Login
+                closeModal={() => this.props.toggleModal(false)}
+                signupState={() => this.setState({ signup: true, })}
+                forgotPassword={() => this.setState({ forgot_password: true, })}
+              />
+            }
           </div>
+        }
+      </div>
+    )
+  }
+
+  renderForgotPassword() {
+    return (
+      <ForgotPassword
+        backToLogin={() => this.setState({ forgot_password: false, })}
+      />
+    )
+  }
+
+	render() {
+		return (
+			<div id='LoginPopup' style={comStyles().container}>
+        {
+          this.state.forgot_password
+          ?
+          this.renderForgotPassword()
+          :
+          this.renderLoginAndSignUp()
         }
 			</div>
 		)
@@ -84,6 +135,7 @@ class LoginPopup extends Component {
 LoginPopup.propTypes = {
 	history: PropTypes.object.isRequired,
   toggleModal: PropTypes.func.isRequired,           // passed in
+  context: PropTypes.string.isRequired,             // passed in
   saveTenantToRedux: PropTypes.func.isRequired,
   triggerForcedSignin: PropTypes.func.isRequired,
   force_signin: PropTypes.bool,
@@ -123,7 +175,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      padding: '25px 100px 25px 100px',
+      padding: '25px 50px 25px 50px',
 		},
     social_container: {
       display: 'flex',

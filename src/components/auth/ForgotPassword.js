@@ -10,8 +10,11 @@ import { withRouter, Link } from 'react-router-dom'
 import {
 	Input,
 	Button,
+	Form,
+	Header,
 } from 'semantic-ui-react'
 import { forgotPassword } from '../../api/aws/aws-cognito'
+import { validateEmail } from '../../api/general/general_api'
 
 class ForgotPassword extends Component {
 
@@ -27,6 +30,7 @@ class ForgotPassword extends Component {
 			cognitoUserPackage: null,		// the AWS Cognito object that will be used later
 			errorMessage: null,					// error message for display
 			loading: false,							// loading flag
+			error_messages: [],							// error message to display
 		}
 		this.observableForPasswordConfirmInput = null		// observable for password input (submit on pressing enter)
 	}
@@ -59,26 +63,29 @@ class ForgotPassword extends Component {
 
 	// Send AWS Cognito email to re-set password
 	sendPasswordReset(state) {
-		this.setState({
-			loading: true
-		}, () => {
-			// Send AWS Cognito email to re-set password
-			forgotPassword(state.email)
-				.then((cognitoUserPackage) => {
-					this.setState({
-						cognitoUserPackage,
-						loading: false,
-						sent: true,
+		if (this.validateForm()) {
+			this.setState({
+				loading: true
+			}, () => {
+				// Send AWS Cognito email to re-set password
+				forgotPassword(state.email)
+					.then((cognitoUserPackage) => {
+						console.log(cognitoUserPackage)
+						this.setState({
+							cognitoUserPackage,
+							loading: false,
+							sent: true,
+						})
+						localStorage.setItem('RentBurrow_Email', this.state.email)
 					})
-					localStorage.setItem('RentBurrow_Email', this.state.email)
-				})
-				.catch((err) => {
-					this.setState({
-						errorMessage: err.message,
-						loading: false
+					.catch((err) => {
+						this.setState({
+							errorMessage: err.message,
+							loading: false
+						})
 					})
-				})
-		})
+			})
+		}
 	}
 
 	// verify the pin and submit the new password
@@ -105,47 +112,99 @@ class ForgotPassword extends Component {
 		}
 	}
 
+	validateForm() {
+		const error_messages = []
+		if (!this.state.email && !validateEmail(this.state.email)) {
+			error_messages.push('You must provide a valid email')
+		}
+		this.setState({
+			error_messages: error_messages,
+			loading: false,
+		})
+		return error_messages.length === 0
+	}
+
+	renderVerifyPIN() {
+		return (
+			<div style={comStyles().ForgotPassword}>
+				<Input value={this.state.pin} onChange={(e) => this.updateAttr(e, 'pin')} type='text' placeholder='Verification PIN' />
+				<Input value={this.state.new_password} onChange={(e) => this.updateAttr(e, 'new_password')} type='password' placeholder='New Password' />
+				<Input id='password_confirm_input' value={this.state.new_password_confirm} onChange={(e) => this.updateAttr(e, 'new_password_confirm')} type='password' placeholder='New Password Confirm' />
+				{
+					this.state.reset
+					?
+					<Link to='/login'>
+						<Button>
+							Login
+						</Button>
+					</Link>
+					:
+					<Button loading={this.state.loading} onClick={() => this.verifyPin(this.state)}>
+						Submit
+					</Button>
+				}
+			</div>
+		)
+	}
+
+	renderResetPassword() {
+		return (
+			<div>
+				<Header
+					as='h2'
+					content='Reset Password'
+					subheader={`We'll send you an email to reset your password`}
+				/>
+				<Form style={comStyles().sendResetEmail}>
+					<Form.Field>
+						<label>Email Address</label>
+						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='Email' />
+					</Form.Field>
+					<Form.Field style={comStyles().col}>
+					{
+						this.state.errorMessage
+						?
+						<strong>{ this.state.errorMessage.message }</strong>
+						:
+						null
+					}
+					{
+						this.state.error_messages.map((err, index) => {
+							return (
+								<strong style={comStyles().red} key={index}>*{ err }</strong>
+							)
+						})
+					}
+					</Form.Field>
+					<Form.Field style={comStyles().buttonsContainer}>
+						<Button
+							color='twitter'
+							basic
+							content='Back to Login'
+							icon='chevron left'
+							onClick={() => this.props.backToLogin()}
+							size='medium'
+							style={comStyles().loginButton}
+						/>
+						<Button color='twitter' fluid loading={this.state.loading} onClick={() => this.sendPasswordReset(this.state)}>
+							Send Reset PIN
+						</Button>
+					</Form.Field>
+				</Form>
+			</div>
+		)
+	}
+
 	render() {
 		return (
 			<div id='ForgotPassword' style={comStyles().container}>
-				<h2>RESET PASSWORD</h2>
-				{
-					this.state.errorMessage
-					?
-					this.state.errorMessage
-					:
-					null
-				}
 				{
 					this.state.sent
 					?
-					<div style={comStyles().ForgotPassword}>
-						<Input value={this.state.pin} onChange={(e) => this.updateAttr(e, 'pin')} type='text' placeholder='Verification PIN' />
-						<Input value={this.state.new_password} onChange={(e) => this.updateAttr(e, 'new_password')} type='password' placeholder='New Password' />
-						<Input id='password_confirm_input' value={this.state.new_password_confirm} onChange={(e) => this.updateAttr(e, 'new_password_confirm')} type='password' placeholder='New Password Confirm' />
-						{
-							this.state.reset
-							?
-							<Link to='/login'>
-								<Button>
-							    Login
-							  </Button>
-							</Link>
-							:
-							<Button loading={this.state.loading} onClick={() => this.verifyPin(this.state)}>
-						    Submit
-						  </Button>
-						}
-					</div>
+					this.renderVerifyPIN()
 					:
-					<div style={comStyles().sendResetEmail}>
-						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='Email' />
-						<Button loading={this.state.loading} onClick={() => this.sendPasswordReset(this.state)}>
-					    Submit
-					  </Button>
-					</div>
+					this.renderResetPassword()
 				}
-				<Link to='/login'>Go back to login</Link>
 			</div>
 		);
 	}
@@ -153,6 +212,7 @@ class ForgotPassword extends Component {
 
 ForgotPassword.propTypes = {
 	history: PropTypes.object.isRequired,
+	backToLogin: PropTypes.func.isRequired,			// passed in
 }
 
 const RadiumHOC = Radium(ForgotPassword);
@@ -175,8 +235,6 @@ const comStyles = () => {
 		container: {
 			display: 'flex',
 			flexDirection: 'column',
-			height: '80vh',
-			padding: '50px',
 		},
 		sendResetEmail: {
 			display: 'flex',
@@ -185,7 +243,21 @@ const comStyles = () => {
 		ForgotPassword: {
 			display: 'flex',
 			flexDirection: 'column',
-		}
+		},
+		buttonsContainer: {
+			display: 'flex',
+			flexDirection: 'row'
+		},
+		loginButton: {
+			width: '30%'
+		},
+		col: {
+			display: 'flex',
+			flexDirection: 'column'
+		},
+		red: {
+      color: 'red'
+    },
 	}
 }
 

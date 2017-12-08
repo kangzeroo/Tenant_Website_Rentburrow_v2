@@ -308,7 +308,9 @@ class MobileLandlordTourConfirmation extends Component {
         >
           <Modal.Content>
             <div style={comStyles().largeFontSize}>
-              {`Confirming Tour for ${moment(this.state.selected_slot.date).format('MMMM Do YYYY')} from ${moment(this.state.selected_slot.time_begin, 'HHmm').format('HH:mm a')} to ${moment(this.state.selected_slot.time_end, 'HHmm').format('HH:mm a')}`}
+              {`Confirming Tour for ${moment(this.state.selected_slot.date).format('MMMM Do YYYY')} from
+                ${moment(this.state.selected_slot.time_begin, 'HHmm').format('HH:mm a')} to
+                ${moment(this.state.selected_slot.time_end, 'HHmm').format('HH:mm a')}`}
             </div>
             <div style={comStyles().largeFontSize}>
               {`Meeting ${this.state.tour.first_name} at ${this.state.meet_at_property ? this.state.building.building_address : this.state.meetup_address}`}
