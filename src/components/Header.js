@@ -6,7 +6,6 @@ import Radium from 'radium'
 import { fadeInDown } from 'react-animations'
 import { Link, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import firebase from 'firebase'
 import {
   xMidBlue,
   xLightBlue,
