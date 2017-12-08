@@ -17,7 +17,6 @@ class MobileBuildingsList extends Component {
   constructor() {
 		super()
 		this.state = {
-			fb_posts: [],
 
 			running: true,
 
@@ -75,17 +74,19 @@ class MobileBuildingsList extends Component {
 		if (this.state.page_number + direction !== 0) {
 			// edge case where scroll up does not work when you have already reached the end of all sublets
       if (this.props.building_search_results.length >= this.state.page_end) {
-				this.setState({
-					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 20),
-					page_end: this.state.page_end + (direction * 20),
-					page_number: this.state.page_number + direction
-				}, () => {
-					if (direction > 0) {
-						target.scrollTop = target.scrollHeight * 0.2
-					} else {
-						target.scrollTop = target.scrollHeight * 0.8
-					}
-				})
+        if (this.state.page_end + (direction * 20) < this.props.building_search_results.length) {
+  				this.setState({
+  					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 20),
+  					page_end: this.state.page_end + (direction * 20),
+  					page_number: this.state.page_number + direction
+  				}, () => {
+  					if (direction > 0) {
+  						target.scrollTop = target.scrollHeight * 0.2
+  					} else {
+  						target.scrollTop = target.scrollHeight * 0.8
+  					}
+  				})
+        }
 			}
 		}
 	}
@@ -93,7 +94,7 @@ class MobileBuildingsList extends Component {
 	render() {
 		return (
       <div id='MobileBuildingsList' style={comStyles().container} >
-  			<div className='pretty_scrollbar' id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
+  			<div onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
   				{
             this.props.building_search_results.slice(this.state.page_start, this.state.page_end).map((building) => {
               return (

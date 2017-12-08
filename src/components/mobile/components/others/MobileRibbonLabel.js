@@ -8,43 +8,52 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+  Label,
 } from 'semantic-ui-react'
 
 
-class MobileBuildingInfo extends Component {
+class MobileRibbonLabel extends Component {
 
-  createMarkup(string) {
-		return {
-			__html: string,
-		}
-	}
+  determineColor(label) {
+    if (label.toLowerCase().indexOf('waitlist') > -1) {
+      return 'violet'
+    } else if (label === 'Apply Now') {
+      return 'blue'
+    } else if (label === 'Sold Out') {
+      return 'red'
+    } else if (label.toLowerCase().indexOf('not yet') > -1) {
+      return 'purple'
+    } else {
+      return 'yellow'
+    }
+  }
 
 	render() {
 		return (
-			<div id='MobileBuildingInfo' style={comStyles().container}>
-        <div
-          dangerouslySetInnerHTML={this.createMarkup(this.props.description)}
-          style={comStyles().textMarkup}
-        />
+			<div id='MobileRibbonLabel' style={comStyles().container}>
+        <Label color={this.determineColor(this.props.label)} ribbon='right'>
+          <div style={comStyles().label}>{ this.props.label }</div>
+        </Label>
 			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-MobileBuildingInfo.propTypes = {
+MobileRibbonLabel.propTypes = {
 	history: PropTypes.object.isRequired,
-  description: PropTypes.string.isRequired,       // passed in
+  label: PropTypes.string.isRequired,       // passed in
+  size: PropTypes.string,                   // passed in
 }
 
 // for all optional props, define a default value
-MobileBuildingInfo.defaultProps = {
-
+MobileRibbonLabel.defaultProps = {
+  label: '',
+  size: 'large',
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(MobileBuildingInfo)
+const RadiumHOC = Radium(MobileRibbonLabel)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -69,9 +78,9 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 		},
-    textMarkup: {
-			fontSize: '3rem',
-			lineHeight: '4rem',
-		},
+    label: {
+      fontSize: '3.5rem',
+      padding: '10px',
+    }
 	}
 }
