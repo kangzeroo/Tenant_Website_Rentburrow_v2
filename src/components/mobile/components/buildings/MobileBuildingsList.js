@@ -35,24 +35,24 @@ class MobileBuildingsList extends Component {
 
 	componentDidMount() {
 		this.scrollStream = new Rx.Subject()
-				.debounceTime(500)
-				.subscribe(
-					(position) => {
-		        // Probably you want to load new cards?
-						if (position.scrollTop / position.scrollHeight > 0.8) {
-		        	this.nextPage(1, position.scrollTop, position.scrollHeight, position.target)
-						} else if (position.scrollTop === 0) {
-							this.nextPage(-1, position.scrollTop, position.scrollHeight, position.target)
-						}
-					},
-					(err) => {
-						// console.log('Stream error occurred:')
-						// console.log(err)
-					},
-					() => {
-						// console.log('Stream finished')
+			.debounceTime(500)
+			.subscribe(
+				(position) => {
+	        // Probably you want to load new cards?
+					if (position.scrollTop / position.scrollHeight > 0.8) {
+	        	this.nextPage(1, position.scrollTop, position.scrollHeight, position.target)
+					} else if (position.scrollTop === 0) {
+						this.nextPage(-1, position.scrollTop, position.scrollHeight, position.target)
 					}
-				)
+				},
+				(err) => {
+					// console.log('Stream error occurred:')
+					// console.log(err)
+				},
+				() => {
+					// console.log('Stream finished')
+				}
+			)
 	}
 
 	handleScroll(e) {
@@ -148,7 +148,8 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
+      // background: "transparent url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center no-repeat",
+      backgroundColor: 'rgba(153,204,255,0.1)',
 		},
     regular_nonscroll: {
 			display: 'flex',

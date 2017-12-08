@@ -151,6 +151,7 @@ const comStyles = (label) => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      height: 'auto'
 		},
     more_info: {
       display: 'flex',
@@ -194,7 +195,10 @@ const comStyles = (label) => {
     },
     headerPrint: {
       fontSize: '1rem',
-      height: 'auto',
+    },
+    imageGallery: {
+      minHeight: '400px',
+      maxHeight: '100% '
     }
 	}
 }
