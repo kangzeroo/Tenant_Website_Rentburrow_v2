@@ -8,10 +8,13 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import {
 	Input,
+	Form,
+	Modal,
 	Button,
 } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
 import { VerifyAccount, resetVerificationPIN } from '../../api/aws/aws-cognito'
+import LoginPopup from './LoginPopup'
 
 
 class AccountVerification extends Component {
@@ -80,15 +83,14 @@ class AccountVerification extends Component {
 				loading: true,
 				errorMessage: null,
 			}, () => {
-				console.log('submitVerification')
 				// submit account verification PIN to AWS Cognito
 				VerifyAccount(state).then(() => {
-					console.log('VerifyAccount success')
 					this.setState({
 						loading: false,
 						verified: true,
 						errorMessage: 'Successfully verified account',
 					})
+					this.toggleModal(true, 'login')
 					res()
 				}).catch((err) => {
 					this.setState({
@@ -125,33 +127,88 @@ class AccountVerification extends Component {
 		})
 	}
 
+	toggleModal(bool, attr, context) {
+		this.setState({
+			toggle_modal: bool,
+			modal_name: attr,
+			context: context
+		})
+	}
+
+	renderLoginSuite(context) {
+    return (
+        <div style={comStyles().login_modal}>
+          <Modal.Content>
+            <LoginPopup
+              toggleModal={() => this.toggleModal(false)}
+              context={context}
+            />
+          </Modal.Content>
+        </div>
+    )
+  }
+
+	renderAppropriateModal(modal_name, context) {
+		if (modal_name === 'login') {
+			return this.renderLoginSuite('login')
+		} else if (modal_name === 'signup') {
+			return this.renderLoginSuite('signup')
+		} else if (modal_name === 'request') {
+			return this.renderRequest()
+		}
+		return null
+	}
+
 	render() {
 		return (
 			<div id='AccountVerification' style={comStyles().container}>
-				<h2>VERIFY ACCOUNT</h2>
-				<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='text' placeholder='Email Address' />
-				<Input id='pin_input' value={this.state.pin} onChange={(e) => this.updateAttr(e, 'pin')} type='text' placeholder='Verification PIN' />
-				{
-					this.state.errorMessage
-					?
-					<strong>{ this.state.errorMessage }</strong>
-					:
-					null
-				}
-				{
-					this.state.verified
-					?
-					<Link to='/login?verified'>
-						<Button>
-							Login
-						</Button>
-					</Link>
-					:
-					<Button loading={this.state.loading} onClick={() => this.submitVerification(this.state)}>
-						Verify
-					</Button>
-				}
-				<div onClick={() => this.resendPIN(this.state)}>Resend PIN</div>
+				<Form>
+					<h2>Verify Account</h2>
+					<Form.Field>
+						<label>Email Address</label>
+						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='text' placeholder='Email Address' />
+					</Form.Field>
+					<Form.Field>
+						<label>Verification PIN</label>
+						<Input id='pin_input' value={this.state.pin} onChange={(e) => this.updateAttr(e, 'pin')} type='text' placeholder='Verification PIN' />
+					</Form.Field>
+					<Form.Field>
+					{
+						this.state.errorMessage
+						?
+						<strong>{ this.state.errorMessage }</strong>
+						:
+						null
+					}
+					</Form.Field>
+					<Form.Field>
+						{
+							this.state.verified
+							?
+							<Link to='/login?verified'>
+								<Button>
+									Login
+								</Button>
+							</Link>
+							:
+							<Button
+								color='blue'
+								fluid
+								loading={this.state.loading}
+								onClick={() => this.submitVerification(this.state)}
+								content='Verify PIN'
+							/>
+						}
+					</Form.Field>
+					<Form.Field>
+						<div style={comStyles().resend} onClick={() => this.resendPIN(this.state)}>Resend PIN</div>
+					</Form.Field>
+				</Form>
+				<Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
+					{
+						this.renderAppropriateModal(this.state.modal_name, this.state.context)
+					}
+				</Modal>
 			</div>
 		)
 	}
@@ -187,7 +244,16 @@ const comStyles = () => {
 			flexDirection: 'column',
 			height: '80vh',
 			padding: '50px',
-		}
+		},
+		resend: {
+      marginLeft: '5px',
+			fontSize: '1.2rem',
+			color: '#6495ED',
+			cursor: 'pointer',
+			':hover': {
+				textDecoration: 'underline'
+			}
+		},
 	}
 }
 

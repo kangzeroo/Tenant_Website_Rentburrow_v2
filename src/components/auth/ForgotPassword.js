@@ -102,7 +102,8 @@ class ForgotPassword extends Component {
 						loading: false,
 						reset: true,
 					})
-					this.props.history.push('/login?passwordReset')
+					this.props.backToLogin()
+					// this.props.history.push('/login?passwordReset')
 				}, 1000)
 			})
 		} else {
@@ -127,22 +128,29 @@ class ForgotPassword extends Component {
 	renderVerifyPIN() {
 		return (
 			<div style={comStyles().ForgotPassword}>
-				<Input value={this.state.pin} onChange={(e) => this.updateAttr(e, 'pin')} type='text' placeholder='Verification PIN' />
-				<Input value={this.state.new_password} onChange={(e) => this.updateAttr(e, 'new_password')} type='password' placeholder='New Password' />
-				<Input id='password_confirm_input' value={this.state.new_password_confirm} onChange={(e) => this.updateAttr(e, 'new_password_confirm')} type='password' placeholder='New Password Confirm' />
-				{
-					this.state.reset
-					?
-					<Link to='/login'>
-						<Button>
-							Login
-						</Button>
-					</Link>
-					:
-					<Button loading={this.state.loading} onClick={() => this.verifyPin(this.state)}>
-						Submit
-					</Button>
-				}
+				<Form>
+					<h2>Create a new password</h2>
+					<Form.Field>
+						<label>Verification PIN</label>
+						<Input value={this.state.pin} onChange={(e) => this.updateAttr(e, 'pin')} type='text' placeholder='Verification PIN' />
+					</Form.Field>
+					<Form.Field>
+						<label>New Password</label>
+						<Input value={this.state.new_password} onChange={(e) => this.updateAttr(e, 'new_password')} type='password' placeholder='New Password' />
+					</Form.Field>
+					<Form.Field>
+						<label>Confirm New Password</label>
+						<Input id='password_confirm_input' value={this.state.new_password_confirm} onChange={(e) => this.updateAttr(e, 'new_password_confirm')} type='password' placeholder='New Password Confirm' />
+					</Form.Field>
+					<Form.Field>
+						<Button
+							primary
+							content='Submit'
+							loading={this.state.loading}
+							onClick={() => this.verifyPin(this.state)}
+						/>
+					</Form.Field>
+				</Form>
 			</div>
 		)
 	}
