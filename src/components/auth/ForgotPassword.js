@@ -145,6 +145,7 @@ class ForgotPassword extends Component {
 					<Form.Field>
 						<Button
 							primary
+							fluid
 							content='Submit'
 							loading={this.state.loading}
 							onClick={() => this.verifyPin(this.state)}
