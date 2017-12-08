@@ -57,6 +57,8 @@ class LoginPopup extends Component {
     })
   }
 
+
+
   renderLoginAndSignUp() {
     return (
       <div>
@@ -94,6 +96,7 @@ class LoginPopup extends Component {
               ?
               <Signup
                 loginComp={() => this.setState({ signup: false, })}
+                closeModal={() => this.props.toggleModal(false)}
               />
               :
               <Login

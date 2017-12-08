@@ -84,6 +84,7 @@ class Signup extends Component {
 					}, () => {
 						// redirect to account verification page
 						this.props.history.push('/register/verify')
+            this.props.closeModal()
 					})
 				}).catch((err) => {
 					this.setState({
@@ -175,6 +176,7 @@ class Signup extends Component {
 Signup.propTypes = {
 	history: PropTypes.object.isRequired,
   loginComp: PropTypes.func.isRequired,     // passed in
+  closeModal: PropTypes.func.isRequired,    // passed in
 }
 
 // for all optional props, define a default value
