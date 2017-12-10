@@ -79,7 +79,7 @@ const comStyles = () => {
       flexDirection: 'column',
 		},
     label: {
-      fontSize: '3.5rem',
+      fontSize: '2.5rem',
       padding: '10px',
     }
 	}

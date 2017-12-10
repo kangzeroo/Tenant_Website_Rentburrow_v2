@@ -82,11 +82,11 @@ const comStyles = () => {
       padding: '0px 0px 0px 30px',
     },
     logo: {
-      height: '80%',
+      height: '5vh',
       display: 'inline-block',
       width: 'auto',
       float: 'left',
-      padding: '0px 0px 0px 30px',
+      // padding: '0px 0px 0px 10px',
     },
 	}
 }
