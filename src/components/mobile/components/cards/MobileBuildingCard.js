@@ -75,21 +75,42 @@ class MobileBuildingCard extends Component {
               <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
             </Header>
             <Card.Description style={comStyles().more_info}>
-              {
-                this.props.building.min_price && this.props.building.max_price
-                ?
-                <div style={comStyles().price}>
-                  {
-                    this.props.building.min_price === this.props.building.max_price
-                    ?
-                    <div style={comStyles().room_price}>Rooms from ${this.props.building.min_price}</div>
-                    :
-                    <div style={comStyles().room_price}>${this.props.building.min_price} to ${this.props.building.max_price}</div>
-                  }
-                </div>
-                :
-                <div style={comStyles().room_price}>Inquire Price</div>
-              }
+                {
+                  this.props.building.min_rooms && this.props.building.max_rooms
+                  ?
+                  <div style={comStyles().price}>
+                    {
+                      this.props.building.min_rooms === this.props.building.max_rooms
+                      ?
+                      <div style={comStyles().room_price}>
+                        {this.props.building.min_rooms} Room{this.props.building.min_rooms > 1 ? 's' : null}
+                      </div>
+                      :
+                      <div style={comStyles().room_price}>
+                        {this.props.building.min_rooms} - {this.props.building.max_rooms} Rooms
+                      </div>
+                    }
+                  </div>
+                  :
+                  null
+                }
+              <div>
+                {
+                  this.props.building.min_price && this.props.building.max_price
+                  ?
+                  <div style={comStyles().price}>
+                    {
+                      this.props.building.min_price === this.props.building.max_price
+                      ?
+                      <div style={comStyles().room_price}>Rooms from ${this.props.building.min_price}</div>
+                      :
+                      <div style={comStyles().room_price}>${this.props.building.min_price} to ${this.props.building.max_price}</div>
+                    }
+                  </div>
+                  :
+                  <div style={comStyles().room_price}>Inquire Price</div>
+                }
+              </div>
             </Card.Description>
           </div>
           {
@@ -155,10 +176,12 @@ const comStyles = (label) => {
 		},
     more_info: {
       display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      height: 'auto',
-      padding: '25px',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      // alignItems: 'center',
+      minHeight: '60px',
+      maxHeight: 'auto',
+      padding: '0px 25px 0px 25px',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
@@ -167,7 +190,7 @@ const comStyles = (label) => {
       // padding: '30px 10px 10px 10px',
     },
     details: {
-      color: 'black',
+      // color: 'black',
       display: 'flex',
       flexDirection: 'column',
       width: '90%',
@@ -177,24 +200,24 @@ const comStyles = (label) => {
       display: 'flex',
       flexDirection: 'column',
       width: '30%',
-      marginTop: '12%',
+    //  marginTop: '12%',
     },
     address: {
       width: '100%',
       display: 'flex',
       flexWrap: 'wrap',
-      fontSize: '5rem',
-      padding: '25px',
+      fontSize: '3rem',
+      padding: '0px 0px 0px 0px 25px',
       lineHeight: '70px',
     },
     price: {
       width: '100%',
     },
     room_price: {
-      fontSize: '3rem',
+      fontSize: '2.5rem',
     },
     headerPrint: {
-      fontSize: '1rem',
+      fontSize: '4rem',
     },
     imageGallery: {
       minHeight: '400px',
