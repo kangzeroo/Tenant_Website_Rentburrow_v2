@@ -539,11 +539,11 @@ class SimpleTempForm extends Component {
           :
           <div>
             {
-              this.state.group_size_filled
-              ?
+              // this.state.group_size_filled
+            //  ?
               this.renderApplicationForm()
-              :
-              this.renderInitialQuestion()
+            //  :
+          //    this.renderInitialQuestion()
             }
           </div>
         }
