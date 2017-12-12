@@ -231,8 +231,8 @@ export default withRouter(
 const comStyles = () => {
 	return {
 		container: {
-      display: 'flex',
-      flexDirection: 'column',
+	      	display: 'flex',
+	      	flexDirection: 'column',
 			width: '100%',
 			height: '-webkit-fill-available',
 			justifyContent: 'center'
