@@ -66,7 +66,7 @@ class LeaseFilterCard extends Component {
 		}
 
 		// if the number of rooms filter has changed...
-		if (this.state.room_count > 1) {
+		if (this.state.room_count >= 1) {
 			filtered = filtered.filter((building) => {
 				return parseInt(building.max_rooms, 10) >= this.state.room_count && parseInt(building.min_rooms, 10) <= this.state.room_count
 			})
