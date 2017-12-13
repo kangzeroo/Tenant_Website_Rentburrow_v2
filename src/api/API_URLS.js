@@ -72,6 +72,7 @@ export const FIREBASE_VERSION = 'development'
 export const AWS_FEDERATED_IDENTITY_ENV = 'production'
 
 
+
 // Prod
 // export const EC2_CONTAINER_IP_ADDRESS = '34.195.86.132'
 

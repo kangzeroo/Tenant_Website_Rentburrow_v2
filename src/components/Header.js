@@ -308,7 +308,8 @@ const comStyles = () => {
       float: 'left',
     },
     logo: {
-      height: '100%',
+      minHeight: '100%',
+      maxHeight: '6vh',
       display: 'inline-block',
       width: 'auto',
       float: 'left',
