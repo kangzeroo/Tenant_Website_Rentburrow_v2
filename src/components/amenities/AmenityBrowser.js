@@ -71,7 +71,7 @@ class AmenityBrowser extends Component {
         'REFERENCE_ID': this.props.building.building_id,
         'DATE': new Date().getTime(),
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
-        'IMAGE_URL': this.state.current_amenity.imgs[0],
+        'IMAGE_URL': this.state.current_amenity.imgs[0] || ''
       }
     })
   }

@@ -14,6 +14,8 @@ import {
 	Button,
 	Card,
 } from 'semantic-ui-react'
+import { STUDENT_PREFERENCES } from '../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../actions/intel/intel_actions'
 import InputRange from 'react-input-range'
 require('../../styles/react-input-range.css')
 
@@ -89,6 +91,15 @@ class LeaseFilterCard extends Component {
 		this.props.saveFilteredBuildingsToRedux(filtered)
 		this.props.saveLeaseFilterParams(this.state)
 		this.props.closeFilterCard()
+		this.props.collectIntel({
+		  'TableName': STUDENT_PREFERENCES,
+		  'Item': {
+		    'ACTION': 'LEASE_FILTER_PARAMS',
+		    'DATE': new Date().getTime(),
+		    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				'PARAMS': JSON.stringify(this.state),
+		  }
+		})
 	}
 
 /*
@@ -238,6 +249,8 @@ LeaseFilterCard.propTypes = {
 	saveFilteredBuildingsToRedux: PropTypes.func.isRequired,
 	toggleHideSoldOuts: PropTypes.func.isRequired,
 	hide_sold_outs: PropTypes.bool,
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
 }
 
 // for all optional props, define a default value
@@ -256,6 +269,7 @@ const mapReduxToProps = (redux) => {
 		building_search_results: redux.search.building_search_results,
 		buildings: redux.search.buildings,
 		hide_sold_outs: redux.search.hide_sold_outs,
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
@@ -266,6 +280,7 @@ export default withRouter(
 		saveLeaseFilterParams,
 		saveFilteredBuildingsToRedux,
 		toggleHideSoldOuts,
+    collectIntel,
 	})(RadiumHOC)
 )
 
