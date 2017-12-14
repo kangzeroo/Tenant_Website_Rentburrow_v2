@@ -68,7 +68,7 @@ class SingularImageGallery extends Component {
         'ACTION': this.props.intel_action,
         'REFERENCE_ID': this.props.intel_id,
         'DATE': new Date().getTime(),
-        'USER_ID': this.props.tenant_profile.tenant_id,
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'IMAGE_URL': this.state.all_images[this.state.current_image_position],
       }
     })
