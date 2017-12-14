@@ -17,6 +17,7 @@ import {
   aliasToURL,
   shortenAddress,
 } from '../../../api/general/general_api'
+import FavoriteIcon from '../../tenant/favorites/FavoriteIcon'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
 import { collectIntel } from '../../../actions/intel/intel_actions'
@@ -41,6 +42,7 @@ class BuildingCard extends Component {
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'CORP_ID': building.corporation_id,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
     // console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
@@ -57,6 +59,7 @@ class BuildingCard extends Component {
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'CORP_ID': building.corporation_id,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -72,6 +75,7 @@ class BuildingCard extends Component {
       >
         {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
         <div style={comStyles().imageGallery}>
+          <FavoriteIcon building_id={this.props.building.building_id} />
           <SingularImageGallery
             list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
             image_size='thumbnail'
@@ -121,6 +125,7 @@ BuildingCard.propTypes = {
   building: PropTypes.object.isRequired,    // passed in
   selectPinToRedux: PropTypes.func.isRequired,
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 }
 
@@ -136,6 +141,7 @@ const RadiumHOC = Radium(BuildingCard)
 function mapReduxToProps(redux) {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

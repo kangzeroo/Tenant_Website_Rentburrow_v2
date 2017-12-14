@@ -15,6 +15,7 @@ import {
   Icon,
   Popup,
 } from 'semantic-ui-react'
+import FavoriteIcon from '../tenant/favorites/FavoriteIcon'
 import HomeExplorer from '../home_explorer/HomeExplorer'
 import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
@@ -61,6 +62,7 @@ class ApplyBox extends Component {
         'BUILDING_ID': this.props.building.building_id,
         'ADDRESS': this.props.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -75,6 +77,7 @@ class ApplyBox extends Component {
         'BUILDING_ID': this.props.building.building_id,
         'ADDRESS': this.props.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -94,6 +97,7 @@ class ApplyBox extends Component {
         'ADDRESS': this.state.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'SUBLET_COUNT': this.props.sublets.length,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -201,6 +205,7 @@ class ApplyBox extends Component {
                 basic
                 content='Open Home Explorer'
               />
+              <FavoriteIcon building_id={this.props.building.building_id} />
             </div>
             <div>
               {
@@ -283,6 +288,7 @@ ApplyBox.propTypes = {
   togglePhoneCallForm: PropTypes.func.isRequired,           // passed in
   sublets: PropTypes.array.isRequired,                      // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 }
 
@@ -298,6 +304,7 @@ const RadiumHOC = Radium(ApplyBox)
 const mapReduxToProps = (state) => {
 	return {
     tenant_profile: state.auth.tenant_profile,
+    fingerprint: state.auth.browser_fingerprint,
 	}
 }
 

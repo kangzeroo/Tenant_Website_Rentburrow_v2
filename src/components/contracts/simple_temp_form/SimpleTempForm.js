@@ -210,7 +210,8 @@ class SimpleTempForm extends Component {
             'BUILDING_ID': this.props.building.building_id,
             'ADDRESS': this.props.building.building_address,
             'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
-            'DATA': JSON.stringify(this.state.group_members)
+            'DATA': JSON.stringify(this.state.group_members),
+            'FINGERPRINT': this.props.fingerprint,
           }
         })
       })
@@ -562,6 +563,7 @@ SimpleTempForm.propTypes = {
 	title: PropTypes.string.isRequired,				// passed in
   landlord: PropTypes.object.isRequired,    // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -576,6 +578,7 @@ const RadiumHOC = Radium(SimpleTempForm)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

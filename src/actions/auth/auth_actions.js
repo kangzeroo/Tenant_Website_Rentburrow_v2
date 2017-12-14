@@ -3,6 +3,8 @@ import {
   FORCE_SIGNIN,
   LOGOUT_TENANT,
   LOCATION_FORWARDING,
+  FINGERPRINT_BROWSER,
+  FORCE_SIGNIN_FAVORITE,
   // LISTEN_TO_FIREBASE_DB,
 } from '../action_types'
 
@@ -47,6 +49,27 @@ export const forwardUrlLocation = (url) => {
     dispatch({
       type: LOCATION_FORWARDING,
       payload: url,
+    })
+  }
+}
+
+// fingerprint browser
+export const fingerprintBrowser = (fingerprint_string) => {
+  return (dispatch) => {
+    dispatch({
+      type: FINGERPRINT_BROWSER,
+      payload: fingerprint_string,
+    })
+  }
+}
+
+// control if the forced signin popup should show
+export const triggerForcedSigninFavorite = (bool) => {
+  // dispatch lets you send actions to Redux
+  return (dispatch) => {
+    dispatch({
+      type: FORCE_SIGNIN_FAVORITE,
+      payload: bool,
     })
   }
 }

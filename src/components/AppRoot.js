@@ -11,6 +11,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium, { StyleRoot } from 'radium'
 import PropTypes from 'prop-types'
+import Fingerprint2 from 'fingerprintjs2'
 import {
   Switch,
   Route,
@@ -71,7 +72,7 @@ import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
 import { getInitialToastMessages } from '../api/messaging/toast_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
-import { saveTenantToRedux, triggerForcedSignin, forwardUrlLocation } from '../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSignin, forwardUrlLocation, fingerprintBrowser } from '../actions/auth/auth_actions'
 import { addToastMessage, removeToastMessage } from '../actions/messaging/toast_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
@@ -100,6 +101,8 @@ class AppRoot extends Component {
   }
 
 	componentWillMount() {
+    // create a unique identifier for the browser
+    this.fingerprintBrowser()
     // automatically set language
     this.autoSetLanguage()
     // detect browser and limit to chrome
@@ -118,6 +121,14 @@ class AppRoot extends Component {
     this.setZoomLevel()
     // execute initial Toast messages
     this.launchToasts()
+  }
+
+  fingerprintBrowser() {
+    new Fingerprint2().get((result, components) => {
+      // console.log(result) // a hash, representing your device fingerprint
+      // console.log(components) // an array of FP components
+      this.props.fingerprintBrowser(result)
+    })
   }
 
   detectBrowser() {
@@ -488,6 +499,7 @@ AppRoot.propTypes = {
   addToastMessage: PropTypes.func.isRequired,
   removeToastMessage: PropTypes.func.isRequired,
   selected_building_to_apply_for: PropTypes.object,
+  fingerprintBrowser: PropTypes.func.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -525,6 +537,7 @@ export default withRouter(connect(mapReduxToProps, {
   saveIntelToCloud,
   addToastMessage,
   removeToastMessage,
+  fingerprintBrowser,
 })(RadiumHOC))
 
 // =============================

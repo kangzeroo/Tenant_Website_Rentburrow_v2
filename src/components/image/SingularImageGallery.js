@@ -70,6 +70,7 @@ class SingularImageGallery extends Component {
         'DATE': new Date().getTime(),
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'IMAGE_URL': this.state.all_images[this.state.current_image_position],
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
     if (this.props.image_size === 'hd') {
@@ -177,6 +178,7 @@ SingularImageGallery.propTypes = {
   list_of_images: PropTypes.array,
   image_size: PropTypes.string,       // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   intel_action: PropTypes.string.isRequired,  // passed in
   intel_id: PropTypes.string.isRequired,      // passed in
@@ -197,6 +199,7 @@ const RadiumHOC = Radium(SingularImageGallery)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

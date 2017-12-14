@@ -145,6 +145,7 @@ class BuildingPage extends Component {
 				    'BUILDING_ID': this.state.building.building_id,
 				    'ADDRESS': this.state.building.building_address,
 				    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				    'FINGERPRINT': this.props.fingerprint,
 				  }
 				})
 			})
@@ -312,6 +313,7 @@ class BuildingPage extends Component {
 	      'ADDRESS': this.state.building.building_address,
 	      'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
 				'SUBLET_COUNT': this.state.sublets.length,
+		    'FINGERPRINT': this.props.fingerprint,
 	    }
 	  })
 	}
@@ -533,6 +535,7 @@ BuildingPage.propTypes = {
 	selected_landlord: PropTypes.object.isRequired,
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -548,6 +551,7 @@ const mapReduxToProps = (redux) => {
 		// building: redux.selection.selected_building,
 		tenant_profile: redux.auth.tenant_profile,
 		selected_landlord: redux.selection.selected_landlord,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 
