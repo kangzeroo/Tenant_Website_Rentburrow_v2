@@ -98,6 +98,7 @@ class LeaseFilterCard extends Component {
 		    'DATE': new Date().getTime(),
 		    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
 				'PARAMS': JSON.stringify(this.state),
+		    'FINGERPRINT': this.props.fingerprint,
 		  }
 		})
 	}
@@ -251,6 +252,7 @@ LeaseFilterCard.propTypes = {
 	hide_sold_outs: PropTypes.bool,
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -270,6 +272,7 @@ const mapReduxToProps = (redux) => {
 		buildings: redux.search.buildings,
 		hide_sold_outs: redux.search.hide_sold_outs,
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

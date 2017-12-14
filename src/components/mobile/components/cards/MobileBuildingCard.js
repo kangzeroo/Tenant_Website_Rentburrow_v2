@@ -40,6 +40,7 @@ class MobileBuildingCard extends Component {
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'CORP_ID': building.corporation_id,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
     // console.log(`${window.location.origin}/${aliasToURL(building.building_alias)}`)
@@ -56,6 +57,7 @@ class MobileBuildingCard extends Component {
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'CORP_ID': building.corporation_id,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -134,6 +136,7 @@ MobileBuildingCard.propTypes = {
   building: PropTypes.object.isRequired,      // passed in
   selectPinToRedux: PropTypes.func.isRequired,
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 }
 
@@ -149,6 +152,7 @@ const RadiumHOC = Radium(MobileBuildingCard)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

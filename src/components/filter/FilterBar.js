@@ -195,7 +195,8 @@ class FilterBar extends Component {
         'ACTION': 'CHANGED_RENT_TYPE',
         'DATE': new Date().getTime(),
         'RENT_TYPE': value.value,
-        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE'
+        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -289,6 +290,7 @@ FilterBar.propTypes = {
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 }
 
@@ -310,6 +312,7 @@ const mapReduxToProps = (redux) => {
     lease_filter_params: redux.filter.lease_filter_params,
     sublet_filter_params: redux.filter.sublet_filter_params,
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

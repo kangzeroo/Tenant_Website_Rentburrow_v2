@@ -29,6 +29,7 @@ class BuildingOverviewRow extends Component {
         'BUILDING_ID': building.building_id,
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -81,6 +82,7 @@ BuildingOverviewRow.propTypes = {
   toggleModal: PropTypes.func.isRequired,   // passed in
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -94,6 +96,7 @@ const RadiumHOC = Radium(BuildingOverviewRow)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

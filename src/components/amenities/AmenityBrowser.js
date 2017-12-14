@@ -61,6 +61,7 @@ class AmenityBrowser extends Component {
         'REFERENCE_ID': this.props.intel_id,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'AMENITY': am.amenity_alias,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
     this.props.collectIntel({
@@ -71,7 +72,8 @@ class AmenityBrowser extends Component {
         'REFERENCE_ID': this.props.building.building_id,
         'DATE': new Date().getTime(),
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
-        'IMAGE_URL': this.state.current_amenity.imgs[0] || ''
+        'IMAGE_URL': this.state.current_amenity.imgs[0] || '',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -149,6 +151,7 @@ AmenityBrowser.propTypes = {
   tenant_profile: PropTypes.object.isRequired,
   intel_action: PropTypes.string.isRequired,    // passed in
   intel_id: PropTypes.string.isRequired,        // passed in
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -163,6 +166,7 @@ const RadiumHOC = Radium(AmenityBrowser)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

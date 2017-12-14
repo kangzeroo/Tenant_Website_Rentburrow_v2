@@ -94,7 +94,7 @@ const comStyles = (link) => {
 			alignItems: 'center',
 			position: 'absolute',
 			bottom: '50px',
-			right: '55px',
+			right: '20px',
       zIndex: 99999,
       height: 'auto',
       pointerEvents: 'none',

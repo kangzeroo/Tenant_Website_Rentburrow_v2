@@ -271,6 +271,7 @@ class MobileMapComponent extends Component {
 					    'BUILDING_ID': n.building_id,
 					    'ADDRESS': n.building_address,
 					    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+					    'FINGERPRINT': this.props.fingerprint,
 					  }
 					})
         })
@@ -332,6 +333,7 @@ class MobileMapComponent extends Component {
 					'BUILDING_ID': b.building_id,
 					'ADDRESS': b.building_address,
 					'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+			    'FINGERPRINT': this.props.fingerprint,
 				}
 			})
 		})
@@ -424,6 +426,7 @@ MobileMapComponent.propTypes = {
 	saveBuildingsToRedux: PropTypes.func.isRequired,
 	saveSubletsToRedux: PropTypes.func.isRequired,
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 }
 
@@ -444,6 +447,7 @@ const mapReduxToProps = (redux) => {
     sublet_filter_params: redux.filter.sublet_filter_params,
 		rent_type: redux.filter.rent_type,
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

@@ -168,6 +168,7 @@ class SuiteOverviewRow extends Component {
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'BUILDING_ID': this.props.building.building_id,
         'BUILDING_NAME': this.props.building.building_address,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -186,6 +187,7 @@ class SuiteOverviewRow extends Component {
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'BUILDING_ID': this.props.building.building_id,
         'BUILDING_NAME': this.props.building.building_address,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -202,6 +204,7 @@ class SuiteOverviewRow extends Component {
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'BUILDING_ID': this.props.building.building_id,
         'BUILDING_NAME': this.props.building.building_address,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -267,6 +270,7 @@ SuiteOverviewRow.propTypes = {
   suite: PropTypes.object.isRequired,    // passed in
   toggleModal: PropTypes.func.isRequired,   // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   toggleTemporaryCollectionFrom: PropTypes.func.isRequired,     // passed in
 }
@@ -283,6 +287,7 @@ const RadiumHOC = Radium(SuiteOverviewRow)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

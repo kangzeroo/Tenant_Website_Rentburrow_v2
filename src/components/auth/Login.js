@@ -20,8 +20,9 @@ import { Link, withRouter } from 'react-router-dom'
 import { STUDENT_USERPOOL_ID, generate_TENANT_IDENTITY_POOL_ID } from '../../api/aws/aws-profile'
 
 import { LoginStudent, buildUserObject } from '../../api/aws/aws-cognito'
+import { saveFavorite } from '../../api/tenant/favorite_api'
 import { getTenantProfile, } from '../../api/auth/tenant_api'
-import { saveTenantToRedux } from '../../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSigninFavorite } from '../../actions/auth/auth_actions'
 
 class Login extends Component {
 
@@ -97,18 +98,22 @@ class Login extends Component {
 				login_loading: false,
 			})
 			this.props.closeModal()
-				// get the full staff details using the staff_id from AWS Cognito
-				getTenantProfile({ tenant_id: data.sub })
-					.then((data) => {
-						// save the authenticated staff to Redux state
-		        this.props.saveTenantToRedux(data)
-						this.props.history.push('/')
+			// get the full staff details using the staff_id from AWS Cognito
+			getTenantProfile({ tenant_id: data.sub })
+				.then((data) => {
+					// save the authenticated staff to Redux state
+	        this.props.saveTenantToRedux(data)
+					this.props.history.push('/')
+		      if (this.props.temporary_favorite_force_signin) {
+		        saveFavorite(this.props.temporary_favorite_force_signin, data.tenant_id, true)
+		        this.props.triggerForcedSigninFavorite('')
+		      }
+				})
+				.catch((err) => {
+					this.setState({
+						errorMessage: 'Error logging in.'
 					})
-					.catch((err) => {
-						this.setState({
-							errorMessage: 'Error logging in.'
-						})
-					})
+				})
 		}).catch((err) => {
 			// this.props.toggleAuthLoading(false)
 			this.setState({
@@ -245,6 +250,8 @@ Login.propTypes = {
 	facebook_only: PropTypes.bool,			// passed in
 	signupState: PropTypes.func.isRequired,	// passed in
 	forgotPassword: PropTypes.func.isRequired,		// passed in
+  temporary_favorite_force_signin: PropTypes.string,
+  triggerForcedSigninFavorite: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -255,14 +262,16 @@ Login.defaultProps = {
 const RadiumHOC = Radium(Login)
 
 // if there is an error, it will appear on the state tree
-const mapStateToProps = (state) => {
+const mapStateToProps = (redux) => {
 	return {
+		temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
 	}
 }
 
 export default withRouter(
 	connect(mapStateToProps, {
 		saveTenantToRedux,
+    triggerForcedSigninFavorite,
 	})(RadiumHOC)
 )
 

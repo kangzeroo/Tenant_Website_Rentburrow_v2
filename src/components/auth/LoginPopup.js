@@ -13,8 +13,9 @@ import {
   Form,
 } from 'semantic-ui-react'
 import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
-import { saveTenantToRedux, triggerForcedSignin } from '../../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSignin, triggerForcedSigninFavorite } from '../../actions/auth/auth_actions'
 import { saveTenantProfile, getTenantProfile } from '../../api/auth/tenant_api'
+import { saveFavorite } from '../../api/tenant/favorite_api'
 import Login from './Login'
 import Signup from './Signup'
 import ForgotPassword from './ForgotPassword'
@@ -54,6 +55,10 @@ class LoginPopup extends Component {
       this.props.saveTenantToRedux(data)
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
+      if (this.props.temporary_favorite_force_signin) {
+        saveFavorite(this.props.temporary_favorite_force_signin, data.tenant_id, true)
+        this.props.triggerForcedSigninFavorite('')
+      }
     })
   }
 
@@ -143,6 +148,8 @@ LoginPopup.propTypes = {
   triggerForcedSignin: PropTypes.func.isRequired,
   force_signin: PropTypes.bool,
   rent_type: PropTypes.string.isRequired,
+  temporary_favorite_force_signin: PropTypes.string,
+  triggerForcedSigninFavorite: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -158,6 +165,7 @@ const mapReduxToProps = (redux) => {
 	return {
     rent_type: redux.filter.rent_type,
     force_signin: redux.auth.force_signin,
+    temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
 	}
 }
 
@@ -166,6 +174,7 @@ export default withRouter(
 	connect(mapReduxToProps, {
     saveTenantToRedux,
     triggerForcedSignin,
+    triggerForcedSigninFavorite,
 	})(RadiumHOC)
 )
 

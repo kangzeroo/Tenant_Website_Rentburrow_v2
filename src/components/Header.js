@@ -20,6 +20,7 @@ import {
   Popup,
 } from 'semantic-ui-react'
 import LoginPopup from './auth/LoginPopup'
+import FavoriteForceSignin from './tenant/favorites/FavoriteForceSignin'
 import i18n from '../i18n/translator'
 import { languageOptions } from '../i18n/language_options'
 import {
@@ -232,6 +233,13 @@ class Header extends Component {
             :
             null
           }
+          {
+            this.props.temporary_favorite_force_signin
+            ?
+            <FavoriteForceSignin />
+            :
+            null
+          }
           <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
             {
               this.renderAppropriateModal(this.state.modal_name, this.state.context)
@@ -254,6 +262,7 @@ Header.propTypes = {
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
   force_signin: PropTypes.bool,
+  temporary_favorite_force_signin: PropTypes.string,
   rent_type: PropTypes.string.isRequired,
 }
 
@@ -277,6 +286,7 @@ const mapReduxToProps = (redux) => {
     sublet_filter_params: redux.filter.sublet_filter_params,
     rent_type: redux.filter.rent_type,
     force_signin: redux.auth.force_signin,
+    temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
   }
 }
 
@@ -297,7 +307,7 @@ const comStyles = () => {
     },
     header: {
       backgroundColor: xMidBlue,
-      height: '6vh',
+      height: '7vh',
       width: '100%',
       zIndex: '1',
       display: 'flex',
