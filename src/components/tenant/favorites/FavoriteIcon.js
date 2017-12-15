@@ -12,6 +12,8 @@ import {
 } from 'semantic-ui-react'
 import { triggerForcedSigninFavorite } from '../../../actions/auth/auth_actions'
 import { saveFavorite } from '../../../api/tenant/favorite_api'
+import { BUILDING_INTERACTIONS, SUITE_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../../actions/intel/intel_actions'
 
 
 class FavoriteIcon extends Component {
@@ -38,16 +40,54 @@ class FavoriteIcon extends Component {
       this.setState({
         favorited: false,
       })
-      saveFavorite(this.props.building_id, this.props.tenant_profile.tenant_id, false)
+      saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, false)
+      this.trackFavorite(false)
     } else {
       if (this.props.authenticated) {
         this.setState({
           favorited: true,
         })
-        saveFavorite(this.props.building_id, this.props.tenant_profile.tenant_id, true)
+        saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, true)
+        this.trackFavorite(true)
       } else {
-        this.props.triggerForcedSigninFavorite(this.props.building_id)
+        this.props.triggerForcedSigninFavorite({
+          id: this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id,
+          fav_type: this.props.fav_type,
+        })
       }
+    }
+  }
+
+  // ADD fav_type='' and suite={}
+  trackFavorite(bool) {
+    if (this.props.fav_type === 'building') {
+      const action = bool ? 'BUILDING_FAVORITED' : 'BUILDING_UNFAVORITED'
+      this.props.collectIntel({
+        'TableName': BUILDING_INTERACTIONS,
+        'Item': {
+          'ACTION': action,
+          'DATE': new Date().getTime(),
+          'BUILDING_ID': this.props.building.building_id,
+          'ADDRESS': this.props.building.building_address,
+          'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+          'FINGERPRINT': this.props.fingerprint,
+        }
+      })
+    } else if (this.props.fav_type === 'suite') {
+      const action = bool ? 'SUITE_FAVORITED' : 'SUITE_UNFAVORITED'
+      this.props.collectIntel({
+        'TableName': SUITE_INTERACTIONS,
+        'Item': {
+          'ACTION': action,
+          'DATE': new Date().getTime(),
+          'SUITE_ID': this.props.suite.suite_id,
+          'SUITE_NAME': this.props.suite.suite_alias,
+          'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+          'BUILDING_ID': this.props.building.building_id,
+          'BUILDING_NAME': this.props.building.building_address,
+          'FINGERPRINT': this.props.fingerprint,
+        }
+      })
     }
   }
 
@@ -58,7 +98,7 @@ class FavoriteIcon extends Component {
         name='heart'
         color={this.state.hovered || this.state.favorited ? 'red' : 'grey'}
         inverted={this.state.hovered || this.state.favorited ? false : true}
-        size='big'
+        size={this.props.size}
         onClick={(e) => this.toggleFavorite(e)}
         onMouseEnter={() => this.setState({ hovered: true })}
         onMouseLeave={() => this.setState({ hovered: false })}
@@ -75,13 +115,21 @@ FavoriteIcon.propTypes = {
   authenticated: PropTypes.bool,              // passed in
   tenant_profile: PropTypes.object.isRequired,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
-  building_id: PropTypes.string.isRequired,   // passed in
+  building: PropTypes.object,               // passed in
+  suite: PropTypes.object,                  // passed in
+  collectIntel: PropTypes.func.isRequired,
+  fav_type: PropTypes.string.isRequired,    // passed in
+  fingerprint: PropTypes.string.isRequired,
+  size: PropTypes.string,                   // passed in
 }
 
 // for all optional props, define a default value
 FavoriteIcon.defaultProps = {
   favorited: false,
   authenticated: false,
+  building: null,
+  suite: null,
+  size: 'big',
 }
 
 // Wrap the prop in Radium to allow JS styling
@@ -92,6 +140,7 @@ const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
     authenticated: redux.auth.authenticated,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 
@@ -99,6 +148,7 @@ const mapReduxToProps = (redux) => {
 export default withRouter(
 	connect(mapReduxToProps, {
     triggerForcedSigninFavorite,
+    collectIntel,
 	})(RadiumHOC)
 )
 

@@ -111,7 +111,7 @@ class BuildingPreview extends Component {
           style={comStyles().hardCard}
         >
           <div style={comStyles().imageGallery}>
-            <FavoriteIcon building_id={this.props.building.building_id} />
+            <FavoriteIcon fav_type='building' building={this.props.building} />
             {
               this.state.summary_images.length === 0
               ?
