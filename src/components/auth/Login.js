@@ -105,8 +105,8 @@ class Login extends Component {
 	        this.props.saveTenantToRedux(data)
 					this.props.history.push('/')
 		      if (this.props.temporary_favorite_force_signin) {
-		        saveFavorite(this.props.temporary_favorite_force_signin, data.tenant_id, true)
-		        this.props.triggerForcedSigninFavorite('')
+		        saveFavorite(this.props.temporary_favorite_force_signin.id, this.props.temporary_favorite_force_signin.fav_type, data.tenant_id, true)
+		        this.props.triggerForcedSigninFavorite(null)
 		      }
 				})
 				.catch((err) => {
@@ -250,13 +250,14 @@ Login.propTypes = {
 	facebook_only: PropTypes.bool,			// passed in
 	signupState: PropTypes.func.isRequired,	// passed in
 	forgotPassword: PropTypes.func.isRequired,		// passed in
-  temporary_favorite_force_signin: PropTypes.string,
+  temporary_favorite_force_signin: PropTypes.object,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 Login.defaultProps = {
   closeModal: () => {},
+	temporary_favorite_force_signin: null,
 }
 
 const RadiumHOC = Radium(Login)

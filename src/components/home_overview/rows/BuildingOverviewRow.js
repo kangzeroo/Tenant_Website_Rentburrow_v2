@@ -12,6 +12,7 @@ import {
   Button,
 } from 'semantic-ui-react'
 import SingularImageGallery from '../../image/SingularImageGallery'
+import FavoriteIcon from '../../tenant/favorites/FavoriteIcon'
 import { xGreyText, xBootstrapRed } from '../../../styles/base_colors'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
@@ -43,6 +44,7 @@ class BuildingOverviewRow extends Component {
         raised
         style={comStyles().hardCard}
       >
+        <FavoriteIcon fav_type='building' size='big' building={this.props.building} />
         <div style={comStyles().left} >
           <div id='infobar' style={comStyles().left_top} >
             <div>{building.building_alias}</div>

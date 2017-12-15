@@ -205,9 +205,6 @@ class ApplyBox extends Component {
                 basic
                 content='Open Home Explorer'
               />
-              <FavoriteIcon building_id={this.props.building.building_id} />
-            </div>
-            <div>
               {
                 this.props.sublets.length > 0
                 ?
@@ -219,6 +216,9 @@ class ApplyBox extends Component {
                 :
                 null
               }
+            </div>
+            <div>
+              <FavoriteIcon fav_type='building' building={this.props.building} size='big' />
             </div>
           </div>
           <div style={comStyles().priceContainer}>

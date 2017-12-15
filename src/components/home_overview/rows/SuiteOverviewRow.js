@@ -18,6 +18,7 @@ import {
   getRoomsForSuite,
   getRoomAmenities,
 } from '../../../api/building/building_api'
+import FavoriteIcon from '../../tenant/favorites/FavoriteIcon'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { xGreyText, xBootstrapRed } from '../../../styles/base_colors'
 import { calculateComplexSuiteBaths, calculateRoomsSummary, calculateSuiteCommonAreasSummary, calculateFreeUtilitiesForSuite, } from '../../../api/amenities/amenity_calculations'
@@ -222,6 +223,7 @@ class SuiteOverviewRow extends Component {
 				<div style={comStyles().left}>
 					<div id='infobar' style={comStyles().left_top} >
 						{ renameSuite(suite.suite_alias) }
+            <FavoriteIcon fav_type='suite' suite={suite} size='large' building={this.props.building} />
 					</div>
 					<div id='infobar' style={comStyles().left_middle} >
             {

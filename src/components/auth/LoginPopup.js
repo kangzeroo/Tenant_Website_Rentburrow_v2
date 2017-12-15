@@ -56,8 +56,8 @@ class LoginPopup extends Component {
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
       if (this.props.temporary_favorite_force_signin) {
-        saveFavorite(this.props.temporary_favorite_force_signin, data.tenant_id, true)
-        this.props.triggerForcedSigninFavorite('')
+        saveFavorite(this.props.temporary_favorite_force_signin.id, this.props.temporary_favorite_force_signin.fav_type, data.tenant_id, true)
+        this.props.triggerForcedSigninFavorite(null)
       }
     })
   }
@@ -148,13 +148,14 @@ LoginPopup.propTypes = {
   triggerForcedSignin: PropTypes.func.isRequired,
   force_signin: PropTypes.bool,
   rent_type: PropTypes.string.isRequired,
-  temporary_favorite_force_signin: PropTypes.string,
+  temporary_favorite_force_signin: PropTypes.object,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 LoginPopup.defaultProps = {
   force_signin: false,
+  temporary_favorite_force_signin: null,
 }
 
 // Wrap the prop in Radium to allow JS styling
