@@ -4,8 +4,8 @@
 // LOCAL
 // export const MESSAGING_MICROSERVICE = 'https://localhost:3001'
 // export const FB_APP_ID = '115765432474914'
-//
-// export const SEARCH_MICROSERVICE = 'https://localhost:3002'
+
+export const SEARCH_MICROSERVICE = 'https://localhost:3002'
 // export const CORP_MICROSERVICE = 'https://localhost:3001'
 // export const REGISTER_MICROSERVICE = 'https://localhost:3002'
 // export const GENERIC_MICROSERVICE = 'https://localhost:3001'
@@ -58,7 +58,7 @@
 export const MESSAGING_MICROSERVICE = 'https://34.227.117.38:3001'
 export const FB_APP_ID = '115765432474914'
 
-export const SEARCH_MICROSERVICE = 'https://34.227.117.38:3002'
+// export const SEARCH_MICROSERVICE = 'https://34.227.117.38:3002'
 export const CORP_MICROSERVICE = 'https://34.227.117.38:3001'
 export const REGISTER_MICROSERVICE = 'https://34.227.117.38:3002'
 export const GENERIC_MICROSERVICE = 'https://34.227.117.38:3001'

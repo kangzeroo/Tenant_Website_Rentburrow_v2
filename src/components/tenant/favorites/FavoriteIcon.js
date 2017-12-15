@@ -11,7 +11,7 @@ import {
   Icon,
 } from 'semantic-ui-react'
 import { triggerForcedSigninFavorite } from '../../../actions/auth/auth_actions'
-import { saveFavorite } from '../../../api/tenant/favorite_api'
+import { saveFavorite, insertBuildingFavorite, insertSuiteFavorite, deleteBuildingFavorite, deleteSuiteFavorite } from '../../../api/tenant/favorite_api'
 import { BUILDING_INTERACTIONS, SUITE_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
 
@@ -40,14 +40,28 @@ class FavoriteIcon extends Component {
       this.setState({
         favorited: false,
       })
-      saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, false)
+      if (this.props.fav_type === 'building') {
+        deleteBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
+      } else {
+        deleteSuiteFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id, this.props.suite.suite_id)
+      }
+      // else { insertSuiteFavorite}
+      // insertBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
+      // saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, false)
       this.trackFavorite(false)
     } else {
       if (this.props.authenticated) {
         this.setState({
           favorited: true,
         })
-        saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, true)
+        // saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, true)
+        if (this.props.fav_type === 'building') {
+          console.log('BUILDING')
+          insertBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
+        } else {
+          console.log('SUITE FAVS')
+          insertSuiteFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id, this.props.suite.suite_id)
+        }
         this.trackFavorite(true)
       } else {
         this.props.triggerForcedSigninFavorite({
