@@ -128,12 +128,12 @@ class LeaseFilterCard extends Component {
 					<div style={comStyles().slider}>
 						<InputRange
 							step={5}
-		          maxValue={1200}
-		          minValue={300}
-		          formatLabel={(value) => `$${value >= 1200 ? '1200+' : value}`}
-		          value={this.state.price}
-		          onChange={(value) => this.updateAttr('price', value)}
-		          onChangeComplete={value => console.log()}
+							maxValue={1200}
+							minValue={300}
+							formatLabel={(value) => `$${value >= 1200 ? '1200+' : value}`}
+							value={this.state.price}
+							onChange={(value) => this.updateAttr('price', value)}
+							onChangeComplete={value => console.log()}
 						/>
 					</div>
 				</div>
@@ -151,7 +151,7 @@ class LeaseFilterCard extends Component {
 							disabled={this.state.room_count <= 1}
 						/>
 						<div style={comStyles().room_text} >
-							{this.state.room_count} Rooms
+							{`${this.state.room_count} Bedroom${this.state.room_count === 1 ? '' : 's'}`}
 						</div>
 						<Button
 							circular
@@ -334,10 +334,11 @@ const comStyles = () => {
 		},
 		roomCountBox: {
 			padding: '20px 10px 20px 10px',
-			width: '100%',
+			minWidth: '250px',
+			maxWidth: '100%',
 			height: '75px',
 			display: 'flex',
-			flexDirection: 'row',
+			flexDirection: 'center',
 		},
 		room_count: {
 			display: 'flex',

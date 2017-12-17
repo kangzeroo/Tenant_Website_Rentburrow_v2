@@ -9,11 +9,9 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
   Card,
-  Image,
-  Label,
+  Icon,
 } from 'semantic-ui-react'
 import {
-  renderProcessedThumbnail,
   aliasToURL,
   shortenAddress,
 } from '../../../api/general/general_api'
@@ -84,7 +82,7 @@ class BuildingCard extends Component {
         <Card.Content style={comStyles().info}>
           <div style={comStyles().details}>
             <Card.Header style={comStyles().headerPrint}>
-              <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
+              <h1 style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</h1>
             </Card.Header>
             <Card.Description style={comStyles().more_info}>
               {
@@ -113,6 +111,26 @@ class BuildingCard extends Component {
             :
             null
           }
+        </Card.Content>
+        <Card.Content extra>
+          <a style={comStyles().bedContainer}>
+            <Icon name='bed' />
+            {
+              this.props.building.min_rooms && this.props.building.max_rooms
+              ?
+              <div>
+                {
+                  this.props.building.min_rooms === this.props.building.max_rooms
+                  ?
+                  `${this.props.building.min_rooms} Bed${this.props.building.min_rooms === 1 ? '' : 's'}`
+                  :
+                  `${this.props.building.min_rooms} to ${this.props.building.max_rooms} Beds`
+                }
+              </div>
+              :
+              'Inquire Rooms'
+            }
+          </a>
         </Card.Content>
       </Card>
 		)
@@ -163,11 +181,11 @@ const comStyles = (label) => {
   }
 	return {
     hardCard: {
-      minWidth: '360px',
-      maxWidth: '360px',
-      minHeight: '280px',
-      maxHeight: '280px',
-      margin: '5px auto',
+      minWidth: '310px',
+      maxWidth: 'auto',
+      minHeight: '270px',
+      maxHeight: '270px',
+      margin: '10px auto',
       ...opacityStyles,
     },
     info: {
@@ -188,10 +206,10 @@ const comStyles = (label) => {
       width: '10%',
     },
     imageGallery: {
-      height: '200px',
+      height: '170px'
     },
     address: {
-      width: '60%',
+      width: '70%',
       display: 'flex',
       flexWrap: 'wrap',
       fontSize: '1.3rem',
@@ -205,6 +223,10 @@ const comStyles = (label) => {
     },
     headerPrint: {
       fontSize: '1rem',
+    },
+    bedContainer: {
+      display: 'flex',
+      flexDirection: 'row',
     }
 	}
 }

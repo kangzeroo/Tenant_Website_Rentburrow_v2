@@ -8,14 +8,18 @@ import PropTypes from 'prop-types'
 import { slideInLeft } from 'react-animations'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
+import Pagination from 'antd/lib/pagination'
+import 'antd/lib/pagination/style/css'
+import { LocaleProvider, Spin } from 'antd'
+import enUS from 'antd/lib/locale-provider/en_US';
+import 'antd/lib/spin/style/css'
 import {
 	xMidBlue,
 } from '../../../styles/base_colors'
 import {
 	Button,
-	Dimmer,
-	Segment,
 	Image,
+	Card,
 } from 'semantic-ui-react'
 import {
 	changeCardStyle,
@@ -38,8 +42,10 @@ class HousingPanel extends Component {
 			running: true,
 
 			page_start: 0,
-			page_end: 50,
+			page_end: 10,
 			page_number: 1,
+
+			total_pages: 1,
 
 			dimmer: false,
 		}
@@ -51,25 +57,25 @@ class HousingPanel extends Component {
 	}
 
 	componentDidMount() {
-		this.scrollStream = new Rx.Subject()
-				.debounceTime(500)
-				.subscribe(
-					(position) => {
-		        // Probably you want to load new cards?
-						if (position.scrollTop / position.scrollHeight > 0.8) {
-		        	this.nextPage(1, position.scrollTop, position.scrollHeight, position.target)
-						} else if (position.scrollTop === 0) {
-							this.nextPage(-1, position.scrollTop, position.scrollHeight, position.target)
-						}
-					},
-					(err) => {
-						// console.log('Stream error occurred:')
-						// console.log(err)
-					},
-					() => {
-						// console.log('Stream finished')
-					}
-				)
+		// this.scrollStream = new Rx.Subject()
+		// 		.debounceTime(500)
+		// 		.subscribe(
+		// 			(position) => {
+		//         // Probably you want to load new cards?
+		// 				if (position.scrollTop / position.scrollHeight > 0.6) {
+		//         	this.nextPage(1, position.scrollTop, position.scrollHeight, position.target)
+		// 				} else if (position.scrollTop === 0) {
+		// 					this.nextPage(-1, position.scrollTop, position.scrollHeight, position.target)
+		// 				}
+		// 			},
+		// 			(err) => {
+		// 				console.log('Stream error occurred:')
+		// 				console.log(err)
+		// 			},
+		// 			() => {
+		// 				console.log('Stream finished')
+		// 			}
+		// 		)
 	}
 
 	handleScroll(e) {
@@ -87,36 +93,6 @@ class HousingPanel extends Component {
 		// })
   }
 
-	nextPage(direction, scrollTop, scrollHeight, target) {
-		if (this.state.page_number + direction !== 0) {
-			// edge case where scroll up does not work when you have already reached the end of all sublets
-			if (this.props.rent_type === 'sublet' && this.props.sublet_search_results.length > this.state.page_end) {
-				this.setState({
-					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 40),
-					page_end: this.state.page_end + (direction * 50),
-					page_number: this.state.page_number + (direction)
-				}, () => {
-					if (direction > 0) {
-						target.scrollTop = target.scrollHeight * 0.2
-					} else {
-						target.scrollTop = target.scrollHeight * 0.8
-					}
-				})
-			} else if (this.props.building_search_results.length > this.state.page_end) {
-				this.setState({
-					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 40),
-					page_end: this.state.page_end + (direction * 50),
-					page_number: this.state.page_number + (direction)
-				}, () => {
-					if (direction > 0) {
-						target.scrollTop = target.scrollHeight * 0.2
-					} else {
-						target.scrollTop = target.scrollHeight * 0.8
-					}
-				})
-			}
-		}
-	}
 
 	generateCard(building) {
 		if (this.props.card_style === 'row') {
@@ -156,6 +132,14 @@ class HousingPanel extends Component {
 		})
 	}
 
+	handlePaginationChange(page, pageSize) {
+		this.setState({
+			page_start: (page * pageSize) - pageSize,
+			page_end: page * pageSize,
+			page_number: page,
+		}, () => { document.getElementById('scroll_div').scrollTop = 0 })
+	}
+
 	renderSubletCard(sublet, index) {
 		return (
 			<SubletCard
@@ -174,8 +158,9 @@ class HousingPanel extends Component {
 			}, 3000)
 			return (
 				<div style={comStyles().loading} >
-					<Image
-						src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
+					<Spin
+						tip='Loading...'
+						size='large'
 					/>
 				</div>
 			)
@@ -238,7 +223,7 @@ class HousingPanel extends Component {
 								{
 									this.props.building_search_results.length > 0
 									?
-									this.props.building_search_results.map((building) => {
+									this.props.building_search_results.slice(this.state.page_start, this.state.page_end).map((building) => {
 										return this.generateCard(building)
 									})
 									:
@@ -258,6 +243,17 @@ class HousingPanel extends Component {
 											</div>
 										}
 									</div>
+								}
+								{
+									this.props.building_search_results.length > 0
+									?
+									<Card fluid raised style={comStyles().paginationContainer} >
+										<LocaleProvider locale={enUS}>
+										<Pagination size='large' onChange={(e) => this.handlePaginationChange(e, 10)} defaultCurrent={1} total={this.props.building_search_results.length} />
+										</LocaleProvider>
+									</Card>
+									:
+									null
 								}
 							</div>
 						}
@@ -320,8 +316,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '800px',
-			width: '45vw',
+      minWidth: '700px',
       maxWidth: '45vw',
       height: '100%',
 			// backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
@@ -342,7 +337,7 @@ const comStyles = () => {
 			maxHeight: '100%',
 			width: '100%',
 			overflowY: 'scroll',
-			padding: '10px',
+			padding: '15px',
 			justifyContent: 'flex-start',
 		},
 		icon: {
@@ -369,15 +364,23 @@ const comStyles = () => {
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
+			minHeight: '65vh',
+			width: '100%'
 		},
 		sublets_container: {
 			display: 'flex',
 			flexDirection: 'row',
 			flexWrap: 'wrap',
 		},
-		pagination: {
+		paginationContainer: {
 			display: 'flex',
-			flexDirection: 'row'
+			flexDirection: 'column',
+			alignItems: 'center',
+			justifyContent: 'center',
+			minHeight: '60px',
+			maxHeight: '60px',
+			minWidth: '100%',
+			maxWidth: '100%'
 		}
 	}
 }
