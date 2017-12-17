@@ -63,6 +63,8 @@ import AccountVerification from './auth/AccountVerification'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 
+import Test from './requests/Test'
+
 import MobileHeader from './mobile/components/MobileHeader'
 import MobilePage from './mobile/MobilePage'
 import MobileBuildingPage from './mobile/components/buildings/MobileBuildingPage'
@@ -340,7 +342,7 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={HousingPage} />
+                <Route exact path='/sandbox' component={Test} />
                 <Route exact path='/invalid' component={InvalidPage} />
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}

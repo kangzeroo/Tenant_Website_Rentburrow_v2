@@ -218,22 +218,27 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '100%',
+      minWidth: '100%',
+      maxWidth: '100%',
       // minHeight: '500px',
       // maxHeight: '500px',
-      minHeight: '100%',
+      minHeight: '170px',
       maxHeight: '100%',
       overflow: 'hidden',
       position: 'relative',
       WebkitTapHighlightColor: 'rgba(0,0,0,0)'
 		},
     image: {
-      height: 'auto',
-      // zIndex: 5,
+      minHeight: '170px',
+      maxHeight: '100%',
+      minWidth: '310px',
+      maxWidth: '100%',
     },
     imageContainer: {
-      width: '100%',
-      height: '100%',
+      minWidth: '310px',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      minHeight: '170px',
       backgroundColor: 'rgba(0,0,0,0.3)',
     },
     left: {

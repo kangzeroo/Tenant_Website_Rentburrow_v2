@@ -137,8 +137,7 @@ const comStyles = () => {
     container: {
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '800px',
-			width: '45vw',
+      minWidth: '700px',
       maxWidth: '45vw',
       maxHeight: '90%',
       overflowY: 'scroll',

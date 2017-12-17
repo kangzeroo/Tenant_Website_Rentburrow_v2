@@ -140,10 +140,10 @@ export default withRouter(
 const comStyles = () => {
 	return {
     hardCard: {
-      minWidth: '360px',
-      maxWidth: '360px',
-      minHeight: '250px',
-      maxHeight: '250px',
+      minWidth: '310px',
+      maxWidth: 'auto',
+      minHeight: '220px',
+      maxHeight: '220px',
       margin: '10px auto',
     },
     info: {

@@ -307,7 +307,8 @@ const comStyles = () => {
     },
     header: {
       backgroundColor: xMidBlue,
-      height: '7vh',
+      minHeight: '7vh',
+      maxHeight: '7vh',
       width: '100%',
       zIndex: '1',
       display: 'flex',
@@ -315,13 +316,17 @@ const comStyles = () => {
       position: 'relative',
     },
     leftFloat: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       float: 'left',
     },
     logo: {
-      minHeight: '100%',
-      maxHeight: '6vh',
+      minHeight: '50px',
+      maxHeight: '50px',
       display: 'inline-block',
-      width: 'auto',
+      minWidth: '225px',
+      maxWidth: 'auto',
       float: 'left',
       padding: '5px'
     },
