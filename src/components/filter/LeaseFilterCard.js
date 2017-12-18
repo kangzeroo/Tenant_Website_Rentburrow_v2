@@ -343,10 +343,11 @@ const comStyles = () => {
 		room_count: {
 			display: 'flex',
 			flexDirection: 'row',
-			width: '100%',
-			justifyContent: 'space-around',
+			minWidth: '300px',
+			maxWidth: '100%',
+			justifyContent: 'center',
 			alignItems: 'center',
-			margin: '0px 200px 0px 200px',
+			margin: '0px 100px 0px 100px',
 		},
 		room_text: {
 			fontSize: 'x-large'
