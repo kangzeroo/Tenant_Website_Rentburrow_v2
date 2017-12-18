@@ -341,7 +341,7 @@ class BuildingPage extends Component {
 					<div style={comStyles().content_left}>
 						<Card fluid raised style={comStyles().building_header}>
 							<div style={comStyles().welcome_banner}>
-								<div style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</div>
+								<h1 style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</h1>
 								{
 									this.state.building.label
 									?
