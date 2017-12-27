@@ -68,3 +68,4 @@ export const MY_APPLIED_BUILDING = 'MY_APPLIED_BUILDING'
 
 // actions related to favorites
 export const SAVE_FAVORITES = 'SAVE_FAVORITES'
+export const SAVE_BUILDING_FAVORITES = 'SAVE_BUILDING_FAVORITES'

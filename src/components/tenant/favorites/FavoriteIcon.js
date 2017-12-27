@@ -14,7 +14,7 @@ import { triggerForcedSigninFavorite } from '../../../actions/auth/auth_actions'
 import { saveFavorite, insertBuildingFavorite, insertSuiteFavorite, deleteBuildingFavorite, deleteSuiteFavorite } from '../../../api/tenant/favorite_api'
 import { BUILDING_INTERACTIONS, SUITE_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
-
+import { saveFavoritesToRedux, } from '../../../actions/favorites/favorites_actions'
 
 class FavoriteIcon extends Component {
 
@@ -42,6 +42,7 @@ class FavoriteIcon extends Component {
       })
       if (this.props.fav_type === 'building') {
         deleteBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
+        this.props.saveFavoritesToRedux(this.props.favorites.filter((fav) => { return fav.building_id === this.props.building_id }))
       } else {
         deleteSuiteFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id, this.props.suite.suite_id)
       }
@@ -58,6 +59,7 @@ class FavoriteIcon extends Component {
         if (this.props.fav_type === 'building') {
           console.log('BUILDING')
           insertBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
+          this.props.saveFavoritesToRedux(this.props.favorites.concat([{ building_id: this.props.building.building_id }]))
         } else {
           console.log('SUITE FAVS')
           insertSuiteFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id, this.props.suite.suite_id)
@@ -134,12 +136,15 @@ FavoriteIcon.propTypes = {
   collectIntel: PropTypes.func.isRequired,
   fav_type: PropTypes.string.isRequired,    // passed in
   fingerprint: PropTypes.string.isRequired,
+  favorites: PropTypes.array,
+  saveFavoritesToRedux: PropTypes.func.isRequired,
   size: PropTypes.string,                   // passed in
 }
 
 // for all optional props, define a default value
 FavoriteIcon.defaultProps = {
   // favorited: false,
+  favorites: [],
   authenticated: false,
   building: null,
   suite: null,
@@ -155,6 +160,7 @@ const mapReduxToProps = (redux) => {
     tenant_profile: redux.auth.tenant_profile,
     authenticated: redux.auth.authenticated,
     fingerprint: redux.auth.browser_fingerprint,
+    favorites: redux.favorites.tenant_favorites,
 	}
 }
 
@@ -163,6 +169,7 @@ export default withRouter(
 	connect(mapReduxToProps, {
     triggerForcedSigninFavorite,
     collectIntel,
+    saveFavoritesToRedux,
 	})(RadiumHOC)
 )
 

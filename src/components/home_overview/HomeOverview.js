@@ -103,6 +103,7 @@ class HomeOverview extends Component {
 					key='building_overview_row'
 					building={this.props.building}
 					toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
+					favorited={this.props.favorited.length > 0}
 				/>
 				{
 					this.props.suites.length > 0
@@ -115,6 +116,7 @@ class HomeOverview extends Component {
 								suite={suite}
 								toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
 								toggleTemporaryCollectionFrom={() => this.props.toggleTemporaryCollectionFrom()}
+								favorited={this.props.favorited.some((favorite) => { return suite.suite_id === favorite.suite_id })}
 							/>
 						)
 					})
@@ -136,6 +138,7 @@ HomeOverview.propTypes = {
 	building: PropTypes.object.isRequired,	// passed in
 	promise_array_of_suite_amenities_with_id: PropTypes.array,		// passed in
 	toggleTemporaryCollectionFrom: PropTypes.func.isRequired,			// passed in
+	favorited: PropTypes.array.isRequired,												// passed in
 }
 
 // for all optional props, define a default value

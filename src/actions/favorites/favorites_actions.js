@@ -16,3 +16,17 @@ export const saveFavoritesToRedux = (favorites) => {
     })
   }
 }
+
+export const saveBuildingFavoritesToRedux = (favorites) => {
+  // dispatch lets you send actions to Redux
+  return (dispatch) => {
+    dispatch({
+      type: SAVE_BUILDING_FAVORITES,
+      payload: favorites.map((x) => {
+        return {
+          ...x,
+        }
+      }),
+    })
+  }
+}
