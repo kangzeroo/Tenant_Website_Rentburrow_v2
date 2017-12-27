@@ -11,15 +11,10 @@ import { withRouter, Route } from 'react-router-dom'
 import {
 	Image,
 	Modal,
-	Item,
-	Icon,
-	Header,
-	Container,
-	Label,
-	Button,
-	Form,
 	Card,
-	Input,
+	Loader,
+	Dimmer,
+	Segment,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
 import {
@@ -87,6 +82,9 @@ class BuildingPage extends Component {
       context: {},
 
 			expand_amenities: true,
+
+			favorited: [],
+			favorites_loaded: false,
 		}
 	}
 
@@ -151,6 +149,18 @@ class BuildingPage extends Component {
 				  }
 				})
 			})
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.tenant_profile !== nextProps.tenant_profile) {
+			getTenantFavoriteForBuilding(nextProps.tenant_profile.tenant_id, this.state.building.building_id)
+			.then((data) => {
+				this.setState({
+					favorited: data,
+					favorites_loaded: true,
+				})
+			})
+		}
 	}
 
 	getImagesForBuilding() {
@@ -343,7 +353,7 @@ class BuildingPage extends Component {
 					<div style={comStyles().content_left}>
 						<Card fluid raised style={comStyles().building_header}>
 							<div style={comStyles().welcome_banner}>
-								<h1 style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</h1>
+								<h1 style={comStyles().welcome_message}>{this.state.building.building_alias}, Waterloo</h1>
 								{
 									this.state.building.label
 									?
@@ -393,13 +403,25 @@ class BuildingPage extends Component {
 						}
 					</div>
 					<div style={comStyles().content_right} >
-						<ApplyBox
-							building={this.state.building}
-							all_suites={this.state.suites}
-							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
-							togglePhoneCallForm={() => this.toggleModal(true, 'phone')}
-							sublets={this.state.sublets}
-						/>
+						{
+							this.state.favorites_loaded
+							?
+							<ApplyBox
+								building={this.state.building}
+								all_suites={this.state.suites}
+								toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
+								togglePhoneCallForm={() => this.toggleModal(true, 'phone')}
+								sublets={this.state.sublets}
+								favorited={this.state.favorited && this.state.favorited.length > 0}
+							/>
+							:
+							<Segment style={comStyles().loadingContainer}>
+								<Dimmer active inverted>
+									<Loader inverted />
+								</Dimmer>
+							</Segment>
+						}
+
 						{
 							this.state.building.building_id
 							?
@@ -444,16 +466,21 @@ class BuildingPage extends Component {
 						null
 					}
 					{
-						this.state.building
+						this.state.building && this.state.favorites_loaded
 						?
 						<HomeOverview
 							building={this.state.building}
 							suites={this.state.suites}
 							promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
 							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
+							favorited={this.state.favorited}
 						/>
 						:
-						null
+						<Segment style={comStyles().loadingContainer}>
+							<Dimmer active inverted>
+								<Loader inverted />
+							</Dimmer>
+						</Segment>
 					}
 				</div>
 				{
@@ -512,7 +539,7 @@ const loadStyles = (img) => {
 	return {
 		cover_photo: {
 			minHeight: '70vh',
-			maxHeight: '70vh',
+			maxHeight: 'auto',
 			minWidth: '100vw',
 			maxWidth: '100vw',
 			overflow: 'hidden',
@@ -688,6 +715,13 @@ const comStyles = () => {
 		},
 		analyticsSummary: {
 			margin: '10px 0px 0px 0px'
+		},
+		loadingContainer: {
+			minHeight: '270px',
+      maxHeight: '270px',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
 		}
 	}
 }
