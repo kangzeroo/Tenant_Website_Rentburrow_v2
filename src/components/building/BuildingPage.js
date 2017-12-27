@@ -67,6 +67,7 @@ import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
 import BuildingViews from '../analytics/BuildingViews'
 import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
+import { getTenantFavoriteForBuilding, } from '../../api/tenant/favorite_api'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -97,7 +98,7 @@ class BuildingPage extends Component {
 		searchForSpecificBuildingByAlias(building_alias)
 			.then((data) => {
 				this.setState({
-					building: data
+					building: data,
 				})
 				return this.getImagesForBuilding()
 			})
@@ -111,6 +112,7 @@ class BuildingPage extends Component {
 			})
 			.then((data) => {
 				const suites = data
+
 				this.setState({
 					suites: suites,
 					promise_array_of_suite_amenities_with_id: suites.map((suite) => {
@@ -378,30 +380,6 @@ class BuildingPage extends Component {
 							:
 							null
 						}
-						{/*
-							this.state.expand_amenities
-							?
-							<div style={comStyles().expanded_amenities} >
-								<Icon
-									name='close'
-									size='large'
-									style={comStyles().close_amenities}
-									onClick={() => this.setState({ expand_amenities: false, })}
-								/>
-								<AmenityBrowser
-									building={this.state.building}
-									amenities={this.state.amenities}
-								/>
-							</div>
-							:
-							null
-						*/}
-						{/*<div style={comStyles().images_container}>
-							<SingularImageGallery
-								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
-								image_size='hd'
-							/>
-						</div>*/}
 						{
 							this.state.building.building_id
 							?
@@ -415,11 +393,6 @@ class BuildingPage extends Component {
 						}
 					</div>
 					<div style={comStyles().content_right} >
-						{/*}<StepByStepCard
-							building={this.state.building}
-							all_suites={this.state.suites}
-							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
-						/>*/}
 						<ApplyBox
 							building={this.state.building}
 							all_suites={this.state.suites}
@@ -455,30 +428,8 @@ class BuildingPage extends Component {
 							:
 							null
 						}
-						{/*
-							this.state.sublets.length > 0
-							?
-							<div style={comStyles().four_month_sublet}>
-								<h3>Prefer a 4 month lease?</h3>
-								<Button onClick={() => this.checkOutSublet()} basic fluid primary style={comStyles().facebook_sublets}>
-									View {this.state.sublets.length} sublets from Facebook <br />
-									{
-										calculateCheapestSublet(this.state.sublets)
-										?
-										`Prices starting from $${calculateCheapestSublet(this.state.sublets)}`
-										:
-										null
-									}
-								</Button>
-							</div>
-							:
-							<div style={comStyles().four_month_sublet}>
-								<h3>No 4 month sublets available</h3>
-							</div>
-						*/}
 					</div>
 				</div>
-
 				<div style={comStyles().suites_table}>
 					{
 						this.state.amenities && this.state.amenities.length > 0
@@ -505,17 +456,6 @@ class BuildingPage extends Component {
 						null
 					}
 				</div>
-
-				{/*<div style={comStyles().images_container}>
-					<SingularImageGallery
-						list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
-						image_size='hd'
-					/>
-				</div>*/}
-				{/*<div style={prizeStyles().popup_icon}>
-					<PrizeBlowup />
-				</div>*/}
-
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }

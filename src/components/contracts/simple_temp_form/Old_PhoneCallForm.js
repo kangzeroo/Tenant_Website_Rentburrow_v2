@@ -158,6 +158,21 @@ class PhoneCallForm extends Component {
 			})
       const id = uuid.v4()
 
+      sendSMSToBothParties({
+          id: id,
+          tenant_id: this.props.tenant_profile.tenant_id,
+          first_name: this.state.application_template.first_name,
+          last_name: this.state.application_template.last_name,
+          gender: this.state.application_template.gender,
+          school: this.state.application_template.school,
+          program_and_term: this.state.application_template.program_and_term,
+          email: this.state.application_template.email,
+          phone: this.state.application_template.phone,
+          group_size: this.state.application_template.group_size,
+          building_id: this.props.building.building_id,
+          building_address: this.props.building.building_address,
+          group_notes: this.state.group_notes,
+        })
       // getLandlordInfo(this.props.building.building_id)
       // .then((data) => {
       //   console.log(data)
@@ -168,20 +183,20 @@ class PhoneCallForm extends Component {
       //
       //   })
       // })
-      insertInquiry({
-        id: id,
-        tenant_id: this.props.tenant_profile.tenant_id,
-        first_name: this.state.application_template.first_name,
-        last_name: this.state.application_template.last_name,
-        gender: this.state.application_template.gender,
-        school: this.state.application_template.school,
-        program_and_term: this.state.application_template.program_and_term,
-        email: this.state.application_template.email,
-        phone: this.state.application_template.phone,
-        group_size: this.state.application_template.group_size,
-        building_id: this.props.building.building_id,
-        group_notes: this.state.group_notes,
-      })
+      // insertInquiry({
+      //   id: id,
+      //   tenant_id: this.props.tenant_profile.tenant_id,
+      //   first_name: this.state.application_template.first_name,
+      //   last_name: this.state.application_template.last_name,
+      //   gender: this.state.application_template.gender,
+      //   school: this.state.application_template.school,
+      //   program_and_term: this.state.application_template.program_and_term,
+      //   email: this.state.application_template.email,
+      //   phone: this.state.application_template.phone,
+      //   group_size: this.state.application_template.group_size,
+      //   building_id: this.props.building.building_id,
+      //   group_notes: this.state.group_notes,
+      // })
       // .then((data) => {
       //   return sendSMSToBothParties({
       //     id: id,
@@ -199,44 +214,44 @@ class PhoneCallForm extends Component {
       //     group_notes: this.state.group_notes,
       //   })
       // })
-      .then((data) => {
-        return sendSimpleTextEmailToRentburrow(
-          {
-            name: [this.state.application_template.first_name, this.state.application_template.last_name].join(' '),
-            gender: this.state.application_template.gender,
-            school_and_term: [this.state.application_template.school, this.state.application_template.program_and_term].join(' '),
-            email: this.state.application_template.email,
-            phone: this.state.application_template.phone,
-            group_size: this.state.application_template.group_size,
-            building_alias: this.props.building.building_alias,
-            id: id,
-          }, this.props.building, this.state.landlord)
-      })
-      .then((data) => {
-        return insertTenantFromApplication({
-          tenant_id: this.props.tenant_profile.tenant_id,
-          first_name: this.state.application_template.first_name,
-          last_name: this.state.application_template.last_name,
-          email: this.state.application_template.email,
-          phone: this.state.application_template.phone,
-          school: this.state.application_template.school,
-          program_and_term: this.state.application_template.program_and_term,
-        })
-      })
-      .then((data) => {
-        return getLandlordInfo(this.props.building.building_id)
-      })
-      .then((data) => {
-        this.setState({
-          sucessful: true,
-          landlord: data,
-        })
-        localStorage.setItem('saved_application', JSON.stringify({
-          landlord_id: this.props.landlord.corporation_id,
-          landlord_name: this.props.landlord.corporation_name,
-          applied_at: new Date().getTime(),
-        }))
-      })
+      // .then((data) => {
+      //   return sendSimpleTextEmailToRentburrow(
+      //     {
+      //       name: [this.state.application_template.first_name, this.state.application_template.last_name].join(' '),
+      //       gender: this.state.application_template.gender,
+      //       school_and_term: [this.state.application_template.school, this.state.application_template.program_and_term].join(' '),
+      //       email: this.state.application_template.email,
+      //       phone: this.state.application_template.phone,
+      //       group_size: this.state.application_template.group_size,
+      //       building_alias: this.props.building.building_alias,
+      //       id: id,
+      //     }, this.props.building, this.state.landlord)
+      // })
+      // .then((data) => {
+      //   return insertTenantFromApplication({
+      //     tenant_id: this.props.tenant_profile.tenant_id,
+      //     first_name: this.state.application_template.first_name,
+      //     last_name: this.state.application_template.last_name,
+      //     email: this.state.application_template.email,
+      //     phone: this.state.application_template.phone,
+      //     school: this.state.application_template.school,
+      //     program_and_term: this.state.application_template.program_and_term,
+      //   })
+      // })
+      // .then((data) => {
+      //   return getLandlordInfo(this.props.building.building_id)
+      // })
+      // .then((data) => {
+      //   this.setState({
+      //     sucessful: true,
+      //     landlord: data,
+      //   })
+      //   localStorage.setItem('saved_application', JSON.stringify({
+      //     landlord_id: this.props.landlord.corporation_id,
+      //     landlord_name: this.props.landlord.corporation_name,
+      //     applied_at: new Date().getTime(),
+      //   }))
+      // })
 		}
 	}
 

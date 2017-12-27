@@ -78,20 +78,20 @@ class HousingPanel extends Component {
 		// 		)
 	}
 
-	handleScroll(e) {
-    this.scrollStream.next({
-			target: e.target,
-			scrollHeight: e.target.scrollHeight,
-			scrollTop: e.target.scrollTop,
-			clientHeight: e.target.clientHeight,
-		})
-		// .filter((positions) => {
-		// 	// positions = [0, 1] events from scrollStream
-		// 	// check that the position of [1] is less than [0], which indicates that we are scrolling down
-		// 	// check that the position of [1] is more than 70% the height of the container
-		// 	return positions[0].scrollTop < positions[1].scrollTop && ((positions[1].scrollTop + positions[1].clientHeight) / positions[1].scrollHeight) > (70 / 100)
-		// })
-  }
+	// handleScroll(e) {
+  //   this.scrollStream.next({
+	// 		target: e.target,
+	// 		scrollHeight: e.target.scrollHeight,
+	// 		scrollTop: e.target.scrollTop,
+	// 		clientHeight: e.target.clientHeight,
+	// 	})
+	// 	// .filter((positions) => {
+	// 	// 	// positions = [0, 1] events from scrollStream
+	// 	// 	// check that the position of [1] is less than [0], which indicates that we are scrolling down
+	// 	// 	// check that the position of [1] is more than 70% the height of the container
+	// 	// 	return positions[0].scrollTop < positions[1].scrollTop && ((positions[1].scrollTop + positions[1].clientHeight) / positions[1].scrollHeight) > (70 / 100)
+	// 	// })
+  // }
 
 
 	generateCard(building) {
@@ -194,7 +194,7 @@ class HousingPanel extends Component {
 								{
 									this.props.sublet_search_results.length > 0
 									?
-									<div className='pretty_scrollbar' id='scroll_div' onScroll={(e, d) => this.handleScroll(e, d)} style={comStyles().scroll}>
+									<div className='pretty_scrollbar' id='scroll_div' style={comStyles().scroll}>
 										{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
 											return this.renderSubletCard(sublet, index)
 										})}
@@ -219,7 +219,7 @@ class HousingPanel extends Component {
 								}
 							</div>
 							:
-							<div className='pretty_scrollbar' id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
+							<div className='pretty_scrollbar' id='scroll_div' style={comStyles().scroll}>
 								{
 									this.props.building_search_results.length > 0
 									?

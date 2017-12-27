@@ -188,8 +188,7 @@ class SubletDetailed extends Component {
             :
             <div style={comStyles().buttons}>
               <Button basic primary content='See Original Post' onClick={(e) => this.goToOriginalPost(e, this.props.sublet.post_id)} style={comStyles().originalButton} />
-              <br />
-              {
+              {/*
                 this.props.onlyForShow
                 ?
                 null
@@ -211,7 +210,7 @@ class SubletDetailed extends Component {
                     </div>
                   }
                 </div>
-              }
+            */}
             </div>
           }
         </div>

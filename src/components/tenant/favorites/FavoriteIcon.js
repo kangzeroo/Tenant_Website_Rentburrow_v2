@@ -125,7 +125,7 @@ class FavoriteIcon extends Component {
 // defines the types of variables in this.props
 FavoriteIcon.propTypes = {
 	history: PropTypes.object.isRequired,
-  favorited: PropTypes.bool,                  // passed in
+  favorited: PropTypes.bool.isRequired,                  // passed in
   authenticated: PropTypes.bool,              // passed in
   tenant_profile: PropTypes.object.isRequired,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
@@ -139,7 +139,7 @@ FavoriteIcon.propTypes = {
 
 // for all optional props, define a default value
 FavoriteIcon.defaultProps = {
-  favorited: false,
+  // favorited: false,
   authenticated: false,
   building: null,
   suite: null,
