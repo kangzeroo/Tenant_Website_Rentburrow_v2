@@ -218,7 +218,7 @@ class ApplyBox extends Component {
               }
             </div>
             <div>
-              <FavoriteIcon fav_type='building' building={this.props.building} size='big' />
+              <FavoriteIcon fav_type='building' building={this.props.building} size='big' favorited={this.props.building.favorited} />
             </div>
           </div>
           <div style={comStyles().priceContainer}>

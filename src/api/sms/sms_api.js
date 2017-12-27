@@ -16,7 +16,6 @@ export const sendSMSToBothParties = (contents) => {
   return p
 }
 
-
 export const insertTenantLandlordSMS = (obj) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SMS_MICROSERVICE}/insert_tenant_landlord_sms`, obj)

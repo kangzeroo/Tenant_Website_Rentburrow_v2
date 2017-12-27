@@ -62,6 +62,7 @@ import ForgotPassword from './auth/ForgotPassword'
 import AccountVerification from './auth/AccountVerification'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
+import MyFavorites from './favorites/MyFavorites'
 
 import Test from './requests/Test'
 
@@ -378,6 +379,7 @@ class AppRoot extends Component {
                 <Route exact path='/account' component={TenantAccount} />
                 <Route exact path='/sublet_applications' component={SubletApplications} />
                 <Route exact path='/lease_applications' component={TenantLeaseApplications} />
+                <Route exact path='/favorites' component={MyFavorites} />
                 <Route exact path='/applications/lease/:group_id' component={LeaseApplicationPage} />
                 <Route exact path='/applications/subletee/:subletee_id' component={SentApplicationPage} />
                 <Route exact path='/applications/subletor/:subletor_id' component={ReceivedApplicationPage} />

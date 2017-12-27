@@ -121,6 +121,8 @@ class Header extends Component {
       this.props.history.push('/privacy-policy')
     } else if (value.value === 'logout') {
       this.props.history.push('/logout')
+    } else if (value.value === 'favorites') {
+      this.props.history.push('/favorites')
     }
   }
 
@@ -139,6 +141,7 @@ class Header extends Component {
 
     const options = [
       { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
+      { key: 'favorites', value: 'favorites', text: 'Favorites', icon: 'heart' },
       { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
       // { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
       // { key: 'pro_tips', value: 'pro_tips', text: 'Renting Pro-Tips', icon: 'star' },

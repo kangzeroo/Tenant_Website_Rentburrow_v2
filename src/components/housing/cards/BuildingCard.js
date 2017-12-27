@@ -25,6 +25,34 @@ import { check_if_building_accessible } from '../../../api/label/building_label_
 
 class BuildingCard extends Component {
 
+  constructor() {
+    super()
+    this.state = {
+      favorited: false,
+    }
+  }
+
+  componentWillMount() {
+    if (this.props.favorites && this.props.favorites.tenant_favorites && this.props.favorites.tenant_favorites.length > 0) {
+      this.setState({
+        favorited: true,
+      })
+    } else if (this.props.favorites && this.props.favorites.favorites_loaded) {
+      console.log('favorited')
+      this.setState({
+        favorited: true,
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.favorites !== nextProps.favorites) {
+			this.setState({
+        favorited: true,
+      })
+		}
+  }
+
   selectThisBuilding(building) {
     if (check_if_building_accessible(building.label)) {
       window.open(`${window.location.origin}/${aliasToURL(building.building_alias)}`, '_blank')
@@ -62,6 +90,16 @@ class BuildingCard extends Component {
     })
   }
 
+  checkIfFavorited(building_id) {
+    if (this.props.favorites && this.props.favorites.tenant_favorites && this.props.favorites.tenant_favorites.length > 0) {
+      return this.props.favorites.tenant_favorites.some((favorite) => {
+        return favorite.building_id === building_id
+      })
+    } else {
+      return false
+    }
+  }
+
 	render() {
 		return (
       <Card
@@ -73,7 +111,13 @@ class BuildingCard extends Component {
       >
         {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
         <div style={comStyles().imageGallery}>
-          <FavoriteIcon fav_type='building' building={this.props.building} />
+          {
+            this.state.favorited
+            ?
+            <FavoriteIcon fav_type='building' building={this.props.building} favorited={this.checkIfFavorited(this.props.building.building_id)} />
+            :
+            null
+          }
           <SingularImageGallery
             list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
             image_size='thumbnail'
@@ -141,6 +185,7 @@ class BuildingCard extends Component {
 BuildingCard.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
+  favorites: PropTypes.object.isRequired,
   selectPinToRedux: PropTypes.func.isRequired,
   collectIntel: PropTypes.func.isRequired,
   fingerprint: PropTypes.string.isRequired,
@@ -160,6 +205,7 @@ function mapReduxToProps(redux) {
 	return {
     tenant_profile: redux.auth.tenant_profile,
     fingerprint: redux.auth.browser_fingerprint,
+    favorites: redux.favorites,
 	}
 }
 

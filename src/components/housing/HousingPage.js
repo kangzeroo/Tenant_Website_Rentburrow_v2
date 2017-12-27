@@ -24,6 +24,8 @@ import {
 	querySubletsInArea,
 } from '../../api/search/sublet_api'
 import { selectHelpThread } from '../../actions/messaging/messaging_actions'
+import { saveFavoritesToRedux } from '../../actions/favorites/favorites_actions'
+import { getAllFavoritesForTenant } from '../../api/tenant/favorite_api'
 
 class HousingPage extends Component {
 
@@ -37,6 +39,15 @@ class HousingPage extends Component {
 	componentWillMount() {
 		this.refreshBuildings()
 		this.props.selectHelpThread()
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.tenant_profile !== nextProps.tenant_profile) {
+			getAllFavoritesForTenant(nextProps.tenant_profile.tenant_id)
+			.then((data) => {
+				this.props.saveFavoritesToRedux(data)
+			})
+		}
 	}
 
 	/* {
@@ -53,6 +64,11 @@ class HousingPage extends Component {
 			this.setState({
 				buildings,
 			})
+		})
+		// .then((data) => {
+		// 	return getAllFavoritesForTenant(this.props.tenant_profile.tenant_id)
+		// })
+		.then((data) => {
 			return querySubletsInArea({
 				...this.props.current_gps_center,
 				filterParams: this.props.sublet_filter_params,
@@ -62,6 +78,7 @@ class HousingPage extends Component {
 			this.props.saveSubletsToRedux(data)
 		})
 	}
+
 
 	render() {
 		return (
@@ -105,6 +122,7 @@ HousingPage.propTypes = {
 	saveBuildingsToRedux: PropTypes.func.isRequired,
 	building_search_results: PropTypes.array,
 	sublet_search_results: PropTypes.array,
+	tenant_profile: PropTypes.object,
 	selected_pin: PropTypes.string,
 	popup_buildings: PropTypes.array,
 	rent_type: PropTypes.string.isRequired,
@@ -113,12 +131,14 @@ HousingPage.propTypes = {
   sublet_filter_params: PropTypes.object.isRequired,
 	saveSubletsToRedux: PropTypes.func.isRequired,
   selectHelpThread: PropTypes.func.isRequired,
+	saveFavoritesToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
 HousingPage.defaultProps = {
 	building_search_results: [],
 	sublet_search_results: [],
+	tenant_profile: {},
 	selected_pin: null,
 	popup_buildings: [],
   search_radius: 1000,
@@ -132,6 +152,7 @@ const mapReduxToProps = (redux) => {
 	return {
 		building_search_results: redux.search.building_search_results,
 		sublet_search_results: redux.search.sublet_search_results,
+		tenant_profile: redux.auth.tenant_profile,
 		selected_pin: redux.search.selected_pin,
 		popup_buildings: redux.search.popup_buildings,
 		rent_type: redux.filter.rent_type,
@@ -147,6 +168,7 @@ export default withRouter(
 		saveBuildingsToRedux,
 		saveSubletsToRedux,
     selectHelpThread,
+		saveFavoritesToRedux,
 	})(RadiumHOC)
 )
 

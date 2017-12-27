@@ -92,3 +92,18 @@ export const getAllFavoritesForTenant = (tenant_id) => {
   })
   return p
 }
+
+export const getTenantFavoriteForBuilding = (tenant_id, building_id) => {
+  const p = new Promise((res, rej) => {
+    // axios.post(`${SEARCH_MICROSERVICE}/search_buildings`, { lat, long })
+    axios.post(`${SEARCH_MICROSERVICE}/get_tenant_favorite_for_building`, { tenant_id, building_id, }, authHeaders()) // { httpsAgent: agent })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
