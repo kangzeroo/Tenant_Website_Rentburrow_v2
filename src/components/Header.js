@@ -40,11 +40,9 @@ class Header extends Component {
       toggle_modal: false,
       modal_name: '',
       context: null,
-    }
-  }
 
-  componentWillMount() {
-    console.log(this.props.temporary_favorite_force_signin)
+      show_favorites_header: true,
+    }
   }
 
   toggleModal(bool, attr, context) {
@@ -125,9 +123,29 @@ class Header extends Component {
       this.props.history.push('/privacy-policy')
     } else if (value.value === 'logout') {
       this.props.history.push('/logout')
-    } else if (value.value === 'favorites') {
-      this.props.history.push('/favorites')
     }
+  }
+
+  showFavorites() {
+    const favs = JSON.parse(localStorage.getItem('favorites')).map(s => s.building_id)
+    const buildings = this.props.building_search_results.filter((building) => {
+      return favs.indexOf(building.building_id) > -1
+    })
+
+    Promise.all(buildings)
+    .then((data) => {
+      this.props.saveBuildingsToRedux(data)
+      this.setState({
+        show_favorites_header: false,
+      })
+    })
+  }
+
+  showAllBuildings() {
+    this.refreshEverything()
+    this.setState({
+      show_favorites_header: true,
+    })
   }
 
   renderProfileDropdown() {
@@ -145,7 +163,7 @@ class Header extends Component {
 
     const options = [
       { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
-      { key: 'favorites', value: 'favorites', text: 'Favorites', icon: 'heart' },
+      // { key: 'favorites', value: 'favorites', text: 'Favorites', icon: 'heart' },
       { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
       // { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
       // { key: 'pro_tips', value: 'pro_tips', text: 'Renting Pro-Tips', icon: 'star' },
@@ -173,7 +191,9 @@ class Header extends Component {
             </Link>
           </div>
           {
-            this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' || this.props.history.location.pathname === '/leases' || this.props.history.location.pathname === '/sublet' || this.props.history.location.pathname === '/sublets'
+            (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
+            this.props.history.location.pathname === '/leases' || this.props.history.location.pathname === '/sublet' ||
+            this.props.history.location.pathname === '/sublets')
             ?
             <SearchInput
               style={comStyles().searchContainer}
@@ -182,16 +202,26 @@ class Header extends Component {
             null
           }
 
-          {/*
-          <div style={comStyles().righterFloat}>
-            <h3> { i18n(WELCOME_MESSAGE) } </h3>
-            <Dropdown placeholder='Change Language' onChange={(e, data) => this.props.changeAppLanguage(data.value)} selection options={languageOptions()} />
-          </div>*/}
+
           {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
-              <Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
+              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                Help
+              </div>
+              {
+                this.state.show_favorites_header
+                ?
+                <div role='button' tabIndex={0} key='favorites' style={comStyles().login} onClick={() => { this.showFavorites() }}>
+                  My Favorites
+                </div>
+                :
+                <div role='button' tabIndex={0} key='show_all' style={comStyles().login} onClick={() => { this.showAllBuildings() }}>
+                  All Buildings
+                </div>
+              }
+
               {/*}<Button
                 basic
                 inverted
@@ -218,13 +248,13 @@ class Header extends Component {
                 inverted
                 content='Login'
               />*/}
-              <div key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
                 Help
               </div>
-              <div key='signup' style={comStyles().login} onClick={() => this.toggleModal(true, 'signup')}>
+              <div role='button' tabIndex={0} key='signup' style={comStyles().login} onClick={() => this.toggleModal(true, 'signup')}>
                 Sign Up
               </div>
-              <div key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
+              <div role='button' tabIndex={0} key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
                 Log In
               </div>
             </div>
@@ -270,6 +300,7 @@ Header.propTypes = {
   sublet_filter_params: PropTypes.object.isRequired,
   force_signin: PropTypes.bool,
   temporary_favorite_force_signin: PropTypes.object,
+  building_search_results: PropTypes.array.isRequired,
   rent_type: PropTypes.string.isRequired,
 }
 
@@ -294,6 +325,7 @@ const mapReduxToProps = (redux) => {
     rent_type: redux.filter.rent_type,
     force_signin: redux.auth.force_signin,
     temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
+    building_search_results: redux.search.building_search_results,
   }
 }
 
@@ -381,11 +413,13 @@ const comStyles = () => {
     user_container: {
       display: 'flex',
       flexDirection: 'row',
+      justifyContent: 'space-between',
       right: '20px',
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      maxWidth: '350px',
+      minWidth: '250px',
+      maxWidth: '250px',
       alignItems: 'center',
     },
     close_login: {

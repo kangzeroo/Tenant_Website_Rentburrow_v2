@@ -52,48 +52,6 @@ class HousingPanel extends Component {
 		this.scrollStream = null
 	}
 
-	componentWillMount() {
-		// this.props.selectHelpThread()
-	}
-
-	componentDidMount() {
-		// this.scrollStream = new Rx.Subject()
-		// 		.debounceTime(500)
-		// 		.subscribe(
-		// 			(position) => {
-		//         // Probably you want to load new cards?
-		// 				if (position.scrollTop / position.scrollHeight > 0.6) {
-		//         	this.nextPage(1, position.scrollTop, position.scrollHeight, position.target)
-		// 				} else if (position.scrollTop === 0) {
-		// 					this.nextPage(-1, position.scrollTop, position.scrollHeight, position.target)
-		// 				}
-		// 			},
-		// 			(err) => {
-		// 				console.log('Stream error occurred:')
-		// 				console.log(err)
-		// 			},
-		// 			() => {
-		// 				console.log('Stream finished')
-		// 			}
-		// 		)
-	}
-
-	// handleScroll(e) {
-  //   this.scrollStream.next({
-	// 		target: e.target,
-	// 		scrollHeight: e.target.scrollHeight,
-	// 		scrollTop: e.target.scrollTop,
-	// 		clientHeight: e.target.clientHeight,
-	// 	})
-	// 	// .filter((positions) => {
-	// 	// 	// positions = [0, 1] events from scrollStream
-	// 	// 	// check that the position of [1] is less than [0], which indicates that we are scrolling down
-	// 	// 	// check that the position of [1] is more than 70% the height of the container
-	// 	// 	return positions[0].scrollTop < positions[1].scrollTop && ((positions[1].scrollTop + positions[1].clientHeight) / positions[1].scrollHeight) > (70 / 100)
-	// 	// })
-  // }
-
-
 	generateCard(building) {
 		if (this.props.card_style === 'row') {
 			return (
@@ -150,12 +108,12 @@ class HousingPanel extends Component {
 	}
 
 	renderTimeout() {
-		if (this.state.running) {
-			setTimeout(() => {
-				this.setState({
-					running: false,
-				})
-			}, 3000)
+		if (this.props.rent_type === 'lease' && !this.props.leases_loaded) {
+			// setTimeout(() => {
+			// 	this.setState({
+			// 		running: false,
+			// 	})
+			// }, 3000)
 			return (
 				<div style={comStyles().loading} >
 					<Spin
@@ -164,13 +122,23 @@ class HousingPanel extends Component {
 					/>
 				</div>
 			)
-		} else {
+		} else if (this.props.rent_type === 'sublet' && !this.props.sublets_loaded) {
 			return (
 				<div style={comStyles().loading} >
-					No Properties Found in this Area
+					<Spin
+						tip='Loading...'
+						size='large'
+					/>
 				</div>
 			)
 		}
+
+			// else {
+			// return (
+			// 	<div style={comStyles().loading} >
+			// 		No Properties Found in this Area
+			// 	</div>
+			// )
 	}
 
 	render() {
@@ -271,6 +239,8 @@ HousingPanel.propTypes = {
 	card_style: PropTypes.string.isRequired,
 	rent_type: PropTypes.string.isRequired,
 	refresh: PropTypes.func.isRequired, 					// passed in
+	leases_loaded: PropTypes.bool.isRequired,	// passed in
+	sublets_loaded: PropTypes.bool.isRequired,		// passed in
 	buildings: PropTypes.array.isRequired,
 	sublets: PropTypes.array.isRequired,
 	selectHelpThread: PropTypes.func.isRequired,
