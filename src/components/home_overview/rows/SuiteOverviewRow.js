@@ -223,7 +223,7 @@ class SuiteOverviewRow extends Component {
 				<div style={comStyles().left}>
 					<div id='infobar' style={comStyles().left_top} >
 						{ renameSuite(suite.suite_alias) }
-            <FavoriteIcon fav_type='suite' suite={suite} size='large' building={this.props.building} favorited={this.props.favorited} />
+            <FavoriteIcon fav_type='suite' suite={suite} size='large' building={this.props.building} />
 					</div>
 					<div id='infobar' style={comStyles().left_middle} >
             {
@@ -275,7 +275,6 @@ SuiteOverviewRow.propTypes = {
   fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   toggleTemporaryCollectionFrom: PropTypes.func.isRequired,     // passed in
-  favorited: PropTypes.bool.isRequired,     // passed in
 }
 
 // for all optional props, define a default value

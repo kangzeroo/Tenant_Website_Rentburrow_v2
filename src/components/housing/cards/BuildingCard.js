@@ -38,7 +38,6 @@ class BuildingCard extends Component {
         favorited: true,
       })
     } else if (this.props.favorites && this.props.favorites.favorites_loaded) {
-      console.log('favorited')
       this.setState({
         favorited: true,
       })
@@ -90,16 +89,6 @@ class BuildingCard extends Component {
     })
   }
 
-  checkIfFavorited(building_id) {
-    if (this.props.favorites && this.props.favorites.tenant_favorites && this.props.favorites.tenant_favorites.length > 0) {
-      return this.props.favorites.tenant_favorites.some((favorite) => {
-        return favorite.building_id === building_id
-      })
-    } else {
-      return false
-    }
-  }
-
 	render() {
 		return (
       <Card
@@ -114,7 +103,7 @@ class BuildingCard extends Component {
           {
             this.state.favorited
             ?
-            <FavoriteIcon fav_type='building' building={this.props.building} favorited={this.checkIfFavorited(this.props.building.building_id)} />
+            <FavoriteIcon fav_type='building' building={this.props.building} />
             :
             null
           }

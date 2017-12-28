@@ -44,7 +44,7 @@ class BuildingOverviewRow extends Component {
         raised
         style={comStyles().hardCard}
       >
-        <FavoriteIcon fav_type='building' size='big' building={this.props.building} favorited={this.props.favorited} />
+        <FavoriteIcon fav_type='building' size='big' building={this.props.building} />
         <div style={comStyles().left} >
           <div id='infobar' style={comStyles().left_top} >
             <div>{building.building_alias}</div>
@@ -82,7 +82,6 @@ BuildingOverviewRow.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   toggleModal: PropTypes.func.isRequired,   // passed in
-  favorited: PropTypes.bool.isRequired,     // passed in
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   fingerprint: PropTypes.string.isRequired,

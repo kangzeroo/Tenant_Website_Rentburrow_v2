@@ -218,7 +218,7 @@ class ApplyBox extends Component {
               }
             </div>
             <div>
-              <FavoriteIcon fav_type='building' building={this.props.building} size='big' favorited={this.props.favorited} />
+              <FavoriteIcon fav_type='building' size='big' building={this.props.building} />
             </div>
           </div>
           <div style={comStyles().priceContainer}>
@@ -287,7 +287,6 @@ ApplyBox.propTypes = {
   toggleTemporaryCollectionFrom: PropTypes.func.isRequired, // passed in
   togglePhoneCallForm: PropTypes.func.isRequired,           // passed in
   sublets: PropTypes.array.isRequired,                      // passed in
-  favorited: PropTypes.bool.isRequired,                     // passed in
   collectIntel: PropTypes.func.isRequired,
   fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,

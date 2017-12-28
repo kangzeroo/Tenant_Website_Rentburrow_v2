@@ -24,7 +24,6 @@ import {
 	querySubletsInArea,
 } from '../../api/search/sublet_api'
 import { selectHelpThread } from '../../actions/messaging/messaging_actions'
-import { saveFavoritesToRedux } from '../../actions/favorites/favorites_actions'
 import { getAllFavoritesForTenant } from '../../api/tenant/favorite_api'
 
 class HousingPage extends Component {
@@ -33,6 +32,7 @@ class HousingPage extends Component {
 		super()
 		this.state = {
 			buildings: [],
+
 		}
 	}
 
@@ -45,7 +45,9 @@ class HousingPage extends Component {
 		if (this.props.tenant_profile !== nextProps.tenant_profile) {
 			getAllFavoritesForTenant(nextProps.tenant_profile.tenant_id)
 			.then((data) => {
-				this.props.saveFavoritesToRedux(data)
+				// favorites is stored in localStorage as [building_id, building_id, ....] for better performance
+				localStorage.removeItem('favorites')
+				localStorage.setItem('favorites', JSON.stringify(data.map((s) => { return { building_id: s.building_id, suite_id: s.suites.f1, } })))
 			})
 		}
 	}
@@ -131,7 +133,6 @@ HousingPage.propTypes = {
   sublet_filter_params: PropTypes.object.isRequired,
 	saveSubletsToRedux: PropTypes.func.isRequired,
   selectHelpThread: PropTypes.func.isRequired,
-	saveFavoritesToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -168,7 +169,6 @@ export default withRouter(
 		saveBuildingsToRedux,
 		saveSubletsToRedux,
     selectHelpThread,
-		saveFavoritesToRedux,
 	})(RadiumHOC)
 )
 

@@ -43,6 +43,10 @@ class Header extends Component {
     }
   }
 
+  componentWillMount() {
+    console.log(this.props.temporary_favorite_force_signin)
+  }
+
   toggleModal(bool, attr, context) {
     this.setState({
       toggle_modal: bool,
@@ -237,7 +241,7 @@ class Header extends Component {
             null
           }
           {
-            this.props.temporary_favorite_force_signin
+            this.props.temporary_favorite_force_signin && this.props.temporary_favorite_force_signin.building_id
             ?
             <FavoriteForceSignin />
             :
@@ -265,7 +269,7 @@ Header.propTypes = {
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
   force_signin: PropTypes.bool,
-  temporary_favorite_force_signin: PropTypes.string,
+  temporary_favorite_force_signin: PropTypes.object,
   rent_type: PropTypes.string.isRequired,
 }
 

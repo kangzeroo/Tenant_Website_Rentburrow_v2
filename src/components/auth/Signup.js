@@ -120,7 +120,7 @@ class Signup extends Component {
 	render() {
 		return (
 			<div id='Signup' style={comStyles().container}>
-				<Form style={comStyles().form} size='medium'>
+				<Form style={comStyles().form} size='small'>
           <Form.Group widths='equal' >
             <Form.Field>
               <label>First Name</label>
@@ -158,7 +158,7 @@ class Signup extends Component {
           }
           </Form.Field>
           <Form.Field>
-            <Button color='twitter' fluid size='medium' loading={this.state.loading} onClick={() => this.submitRegistration(this.state)}>
+            <Button color='twitter' fluid size='small' loading={this.state.loading} onClick={() => this.submitRegistration(this.state)}>
               Sign up
             </Button>
           </Form.Field>
