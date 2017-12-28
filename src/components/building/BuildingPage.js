@@ -83,8 +83,9 @@ class BuildingPage extends Component {
 
 			expand_amenities: true,
 
-			favorited: [],
-			favorites_loaded: false,
+			// favorited: [],
+			// favorites_loaded: false,
+			loading: true,
 		}
 	}
 
@@ -130,6 +131,7 @@ class BuildingPage extends Component {
 			.then((sublets) => {
 				this.setState({
 					sublets: sublets,
+					loading: false,
 				})
 				// console.log('getSpecificLandlord', this.state.building.building_id)
 				return getSpecificLandlord({ building_id: this.state.building.building_id })
@@ -151,17 +153,17 @@ class BuildingPage extends Component {
 			})
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if (this.props.tenant_profile !== nextProps.tenant_profile) {
-			getTenantFavoriteForBuilding(nextProps.tenant_profile.tenant_id, this.state.building.building_id)
-			.then((data) => {
-				this.setState({
-					favorited: data,
-					favorites_loaded: true,
-				})
-			})
-		}
-	}
+	// componentWillReceiveProps(nextProps) {
+	// 	if (this.props.tenant_profile !== nextProps.tenant_profile) {
+	// 		getTenantFavoriteForBuilding(nextProps.tenant_profile.tenant_id, this.state.building.building_id)
+	// 		.then((data) => {
+	// 			this.setState({
+	// 				favorited: data,
+	// 				favorites_loaded: true,
+	// 			})
+	// 		})
+	// 	}
+	// }
 
 	getImagesForBuilding() {
 		getImagesForSpecificBuilding({
@@ -351,29 +353,39 @@ class BuildingPage extends Component {
 				</div>
 				<div style={comStyles().content_top}>
 					<div style={comStyles().content_left}>
-						<Card fluid raised style={comStyles().building_header}>
-							<div style={comStyles().welcome_banner}>
-								<h1 style={comStyles().welcome_message}>{this.state.building.building_alias}, Waterloo</h1>
-								{
-									this.state.building.label
-									?
-									<div onClick={() => this.toggleModal(true, 'collection')} style={comStyles().welcome_ribbon}>
-			              <RibbonLabel label={this.state.building.label} size='massive' />
-									</div>
-									:
-									null
-								}
-							</div>
-							<div style={comStyles().description} >
-								{
-									this.state.building.building_desc
-									?
-									<DescriptionBox description={this.state.building.building_desc} />
-									:
-									null
-								}
-							</div>
-						</Card>
+						{
+							this.state.building && !this.state.loading
+							?
+							<Card fluid raised style={comStyles().building_header}>
+								<div style={comStyles().welcome_banner}>
+									<h1 style={comStyles().welcome_message}>{this.state.building.building_alias}, Waterloo</h1>
+									{
+										this.state.building.label
+										?
+										<div onClick={() => this.toggleModal(true, 'collection')} style={comStyles().welcome_ribbon}>
+				              <RibbonLabel label={this.state.building.label} size='massive' />
+										</div>
+										:
+										null
+									}
+								</div>
+								<div style={comStyles().description} >
+									{
+										this.state.building.building_desc
+										?
+										<DescriptionBox description={this.state.building.building_desc} />
+										:
+										null
+									}
+								</div>
+							</Card>
+							:
+							<Segment style={comStyles().loadingContainer}>
+								<Dimmer active inverted>
+									<Loader inverted />
+								</Dimmer>
+							</Segment>
+						}
 						{
 							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.promise_array_of_suite_amenities_with_id.length > 0
 							?
@@ -404,7 +416,7 @@ class BuildingPage extends Component {
 					</div>
 					<div style={comStyles().content_right} >
 						{
-							this.state.favorites_loaded
+							this.state.building && !this.state.loading
 							?
 							<ApplyBox
 								building={this.state.building}
@@ -412,7 +424,6 @@ class BuildingPage extends Component {
 								toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
 								togglePhoneCallForm={() => this.toggleModal(true, 'phone')}
 								sublets={this.state.sublets}
-								favorited={this.state.favorited && this.state.favorited.length > 0}
 							/>
 							:
 							<Segment style={comStyles().loadingContainer}>
@@ -421,7 +432,6 @@ class BuildingPage extends Component {
 								</Dimmer>
 							</Segment>
 						}
-
 						{
 							this.state.building.building_id
 							?
@@ -466,14 +476,13 @@ class BuildingPage extends Component {
 						null
 					}
 					{
-						this.state.building && this.state.favorites_loaded
+						this.state.building && !this.state.loading
 						?
 						<HomeOverview
 							building={this.state.building}
 							suites={this.state.suites}
 							promise_array_of_suite_amenities_with_id={this.state.promise_array_of_suite_amenities_with_id}
 							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
-							favorited={this.state.favorited}
 						/>
 						:
 						<Segment style={comStyles().loadingContainer}>

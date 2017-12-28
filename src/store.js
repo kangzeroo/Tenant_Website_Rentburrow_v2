@@ -10,7 +10,7 @@ import reducers from './reducers'
 // recall that all actions will flow through each middleware until it reaches the end to be passed to reducers
 const createStoreWithMiddleware = applyMiddleware(
 	reduxThunk,
-	filteredLogger,
+	// filteredLogger,
 	// establishFirebaseMessaging,
 	// establishFirebaseRealtimeDatabaseMessaging,
 )(createStore);

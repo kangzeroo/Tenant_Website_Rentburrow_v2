@@ -27,48 +27,92 @@ class FavoriteIcon extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      favorited: this.props.favorited,
-    })
+    if (this.props.fav_type === 'suite') {
+      const favs = JSON.parse(localStorage.getItem('favorites'))
+      if (favs && favs.length > 0) {
+        this.setState({
+          favorited: favs.some((fav) => { return fav.suite_id === this.props.suite.suite_id }),
+        })
+      } else {
+        this.setState({
+          favorited: false,
+        })
+      }
+    } else if (this.props.fav_type === 'building') {
+      const favs = JSON.parse(localStorage.getItem('favorites'))
+      if (favs && favs.length > 0) {
+        this.setState({
+          favorited: favs.some((fav) => { return fav.building_id === this.props.building.building_id }),
+        })
+      } else {
+        this.setState({
+          favorited: false,
+        })
+      }
+    }
   }
 
   toggleFavorite(e) {
     if (e) {
       e.stopPropagation()
     }
+    const building_id = this.props.building.building_id
+    const tenant_id = this.props.tenant_profile.tenant_id
     if (this.state.favorited) {
       this.setState({
         favorited: false,
       })
       if (this.props.fav_type === 'building') {
-        deleteBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
-        this.props.saveFavoritesToRedux(this.props.favorites.filter((fav) => { return fav.building_id === this.props.building_id }))
-      } else {
-        deleteSuiteFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id, this.props.suite.suite_id)
+        // delete the favorite from the database
+        deleteBuildingFavorite(tenant_id, building_id)
+
+        // modify local storage
+        const favs = JSON.parse(localStorage.getItem('favorites'))
+        const modifiedFavs = favs.filter((fav) => {
+          return !(fav.building_id === building_id && !fav.suite_id)
+        })
+        localStorage.setItem('favorites', JSON.stringify(modifiedFavs))
+      } else if (this.props.fav_type === 'suite') {
+        // delete the suite favorite from the database
+        deleteSuiteFavorite(tenant_id, building_id, this.props.suite.suite_id)
+
+        // modify local storage
+        const favs = JSON.parse(localStorage.getItem('favorites'))
+        const modifiedFavs = favs.filter((fav) => {
+          return !(fav.building_id === building_id && fav.suite_id === this.props.suite.suite_id)
+        })
+        localStorage.setItem('favorites', JSON.stringify(modifiedFavs))
       }
-      // else { insertSuiteFavorite}
-      // insertBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
-      // saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, false)
       this.trackFavorite(false)
     } else {
       if (this.props.authenticated) {
         this.setState({
           favorited: true,
         })
-        // saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, true)
         if (this.props.fav_type === 'building') {
-          console.log('BUILDING')
-          insertBuildingFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id)
-          this.props.saveFavoritesToRedux(this.props.favorites.concat([{ building_id: this.props.building.building_id }]))
+          // insert the building favorite to the database
+          insertBuildingFavorite(tenant_id, building_id)
+
+          // modify the favorites in localStorage
+          const favs = JSON.parse(localStorage.getItem('favorites'))
+          localStorage.setItem('favorites', JSON.stringify(favs.concat([{ building_id: building_id }])))
         } else {
-          console.log('SUITE FAVS')
-          insertSuiteFavorite(this.props.tenant_profile.tenant_id, this.props.building.building_id, this.props.suite.suite_id)
+          // insert the suite favorite into the database
+          insertSuiteFavorite(tenant_id, building_id, this.props.suite.suite_id)
+
+          // modify the favorites in localStorage
+          const favs = JSON.parse(localStorage.getItem('favorites'))
+          localStorage.setItem('favorites', JSON.stringify(favs.concat([{ building_id: building_id, suite_id: this.props.suite.suite_id }])))
         }
         this.trackFavorite(true)
       } else {
         this.props.triggerForcedSigninFavorite({
-          id: this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id,
+          building_id: this.props.building.building_id,
+          suite_id: this.props.suite ? this.props.suite.suite_id : '',
           fav_type: this.props.fav_type,
+        })
+        this.setState({
+          favorited: true,
         })
       }
     }
@@ -127,24 +171,20 @@ class FavoriteIcon extends Component {
 // defines the types of variables in this.props
 FavoriteIcon.propTypes = {
 	history: PropTypes.object.isRequired,
-  favorited: PropTypes.bool.isRequired,                  // passed in
   authenticated: PropTypes.bool,              // passed in
+  fav_type: PropTypes.string.isRequired,      // passed in
   tenant_profile: PropTypes.object.isRequired,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
   building: PropTypes.object,               // passed in
   suite: PropTypes.object,                  // passed in
   collectIntel: PropTypes.func.isRequired,
-  fav_type: PropTypes.string.isRequired,    // passed in
   fingerprint: PropTypes.string.isRequired,
-  favorites: PropTypes.array,
-  saveFavoritesToRedux: PropTypes.func.isRequired,
   size: PropTypes.string,                   // passed in
 }
 
 // for all optional props, define a default value
 FavoriteIcon.defaultProps = {
-  // favorited: false,
-  favorites: [],
+
   authenticated: false,
   building: null,
   suite: null,
@@ -160,7 +200,6 @@ const mapReduxToProps = (redux) => {
     tenant_profile: redux.auth.tenant_profile,
     authenticated: redux.auth.authenticated,
     fingerprint: redux.auth.browser_fingerprint,
-    favorites: redux.favorites.tenant_favorites,
 	}
 }
 

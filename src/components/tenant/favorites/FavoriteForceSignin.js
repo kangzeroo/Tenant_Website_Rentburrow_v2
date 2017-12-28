@@ -18,11 +18,11 @@ class FavoriteForceSignin extends Component {
 
 	render() {
 		return (
-      <Modal dimmer='blurring' open={true} onClose={() => this.props.triggerForcedSigninFavorite('')}>
+      <Modal dimmer='blurring' open={true} onClose={() => this.props.triggerForcedSigninFavorite(null)}>
         <Modal.Content>
           <LoginPopup
-            toggleModal={() => this.props.triggerForcedSigninFavorite('')}
-            context='signup'
+            toggleModal={() => this.props.triggerForcedSigninFavorite(null)}
+            context='login'
           />
         </Modal.Content>
       </Modal>

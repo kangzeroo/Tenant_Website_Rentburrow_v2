@@ -15,7 +15,7 @@ import {
 import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin, triggerForcedSigninFavorite } from '../../actions/auth/auth_actions'
 import { saveTenantProfile, getTenantProfile } from '../../api/auth/tenant_api'
-import { saveFavorite } from '../../api/tenant/favorite_api'
+import { insertBuildingFavorite, insertSuiteFavorite } from '../../api/tenant/favorite_api'
 import Login from './Login'
 import Signup from './Signup'
 import ForgotPassword from './ForgotPassword'
@@ -27,6 +27,8 @@ class LoginPopup extends Component {
     this.state = {
       signup: false,
       forgot_password: false,
+
+      loading: false,
     }
   }
 
@@ -39,30 +41,41 @@ class LoginPopup extends Component {
   }
 
   loginWithFacebook() {
+    this.setState({
+      loading: true,
+    })
     localStorage.removeItem('fbToken')
     initiateFacebook()
     .then(() => {
       return loginFacebook()
     })
     .then((fbProfile) => {
-      insertUser(fbProfile)
+      // insertUser(fbProfile)
       return saveTenantProfile(fbProfile)
     })
     .then((data) => {
+      if (this.props.temporary_favorite_force_signin.fav_type === 'building') {
+        insertBuildingFavorite(data.tenant_id, this.props.temporary_favorite_force_signin.building_id)
+        // const favs = JSON.parse(localStorage.getItem('favorites'))
+        // localStorage.setItem('favorites', JSON.stringify([{ building_id: this.props.temporary_favorite_force_signin.building_id }]))
+        this.props.triggerForcedSigninFavorite({})
+      } else if (this.props.temporary_favorite_force_signin.fav_type === 'suite') {
+        insertSuiteFavorite(data.tenant_id, this.props.temporary_favorite_force_signin.building_id, this.props.temporary_favorite_force_signin.suite_id)
+        // const favs = JSON.parse(localStorage.getItem('favorites'))
+        // localStorage.setItem('favorites', JSON.stringify([{ building_id: this.props.temporary_favorite_force_signin.building_id, suite_id: this.props.temporary_favorite_force_signin.suite_id, }]))
+        this.props.triggerForcedSigninFavorite({})
+      }
       return getTenantProfile({ tenant_id: data.tenant_id, })
     })
     .then((data) => {
       this.props.saveTenantToRedux(data)
       this.props.toggleModal(false)
       this.props.triggerForcedSignin(false)
-      if (this.props.temporary_favorite_force_signin) {
-        saveFavorite(this.props.temporary_favorite_force_signin.id, this.props.temporary_favorite_force_signin.fav_type, data.tenant_id, true)
-        this.props.triggerForcedSigninFavorite(null)
-      }
+      this.setState({
+        loading: false,
+      })
     })
   }
-
-
 
   renderLoginAndSignUp() {
     return (
@@ -81,6 +94,7 @@ class LoginPopup extends Component {
             color='facebook'
             icon='facebook'
             size='medium'
+            loading={this.state.loading}
           />
           {/*<Button
             content='Login with Google'
