@@ -33,6 +33,8 @@ class HousingPage extends Component {
 		this.state = {
 			buildings: [],
 
+			leases_loaded: false,
+			sublets_loaded: false,
 		}
 	}
 
@@ -65,6 +67,7 @@ class HousingPage extends Component {
 			this.props.saveBuildingsToRedux(buildings.sort((a, b) => { return 0.5 - Math.random() }))
 			this.setState({
 				buildings,
+				leases_loaded: true,
 			})
 		})
 		// .then((data) => {
@@ -78,6 +81,9 @@ class HousingPage extends Component {
 		})
 		.then((data) => {
 			this.props.saveSubletsToRedux(data)
+			this.setState({
+				sublets_loaded: true,
+			})
 		})
 	}
 
@@ -98,6 +104,8 @@ class HousingPage extends Component {
 				<HousingPanel
 					refresh={() => this.refreshBuildings()}
 					buildings={this.state.buildings}
+					leases_loaded={this.state.leases_loaded}
+					sublets_loaded={this.state.sublets_loaded}
 				/>
 				<MapComponent
 					listOfResults={

@@ -94,6 +94,14 @@ const comStyles = () => {
       minHeight: '94vh',
       maxHeight: '100%',
       margin: '20px'
-		}
+		},
+    favoritesContainer: {
+      display: 'flex',
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			maxHeight: '100%',
+			width: '100%',
+			justifyContent: 'flex-start',
+    }
 	}
 }

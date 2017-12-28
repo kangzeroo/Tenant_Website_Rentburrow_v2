@@ -29,7 +29,7 @@ class LeaseFilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			room_count: 1,
+			room_count: 0,
 			ensuite_bath: false,
 			utils_incl: false,
 			parking_avail: false,
@@ -68,7 +68,7 @@ class LeaseFilterCard extends Component {
 		}
 
 		// if the number of rooms filter has changed...
-		if (this.state.room_count >= 1) {
+		if (this.state.room_count !== 0) {
 			filtered = filtered.filter((building) => {
 				return parseInt(building.max_rooms, 10) >= this.state.room_count && parseInt(building.min_rooms, 10) <= this.state.room_count
 			})
@@ -148,10 +148,10 @@ class LeaseFilterCard extends Component {
 							basic
 							icon='minus'
 							onClick={() => this.updateAttr('room_count', this.state.room_count - 1)}
-							disabled={this.state.room_count <= 1}
+							disabled={this.state.room_count === 0}
 						/>
 						<div style={comStyles().room_text} >
-							{`${this.state.room_count} Bedroom${this.state.room_count === 1 ? '' : 's'}`}
+							{ this.state.room_count === 0 ? 'All Bedrooms' : `${this.state.room_count} Bedroom${this.state.room_count === 1 ? '' : 's'}`}
 						</div>
 						<Button
 							circular
