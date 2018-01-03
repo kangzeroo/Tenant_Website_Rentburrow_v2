@@ -241,7 +241,7 @@ class ApplyBox extends Component {
               fluid
               basic
               icon='phone'
-              content='Text Property Manager'
+              content='Message Landlord'
               onClick={() => this.callPhoneForm()}
               size='large'
               style={comStyles().button}

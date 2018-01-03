@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+  Button,
 } from 'semantic-ui-react'
 
 
@@ -39,7 +39,7 @@ class DescriptionBox extends Component {
         {
           this.props.description.length > 1000
           ?
-          <div primary basic onClick={() => this.setState({ expanded: !this.state.expanded })} style={comStyles().expand}>
+          <Button primary basic onClick={() => this.setState({ expanded: !this.state.expanded })} style={comStyles().expand}>
             {
               this.state.expanded
               ?
@@ -47,7 +47,7 @@ class DescriptionBox extends Component {
               :
               'See More'
             }
-          </div>
+          </Button>
           :
           null
         }

@@ -211,16 +211,26 @@ class Header extends Component {
                 Help
               </div>
               {
-                this.state.show_favorites_header
+                (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
+                this.props.history.location.pathname === '/leases')
                 ?
-                <div role='button' tabIndex={0} key='favorites' style={comStyles().login} onClick={() => { this.showFavorites() }}>
-                  My Favorites
+                <div>
+                  {
+                    this.state.show_favorites_header
+                    ?
+                    <div role='button' tabIndex={0} key='favorites' style={comStyles().login} onClick={() => { this.showFavorites() }}>
+                      My Favorites
+                    </div>
+                    :
+                    <div role='button' tabIndex={0} key='show_all' style={comStyles().login} onClick={() => { this.showAllBuildings() }}>
+                      All Buildings
+                    </div>
+                  }
                 </div>
                 :
-                <div role='button' tabIndex={0} key='show_all' style={comStyles().login} onClick={() => { this.showAllBuildings() }}>
-                  All Buildings
-                </div>
+                null
               }
+
 
               {/*}<Button
                 basic
@@ -413,7 +423,7 @@ const comStyles = () => {
     user_container: {
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'space-around',
       right: '20px',
       top: '0px',
       position: 'absolute',

@@ -7,8 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { queryBuildingsInArea } from '../../api/search/search_api'
-import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRedux, toggleHideSoldOuts } from '../../actions/search/search_actions'
+import InputRange from 'react-input-range'
 import {
 	Checkbox,
 	Button,
@@ -16,9 +15,9 @@ import {
 } from 'semantic-ui-react'
 import { STUDENT_PREFERENCES } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
-import InputRange from 'react-input-range'
+import { queryBuildingsInArea } from '../../api/search/search_api'
+import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRedux, toggleHideSoldOuts } from '../../actions/search/search_actions'
 require('../../styles/react-input-range.css')
-
 
 class LeaseFilterCard extends Component {
 
@@ -50,14 +49,6 @@ class LeaseFilterCard extends Component {
 	}
 
 	applyFilters() {
-		// this.props.saveLeaseFilterParams(this.state)
-		// queryBuildingsInArea({
-		// 	...this.props.current_gps_center,
-		// 	filterParams: this.state,
-		// }).then((buildings) => {
-		// 	this.props.saveBuildingsToRedux(buildings)
-		// 	this.props.closeFilterCard()
-		// })
 		let filtered = this.props.buildings
 
 		// If pricing filters have changed...
@@ -102,21 +93,6 @@ class LeaseFilterCard extends Component {
 		  }
 		})
 	}
-
-/*
-	renderRoomFilter() {
-		return (
-			<InputRange
-				step={1}
-				maxValue={10}
-				minValue={1}
-				formatLabel={(value) => `${value} bed${value > 1 ? 's' : ''}`}
-				value={this.state.bedrooms}
-				onChange={(value) => this.updateAttr('bedrooms', value)}
-				onChangeComplete={value => console.log(value)}
-			/>
-		)
-	}*/
 
 	render() {
 		return (
@@ -163,60 +139,17 @@ class LeaseFilterCard extends Component {
 						/>
 					</div>
 				</div>
-				{/*<div style={comStyles().sliderBox}>
-					<div style={comStyles().label}>
-						<h2>Bedrooms</h2>
-					</div>
-					<div style={comStyles().slider}>
-						<InputRange
-							step={1}
-		          maxValue={6}
-		          minValue={1}
-		          formatLabel={(value) => `${value >= 6 ? '5+' : value}`}
-		          value={this.state.room_count}
-		          onChange={(value) => this.updateAttr('room_count', value)}
-		          onChangeComplete={value => console.log()}
-						/>
-					</div>
-				</div>*/}
-				{/*<div style={comStyles().sliderBox}>
-					<div style={comStyles().label}>
-						<h2>Lease Length</h2>
-					</div>
-					<div style={comStyles().slider}>
-						<InputRange
-							step={4}
-		          maxValue={16}
-		          minValue={0}
-		          formatLabel={(value) => `${value} months`}
-		          value={this.state.lease_length}
-		          onChange={(value) => this.updateAttr('lease_length', value)}
-		          onChangeComplete={value => console.log(value)}
-						/>
-					</div>
-				</div>*/}
 				<div style={comStyles().main_amenities}>
 					<Checkbox
 						label='Ensuite Bath'
 						checked={this.state.ensuite_bath}
 						onChange={(e, x) => this.updateAttr('ensuite_bath', x.checked)}
 						toggle />
-					{/*}<Checkbox
-						label='Utilities Included'
-						checked={this.state.utils_incl}
-						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
-						toggle />*/}
 					<Checkbox
 						label='Hide Sold Outs'
 						checked={this.props.hide_sold_outs}
 						onChange={() => this.props.toggleHideSoldOuts(!this.props.hide_sold_outs)}
 						toggle />
-					{/*
-					<Checkbox
-						label='Parking Available'
-						checked={this.state.parking_avail}
-						onChange={(e, x) => this.updateAttr('parking_avail', x.checked)}
-						toggle />*/}
 				</div>
 				<div style={comStyles().buttons_container}>
 					<Button

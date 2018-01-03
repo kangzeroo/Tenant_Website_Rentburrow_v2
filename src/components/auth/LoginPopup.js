@@ -11,6 +11,7 @@ import {
   Button,
   Divider,
   Form,
+  Header,
 } from 'semantic-ui-react'
 import { loginFacebook, insertUser, initiateFacebook } from '../../api/auth/facebook_auth'
 import { saveTenantToRedux, triggerForcedSignin, triggerForcedSigninFavorite } from '../../actions/auth/auth_actions'
@@ -86,6 +87,13 @@ class LoginPopup extends Component {
           <h4>Rentburrow pulls sublets from Facebook. By signing in, you help make this service possible. Thank you.</h4>
           :
           null
+        }
+        {
+          this.state.signup
+          ?
+          <Header as='h2' content='Sign Up' />
+          :
+          <Header as='h2' content='Log In' />
         }
         <div style={comStyles().social_container} >
           <Button

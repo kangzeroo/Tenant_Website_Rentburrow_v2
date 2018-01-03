@@ -57,12 +57,13 @@ import DescriptionBox from './DescriptionBox'
 import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
-import Old_PhoneCallForm from '../contracts/simple_temp_form/Old_PhoneCallForm'
+import MessageLandlordForm from '../contracts/simple_temp_form/MessageLandlordForm'
 import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
 import BuildingViews from '../analytics/BuildingViews'
 import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
 import { getTenantFavoriteForBuilding, } from '../../api/tenant/favorite_api'
+import { triggerForcedSigninFavorite, } from '../../actions/auth/auth_actions'
 
 class BuildingPage extends Component {
 	constructor() {
@@ -231,30 +232,30 @@ class BuildingPage extends Component {
 	      </Modal>
 	    )
 		} else if (modal_name === 'phone') {
-			return (
-	      <Modal
-					dimmer
-					open={this.state.toggle_modal}
-					onClose={() => this.toggleModal(false)}
-					closeIcon
-					size='large'
-				>
-	        <Modal.Content>
-						<Old_PhoneCallForm
-							building={this.state.building}
-							landlord={this.props.selected_landlord}
-							title={this.state.building.label}
-							closeModal={() => this.toggleModal(false)}
-						/>
-						{/*<PhoneTestForm
-							building={this.state.building}
-							landlord={this.props.selected_landlord}
-							title={this.state.building.label}
-							closeModal={() => this.toggleModal(false)}
-						/>*/}
-	        </Modal.Content>
-	      </Modal>
-	    )
+				return (
+		      <Modal
+						dimmer
+						open={this.state.toggle_modal}
+						onClose={() => this.toggleModal(false)}
+						closeIcon
+						size='large'
+					>
+		        <Modal.Content>
+							<MessageLandlordForm
+								building={this.state.building}
+								landlord={this.props.selected_landlord}
+								title={this.state.building.label}
+								closeModal={() => this.toggleModal(false)}
+							/>
+							{/*<PhoneTestForm
+								building={this.state.building}
+								landlord={this.props.selected_landlord}
+								title={this.state.building.label}
+								closeModal={() => this.toggleModal(false)}
+							/>*/}
+		        </Modal.Content>
+		      </Modal>
+		    )
 		}
   }
 
@@ -303,6 +304,16 @@ class BuildingPage extends Component {
 					onClick={() => { this.toggleModal(true, 'images') }}
 				/>
 			)
+		}
+	}
+
+	showMessagePopup() {
+		if (!this.props.authenticated) {
+			this.props.triggerForcedSigninFavorite({
+				building_id: this.state.building.building_id,
+			})
+		} else {
+			this.toggleModal(true, 'phone')
 		}
 	}
 
@@ -422,7 +433,7 @@ class BuildingPage extends Component {
 								building={this.state.building}
 								all_suites={this.state.suites}
 								toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
-								togglePhoneCallForm={() => this.toggleModal(true, 'phone')}
+								togglePhoneCallForm={() => this.showMessagePopup()}
 								sublets={this.state.sublets}
 							/>
 							:
@@ -504,6 +515,7 @@ class BuildingPage extends Component {
 BuildingPage.propTypes = {
 	history: PropTypes.object.isRequired,
 	// building: PropTypes.object.isRequired,
+	authenticated: PropTypes.bool.isRequired,
 	selectBuilding: PropTypes.func.isRequired,
 	selectCorporation: PropTypes.func.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
@@ -512,6 +524,7 @@ BuildingPage.propTypes = {
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   fingerprint: PropTypes.string.isRequired,
+	triggerForcedSigninFavorite: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -525,6 +538,7 @@ const RadiumHOC = Radium(BuildingPage)
 const mapReduxToProps = (redux) => {
 	return {
 		// building: redux.selection.selected_building,
+		authenticated: redux.auth.authenticated,
 		tenant_profile: redux.auth.tenant_profile,
 		selected_landlord: redux.selection.selected_landlord,
     fingerprint: redux.auth.browser_fingerprint,
@@ -538,6 +552,7 @@ export default withRouter(
 		selectChatThread,
 		selectCorporation,
 		collectIntel,
+		triggerForcedSigninFavorite,
 	})(RadiumHOC)
 )
 
