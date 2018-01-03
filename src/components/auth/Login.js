@@ -116,7 +116,7 @@ class Login extends Component {
 
 					// save the authenticated staff to Redux state
 	        this.props.saveTenantToRedux(tenantData)
-					this.props.history.push('/')
+					// this.props.history.push('/')
 				})
 				.catch((err) => {
 					this.setState({

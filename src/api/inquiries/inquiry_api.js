@@ -31,6 +31,20 @@ export const insertInquiry = (obj) => {
   return p
 }
 
+export const insertTenantInquiry = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/insert_tenant_inquiry`, obj, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
 export const tenantFilledInquiry = (tenant_id) => {
   const p = new Promise((res, rej) => {
     axios.post(`${CONTRACTING_MICROSERVICE}/tenant_completed_inquiry`, { tenant_id, }, authHeaders())
