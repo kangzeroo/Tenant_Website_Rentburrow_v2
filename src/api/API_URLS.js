@@ -10,7 +10,7 @@
 // export const REGISTER_MICROSERVICE = 'https://localhost:3002'
 // export const GENERIC_MICROSERVICE = 'https://localhost:3001'
 // export const FB_PARSER_MICROSERVICE = 'https://localhost:3002'
-// export const INTEL_MICROSERVICE = 'https://localhost:3004'
+export const INTEL_MICROSERVICE = 'https://localhost:3004'
 // export const SUBLETTING_MICROSERVICE = 'https://localhost:3005'
 // export const CONTRACTING_MICROSERVICE = 'https://localhost:3005'
 // export const ANALYTICS_MICROSERVICE = 'https://localhost:3007'
@@ -34,7 +34,6 @@
 // export const SMS_MICROSERVICE = 'http://rentburrow.com:3006'
 // export const FIREBASE_VERSION = 'production'
 // export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
-
 
 // PRIVATE SUBNET
 // export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
@@ -63,7 +62,7 @@ export const CORP_MICROSERVICE = 'https://34.227.117.38:3001'
 export const REGISTER_MICROSERVICE = 'https://34.227.117.38:3002'
 export const GENERIC_MICROSERVICE = 'https://34.227.117.38:3001'
 export const FB_PARSER_MICROSERVICE = 'https://34.227.117.38:3002'
-export const INTEL_MICROSERVICE = 'https://34.227.117.38:3004'
+// export const INTEL_MICROSERVICE = 'https://34.227.117.38:3004'
 export const SUBLETTING_MICROSERVICE = 'https://34.227.117.38:3005'
 export const CONTRACTING_MICROSERVICE = 'https://34.227.117.38:3005'
 export const ANALYTICS_MICROSERVICE = 'https://34.227.117.38:3007'

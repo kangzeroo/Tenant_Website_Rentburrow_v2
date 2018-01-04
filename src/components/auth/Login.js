@@ -17,7 +17,6 @@ import {
 	Dimmer,
 } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
-import { STUDENT_USERPOOL_ID, generate_TENANT_IDENTITY_POOL_ID } from '../../api/aws/aws-profile'
 
 import { LoginStudent, buildUserObject } from '../../api/aws/aws-cognito'
 import { saveFavorite } from '../../api/tenant/favorite_api'
