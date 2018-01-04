@@ -8,7 +8,7 @@
     "build": "webpack -p",
     "start-http": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --watch --port 8081",
     "node": "NODE_ENV=development nodemon --harmony server.js",
-    "prod": "NODE_ENV=production nodemon --harmony server.js",
+    "prod": "NODE_ENV=production PORT=443 nodemon --harmony server.js",
     "prod-mimic": "NODE_ENV=development nodemon --harmony server.js"
   },
   "keywords": [],
