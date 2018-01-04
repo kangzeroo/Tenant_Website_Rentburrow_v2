@@ -20,9 +20,9 @@ const port = process.env.PORT || 8081
 
 if (process.env.NODE_ENV === 'production') {
   const options = {
-      // ca: fs.readFileSync('./credentials/renthero_ssl.ca-bundle'),
-      key: fs.readFileSync('./credentials/renthero_ssl.key'),
-      cert: fs.readFileSync('./credentials/renthero_ssl.crt'),
+      ca: fs.readFileSync('./credentials/rentburrow_com.ca-bundle'),
+      key: fs.readFileSync('./credentials/rentburrow_com.key'),
+      cert: fs.readFileSync('./credentials/rentburrow_com.crt'),
       requestCert: false,
       rejectUnauthorized: false
   }
