@@ -31,7 +31,7 @@ export const INTEL_MICROSERVICE = 'https://rentburrow.com:3004'
 export const SUBLETTING_MICROSERVICE = 'https://rentburrow.com:3005'
 export const CONTRACTING_MICROSERVICE = 'https://rentburrow.com:3005'
 export const ANALYTICS_MICROSERVICE = 'https://rentburrow.com:3007'
-export const SMS_MICROSERVICE = 'http://rentburrow.com:3006'
+export const SMS_MICROSERVICE = 'https://rentburrow.com:3006'
 export const FIREBASE_VERSION = 'production'
 export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
 
