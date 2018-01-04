@@ -17,11 +17,12 @@ class Logout extends Component {
 		logoutFacebook()
 		signOutStudent()
 		this.props.history.push('/')
+		localStorage.removeItem('favorites')
 	}
 
 	render() {
 		return (
-			<div id='Logout'>
+			<div id='Logout' style={comStyles().container}>
 				<p>Sorry to see you go...</p>
 			</div>
 		)
@@ -44,23 +45,13 @@ export default withRouter(
 // ==================================
 
 
-// const comStyles = () => {
-// 	return {
-// 		background: {
-// 			backgroundColor: xMidBlue,
-// 			width: "100%",
-// 			height: "100%",
-// 			margin: "0",
-// 			left: "0",
-// 			top: "0",
-// 			display:"flex",
-// 			WebkitBoxPack: "justify", WebkitJustifyContent: "center", justifyContent: "center"
-// 		},
-// 		goodbye: {
-// 			fontSize: "1.5rem",
-// 			fontWeight: "bold",
-// 			color: "white",
-// 			margin: "auto"
-// 		}
-// 	}
-// }
+const comStyles = () => {
+	return {
+		container: {
+			minHeight: '94vh',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+		}
+	}
+}

@@ -64,12 +64,12 @@ export const fingerprintBrowser = (fingerprint_string) => {
 }
 
 // control if the forced signin popup should show
-export const triggerForcedSigninFavorite = (bool) => {
+export const triggerForcedSigninFavorite = (obj) => {
   // dispatch lets you send actions to Redux
   return (dispatch) => {
     dispatch({
       type: FORCE_SIGNIN_FAVORITE,
-      payload: bool,
+      payload: obj,
     })
   }
 }

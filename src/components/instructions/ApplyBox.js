@@ -218,7 +218,7 @@ class ApplyBox extends Component {
               }
             </div>
             <div>
-              <FavoriteIcon fav_type='building' building={this.props.building} size='big' />
+              <FavoriteIcon fav_type='building' size='big' building={this.props.building} />
             </div>
           </div>
           <div style={comStyles().priceContainer}>
@@ -241,7 +241,7 @@ class ApplyBox extends Component {
               fluid
               basic
               icon='phone'
-              content='Text Property Manager'
+              content='Message Landlord'
               onClick={() => this.callPhoneForm()}
               size='large'
               style={comStyles().button}

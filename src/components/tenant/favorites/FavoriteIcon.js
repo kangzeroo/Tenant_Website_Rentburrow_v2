@@ -11,10 +11,10 @@ import {
   Icon,
 } from 'semantic-ui-react'
 import { triggerForcedSigninFavorite } from '../../../actions/auth/auth_actions'
-import { saveFavorite } from '../../../api/tenant/favorite_api'
+import { saveFavorite, insertBuildingFavorite, insertSuiteFavorite, deleteBuildingFavorite, deleteSuiteFavorite } from '../../../api/tenant/favorite_api'
 import { BUILDING_INTERACTIONS, SUITE_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
-
+import { saveFavoritesToRedux, } from '../../../actions/favorites/favorites_actions'
 
 class FavoriteIcon extends Component {
 
@@ -27,32 +27,92 @@ class FavoriteIcon extends Component {
   }
 
   componentWillMount() {
-    this.setState({
-      favorited: this.props.favorited,
-    })
+    if (this.props.fav_type === 'suite') {
+      const favs = JSON.parse(localStorage.getItem('favorites'))
+      if (favs && favs.length > 0) {
+        this.setState({
+          favorited: favs.some((fav) => { return fav.suite_id === this.props.suite.suite_id }),
+        })
+      } else {
+        this.setState({
+          favorited: false,
+        })
+      }
+    } else if (this.props.fav_type === 'building') {
+      const favs = JSON.parse(localStorage.getItem('favorites'))
+      if (favs && favs.length > 0) {
+        this.setState({
+          favorited: favs.some((fav) => { return fav.building_id === this.props.building.building_id }),
+        })
+      } else {
+        this.setState({
+          favorited: false,
+        })
+      }
+    }
   }
 
   toggleFavorite(e) {
     if (e) {
       e.stopPropagation()
     }
+    const building_id = this.props.building.building_id
+    const tenant_id = this.props.tenant_profile.tenant_id
     if (this.state.favorited) {
       this.setState({
         favorited: false,
       })
-      saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, false)
+      if (this.props.fav_type === 'building') {
+        // delete the favorite from the database
+        deleteBuildingFavorite(tenant_id, building_id)
+
+        // modify local storage
+        const favs = JSON.parse(localStorage.getItem('favorites'))
+        const modifiedFavs = favs.filter((fav) => {
+          return !(fav.building_id === building_id && !fav.suite_id)
+        })
+        localStorage.setItem('favorites', JSON.stringify(modifiedFavs))
+      } else if (this.props.fav_type === 'suite') {
+        // delete the suite favorite from the database
+        deleteSuiteFavorite(tenant_id, building_id, this.props.suite.suite_id)
+
+        // modify local storage
+        const favs = JSON.parse(localStorage.getItem('favorites'))
+        const modifiedFavs = favs.filter((fav) => {
+          return !(fav.building_id === building_id && fav.suite_id === this.props.suite.suite_id)
+        })
+        localStorage.setItem('favorites', JSON.stringify(modifiedFavs))
+      }
       this.trackFavorite(false)
     } else {
       if (this.props.authenticated) {
         this.setState({
           favorited: true,
         })
-        saveFavorite(this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id, this.props.fav_type, this.props.tenant_profile.tenant_id, true)
+        if (this.props.fav_type === 'building') {
+          // insert the building favorite to the database
+          insertBuildingFavorite(tenant_id, building_id)
+
+          // modify the favorites in localStorage
+          const favs = JSON.parse(localStorage.getItem('favorites'))
+          localStorage.setItem('favorites', JSON.stringify(favs.concat([{ building_id: building_id }])))
+        } else {
+          // insert the suite favorite into the database
+          insertSuiteFavorite(tenant_id, building_id, this.props.suite.suite_id)
+
+          // modify the favorites in localStorage
+          const favs = JSON.parse(localStorage.getItem('favorites'))
+          localStorage.setItem('favorites', JSON.stringify(favs.concat([{ building_id: building_id, suite_id: this.props.suite.suite_id }])))
+        }
         this.trackFavorite(true)
       } else {
         this.props.triggerForcedSigninFavorite({
-          id: this.props.fav_type === 'building' ? this.props.building.building_id : this.props.suite.suite_id,
+          building_id: this.props.building.building_id,
+          suite_id: this.props.suite ? this.props.suite.suite_id : '',
           fav_type: this.props.fav_type,
+        })
+        this.setState({
+          favorited: true,
         })
       }
     }
@@ -111,21 +171,20 @@ class FavoriteIcon extends Component {
 // defines the types of variables in this.props
 FavoriteIcon.propTypes = {
 	history: PropTypes.object.isRequired,
-  favorited: PropTypes.bool,                  // passed in
   authenticated: PropTypes.bool,              // passed in
+  fav_type: PropTypes.string.isRequired,      // passed in
   tenant_profile: PropTypes.object.isRequired,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
   building: PropTypes.object,               // passed in
   suite: PropTypes.object,                  // passed in
   collectIntel: PropTypes.func.isRequired,
-  fav_type: PropTypes.string.isRequired,    // passed in
   fingerprint: PropTypes.string.isRequired,
   size: PropTypes.string,                   // passed in
 }
 
 // for all optional props, define a default value
 FavoriteIcon.defaultProps = {
-  favorited: false,
+
   authenticated: false,
   building: null,
   suite: null,
@@ -149,6 +208,7 @@ export default withRouter(
 	connect(mapReduxToProps, {
     triggerForcedSigninFavorite,
     collectIntel,
+    saveFavoritesToRedux,
 	})(RadiumHOC)
 )
 

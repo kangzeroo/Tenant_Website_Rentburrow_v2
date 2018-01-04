@@ -116,3 +116,17 @@ export const getTenantByEmail = (email) => {
   })
   return p
 }
+
+export const updateEntireTenantProfile = (tenantObj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_entire_tenant_profile`, tenantObj, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}

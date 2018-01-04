@@ -19,7 +19,7 @@ import {
 import { Link, withRouter } from 'react-router-dom'
 
 import { LoginStudent, buildUserObject } from '../../api/aws/aws-cognito'
-import { saveFavorite } from '../../api/tenant/favorite_api'
+import { insertBuildingFavorite, insertSuiteFavorite } from '../../api/tenant/favorite_api'
 import { getTenantProfile, } from '../../api/auth/tenant_api'
 import { saveTenantToRedux, triggerForcedSigninFavorite } from '../../actions/auth/auth_actions'
 
@@ -97,16 +97,25 @@ class Login extends Component {
 				login_loading: false,
 			})
 			this.props.closeModal()
+			if (this.props.temporary_favorite_force_signin.fav_type === 'building') {
+				insertBuildingFavorite(data.sub, this.props.temporary_favorite_force_signin.building_id)
+				// const favs = JSON.parse(localStorage.getItem('favorites'))
+				// localStorage.setItem('favorites', JSON.stringify([{ building_id: this.props.temporary_favorite_force_signin.building_id }]))
+				this.props.triggerForcedSigninFavorite({})
+			} else if (this.props.temporary_favorite_force_signin.fav_type === 'suite') {
+				insertSuiteFavorite(data.sub, this.props.temporary_favorite_force_signin.building_id, this.props.temporary_favorite_force_signin.suite_id)
+				// const favs = JSON.parse(localStorage.getItem('favorites'))
+				// localStorage.setItem('favorites', JSON.stringify([{ building_id: this.props.temporary_favorite_force_signin.building_id, suite_id: this.props.temporary_favorite_force_signin.suite_id, }]))
+				this.props.triggerForcedSigninFavorite({})
+			}
 			// get the full staff details using the staff_id from AWS Cognito
 			getTenantProfile({ tenant_id: data.sub })
-				.then((data) => {
+				.then((tenantData) => {
+
+
 					// save the authenticated staff to Redux state
-	        this.props.saveTenantToRedux(data)
-					this.props.history.push('/')
-		      if (this.props.temporary_favorite_force_signin) {
-		        saveFavorite(this.props.temporary_favorite_force_signin.id, this.props.temporary_favorite_force_signin.fav_type, data.tenant_id, true)
-		        this.props.triggerForcedSigninFavorite(null)
-		      }
+	        this.props.saveTenantToRedux(tenantData)
+					// this.props.history.push('/')
 				})
 				.catch((err) => {
 					this.setState({
@@ -194,7 +203,7 @@ class Login extends Component {
 	render() {
 		return (
 			<div id='Login' style={comStyles().container} >
-				<Form style={comStyles().emailContainer} size='medium' >
+				<Form style={comStyles().emailContainer} size='small' >
 					<Form.Field>
 						<label>Email Address</label>
 						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
@@ -221,7 +230,7 @@ class Login extends Component {
 						?
 						null
 						:
-						<Button color='twitter' fluid size='medium' loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
+						<Button color='twitter' fluid size='small' loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
 							Login
 						</Button>
 					}

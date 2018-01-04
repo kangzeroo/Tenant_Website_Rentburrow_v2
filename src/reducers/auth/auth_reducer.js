@@ -11,7 +11,7 @@ const INITIAL_STATE = {
   tenant_profile: {},
   authenticated: false,
   force_signin: false,
-  temporary_favorite_force_signin: '',
+  temporary_favorite_force_signin: {},
   location_forwarding: '',    // forwarding location after sign in
   browser_fingerprint: '',    // unique identifier for web browser
 }

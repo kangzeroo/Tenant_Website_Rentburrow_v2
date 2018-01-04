@@ -9,11 +9,9 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
   Card,
-  Image,
-  Label,
+  Icon,
 } from 'semantic-ui-react'
 import {
-  renderProcessedThumbnail,
   aliasToURL,
   shortenAddress,
 } from '../../../api/general/general_api'
@@ -26,6 +24,33 @@ import RibbonLabel from '../../instructions/RibbonLabel'
 import { check_if_building_accessible } from '../../../api/label/building_label_api'
 
 class BuildingCard extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      favorited: false,
+    }
+  }
+
+  componentWillMount() {
+    if (this.props.favorites && this.props.favorites.tenant_favorites && this.props.favorites.tenant_favorites.length > 0) {
+      this.setState({
+        favorited: true,
+      })
+    } else if (this.props.favorites && this.props.favorites.favorites_loaded) {
+      this.setState({
+        favorited: true,
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.favorites !== nextProps.favorites) {
+			this.setState({
+        favorited: true,
+      })
+		}
+  }
 
   selectThisBuilding(building) {
     if (check_if_building_accessible(building.label)) {
@@ -75,7 +100,13 @@ class BuildingCard extends Component {
       >
         {/*<Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />*/}
         <div style={comStyles().imageGallery}>
-          <FavoriteIcon fav_type='building' building={this.props.building} />
+          {
+            this.state.favorited
+            ?
+            <FavoriteIcon fav_type='building' building={this.props.building} />
+            :
+            null
+          }
           <SingularImageGallery
             list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
             image_size='thumbnail'
@@ -84,7 +115,7 @@ class BuildingCard extends Component {
         <Card.Content style={comStyles().info}>
           <div style={comStyles().details}>
             <Card.Header style={comStyles().headerPrint}>
-              <div style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</div>
+              <h1 style={comStyles().address}>{ this.props.building.building_alias ? this.props.building.building_alias : shortenAddress(this.props.building.building_address) }</h1>
             </Card.Header>
             <Card.Description style={comStyles().more_info}>
               {
@@ -114,6 +145,26 @@ class BuildingCard extends Component {
             null
           }
         </Card.Content>
+        <Card.Content extra>
+          <a style={comStyles().bedContainer}>
+            <Icon name='bed' />
+            {
+              this.props.building.min_rooms && this.props.building.max_rooms
+              ?
+              <div>
+                {
+                  this.props.building.min_rooms === this.props.building.max_rooms
+                  ?
+                  `${this.props.building.min_rooms} Bed${this.props.building.min_rooms === 1 ? '' : 's'}`
+                  :
+                  `${this.props.building.min_rooms} to ${this.props.building.max_rooms} Beds`
+                }
+              </div>
+              :
+              'Inquire Rooms'
+            }
+          </a>
+        </Card.Content>
       </Card>
 		)
 	}
@@ -123,6 +174,7 @@ class BuildingCard extends Component {
 BuildingCard.propTypes = {
 	history: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
+  favorites: PropTypes.object.isRequired,
   selectPinToRedux: PropTypes.func.isRequired,
   collectIntel: PropTypes.func.isRequired,
   fingerprint: PropTypes.string.isRequired,
@@ -142,6 +194,7 @@ function mapReduxToProps(redux) {
 	return {
     tenant_profile: redux.auth.tenant_profile,
     fingerprint: redux.auth.browser_fingerprint,
+    favorites: redux.favorites,
 	}
 }
 
@@ -163,11 +216,11 @@ const comStyles = (label) => {
   }
 	return {
     hardCard: {
-      minWidth: '360px',
-      maxWidth: '360px',
-      minHeight: '280px',
-      maxHeight: '280px',
-      margin: '5px auto',
+      minWidth: '310px',
+      maxWidth: 'auto',
+      minHeight: '270px',
+      maxHeight: '270px',
+      margin: '10px auto',
       ...opacityStyles,
     },
     info: {
@@ -188,10 +241,10 @@ const comStyles = (label) => {
       width: '10%',
     },
     imageGallery: {
-      height: '200px',
+      height: '170px'
     },
     address: {
-      width: '60%',
+      width: '70%',
       display: 'flex',
       flexWrap: 'wrap',
       fontSize: '1.3rem',
@@ -205,6 +258,10 @@ const comStyles = (label) => {
     },
     headerPrint: {
       fontSize: '1rem',
+    },
+    bedContainer: {
+      display: 'flex',
+      flexDirection: 'row',
     }
 	}
 }

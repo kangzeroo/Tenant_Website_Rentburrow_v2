@@ -8,14 +8,18 @@ import PropTypes from 'prop-types'
 import { slideInLeft } from 'react-animations'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
+import Pagination from 'antd/lib/pagination'
+import 'antd/lib/pagination/style/css'
+import { LocaleProvider, Spin } from 'antd'
+import enUS from 'antd/lib/locale-provider/en_US';
+import 'antd/lib/spin/style/css'
 import {
 	xMidBlue,
 } from '../../../styles/base_colors'
 import {
 	Button,
-	Dimmer,
-	Segment,
 	Image,
+	Card,
 } from 'semantic-ui-react'
 import {
 	changeCardStyle,
@@ -38,84 +42,14 @@ class HousingPanel extends Component {
 			running: true,
 
 			page_start: 0,
-			page_end: 50,
+			page_end: 10,
 			page_number: 1,
+
+			total_pages: 1,
 
 			dimmer: false,
 		}
 		this.scrollStream = null
-	}
-
-	componentWillMount() {
-		// this.props.selectHelpThread()
-	}
-
-	componentDidMount() {
-		this.scrollStream = new Rx.Subject()
-				.debounceTime(500)
-				.subscribe(
-					(position) => {
-		        // Probably you want to load new cards?
-						if (position.scrollTop / position.scrollHeight > 0.8) {
-		        	this.nextPage(1, position.scrollTop, position.scrollHeight, position.target)
-						} else if (position.scrollTop === 0) {
-							this.nextPage(-1, position.scrollTop, position.scrollHeight, position.target)
-						}
-					},
-					(err) => {
-						// console.log('Stream error occurred:')
-						// console.log(err)
-					},
-					() => {
-						// console.log('Stream finished')
-					}
-				)
-	}
-
-	handleScroll(e) {
-    this.scrollStream.next({
-			target: e.target,
-			scrollHeight: e.target.scrollHeight,
-			scrollTop: e.target.scrollTop,
-			clientHeight: e.target.clientHeight,
-		})
-		// .filter((positions) => {
-		// 	// positions = [0, 1] events from scrollStream
-		// 	// check that the position of [1] is less than [0], which indicates that we are scrolling down
-		// 	// check that the position of [1] is more than 70% the height of the container
-		// 	return positions[0].scrollTop < positions[1].scrollTop && ((positions[1].scrollTop + positions[1].clientHeight) / positions[1].scrollHeight) > (70 / 100)
-		// })
-  }
-
-	nextPage(direction, scrollTop, scrollHeight, target) {
-		if (this.state.page_number + direction !== 0) {
-			// edge case where scroll up does not work when you have already reached the end of all sublets
-			if (this.props.rent_type === 'sublet' && this.props.sublet_search_results.length > this.state.page_end) {
-				this.setState({
-					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 40),
-					page_end: this.state.page_end + (direction * 50),
-					page_number: this.state.page_number + (direction)
-				}, () => {
-					if (direction > 0) {
-						target.scrollTop = target.scrollHeight * 0.2
-					} else {
-						target.scrollTop = target.scrollHeight * 0.8
-					}
-				})
-			} else if (this.props.building_search_results.length > this.state.page_end) {
-				this.setState({
-					page_start: this.state.page_number === 0 ? 0 : this.state.page_start + (direction * 40),
-					page_end: this.state.page_end + (direction * 50),
-					page_number: this.state.page_number + (direction)
-				}, () => {
-					if (direction > 0) {
-						target.scrollTop = target.scrollHeight * 0.2
-					} else {
-						target.scrollTop = target.scrollHeight * 0.8
-					}
-				})
-			}
-		}
 	}
 
 	generateCard(building) {
@@ -156,6 +90,14 @@ class HousingPanel extends Component {
 		})
 	}
 
+	handlePaginationChange(page, pageSize) {
+		this.setState({
+			page_start: (page * pageSize) - pageSize,
+			page_end: page * pageSize,
+			page_number: page,
+		}, () => { document.getElementById('scroll_div').scrollTop = 0 })
+	}
+
 	renderSubletCard(sublet, index) {
 		return (
 			<SubletCard
@@ -166,26 +108,37 @@ class HousingPanel extends Component {
 	}
 
 	renderTimeout() {
-		if (this.state.running) {
-			setTimeout(() => {
-				this.setState({
-					running: false,
-				})
-			}, 3000)
+		if (this.props.rent_type === 'lease' && !this.props.leases_loaded) {
+			// setTimeout(() => {
+			// 	this.setState({
+			// 		running: false,
+			// 	})
+			// }, 3000)
 			return (
 				<div style={comStyles().loading} >
-					<Image
-						src='https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif'
+					<Spin
+						tip='Loading...'
+						size='large'
 					/>
 				</div>
 			)
-		} else {
+		} else if (this.props.rent_type === 'sublet' && !this.props.sublets_loaded) {
 			return (
 				<div style={comStyles().loading} >
-					No Properties Found in this Area
+					<Spin
+						tip='Loading...'
+						size='large'
+					/>
 				</div>
 			)
 		}
+
+			// else {
+			// return (
+			// 	<div style={comStyles().loading} >
+			// 		No Properties Found in this Area
+			// 	</div>
+			// )
 	}
 
 	render() {
@@ -209,7 +162,7 @@ class HousingPanel extends Component {
 								{
 									this.props.sublet_search_results.length > 0
 									?
-									<div className='pretty_scrollbar' id='scroll_div' onScroll={(e, d) => this.handleScroll(e, d)} style={comStyles().scroll}>
+									<div className='pretty_scrollbar' id='scroll_div' style={comStyles().scroll}>
 										{this.props.sublet_search_results.slice(this.state.page_start, this.state.page_end).map((sublet, index) => {
 											return this.renderSubletCard(sublet, index)
 										})}
@@ -234,11 +187,11 @@ class HousingPanel extends Component {
 								}
 							</div>
 							:
-							<div className='pretty_scrollbar' id='scroll_div' onScroll={(e) => this.handleScroll(e)} style={comStyles().scroll}>
+							<div className='pretty_scrollbar' id='scroll_div' style={comStyles().scroll}>
 								{
 									this.props.building_search_results.length > 0
 									?
-									this.props.building_search_results.map((building) => {
+									this.props.building_search_results.slice(this.state.page_start, this.state.page_end).map((building) => {
 										return this.generateCard(building)
 									})
 									:
@@ -259,6 +212,17 @@ class HousingPanel extends Component {
 										}
 									</div>
 								}
+								{
+									this.props.building_search_results.length > 0
+									?
+									<Card fluid raised style={comStyles().paginationContainer} >
+										<LocaleProvider locale={enUS}>
+										<Pagination size='large' onChange={(e) => this.handlePaginationChange(e, 10)} defaultCurrent={1} total={this.props.building_search_results.length} />
+										</LocaleProvider>
+									</Card>
+									:
+									null
+								}
 							</div>
 						}
 			</div>
@@ -275,6 +239,8 @@ HousingPanel.propTypes = {
 	card_style: PropTypes.string.isRequired,
 	rent_type: PropTypes.string.isRequired,
 	refresh: PropTypes.func.isRequired, 					// passed in
+	leases_loaded: PropTypes.bool.isRequired,	// passed in
+	sublets_loaded: PropTypes.bool.isRequired,		// passed in
 	buildings: PropTypes.array.isRequired,
 	sublets: PropTypes.array.isRequired,
 	selectHelpThread: PropTypes.func.isRequired,
@@ -320,8 +286,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      minWidth: '800px',
-			width: '45vw',
+      minWidth: '700px',
       maxWidth: '45vw',
       height: '100%',
 			// backgroundImage: `url('https://www.xmple.com/wallpaper/gradient-blue-white-linear-1920x1080-c2-ffffff-87ceeb-a-0-f-14.svg')`,
@@ -342,7 +307,7 @@ const comStyles = () => {
 			maxHeight: '100%',
 			width: '100%',
 			overflowY: 'scroll',
-			padding: '10px',
+			padding: '15px',
 			justifyContent: 'flex-start',
 		},
 		icon: {
@@ -369,15 +334,23 @@ const comStyles = () => {
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
+			minHeight: '65vh',
+			width: '100%'
 		},
 		sublets_container: {
 			display: 'flex',
 			flexDirection: 'row',
 			flexWrap: 'wrap',
 		},
-		pagination: {
+		paginationContainer: {
 			display: 'flex',
-			flexDirection: 'row'
+			flexDirection: 'column',
+			alignItems: 'center',
+			justifyContent: 'center',
+			minHeight: '60px',
+			maxHeight: '60px',
+			minWidth: '100%',
+			maxWidth: '100%'
 		}
 	}
 }

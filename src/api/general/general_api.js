@@ -161,3 +161,11 @@ export const convertToArray = (obj) => {
   }
   return array
 }
+
+export const dbTimeToCurrentTimeShort = (timestamp) => {
+	return moment(timestamp).format('MMM Do YYY')
+}
+
+export const dbTimeToCurrentTimeLong = (timestamp) => {
+	return moment(timestamp).subtract(5, 'hours').format('MMMM Do YYYY, hh:mm a')
+}

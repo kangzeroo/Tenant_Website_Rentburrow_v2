@@ -1,4 +1,4 @@
-// Compt for copying as a FavoriteForceSignin
+// Compt for copying as a template
 // This compt is used for...
 
 import React, { Component } from 'react'
@@ -8,41 +8,34 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-  Modal,
-} from 'semantic-ui-react'
-import LoginPopup from '../../auth/LoginPopup'
-import { triggerForcedSigninFavorite } from '../../../actions/auth/auth_actions'
+  Spin,
+  Icon,
+} from 'antd'
+import 'antd/lib/spin/style/css'
 
-
-class FavoriteForceSignin extends Component {
+class Test extends Component {
 
 	render() {
 		return (
-      <Modal dimmer='blurring' open={true} onClose={() => this.props.triggerForcedSigninFavorite(null)}>
-        <Modal.Content>
-          <LoginPopup
-            toggleModal={() => this.props.triggerForcedSigninFavorite(null)}
-            context='login'
-          />
-        </Modal.Content>
-      </Modal>
+			<div id='Test' style={comStyles().container}>
+    <Spin indicator={<Icon type="loading" style={{ fontSize: 24 }} spin />} />
+			</div>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-FavoriteForceSignin.propTypes = {
+Test.propTypes = {
 	history: PropTypes.object.isRequired,
-  triggerForcedSigninFavorite: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
-FavoriteForceSignin.defaultProps = {
+Test.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(FavoriteForceSignin)
+const RadiumHOC = Radium(Test)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -54,7 +47,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-    triggerForcedSigninFavorite,
+
 	})(RadiumHOC)
 )
 
@@ -66,6 +59,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      height: '500px'
 		}
 	}
 }

@@ -228,7 +228,7 @@ class FilterBar extends Component {
           this.renderFilterCard(this.props.rent_type)
           :
           <div style={comStyles().searchbar}>
-            <div>
+            <div style={comStyles().filterAndTypeContainer}>
               <Button
                 primary
                 onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
@@ -342,7 +342,8 @@ const comStyles = () => {
       height: 'auto',
 		},
     sortMargin: {
-      margin: '20px'
+      margin: '20px',
+      textAlign: 'center'
     },
     searchbar: {
       position: 'relative',
@@ -352,5 +353,9 @@ const comStyles = () => {
       alignItems: 'center',
       width: '100%',
     },
+    filterAndTypeContainer: {
+      display: 'flex',
+      flexDirection: 'row'
+    }
 	}
 }
