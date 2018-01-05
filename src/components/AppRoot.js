@@ -109,7 +109,7 @@ class AppRoot extends Component {
     // automatically set language
     this.autoSetLanguage()
     // detect browser and limit to chrome
-    this.detectBrowser()
+    // this.detectBrowser()
     // check if its a mobile device
     this.checkIfMobile()
     // begin the facebook login process
