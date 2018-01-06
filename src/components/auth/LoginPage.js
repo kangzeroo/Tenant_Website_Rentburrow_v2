@@ -62,6 +62,7 @@ const comStyles = () => {
       height: '80vh',
       justifyContent: 'center',
       alignItems: 'center',
+			padding: '50px',
 		}
 	}
 }

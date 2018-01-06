@@ -151,12 +151,18 @@ class Header extends Component {
   renderProfileDropdown() {
     const trigger = (
       <span style={profileStyles().profile_div}>
-        <Image
-          src={this.props.tenant_profile.thumbnail}
-          shape='circular'
-          bordered
-          style={comStyles().tenant_thumbnail}
-        />
+        {
+          this.props.tenant_profile.thumbnail
+          ?
+          <Image
+            src={this.props.tenant_profile.thumbnail}
+            shape='circular'
+            bordered
+            style={comStyles().tenant_thumbnail}
+          />
+          :
+          <h3 style={comStyles().tenant_name}>{this.props.tenant_profile.first_name} {this.props.tenant_profile.last_name}</h3>
+        }
         <Icon name='content' inverted size='big' />
       </span>
     )
@@ -394,7 +400,15 @@ const comStyles = () => {
     tenant_thumbnail: {
       height: '6vh',
       width: 'auto',
-      margin: '0.5vh'
+      margin: '0.5vh',
+    },
+    tenant_name: {
+      height: '6vh',
+      width: 'auto',
+      margin: '0.5vh',
+      color: 'white',
+      lineHeight: '6vh',
+      fontWeight: 'bold',
     },
     searchContainer: {
       height: '5vh',

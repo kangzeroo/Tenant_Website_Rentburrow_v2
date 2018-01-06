@@ -353,7 +353,11 @@ export const registerFacebookLoginWithCognito = (response) => {
 					if (AWS.config.credentials.expired) {
 						localStorage.removeItem('fbToken')
 					}
-					res(AWS.config.credentials.data.IdentityId)
+					if (AWS.config.credentials.data) {
+						res(AWS.config.credentials.data.IdentityId)
+					} else {
+						res('IdentityId-NONE')
+					}
 				})
 		  } else {
 		    // console.log('There was a problem logging you in.');
