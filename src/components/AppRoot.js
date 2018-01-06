@@ -104,14 +104,14 @@ class AppRoot extends Component {
   }
 
 	componentWillMount() {
+    // check if its a mobile device
+    this.checkIfMobile()
     // create a unique identifier for the browser
     this.fingerprintBrowser()
     // automatically set language
     this.autoSetLanguage()
     // detect browser and limit to chrome
     // this.detectBrowser()
-    // check if its a mobile device
-    this.checkIfMobile()
     // begin the facebook login process
     this.initiateFacebookProcess()
     // execute processes depending on if we're on sublet or lease
@@ -148,10 +148,10 @@ class AppRoot extends Component {
   checkIfMobile() {
     // if (screen.width <= )
     if (/Mobi/.test(navigator.userAgent)) {
-			// window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
-      this.setState({
-        mobile: true,
-      })
+			window.location.href = ' https://mobile.renthero.ca'
+      // this.setState({
+      //   mobile: true,
+      // })
     }
   }
 

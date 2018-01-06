@@ -193,7 +193,8 @@ class Header extends Component {
         <div id='Header' style={comStyles().header}>
           <div style={comStyles().leftFloat}>
             <Link to='/' onClick={() => this.refreshEverything()}>
-              <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
+              {/*<img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />*/}
+              <h1 style={comStyles().font_logo}>RentHero</h1>
             </Link>
           </div>
           {
@@ -454,6 +455,11 @@ const comStyles = () => {
     helpIcon: {
       cursor: 'pointer',
     },
+    font_logo: {
+      color: 'white',
+      fontFamily: `'Carter One', cursive`,
+      margin: '0px 0px 0px 20px',
+    }
   }
 }
 
