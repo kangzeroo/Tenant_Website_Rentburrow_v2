@@ -201,53 +201,61 @@ class Login extends Component {
 	}
 
 	render() {
-		return (
-			<div id='Login' style={comStyles().container} >
-				<Form style={comStyles().emailContainer} size='small' >
-					<Form.Field>
-						<label>Email Address</label>
-						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
-					</Form.Field>
-					<Form.Field>
-						<label>Password</label>
-						<Input id='password_input' value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
-					</Form.Field>
-					{/*<div style={comStyles().registerContainer} >
-						<p> New to Rentburrow? </p>
-						<Link to='/register' > Register Here </Link>
-					</div>*/}
+		if (this.props.authenticated) {
+			return (
+				<Button primary onClick={() => this.props.history.push('/')}>
+					BEGIN EXPLORING
+				</Button>
+			)
+		} else {
+			return (
+				<div id='Login' style={comStyles().container} >
+					<Form style={comStyles().emailContainer} size='small' >
+						<Form.Field>
+							<label>Email Address</label>
+							<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
+						</Form.Field>
+						<Form.Field>
+							<label>Password</label>
+							<Input id='password_input' value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
+						</Form.Field>
+						{/*<div style={comStyles().registerContainer} >
+							<p> New to Rentburrow? </p>
+							<Link to='/register' > Register Here </Link>
+						</div>*/}
 
-					<Form.Field>
-					{
-						this.state.errorMessage
-						?
-						<strong>{ this.state.errorMessage.message }</strong>
-						:
-						null
-					}
-					{
-						this.state.submitted_staff
-						?
-						null
-						:
-						<Button color='twitter' fluid size='small' loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
-							Login
-						</Button>
-					}
-					</Form.Field>
-					<Form.Field>
-						<div style={comStyles().forgot} onClick={() => this.props.forgotPassword()}>Forgot Password</div>
-					</Form.Field>
-					<Form.Field style={comStyles().row}>
-						<div>{`Don't have an account?`}</div>
-						<div style={comStyles().signup} onClick={() => this.props.signupState()}>  Sign Up</div>
-					</Form.Field>
+						<Form.Field>
+						{
+							this.state.errorMessage
+							?
+							<strong>{ this.state.errorMessage.message }</strong>
+							:
+							null
+						}
+						{
+							this.state.submitted_staff
+							?
+							null
+							:
+							<Button color='twitter' fluid size='small' loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
+								Login
+							</Button>
+						}
+						</Form.Field>
+						<Form.Field>
+							<div style={comStyles().forgot} onClick={() => this.props.history.push('/login/forgot')}>Forgot Password</div>
+						</Form.Field>
+						<Form.Field style={comStyles().row}>
+							<div>{`Don't have an account?`}</div>
+							<div style={comStyles().signup} onClick={() => this.props.history.push('/register')}>  Sign Up</div>
+						</Form.Field>
 
-					{ this.renderVerifiedModal() }
-					{ this.renderResetModal() }
-				</Form>
-			</div>
-		)
+						{ this.renderVerifiedModal() }
+						{ this.renderResetModal() }
+					</Form>
+				</div>
+			)
+		}
 	}
 }
 
@@ -256,16 +264,18 @@ Login.propTypes = {
 	saveTenantToRedux: PropTypes.func.isRequired,
 	closeModal: PropTypes.func,					// passed in
 	facebook_only: PropTypes.bool,			// passed in
-	signupState: PropTypes.func.isRequired,	// passed in
-	forgotPassword: PropTypes.func.isRequired,		// passed in
+	// signupState: PropTypes.func.isRequired,	// passed in
+	// forgotPassword: PropTypes.func.isRequired,		// passed in
   temporary_favorite_force_signin: PropTypes.object,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
+	authenticated: PropTypes.bool,
 }
 
 // for all optional props, define a default value
 Login.defaultProps = {
   closeModal: () => {},
 	temporary_favorite_force_signin: null,
+	authenticated: false,
 }
 
 const RadiumHOC = Radium(Login)
@@ -274,6 +284,7 @@ const RadiumHOC = Radium(Login)
 const mapStateToProps = (redux) => {
 	return {
 		temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
+		authenticated: redux.auth.authenticated,
 	}
 }
 
