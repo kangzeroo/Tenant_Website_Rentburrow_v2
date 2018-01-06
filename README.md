@@ -1,4 +1,4 @@
-# Rentburrow Tenant
+# RentHero Tenant
 The public facing website for tenants. Use it to browse properties, apply for leases and view your favorites.
 <br/><br/>
 Includes the following technologies:

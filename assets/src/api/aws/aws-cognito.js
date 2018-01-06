@@ -357,7 +357,7 @@ export function unauthRoleLandlordLogin(){
 			// console.log(AWS.config.credentials)
 			res({
 				id: AWS.config.credentials.identityId,
-				name: 'Student on RentBurrow',
+				name: 'Student on RentHero',
 				picurl: 'https://image.flaticon.com/icons/png/128/149/149071.png'
 			})
 		});
