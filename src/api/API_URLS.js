@@ -54,22 +54,21 @@ export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD 
 //
 
 // STAGING
-// export const MESSAGING_MICROSERVICE = 'https://34.227.117.38:3001'
-// export const FB_APP_ID = '115765432474914'
-//
-// export const SEARCH_MICROSERVICE = 'https://34.227.117.38:3002'
-// export const CORP_MICROSERVICE = 'https://34.227.117.38:3001'
-// export const REGISTER_MICROSERVICE = 'https://34.227.117.38:3002'
-// export const GENERIC_MICROSERVICE = 'https://34.227.117.38:3001'
-// export const FB_PARSER_MICROSERVICE = 'https://34.227.117.38:3002'
-// export const INTEL_MICROSERVICE = 'https://34.227.117.38:3004'
-// export const SUBLETTING_MICROSERVICE = 'https://34.227.117.38:3005'
-// export const CONTRACTING_MICROSERVICE = 'https://34.227.117.38:3005'
-// export const ANALYTICS_MICROSERVICE = 'https://34.227.117.38:3007'
-// export const SMS_MICROSERVICE = 'https://34.227.117.38:3006'
-// export const FIREBASE_VERSION = 'development'
-// export const AWS_FEDERATED_IDENTITY_ENV = 'production'
+export const MESSAGING_MICROSERVICE = 'https://renthero.host:3001'
+export const FB_APP_ID = '115765432474914'
 
+export const SEARCH_MICROSERVICE = 'https://renthero.host:3002'
+export const CORP_MICROSERVICE = 'https://renthero.host:3001'
+export const REGISTER_MICROSERVICE = 'https://renthero.host:3002'
+export const GENERIC_MICROSERVICE = 'https://renthero.host:3001'
+export const FB_PARSER_MICROSERVICE = 'https://renthero.host:3002'
+export const INTEL_MICROSERVICE = 'https://renthero.host:3004'
+export const SUBLETTING_MICROSERVICE = 'https://renthero.host:3005'
+export const CONTRACTING_MICROSERVICE = 'https://renthero.host:3005'
+export const ANALYTICS_MICROSERVICE = 'https://renthero.host:3007'
+export const SMS_MICROSERVICE = 'https://renthero.host:3006'
+export const FIREBASE_VERSION = 'development'
+export const AWS_FEDERATED_IDENTITY_ENV = 'production'
 
 
 // Prod
