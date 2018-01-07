@@ -93,14 +93,14 @@ class MessageLandlordForm extends Component {
 
   componentWillMount() {
     if (!this.props.tenant_profile.phone || this.props.tenant_profile.phone.length === 0) {
-      console.log('no phone')
+      // console.log('no phone')
       this.setState({
         phoneRequired: true,
       })
     }
 
     if (!this.props.tenant_profile.email || this.props.tenant_profile.email.length === 0) {
-      console.log('no email')
+      // console.log('no email')
       this.setState({
         emailRequired: true,
       })
