@@ -161,7 +161,7 @@ class Header extends Component {
             style={comStyles().tenant_thumbnail}
           />
           :
-          <h3 style={comStyles().tenant_name}>{this.props.tenant_profile.first_name} {this.props.tenant_profile.last_name}</h3>
+          <h3 style={comStyles().tenant_name}>{this.props.tenant_profile.first_name}</h3>
         }
         <Icon name='content' inverted size='big' />
       </span>
@@ -183,6 +183,7 @@ class Header extends Component {
         options={options}
         pointing='top right'
         icon={null}
+        floating
         onChange={(e, value) => this.handleTenantChange(e, value)}
       />
     )
@@ -443,8 +444,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      minWidth: '250px',
-      maxWidth: '250px',
+      minWidth: '300px',
+      maxWidth: '300px',
       alignItems: 'center',
     },
     close_login: {
