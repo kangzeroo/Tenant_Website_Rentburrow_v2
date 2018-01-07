@@ -27,7 +27,7 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment'
 import { validateEmail, } from '../../../api/general/general_api'
 import { insertTenantInquiry } from '../../../api/inquiries/inquiry_api'
-import { updateEntireTenantProfile, } from '../../../api/auth/tenant_api'
+import { updateEntireTenantProfile, updateTenantPhone, updateTenantEmail, } from '../../../api/auth/tenant_api'
 import { sendInitialMessage, } from '../../../api/sms/sms_api'
 
 class MessageLandlordForm extends Component {
@@ -35,19 +35,27 @@ class MessageLandlordForm extends Component {
   constructor() {
     super()
     this.state = {
-      tenant_profile: {
-        first_name: '',
-        last_name: '',
-        legal_name: '',
-        gender: '',
-        email: '',
-        phone: '',
-        date_of_birth: '',
-        school: '',
-        program: '',
-        current_semester: '',
-        group_size: 1,
-      },
+      // tenant_profile: {
+      //   first_name: '',
+      //   last_name: '',
+      //   legal_name: '',
+      //   gender: '',
+      //   email: '',
+      //   phone: '',
+      //   date_of_birth: '',
+      //   school: '',
+      //   program: '',
+      //   current_semester: '',
+      //   group_size: 1,
+      // },
+
+      phoneRequired: false,
+      emailRequired: false,
+
+      phone: '',
+      email: '',
+
+      group_size: 1,
       group_notes: '',
       acknowledge: false,
 
@@ -84,82 +92,124 @@ class MessageLandlordForm extends Component {
   }
 
   componentWillMount() {
+    console.log(this.props.tenant_profile)
+    if (!this.props.tenant_profile.phone || this.props.tenant_profile.phone.length === 0) {
+      console.log('no phone')
+      this.setState({
+        phoneRequired: true,
+      })
+    }
+
+    if (!this.props.tenant_profile.email || this.props.tenant_profile.email.length === 0) {
+      console.log('no email')
+      this.setState({
+        emailRequired: true,
+      })
+    }
+    // this.setState({
+    //   tenant_profile: {
+    //     first_name: this.props.tenant_profile.first_name ? this.props.tenant_profile.first_name : '',
+    //     last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
+    //     legal_name: this.props.tenant_profile.legal_name ? this.props.tenant_profile.legal_name : '',
+    //     gender: this.props.tenant_profile.gender ? this.props.tenant_profile.gender : '',
+    //     email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
+    //     phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
+    //     date_of_birth: this.props.tenant_profile.date_of_birth ? this.props.tenant_profile.date_of_birth : moment().format('L'),
+    //     school: this.props.tenant_profile.school ? this.props.tenant_profile.school : '',
+    //     program: this.props.tenant_profile.program ? this.props.tenant_profile.program : '',
+    //     current_semester: this.props.tenant_profile.current_semester ? this.props.tenant_profile.current_semester : '',
+    //   }
+    // })
+  }
+
+  updateAttr(e, attr) {
     this.setState({
-      tenant_profile: {
-        first_name: this.props.tenant_profile.first_name ? this.props.tenant_profile.first_name : '',
-        last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
-        legal_name: this.props.tenant_profile.legal_name ? this.props.tenant_profile.legal_name : '',
-        gender: this.props.tenant_profile.gender ? this.props.tenant_profile.gender : '',
-        email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
-        phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
-        date_of_birth: this.props.tenant_profile.date_of_birth ? this.props.tenant_profile.date_of_birth : moment().format('L'),
-        school: this.props.tenant_profile.school ? this.props.tenant_profile.school : '',
-        program: this.props.tenant_profile.program ? this.props.tenant_profile.program : '',
-        current_semester: this.props.tenant_profile.current_semester ? this.props.tenant_profile.current_semester : '',
-      }
+      [attr]: e.target.value
     })
   }
 
-  updateTenantState(e, attr) {
+  updateGroupSize(e, data, attr) {
     this.setState({
-      tenant_profile: {
-        ...this.state.tenant_profile,
-        [attr]: e.target.value,
-      }
+      [attr]: data.value,
     })
   }
 
-  updateApplicationType(e, data, attr) {
-    this.setState({
-      tenant_profile: {
-        ...this.state.tenant_profile,
-        [attr]: data.value,
-      }
-    })
-  }
-
-  updateDateType(e, data, attr) {
-    this.setState({
-      tenant_profile: {
-        ...this.state.tenant_profile,
-        [attr]: moment(data).format('L'),
-      }
-    }, () => console.log(this.state.tenant_profile.date_of_birth))
-  }
+  // updateTenantState(e, attr) {
+  //   this.setState({
+  //     tenant_profile: {
+  //       ...this.state.tenant_profile,
+  //       [attr]: e.target.value,
+  //     }
+  //   })
+  // }
+  //
+  // updateApplicationType(e, data, attr) {
+  //   this.setState({
+  //     tenant_profile: {
+  //       ...this.state.tenant_profile,
+  //       [attr]: data.value,
+  //     }
+  //   })
+  // }
+  //
+  // updateDateType(e, data, attr) {
+  //   this.setState({
+  //     tenant_profile: {
+  //       ...this.state.tenant_profile,
+  //       [attr]: moment(data).format('L'),
+  //     }
+  //   })
+  // }
 
   validateForm() {
     let ok_to_proceed = true
     const error_messages = []
-    if (this.state.tenant_profile.first_name.length === 0 || this.state.tenant_profile.last_name.length === 0) {
-      error_messages.push('Your name fields are incomplete')
-      ok_to_proceed = false
-    }
-    if (this.state.tenant_profile.gender.length === 0) {
-      error_messages.push('Please select a gender')
-      ok_to_proceed = false
-    }
-    if (this.state.tenant_profile.program.length === 0 || this.state.tenant_profile.current_semester.length === 0 || this.state.tenant_profile.school.length === 0) {
-      error_messages.push('Please enter your school, program, and term')
-      ok_to_proceed = false
-    }
-    if (!this.state.tenant_profile.group_size) {
+    // if (this.state.tenant_profile.first_name.length === 0 || this.state.tenant_profile.last_name.length === 0) {
+    //   error_messages.push('Your name fields are incomplete')
+    //   ok_to_proceed = false
+    // }
+    // if (this.state.tenant_profile.gender.length === 0) {
+    //   error_messages.push('Please select a gender')
+    //   ok_to_proceed = false
+    // }
+    // if (this.state.tenant_profile.program.length === 0 || this.state.tenant_profile.current_semester.length === 0 || this.state.tenant_profile.school.length === 0) {
+    //   error_messages.push('Please enter your school, program, and term')
+    //   ok_to_proceed = false
+    // }
+    if (!this.state.group_size) {
       error_messages.push('You must specify a group size')
       ok_to_proceed = false
     }
-    if (!validateEmail(this.state.tenant_profile.email)) {
-      error_messages.push('The email address entered is not valid')
-      ok_to_proceed = false
-    }
-    if (this.state.tenant_profile.email.length === 0 || this.state.tenant_profile.phone.length === 0) {
-      error_messages.push('You must enter your email and phone number')
-      ok_to_proceed = false
-    }
+    // if (!validateEmail(this.state.tenant_profile.email)) {
+    //   error_messages.push('The email address entered is not valid')
+    //   ok_to_proceed = false
+    // }
+    // if (this.state.tenant_profile.email.length === 0 || this.state.tenant_profile.phone.length === 0) {
+    //   error_messages.push('You must enter your email and phone number')
+    //   ok_to_proceed = false
+    // }
     if (this.state.group_notes.length === 0) {
       error_messages.push('Please enter a Message')
       ok_to_proceed = false
     }
-    if (!this.state.acknowledge) {
-      error_messages.push('Please acknowledge your information')
+    // if (!this.state.acknowledge) {
+    //   error_messages.push('Please acknowledge your information')
+    //   ok_to_proceed = false
+    // }
+    if (this.state.phoneRequired && this.state.phone.length === 0) {
+      error_messages.push('You must enter your phone number')
+      ok_to_proceed = false
+    }
+    if (this.state.emailRequired && this.state.email.length === 0) {
+      error_messages.push('You must enter your email address')
+      ok_to_proceed = false
+    }
+    if (this.state.emailRequired && !validateEmail(this.state.email)) {
+      error_messages.push('The email address entered is not valid')
+      ok_to_proceed = false
+    }
+    if ((this.state.emailRequired || this.state.phoneRequired) && !this.state.acknowledge) {
+      error_messages.push('Please check the checkbox')
       ok_to_proceed = false
     }
     this.setState({
@@ -170,43 +220,52 @@ class MessageLandlordForm extends Component {
   }
 
   sendMessageToBothParties() {
-    if (this.validateForm(this.state.tenant_profile)) {
+    if (this.validateForm()) {
       this.setState({ saving: true, })
-      const tenantObj = {
-        tenant_id: this.props.tenant_profile.tenant_id,
-        first_name: this.state.tenant_profile.first_name,
-        last_name: this.state.tenant_profile.last_name,
-        legal_name: this.state.tenant_profile.legal_name,
-        gender: this.state.tenant_profile.gender,
-        email: this.state.tenant_profile.email,
-        phone: this.state.tenant_profile.phone,
-        date_of_birth: moment(this.state.tenant_profile.date_of_birth).format('L'),
-        school: this.state.tenant_profile.school,
-        program: this.state.tenant_profile.program,
-        year: this.state.tenant_profile.current_semester,
-      }
-      updateEntireTenantProfile(tenantObj)
-      .then((data) => {
-        return insertTenantInquiry({
+      // const tenantObj = {
+      //   tenant_id: this.props.tenant_profile.tenant_id,
+      //   first_name: this.state.tenant_profile.first_name,
+      //   last_name: this.state.tenant_profile.last_name,
+      //   legal_name: this.state.tenant_profile.legal_name,
+      //   gender: this.state.tenant_profile.gender,
+      //   email: this.state.tenant_profile.email,
+      //   phone: this.state.tenant_profile.phone,
+      //   date_of_birth: moment(this.state.tenant_profile.date_of_birth).format('L'),
+      //   school: this.state.tenant_profile.school,
+      //   program: this.state.tenant_profile.program,
+      //   year: this.state.tenant_profile.current_semester,
+      // }
+      if (this.state.phoneRequired) {
+        updateTenantPhone({
           tenant_id: this.props.tenant_profile.tenant_id,
-          group_id: null,
-          building_id: this.props.building.building_id,
-          group_notes: this.state.group_notes,
-          group_size: this.state.tenant_profile.group_size,
+          phone: this.state.phone,
         })
+      }
+      if (this.state.emailRequired) {
+        updateTenantEmail({
+          tenant_id: this.props.tenant_profile.tenant_id,
+          email: this.state.email,
+        })
+      }
+
+      insertTenantInquiry({
+        tenant_id: this.props.tenant_profile.tenant_id,
+        group_id: null,
+        building_id: this.props.building.building_id,
+        group_notes: this.state.group_notes,
+        group_size: this.state.group_size,
       })
       .then((data) => {
         return sendInitialMessage({
-          id: data.inquiry_id,
           tenant_id: this.props.tenant_profile.tenant_id,
-          first_name: this.state.tenant_profile.first_name,
-          last_name: this.state.tenant_profile.last_name,
-          gender: this.state.tenant_profile.gender,
-          school: this.state.tenant_profile.school,
-          program_and_term: [this.state.tenant_profile.program, this.state.tenant_profile.current_semester].join(', '),
-          email: this.state.tenant_profile.email,
-          phone: this.state.tenant_profile.phone,
-          group_size: this.state.tenant_profile.group_size,
+          first_name: this.props.tenant_profile.first_name,
+          last_name: this.props.tenant_profile.last_name,
+          // gender: this.state.tenant_profile.gender,
+          // school: this.state.tenant_profile.school,
+          // program_and_term: [this.state.tenant_profile.program, this.state.tenant_profile.current_semester].join(', '),
+          email: this.state.emailRequired ? this.state.email : this.props.tenant_profile.email,
+          phone: this.state.phoneRequired ? this.state.phone : this.props.tenant_profile.phone,
+          group_size: this.state.group_size,
           building_id: this.props.building.building_id,
           building_address: this.props.building.building_address,
           building_alias: this.props.building.building_alias,
@@ -231,112 +290,50 @@ class MessageLandlordForm extends Component {
 	render() {
 		return (
 			<div id='MessageLandlordForm' style={comStyles().container}>
-				<Header as='h2' icon='phone' content='Message Landlord' subheader='Please confirm your information before a chat thread is opened between you and the landlord' />
+				<Header as='h2' icon='phone' content='Message Landlord' subheader='A chat thread will be opened between you and the landlord' />
+        <br />
         <Form>
           <Form.Group widths='equal'>
-            <Form.Field>
-              <label>First Name</label>
-              <Input
-                value={this.state.tenant_profile.first_name}
-                onChange={e => this.updateTenantState(e, 'first_name')}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Last Name</label>
-              <Input
-                value={this.state.tenant_profile.last_name}
-                onChange={e => this.updateTenantState(e, 'last_name')}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Full Legal Name</label>
-              <Input
-                value={this.state.tenant_profile.legal_name}
-                onChange={e => this.updateTenantState(e, 'legal_name')}
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group widths='equal'>
-            <Form.Field>
-              <label>Phone Number</label>
-              <Input
-                value={this.state.tenant_profile.phone}
-                onChange={e => this.updateTenantState(e, 'phone')}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Email Address</label>
-              <Input
-                value={this.state.tenant_profile.email}
-                onChange={e => this.updateTenantState(e, 'email')}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Date of Birth</label>
-              <LocaleProvider locale={enUS}>
-                <DatePicker
-                  value={moment(this.state.tenant_profile.date_of_birth, 'MM/DD/YYYY')}
-                  format={'MM/DD/YYYY'}
-                  onChange={(date, dateString) => this.updateDateType(date, dateString, 'date_of_birth')}
-                  size='large'
-                  placeholder='Select your birthday'
-                  allowClear
-                  autoFocus
+            {
+              this.state.phoneRequired
+              ?
+              <Form.Field>
+                <label>Phone Number</label>
+                <Input
+                  value={this.state.phone}
+                  onChange={e => this.updateAttr(e, 'phone')}
                 />
-              </LocaleProvider>
-            </Form.Field>
+              </Form.Field>
+              :
+              null
+            }
+            {
+              this.state.emailRequired
+              ?
+              <Form.Field>
+                <label>Email Address</label>
+                <Input
+                  value={this.state.email}
+                  onChange={e => this.updateAttr(e, 'email')}
+                />
+              </Form.Field>
+              :
+              null
+            }
           </Form.Group>
-          <Form.Group widths='equal'>
-            <Form.Field>
-              <label>School</label>
-              <Dropdown
-                id='school'
-                placeholder='School'
-                value={this.state.tenant_profile.school}
-                selection
-                options={this.school_options}
-                onChange={(e, d) => { this.updateApplicationType(e, d, 'school') }}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Program</label>
-              <Input
-                value={this.state.tenant_profile.program}
-                onChange={e => this.updateTenantState(e, 'program')}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Current Semester</label>
-              <Input
-                value={this.state.tenant_profile.current_semester}
-                onChange={e => this.updateTenantState(e, 'current_semester')}
-              />
-            </Form.Field>
-          </Form.Group>
-          <Form.Group widths='equal'>
-            <Form.Field>
-              <label>My Gender</label>
-              <Dropdown
-                id='Group Size'
-                placeholder='Select your Gender'
-                value={this.state.tenant_profile.gender}
-                selection
-                options={this.gender_options}
-                onChange={(e, d) => { this.updateApplicationType(e, d, 'gender') }}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Group Size</label>
-              <Dropdown
-                id='Group Size'
-                placeholder='Select your Group Size'
-                value={this.state.tenant_profile.group_size}
-                selection
-                options={this.group_size_options}
-                onChange={(e, d) => { this.updateApplicationType(e, d, 'group_size') }}
-              />
-            </Form.Field>
-          </Form.Group>
+
+
+          <Form.Field>
+            <label>Group Size</label>
+            <Dropdown
+              id='Group Size'
+              placeholder='Select your Group Size'
+              value={this.state.group_size}
+              selection
+              options={this.group_size_options}
+              onChange={(e, d) => { this.updateGroupSize(e, d, 'group_size') }}
+            />
+          </Form.Field>
           <Form.Field>
             <label>Message</label>
             <TextArea
@@ -347,13 +344,21 @@ class MessageLandlordForm extends Component {
               style={comStyles().textArea}
             />
           </Form.Field>
-          <Form.Field style={{ display: 'flex', flexDirection: 'row' }}>
-            <Checkbox
-              checked={this.state.acknowledge}
-              onChange={() => this.setState({ acknowledge: !this.state.acknowledge })}
-            />
-            <label style={{ marginLeft: '10px'}} >I acknowledge that my information is accurate, send my message to the landlord</label>
-          </Form.Field>
+
+          {
+            this.state.emailRequired || this.state.phoneRequired
+            ?
+            <Form.Field style={{ display: 'flex', flexDirection: 'row' }}>
+              <Checkbox
+                checked={this.state.acknowledge}
+                onChange={() => this.setState({ acknowledge: !this.state.acknowledge })}
+              />
+              <label style={{ marginLeft: '10px'}} >I acknowledge that my information is accurate, send my message to the landlord</label>
+            </Form.Field>
+            :
+            null
+          }
+
           <Form.Field>
             {
               this.state.error_messages.map((err, index) => {

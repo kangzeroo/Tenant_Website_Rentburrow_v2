@@ -32,6 +32,35 @@ export const updateTenantProfile = (profile) => {
   return p
 }
 
+export const updateTenantPhone = ({ tenant_id, phone, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_tenant_phone`, { tenant_id, phone, }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const updateTenantEmail = ({ tenant_id, email, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_tenant_email`, { tenant_id, email, }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
+
+
 export const getTenantProfile = ({ tenant_id, }) => {
   const p = new Promise((res, rej) => {
     axios.post(`${SUBLETTING_MICROSERVICE}/get_tenant_profile`, { tenant_id, }, authHeaders())
