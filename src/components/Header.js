@@ -195,7 +195,7 @@ class Header extends Component {
           <div style={comStyles().leftFloat}>
             <Link to='/' onClick={() => this.refreshEverything()}>
               {/*<img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />*/}
-              <h1 style={comStyles().font_logo}>RentHero</h1>
+              <h1 style={comStyles().font_logo}>Rent Hero</h1>
             </Link>
           </div>
           {
