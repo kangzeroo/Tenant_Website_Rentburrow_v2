@@ -148,7 +148,7 @@ class AppRoot extends Component {
   checkIfMobile() {
     // if (screen.width <= )
     if (/Mobi/.test(navigator.userAgent)) {
-			window.location.href = ' https://mobile.renthero.ca'
+			window.location.href = ' https://m.renthero.ca'
       // this.setState({
       //   mobile: true,
       // })
