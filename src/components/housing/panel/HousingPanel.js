@@ -52,6 +52,16 @@ class HousingPanel extends Component {
 		this.scrollStream = null
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (this.props.building_search_results !== nextProps.building_search_results) {
+			this.setState({
+				page_start: 0,
+				page_ned: 10,
+				page_number: 1,
+			})
+		}
+	}
+
 	generateCard(building) {
 		if (this.props.card_style === 'row') {
 			return (

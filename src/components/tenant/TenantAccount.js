@@ -176,6 +176,7 @@ class TenantAccount extends Component {
                 <Form.Input
                   label='Phone Number'
                   placeholder='Phone Number'
+                  disabled={this.props.tenant_profile.phone && this.props.tenant_profile.phone.length > 0}
                   value={this.state.phone}
                   onChange={(e) => this.updateAttr(e, 'phone')}
                 />
