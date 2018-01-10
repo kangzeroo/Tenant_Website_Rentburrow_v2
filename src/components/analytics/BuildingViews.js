@@ -61,7 +61,7 @@ class BuildingViews extends Component {
             <Icon color='blue' name='eye' /> &nbsp;
             {this.state.unique_visitors}
           </Statistic.Value>
-          <Statistic.Label>People Looking</Statistic.Label>
+          <Statistic.Label>People Interested</Statistic.Label>
         </Statistic>
 			</Card>
 		)
