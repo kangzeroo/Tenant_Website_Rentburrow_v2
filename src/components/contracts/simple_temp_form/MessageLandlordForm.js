@@ -314,7 +314,13 @@ class MessageLandlordForm extends Component {
 	render() {
 		return (
 			<div id='MessageLandlordForm' style={comStyles().container}>
-				<Header as='h2' icon='phone' content='Message Landlord' subheader='A chat thread will be opened between you and the landlord' />
+        {
+          this.props.header === 'Apply Now'
+          ?
+          <Header as='h2' icon='suitcase' content='Apply Now' subheader='Send an Inquiry and chat with the landlord' />
+          :
+          <Header as='h2' icon='phone' content='Message Landlord' subheader='A chat thread will be opened between you and the landlord' />
+        }
         <br />
         <Form>
           <Form.Group widths='equal'>
@@ -432,6 +438,7 @@ MessageLandlordForm.propTypes = {
   building: PropTypes.object.isRequired,    // passed in
 	closeModal: PropTypes.func.isRequired,		// passed in
   landlord: PropTypes.object.isRequired,    // passed in
+  header: PropTypes.string.isRequired,      // passed in
 }
 
 // for all optional props, define a default value
