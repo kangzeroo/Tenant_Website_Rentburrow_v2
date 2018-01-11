@@ -19,6 +19,9 @@ import {
 } from 'react-router-dom'
 import {
   Modal,
+  Segment,
+  Dimmer,
+  Loader,
 } from 'semantic-ui-react'
 import locale from 'browser-locale'
 import { Helmet } from 'react-helmet'
@@ -99,31 +102,37 @@ class AppRoot extends Component {
       modal_name: '',              // name of the modal
       context: {},
 
-      mobile: false,
+      mobile: true,
     }
   }
 
 	componentWillMount() {
     // check if its a mobile device
-    this.checkIfMobile()
-    // create a unique identifier for the browser
-    this.fingerprintBrowser()
-    // automatically set language
-    this.autoSetLanguage()
-    // detect browser and limit to chrome
-    // this.detectBrowser()
-    // begin the facebook login process
-    this.initiateFacebookProcess()
-    // execute processes depending on if we're on sublet or lease
-    this.executeOnSubletOrLease()
-    // execute on url name
-    this.executeOnURL()
-    // being Intel collection
-    this.beginCollectingIntel()
-    // set the zoom level so that CSS displays well
-    this.setZoomLevel()
-    // execute initial Toast messages
-    this.launchToasts()
+    if (/Mobi/.test(navigator.userAgent)) {
+      window.location.href = 'https://m.renthero.ca'
+    } else {
+      this.setState({
+        mobile: false,
+      })
+      // create a unique identifier for the browser
+      this.fingerprintBrowser()
+      // automatically set language
+      this.autoSetLanguage()
+      // detect browser and limit to chrome
+      // this.detectBrowser()
+      // begin the facebook login process
+      this.initiateFacebookProcess()
+      // execute processes depending on if we're on sublet or lease
+      this.executeOnSubletOrLease()
+      // execute on url name
+      this.executeOnURL()
+      // being Intel collection
+      this.beginCollectingIntel()
+      // set the zoom level so that CSS displays well
+      this.setZoomLevel()
+      // execute initial Toast messages
+      this.launchToasts()
+    }
   }
 
   fingerprintBrowser() {
@@ -146,13 +155,15 @@ class AppRoot extends Component {
   }
 
   checkIfMobile() {
-    // if (screen.width <= )
-    if (/Mobi/.test(navigator.userAgent)) {
-			window.location.href = ' https://m.renthero.ca'
-      // this.setState({
-      //   mobile: true,
-      // })
-    }
+    const p = new Promise((res, rej) => {
+      if (/Mobi/.test(navigator.userAgent)) {
+  			window.location.href = 'https://m.renthero.ca'
+        rej()
+      } else {
+        res()
+      }
+    })
+    return p
   }
 
   autoSetLanguage() {
@@ -469,7 +480,11 @@ class AppRoot extends Component {
         {
           this.state.mobile
           ?
-          this.renderMobileSite()
+          <Segment style={comStyles().loadingContainer}>
+            <Dimmer active inverted>
+              <Loader size='massive' inverted>Loading</Loader>
+            </Dimmer>
+          </Segment>
           :
           this.renderMainSite()
         }
@@ -582,6 +597,23 @@ const comStyles = () => {
     },
     chat: {
 
+    },
+    loadingContainer: {
+      fontFamily: 'Helvetica Neue',
+      backgroundColor: 'white',
+      minHeight: '100vh',
+      maxHeight: '100vh',
+      minWidth: '100vw',
+      maxWidth: '100vw',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    font_logo: {
+      fontSize: '5em',
+      color: 'rgba(81, 151, 214, 1)',
+      fontWeight: 'bold',
+      fontFamily: `'Carter One', cursive`,
     }
 	}
 }

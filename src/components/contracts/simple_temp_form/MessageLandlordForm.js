@@ -28,7 +28,8 @@ import moment from 'moment'
 import { validateEmail, } from '../../../api/general/general_api'
 import { insertTenantInquiry } from '../../../api/inquiries/inquiry_api'
 import { updateEntireTenantProfile, updateTenantPhone, updateTenantEmail, } from '../../../api/auth/tenant_api'
-import { sendInitialMessage, } from '../../../api/sms/sms_api'
+import { sendInitialMessage, sendTenantWaitMsg, } from '../../../api/sms/sms_api'
+import { getLandlordInfo, } from '../../../api/search/search_api'
 
 class MessageLandlordForm extends Component {
 
@@ -219,6 +220,7 @@ class MessageLandlordForm extends Component {
   }
 
   sendMessageToBothParties() {
+    let inquiry_id
     if (this.validateForm()) {
       this.setState({ saving: true, })
       // const tenantObj = {
@@ -255,21 +257,44 @@ class MessageLandlordForm extends Component {
         group_size: this.state.group_size,
       })
       .then((data) => {
-        return sendInitialMessage({
-          tenant_id: this.props.tenant_profile.tenant_id,
-          first_name: this.props.tenant_profile.first_name,
-          last_name: this.props.tenant_profile.last_name,
-          // gender: this.state.tenant_profile.gender,
-          // school: this.state.tenant_profile.school,
-          // program_and_term: [this.state.tenant_profile.program, this.state.tenant_profile.current_semester].join(', '),
-          email: this.state.emailRequired ? this.state.email : this.props.tenant_profile.email,
-          phone: this.state.phoneRequired ? this.state.phone : this.props.tenant_profile.phone,
-          group_size: this.state.group_size,
-          building_id: this.props.building.building_id,
-          building_address: this.props.building.building_address,
-          building_alias: this.props.building.building_alias,
-          group_notes: this.state.group_notes,
-        })
+        inquiry_id = data.inquiry_id
+        return getLandlordInfo(this.props.building.building_id)
+      })
+      .then((data) => {
+        if (data.corporate_landlord) {
+          // send email to landlord to select time slot,
+          // send email + sms to tenant, an agent will contact him/her shortly
+          return sendTenantWaitMsg({
+            tenant: {
+              tenant_id: this.props.tenant_profile.tenant_id,
+              first_name: this.props.tenant_profile.first_name,
+              last_name: this.props.tenant_profile.last_name,
+              phone: this.props.tenant_profile.phone,
+            },
+            building: {
+              building_id: this.props.building.building_id,
+              building_alias: this.props.building.building_alias,
+              building_address: this.props.building.building_address,
+            },
+            group_notes: this.state.group_notes,
+            group_size: this.state.group_size,
+            corporation_email: data.email,
+            inquiry_id: inquiry_id,
+          })
+        } else {
+          return sendInitialMessage({
+            tenant_id: this.props.tenant_profile.tenant_id,
+            first_name: this.props.tenant_profile.first_name,
+            last_name: this.props.tenant_profile.last_name,
+            email: this.state.emailRequired ? this.state.email : this.props.tenant_profile.email,
+            phone: this.state.phoneRequired ? this.state.phone : this.props.tenant_profile.phone,
+            group_size: this.state.group_size,
+            building_id: this.props.building.building_id,
+            building_address: this.props.building.building_address,
+            building_alias: this.props.building.building_alias,
+            group_notes: this.state.group_notes,
+          })
+        }
       })
       .then((data) => {
         this.setState({

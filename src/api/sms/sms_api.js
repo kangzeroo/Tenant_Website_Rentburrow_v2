@@ -57,3 +57,18 @@ export const sendInitialMessage = (obj) => {
   })
   return p
 }
+
+export const sendTenantWaitMsg = ({ tenant, building, group_notes, group_size, corporation_email, inquiry_id, }) => {
+  console.log('ye')
+  const p = new Promise((res, rej) => {
+    axios.post(`${SMS_MICROSERVICE}/send_tenant_wait_msg`, { tenant, building, group_notes, group_size, corporation_email, inquiry_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
