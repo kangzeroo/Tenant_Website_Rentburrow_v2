@@ -53,7 +53,8 @@ class ApplyBox extends Component {
   signAndPayOnline() {
     // localStorage.removeItem('leasing_group_id')
     // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
-    this.props.toggleTemporaryCollectionFrom()
+    // this.props.toggleTemporaryCollectionFrom()
+    this.props.togglePhoneCallForm('Apply Now')
     this.props.collectIntel({
       'TableName': BUILDING_INTERACTIONS,
       'Item': {
@@ -68,7 +69,7 @@ class ApplyBox extends Component {
   }
 
   callPhoneForm() {
-    this.props.togglePhoneCallForm()
+    this.props.togglePhoneCallForm('Message Landlord')
     this.props.collectIntel({
       'TableName': BUILDING_INTERACTIONS,
       'Item': {
@@ -230,7 +231,7 @@ class ApplyBox extends Component {
             <Button
               primary
               fluid
-              icon={this.generateText(this.props.building.label) === 'Apply Now' ? 'lightning' : 'wait'}
+              icon={this.generateText(this.props.building.label) === 'Apply Now' ? 'suitcase' : 'wait'}
               content={this.generateText(this.props.building.label)}
               onClick={() => this.signAndPayOnline()}
               size='huge'
