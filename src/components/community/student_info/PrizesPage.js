@@ -130,7 +130,7 @@ class PrizesPage extends Component {
         <Header
           icon='gift'
           as='h1'
-          content='Apply Online With Rentburrow.com'
+          content='Apply Online With Renthero.ca'
           subheader='And get a free housewarming gift'
         />
         <div style={comStyles().gift_explanation}>
