@@ -109,7 +109,7 @@ class AppRoot extends Component {
 	componentWillMount() {
     // check if its a mobile device
     if (/Mobi/.test(navigator.userAgent)) {
-      window.location.href = 'https://m.renthero.ca'
+      window.location.href = `https://m.renthero.ca${this.props.location.pathname}`
     } else {
       this.setState({
         mobile: false,
