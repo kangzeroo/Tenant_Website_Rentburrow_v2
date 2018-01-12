@@ -59,7 +59,6 @@ export const sendInitialMessage = (obj) => {
 }
 
 export const sendTenantWaitMsg = ({ tenant, building, group_notes, group_size, corporation_email, inquiry_id, }) => {
-  console.log('ye')
   const p = new Promise((res, rej) => {
     axios.post(`${SMS_MICROSERVICE}/send_tenant_wait_msg`, { tenant, building, group_notes, group_size, corporation_email, inquiry_id, })
       .then((data) => {
