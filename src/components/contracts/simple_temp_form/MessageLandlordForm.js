@@ -264,24 +264,6 @@ class MessageLandlordForm extends Component {
         if (data.corporate_landlord) {
           // send email to landlord to select time slot,
           // send email + sms to tenant, an agent will contact him/her shortly
-          console.log('corporate landlord')
-          console.log({
-            tenant: {
-              tenant_id: this.props.tenant_profile.tenant_id,
-              first_name: this.props.tenant_profile.first_name,
-              last_name: this.props.tenant_profile.last_name,
-              phone: this.props.tenant_profile.phone,
-            },
-            building: {
-              building_id: this.props.building.building_id,
-              building_alias: this.props.building.building_alias,
-              building_address: this.props.building.building_address,
-            },
-            group_notes: this.state.group_notes,
-            group_size: this.state.group_size,
-            corporation_email: data.email,
-            inquiry_id: inquiry_id,
-          })
           return sendTenantWaitMsg({
             tenant: {
               tenant_id: this.props.tenant_profile.tenant_id,
