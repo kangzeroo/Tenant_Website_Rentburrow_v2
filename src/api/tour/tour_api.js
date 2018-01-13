@@ -15,6 +15,10 @@ export const insertTour = ({ inquiry_id, date_1, time_1_begin, time_1_end, date_
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -29,6 +33,10 @@ export const insertTourDetails = ({ tour_id, date, time_begin, time_end, notes, 
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -43,6 +51,10 @@ export const insertRideForTour = ({ tour_id, pickup_address, }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -57,6 +69,10 @@ export const getTourById = (tour_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -71,6 +87,10 @@ export const getTourDetailsById = (tour_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -86,6 +106,10 @@ export const sendTourEmailToLandlord = (tourObj, building) => {
 		AWS.config.credentials.refresh(() => {
 			ses.sendEmail(params, (err, data) => {
 			  if (err) {
+          _LTracker.push({
+            'error': err,
+            'tag' : `${localStorage.getItem('tenant_id')}`
+          })
 			  	 rej(err)
 			  } else {
 				res('Success! Email sent')
@@ -105,6 +129,10 @@ export const sendTourConfirmationEmailToTenant = (tourObj, mailObj, building) =>
 		AWS.config.credentials.refresh(() => {
 			ses.sendEmail(params, (err, data) => {
 			  if (err) {
+          _LTracker.push({
+            'error': err,
+            'tag' : `${localStorage.getItem('tenant_id')}`
+          })
 			  	 rej(err)
 			  } else {
 				res('Success! Email sent')

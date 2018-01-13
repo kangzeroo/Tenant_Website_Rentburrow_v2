@@ -29,6 +29,10 @@ export function submitActivities(trackedActivities, geoCoords){
         res()
       })
       .catch((err)=>{
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         // console.log(err)
         rej()
       })

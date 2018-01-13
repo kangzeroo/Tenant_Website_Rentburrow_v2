@@ -303,6 +303,10 @@ class MessageLandlordForm extends Component {
         })
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         this.setState({
           error_messages: ['An error as occurred, please Send us a Message'],
           saving: false,

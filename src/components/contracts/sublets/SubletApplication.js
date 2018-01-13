@@ -169,6 +169,10 @@ class SubletApplication extends Component {
 				})
 			})
 			.catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				this.setState({
 					current_form: 'invalid_subletor'
 				})
@@ -200,6 +204,10 @@ class SubletApplication extends Component {
 				})
 			})
 			.catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				// console.log(err)
 			})
 	}
@@ -230,6 +238,10 @@ class SubletApplication extends Component {
 				this.props.history.push(`/sublet_applications?tab=people-want-to-live-at-mine`)
 			})
 			.catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				// console.log(err)
 			})
 	}

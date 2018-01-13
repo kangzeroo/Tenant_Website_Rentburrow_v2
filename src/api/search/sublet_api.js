@@ -14,6 +14,10 @@ export const querySubletsInArea = ({ lat, lng, filterParams }) => {
         }))
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -31,6 +35,10 @@ export const matchSubletsByPlaceId = ({ place_id }) => {
         }))
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -48,6 +56,10 @@ export const matchSubletsByAddress = ({ address }) => {
         }))
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

@@ -203,6 +203,10 @@ class AppRoot extends Component {
           }
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         // no facebook login, use AWS Cognito Unauth role
         unauthRoleStudent().then((unauthUser) => {
           // console.log(unauthUser)
@@ -232,6 +236,10 @@ class AppRoot extends Component {
         this.props.saveTenantToRedux(tenant)
       })
 			.catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				// if not, then we do nothing
         unauthRoleStudent().then((unauthUser) => {
           // console.log(unauthUser)

@@ -83,12 +83,16 @@ class ExampleEncryptionS3 extends Component {
 
 	getEncryptedPhoto(url) {
 		getEncryptedS3Image(url, `${this.props.tenant_profile.tenant_id}/`).then((data) => {
-			console.log(data)
+			// console.log(data)
 			this.setState({
 				decrypted_image_blob: data
 			})
 		}).catch((err) => {
-			console.log(err)
+			_LTracker.push({
+				'error': err,
+				'tag' : `${localStorage.getItem('tenant_id')}`
+			})
+			// console.log(err)
 		})
 	}
 

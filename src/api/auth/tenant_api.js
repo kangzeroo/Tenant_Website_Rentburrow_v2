@@ -12,6 +12,10 @@ export const saveTenantProfile = (fbProfile) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -26,6 +30,10 @@ export const updateTenantProfile = (profile) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -40,6 +48,10 @@ export const updateTenantPhone = ({ tenant_id, phone, }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -54,6 +66,10 @@ export const updateTenantEmail = ({ tenant_id, email, }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -69,6 +85,10 @@ export const getTenantProfile = ({ tenant_id, }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -83,6 +103,10 @@ export const getTenantDetails = (tenant_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -98,6 +122,10 @@ export const saveTenantDetails = (obj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -112,6 +140,10 @@ export const insertStudentCard = ({ tenant_id, student_card }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -126,6 +158,10 @@ export const getStudentCard = ({ tenant_id }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -140,6 +176,10 @@ export const getTenantByEmail = (email) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -154,6 +194,10 @@ export const updateEntireTenantProfile = (tenantObj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

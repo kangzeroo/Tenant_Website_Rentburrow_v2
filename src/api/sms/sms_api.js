@@ -10,6 +10,10 @@ export const sendSMSToBothParties = (contents) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -24,6 +28,10 @@ export const insertTenantLandlordSMS = (obj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -38,6 +46,10 @@ export const getLandlordInfo = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -52,6 +64,10 @@ export const sendInitialMessage = (obj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -66,6 +82,10 @@ export const sendTenantWaitMsg = ({ tenant, building, group_notes, group_size, c
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

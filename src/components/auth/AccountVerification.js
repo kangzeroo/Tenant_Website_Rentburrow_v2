@@ -94,6 +94,10 @@ class AccountVerification extends Component {
 					this.props.history.push('/login?verified')
 					res()
 				}).catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					this.setState({
 						loading: false,
 						errorMessage: err.message,
@@ -120,6 +124,10 @@ class AccountVerification extends Component {
 					})
 				})
 				.catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					// console.log(err.message)
 					this.setState({
 						errorMessage: err.message,

@@ -11,6 +11,10 @@ export const filterBuildings = (obj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -25,23 +29,30 @@ export const sortBuildings = (obj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
   return p
 }
 
-export const filterSublets = (ob) => {
+export const filterSublets = (obj) => {
   const p = new Promise((res, rej) => {
-    // axios.post(`${SEARCH_MICROSERVICE}/filter_sublets`, obj, authHeaders())
-    //   .then((data) => {
-    //     // once we have the response, only then do we dispatch an action to Redux
-    //     res(data.data)
-    //   })
-    //   .catch((err) => {
-    //     rej(err)
-    //   })
-    res([])
+    axios.post(`${SEARCH_MICROSERVICE}/filter_sublets`, obj, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
   })
   return p
 }

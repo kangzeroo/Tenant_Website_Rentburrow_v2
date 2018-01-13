@@ -46,6 +46,10 @@ export const redirectPath = (urlPath) => {
 				}
 			}
 		}).catch((err) => {
+			_LTracker.push({
+				'error': err,
+				'tag' : `${localStorage.getItem('tenant_id')}`
+			})
 			const altURL = redirectToAnotherRoute(urlPath)
 			if (altURL.success) {
 				res(altURL)

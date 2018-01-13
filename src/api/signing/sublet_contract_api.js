@@ -11,6 +11,10 @@ export const getSubletPostById = (post_id) => {
         res(data.data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -26,6 +30,10 @@ export const saveSubleteeFormToDb = (form) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -41,6 +49,10 @@ export const saveSubletorFormToDb = (form) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -56,6 +68,10 @@ export const getSubleteeContractForSubletor = (contract_id) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -71,6 +87,10 @@ export const getSubletorContractForReview = (contract_id) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -86,6 +106,10 @@ export const getSubleteeProfile = (subletee_id) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -100,6 +124,10 @@ export const getContractLink = (contract_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

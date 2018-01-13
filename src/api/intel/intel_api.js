@@ -13,6 +13,10 @@ export const sendOffToDynamoDB = (organizedCollection) => {
         res(data.data)
       })
       .catch((err) => {
+        // _LTracker.push({
+        //   'error': err,
+        //   'tag' : `${localStorage.getItem('tenant_id')}`
+        // })
         rej(err)
       })
   })

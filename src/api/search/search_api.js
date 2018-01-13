@@ -16,6 +16,10 @@ export const queryBuildingsInArea = (tenant_id) => { //{ lat, lng, filterParams 
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -35,6 +39,10 @@ export const searchForSpecificBuilding = (urlPath) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -50,6 +58,10 @@ export const getBuildingById = (id) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -69,6 +81,10 @@ export const searchForSpecificBuildingByAlias = (urlPath, tenant_id) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -86,6 +102,10 @@ export const searchBuildingByPlaceID = ({ place_id }) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -101,6 +121,10 @@ export const searchBuildingByAddress = (addr) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -116,6 +140,10 @@ export const getAllImagesSizeForSpecificBuilding = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -131,6 +159,10 @@ export const getAllSummaryImages = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -146,6 +178,10 @@ export const getNumVirtualTours = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -161,6 +197,10 @@ export const getSpecificLandlord = ({ building_id }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -175,6 +215,10 @@ export const getLandlordInfo = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
