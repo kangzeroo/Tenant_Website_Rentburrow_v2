@@ -369,7 +369,7 @@ class MessageLandlordForm extends Component {
             <TextArea
               rows={3}
               value={this.state.group_notes}
-              placeholder='Eg. Give as much info as possible. Which suites we you ok with? Will your group change? Do you want a tour? ...etc'
+              placeholder='When are you available for a tour?'
               onChange={e => this.setState({ group_notes: e.target.value })}
               style={comStyles().textArea}
             />
