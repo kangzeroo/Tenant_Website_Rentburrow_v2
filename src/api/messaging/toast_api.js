@@ -27,7 +27,7 @@ export const getInitialToastMessages = (location) => {
         text: 'Click here to start home hunting',
         color: 'blue',
         icon: 'home',
-        link: 'https://rentburrow.com/lease'
+        link: 'https://renthero.ca/lease'
       }
     ]
   } else {

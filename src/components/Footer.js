@@ -21,13 +21,13 @@ class Footer extends Component {
 			<div id='Footer' style={comStyles().container}>
         <div style={comStyles().leftFloat}>
           <Link to='/' onClick={() => this.refreshEverything()}>
-            <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
+            <h1 style={comStyles().font_logo}>Rent Hero</h1>
           </Link>
           <div style={comStyles().desc}>
-            Rentburrow.com is the marketplace for student housing.<br/>Tour & apply for your rent online.
+            RentHero.ca is the marketplace for student housing.<br/>Tour & apply for your rent online.
           </div>
           <div style={comStyles().copyright}>
-            &nbsp; &nbsp; &copy; 2017 Bytenectar Inc
+            &nbsp; &nbsp; &copy; 2018 Bytenectar Inc
           </div>
         </div>
         <div style={comStyles().table_of_contents}>
@@ -170,6 +170,11 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
+    },
+    font_logo: {
+      color: 'white',
+      fontFamily: `'Carter One', cursive`,
+      margin: '0px 0px 0px 20px',
     }
 	}
 }

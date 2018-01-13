@@ -23,7 +23,9 @@ class AmenityBrowser extends Component {
   constructor() {
     super()
     this.state = {
-      current_amenity: {},
+      current_amenity: {
+        imgs: []
+      },
     }
   }
 
@@ -44,11 +46,12 @@ class AmenityBrowser extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // console.log(this.props.amenities)
-    if (prevProps && (prevProps.amenities !== this.props.amenities)) {
-      this.setState({
-        current_amenity: this.props.amenities[0]
-      })
-    }
+    // if (prevProps && (prevProps.amenities !== this.props.amenities)) {
+    //   console.log('UPDATING')
+    //   this.setState({
+    //     current_amenity: this.props.amenities[0]
+    //   })
+    // }
   }
 
   clickedAmenity(am) {
