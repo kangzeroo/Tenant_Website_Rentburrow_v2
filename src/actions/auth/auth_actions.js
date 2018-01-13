@@ -16,6 +16,7 @@ export const saveTenantToRedux = (tenantProfile) => {
       type: AUTHENTICATE_TENANT,
       payload: tenantProfile,
     })
+    localStorage.setItem('tenant_id', tenantProfile.tenant_id)
 		// dispatch({
 		// 	type: LISTEN_TO_FIREBASE_DB,
 		// 	payload: tenantProfile.tenant_id,

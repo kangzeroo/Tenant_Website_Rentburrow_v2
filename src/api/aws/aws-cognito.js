@@ -82,6 +82,10 @@ export const LoginStudent = ({ email, password }) => {
 				res(staffProfileObject)
 			})
 			.catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				rej({
 					message: err
 				})

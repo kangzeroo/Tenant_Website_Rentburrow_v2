@@ -11,6 +11,10 @@ export const checkIfUserAlreadyPartGroup = (group_id, tenant_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -25,6 +29,10 @@ export const addMeToTheGroup = (user_id, group_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -39,6 +47,10 @@ export const autoGenerateGroup = (user_id) => {
     //     res(data.data)
     //   })
     //   .catch((err) => {
+    // _LTracker.push({
+    //   'error': err,
+    //   'tag' : `${localStorage.getItem('tenant_id')}`
+    // })
     //     rej(err)
     //   })
     res({
@@ -57,6 +69,10 @@ export const userInGroup = (tenant_id, group_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -71,6 +87,10 @@ export const createGroup = (tenant_id, corporation_id, building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -85,6 +105,10 @@ export const getGroupMembers = (group_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -99,6 +123,10 @@ export const getGroupInfo = (group_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -113,6 +141,10 @@ export const saveGroupNameToDb = (group_id, group_name) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -127,6 +159,10 @@ export const getSuiteRankings = (group_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -141,6 +177,10 @@ export const saveRankingsToDb = ({ group_id, suite_style_id, suite_alias, rankin
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

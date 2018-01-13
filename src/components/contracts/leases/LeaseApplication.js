@@ -150,6 +150,10 @@ class LeaseApplication extends Component {
           }
         })
         .catch((err) => {
+          _LTracker.push({
+            'error': err,
+            'tag' : `${localStorage.getItem('tenant_id')}`
+          })
           // console.log(err)
         })
     } else {

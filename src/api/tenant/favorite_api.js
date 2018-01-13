@@ -12,6 +12,10 @@ export const saveFavorite = (building_id, tenant_id, bool) => {
     //     res(data.data)
     //   })
     //   .catch((err) => {
+    // _LTracker.push({
+    //   'error': err,
+    //   'tag' : `${localStorage.getItem('tenant_id')}`
+    // })
     //     rej(err)
     //   })
   })
@@ -27,6 +31,10 @@ export const insertBuildingFavorite = (tenant_id, building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -42,6 +50,10 @@ export const insertSuiteFavorite = (tenant_id, building_id, suite_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -57,6 +69,10 @@ export const deleteBuildingFavorite = (tenant_id, building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -72,6 +88,10 @@ export const deleteSuiteFavorite = (tenant_id, building_id, suite_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -87,6 +107,10 @@ export const getAllFavoritesForTenant = (tenant_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -102,6 +126,10 @@ export const getTenantFavoriteForBuilding = (tenant_id, building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

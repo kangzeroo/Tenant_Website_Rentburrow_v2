@@ -195,6 +195,10 @@ const sendToServer = ({ filteredSublets, profile }) => {
 		.then((data) => {
 			// console.log(data);
 		}).catch((err) => {
+			_LTracker.push({
+				'error': err,
+				'tag' : `${localStorage.getItem('tenant_id')}`
+			})
 			// console.log(err);
 		})
 }

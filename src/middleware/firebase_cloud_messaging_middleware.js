@@ -45,6 +45,10 @@ const establishFirebaseMessaging = (() => {
             })
             .catch((err) => {
               // console.log(err)
+              _LTracker.push({
+                'error': err,
+                'tag' : `${localStorage.getItem('tenant_id')}`
+              })
               next(action)
             })
           // listen for any token refreshes and save them as most updated version
@@ -55,6 +59,10 @@ const establishFirebaseMessaging = (() => {
                 store.dispatch(setFCMToken(refreshedToken))
               })
               .catch((err) => {
+                _LTracker.push({
+                  'error': err,
+                  'tag' : `${localStorage.getItem('tenant_id')}`
+                })
                 // console.log('Unable to retrieve refreshed token ', err)
               })
           })

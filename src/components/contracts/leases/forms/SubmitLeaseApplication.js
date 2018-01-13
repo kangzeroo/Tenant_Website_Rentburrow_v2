@@ -88,6 +88,10 @@ class SubmitLeaseApplication extends Component {
 				// this.props.history.push('/lease_applications')
 			})
 			.catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				this.setState({
 					error: true,
 					error_message: 'Failed to Submit Application'

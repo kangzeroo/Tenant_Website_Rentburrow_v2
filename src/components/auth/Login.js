@@ -118,11 +118,19 @@ class Login extends Component {
 					// this.props.history.push('/')
 				})
 				.catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					this.setState({
 						errorMessage: 'Error logging in.'
 					})
 				})
 		}).catch((err) => {
+			_LTracker.push({
+				'error': err,
+				'tag' : `${localStorage.getItem('tenant_id')}`
+			})
 			// this.props.toggleAuthLoading(false)
 			this.setState({
 				errorMessage: err.message,

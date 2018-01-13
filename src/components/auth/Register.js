@@ -84,6 +84,10 @@ class Register extends Component {
 						this.props.history.push('/register/verify')
 					})
 				}).catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					this.setState({
 						loading: false,
 						error_messages: [err.message],
