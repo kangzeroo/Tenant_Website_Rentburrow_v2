@@ -39,7 +39,11 @@ class HomeOverview extends Component {
 					return {
 						suite_id: amenity_summary.suite_id,
 						amenities: amenity_summary.amenities.map((amenity_string) => {
-							return JSON.parse(amenity_string)
+							if (typeof amenity_string === 'string') {
+								return JSON.parse(amenity_string)
+							} else {
+								return amenity_string
+							}
 						})
 					}
 				})
