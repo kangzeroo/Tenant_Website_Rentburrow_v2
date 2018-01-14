@@ -269,7 +269,7 @@ class MessageLandlordForm extends Component {
               tenant_id: this.props.tenant_profile.tenant_id,
               first_name: this.props.tenant_profile.first_name,
               last_name: this.props.tenant_profile.last_name,
-              phone: this.props.tenant_profile.phone,
+              phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : this.state.phone,
             },
             building: {
               building_id: this.props.building.building_id,
