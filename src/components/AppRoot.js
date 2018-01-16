@@ -66,6 +66,7 @@ import AccountVerification from './auth/AccountVerification'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import MyFavorites from './favorites/MyFavorites'
+import ToursPage from './tours/ToursPage'
 
 import Test from './requests/Test'
 
@@ -383,6 +384,8 @@ class AppRoot extends Component {
                 <Route exact path='/login/forgot' component={ForgotPassword} />
                 <Route exact path='/login' component={LoginPage} />
                 <Route exact path='/logout' component={Logout} />
+
+                <Route exact path='/tours' component={ToursPage} />
 
                 <Route exact path='/lease' component={HousingPage} />
                 <Route exact path='/leases' component={HousingPage} />

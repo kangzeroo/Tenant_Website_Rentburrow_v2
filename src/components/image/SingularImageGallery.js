@@ -155,7 +155,7 @@ class SingularImageGallery extends Component {
             this.props.image_size === 'hd'
             ?
             <div style={comStyles().indicator}>
-              {`${this.state.current_image_position+1}/${this.state.all_images.length}`}
+              {`${this.state.current_image_position + 1}/${this.state.all_images.length}`}
             </div>
             :
             null
