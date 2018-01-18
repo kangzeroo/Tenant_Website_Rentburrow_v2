@@ -484,6 +484,7 @@ class AppRoot extends Component {
       <div id='AppRoot' style={this.state.mobile ? comStyles().mobile_main : comStyles().main}>
         <Helmet>
           <html lang={this.props.language}></html>
+          <title>{ this.props.html_title }</title>
         </Helmet>
         {
           this.state.mobile
@@ -527,6 +528,7 @@ AppRoot.propTypes = {
   removeToastMessage: PropTypes.func.isRequired,
   selected_building_to_apply_for: PropTypes.object,
   fingerprintBrowser: PropTypes.func.isRequired,
+  html_title: PropTypes.string.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -549,6 +551,7 @@ const mapReduxToProps = (redux) => {
     location_forwarding: redux.auth.location_forwarding,
     tenant_profile: redux.auth.tenant_profile,
     selected_building_to_apply_for: redux.contract.selected_building_to_apply_for,
+    html_title: redux.app.html_title,
 	}
 }
 
