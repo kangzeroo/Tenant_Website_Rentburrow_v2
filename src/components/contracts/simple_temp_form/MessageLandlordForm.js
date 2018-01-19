@@ -328,32 +328,22 @@ class MessageLandlordForm extends Component {
         <br />
         <Form>
           <Form.Group widths='equal'>
-            {
-              this.state.phoneRequired
-              ?
-              <Form.Field>
-                <label>Phone Number</label>
-                <Input
-                  value={this.state.phone}
-                  onChange={e => this.updateAttr(e, 'phone')}
-                />
-              </Form.Field>
-              :
-              null
-            }
-            {
-              this.state.emailRequired
-              ?
-              <Form.Field>
-                <label>Email Address</label>
-                <Input
-                  value={this.state.email}
-                  onChange={e => this.updateAttr(e, 'email')}
-                />
-              </Form.Field>
-              :
-              null
-            }
+            <Form.Field>
+              <label>Phone Number</label>
+              <Input
+                value={this.state.phone}
+                onChange={e => this.updateAttr(e, 'phone')}
+                disabled={!this.state.phoneRequired}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Email Address</label>
+              <Input
+                value={this.state.email}
+                onChange={e => this.updateAttr(e, 'email')}
+                disabled={!this.state.phoneRequired}
+              />
+            </Form.Field>
           </Form.Group>
 
 

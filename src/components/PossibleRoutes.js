@@ -19,4 +19,6 @@ export default [
   '/login',
   '/account',
   '/pricing',
+  '/prizes',
+  '/tours',
 ]

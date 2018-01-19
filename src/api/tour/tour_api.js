@@ -97,6 +97,26 @@ export const getTourDetailsById = (tour_id) => {
   return p
 }
 
+
+export const getAllAvailableTours = () => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/get_all_available_tours`, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+
 export const sendTourEmailToLandlord = (tourObj, building) => {
   const ses = new AWS_SES({
 		region: 'us-east-1',

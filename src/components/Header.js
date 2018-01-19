@@ -218,6 +218,9 @@ class Header extends Component {
               <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
                 Help
               </div>
+              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                Tours
+              </div>
               {
                 (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
                 this.props.history.location.pathname === '/leases')
@@ -266,6 +269,9 @@ class Header extends Component {
                 inverted
                 content='Login'
               />*/}
+              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                Tours
+              </div>
               <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
                 Help
               </div>
@@ -423,7 +429,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '200px',
+      width: '300px',
       right: '20px'
     },
     righterFloat: {
@@ -444,8 +450,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      minWidth: '300px',
-      maxWidth: '300px',
+      minWidth: '400px',
+      maxWidth: '400px',
       alignItems: 'center',
     },
     close_login: {

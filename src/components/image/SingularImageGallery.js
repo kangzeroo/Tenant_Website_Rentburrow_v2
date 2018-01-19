@@ -61,18 +61,6 @@ class SingularImageGallery extends Component {
     if (event) {
       event.stopPropagation()
     }
-    this.props.collectIntel({
-      // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
-      'TableName': IMAGE_INTERACTIONS,
-      'Item': {
-        'ACTION': this.props.intel_action,
-        'REFERENCE_ID': this.props.intel_id,
-        'DATE': new Date().getTime(),
-        'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
-        'IMAGE_URL': this.state.all_images[this.state.current_image_position],
-        'FINGERPRINT': this.props.fingerprint,
-      }
-    })
     if (this.props.image_size === 'hd') {
       this.setState({
         visible: false,
@@ -94,6 +82,30 @@ class SingularImageGallery extends Component {
         current_image_position: this.state.current_image_position + itr,
       }, () => this.transitionImageFade())
     }
+    // console.log({
+    //   // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
+    //   'TableName': IMAGE_INTERACTIONS,
+    //   'Item': {
+    //     'ACTION': this.props.intel_action,
+    //     'REFERENCE_ID': this.props.intel_id,
+    //     'DATE': new Date().getTime(),
+    //     'USER_ID': this.props.tenant_profile.tenant_id ? this.props.tenant_profile.tenant_id : 'NONE',
+    //     'IMAGE_URL': this.state.all_images[this.state.current_image_position],
+    //     'FINGERPRINT': this.props.fingerprint,
+    //   }
+    // })
+    // this.props.collectIntel({
+    //   // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
+    //   'TableName': IMAGE_INTERACTIONS,
+    //   'Item': {
+    //     'ACTION': this.props.intel_action,
+    //     'REFERENCE_ID': this.props.intel_id,
+    //     'DATE': new Date().getTime(),
+    //     'USER_ID': this.props.tenant_profile.tenant_id ? this.props.tenant_profile.tenant_id : 'NONE',
+    //     'IMAGE_URL': this.state.all_images[this.state.current_image_position],
+    //     'FINGERPRINT': this.props.fingerprint,
+    //   }
+    // })
   }
 
   transitionImageFade() {
@@ -143,7 +155,7 @@ class SingularImageGallery extends Component {
             this.props.image_size === 'hd'
             ?
             <div style={comStyles().indicator}>
-              {`${this.state.current_image_position+1}/${this.state.all_images.length}`}
+              {`${this.state.current_image_position + 1}/${this.state.all_images.length}`}
             </div>
             :
             null
