@@ -23,19 +23,24 @@ class TourCard extends Component {
 
 	render() {
     return (
-			<Card id='TourCard' style={comStyles().container} onClick={() => this.props.openPopup(this.props.tour)}>
+			<Card
+        id='TourCard'
+        style={comStyles().container}
+        onClick={() => this.props.openPopup({ tour: this.props.tour, building: this.props.building, })}
+        style={comStyles(this.props.building.label).hardCard}
+      >
         <div style={comStyles().imageGallery} >
-          <Image src={renderProcessedThumbnail(this.props.building.thumbnail)} />
+          <Image style={{ maxHeight: '170px', minWidth: '100%' }} src={renderProcessedThumbnail(this.props.building.thumbnail)} />
         </div>
-        <Card.Content>
+        <Card.Content style={comStyles().info}>
           <Card.Header>
-            <h1>{ this.props.building.building_alias }</h1>
+            <h3 style={{ fontWeight: 'bold' }}>{ this.props.building.building_alias }</h3>
           </Card.Header>
           <Card.Description style={comStyles().more_info}>
             {
               this.props.building.min_price && this.props.building.max_price
               ?
-              <h3 style={comStyles().price}>
+              <h5 style={comStyles().price}>
                 {
                   this.props.building.min_price === this.props.building.max_price
                   ?
@@ -43,12 +48,12 @@ class TourCard extends Component {
                   :
                   `Rooms from $${this.props.building.min_price} to $${this.props.building.max_price}`
                 }
-              </h3>
+              </h5>
               :
               'Inquire Price'
             }
-            <h3 style={{ color: '#33A3F4', fontWeight: 'bold', }}>Tour {moment(this.props.tour.selected_date).fromNow()}</h3>
-            <h3>{`${moment(this.props.tour.selected_date).format('MMMM Do YYYY, h:mm a')}`}</h3>
+            <h5 style={{ color: '#33A3F4', fontWeight: 'bold', padding: '2.5px' }}>Tour {moment(this.props.tour.selected_date).fromNow()}</h5>
+            <h5 style={{ padding: '2.5px' }}>{`${moment(this.props.tour.selected_date).format('MMMM Do YYYY, h:mm a')}`}</h5>
           </Card.Description>
         </Card.Content>
         <Card.Content extra>
@@ -122,6 +127,13 @@ const comStyles = () => {
       flexDirection: 'column',
       margin: '30px'
 		},
+    hardCard: {
+      minWidth: '310px',
+      maxWidth: 'auto',
+      minHeight: '340px',
+      maxHeight: '340px',
+      margin: '30px',
+    },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
       display: 'flex',
@@ -145,10 +157,12 @@ const comStyles = () => {
     },
     price: {
       width: '100%',
+      padding: '2.5px',
     },
     more_info: {
       display: 'flex',
       flexDirection: 'column',
+      justifyContent: 'space-between'
     },
     headerPrint: {
       fontSize: '1rem',

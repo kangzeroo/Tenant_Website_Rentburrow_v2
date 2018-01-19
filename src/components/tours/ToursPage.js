@@ -8,13 +8,18 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-  Card,
-  Modal,
   Header,
+  Tab,
 } from 'semantic-ui-react'
 import { getAllAvailableTours, } from '../../api/tour/tour_api'
-import TourCard from './cards/TourCard'
-import TourPopup from './components/TourPopup'
+import {
+	queryBuildingsInArea,
+} from '../../api/search/search_api'
+import {
+	saveBuildingsToRedux,
+} from '../../actions/search/search_actions'
+import AllUpcomingToursTab from './tabs/AllUpcomingToursTab'
+import MyUpcomingToursTab from './tabs/MyUpcomingToursTab'
 
 class ToursPage extends Component {
 
@@ -30,78 +35,60 @@ class ToursPage extends Component {
   }
 
   componentWillMount() {
-    getAllAvailableTours()
-    .then((data) => {
-      this.setState({
-        tours: data,
+    this.refreshTours()
+  }
+
+  refreshTours() {
+    if (this.props.buildings && this.props.buildings.length === 0) {
+      queryBuildingsInArea()
+      .then((data) => {
+        this.props.saveBuildingsToRedux(data)
+        return getAllAvailableTours()
       })
-    })
-  }
-
-  getBuildingObj(building_id) {
-    return this.props.buildings.filter((building) => {
-      return building.building_id === building_id
-    })[0]
-  }
-
-  toggleModal(bool, attr, context) {
-    this.setState({
-      toggle_modal: bool,
-      modal_name: attr,
-      context: context
-    })
-  }
-
-  renderAppropriateModal(modal_name, context) {
-    if (modal_name === 'open_tour') {
-      return this.renderTourPopup(context)
+      .then((data) => {
+        this.setState({
+          tours: data,
+        })
+      })
+    } else {
+      getAllAvailableTours()
+      .then((data) => {
+        this.setState({
+          tours: data,
+        })
+      })
     }
-    return null
   }
 
-  renderTourPopup(tour) {
+  renderTabs() {
+    return [
+      { index: 0, menuItem: 'All Upcoming Tours', render: () => <Tab.Pane attached={false}>{ this.renderUpcomingTours() }</Tab.Pane>},
+      { index: 1, menuItem: 'My Upcoming Tours', render: () => <Tab.Pane attached={false}>{ this.renderMyUpcomingTours() }</Tab.Pane>}
+    ]
+  }
+
+  renderUpcomingTours() {
     return (
-      <Modal
-        dimmer
-        open={this.state.toggle_modal}
-        onClose={() => this.toggleModal(false)}
-        closeIcon
-        size='large'
-      >
-      <Modal.Content>
-        <TourPopup
-          tour={tour}
-          refresh={() => this.refreshTours()}
-          closeModal={() => this.toggleModal(false)}
-        />
-      </Modal.Content>
-    </Modal>
+      <AllUpcomingToursTab
+        tours={this.state.tours}
+        buildings={this.props.buildings}
+      />
     )
   }
 
+  renderMyUpcomingTours() {
+    return (
+      <MyUpcomingToursTab
+
+      />
+    )
+  }
 
 	render() {
 		return (
 			<div id='ToursPage' style={comStyles().container}>
-        <Header as='h2' content='Upcoming Tours' subheader='You can join an upcoming tour' />
-        <div style={comStyles().toursContainer} >
-          {
-            this.state.tours.map((tour) => {
-              const building = this.getBuildingObj(tour.building_id)
-              return (
-                <TourCard
-                  key={tour.tour_id}
-                  tour={tour}
-                  building={building}
-                  openPopup={(e) => this.toggleModal(true, 'open_tour', e)}
-                />
-              )
-            })
-          }
-        </div>
-        {
-          this.renderAppropriateModal(this.state.modal_name, this.state.context)
-        }
+        <Header as='h2' icon='calendar check' content={`${this.state.tours.length} Upcoming Tours`} subheader='You can join an upcoming tour' />
+        <Tab menu={{ secondary: true }} panes={this.renderTabs()} />
 			</div>
 		)
 	}
@@ -110,6 +97,7 @@ class ToursPage extends Component {
 // defines the types of variables in this.props
 ToursPage.propTypes = {
 	history: PropTypes.object.isRequired,
+  saveBuildingsToRedux: PropTypes.func.isRequired,
   buildings: PropTypes.array.isRequired,
 }
 
@@ -131,7 +119,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    saveBuildingsToRedux,
 	})(RadiumHOC)
 )
 
@@ -146,15 +134,6 @@ const comStyles = () => {
       margin: '20px',
       minHeight: '93vh'
 		},
-    toursContainer: {
-      display: 'flex',
-			flexDirection: 'row',
-			flexWrap: 'wrap',
-			maxHeight: '100%',
-			width: '100%',
-			overflowY: 'scroll',
-			padding: '15px',
-			justifyContent: 'flex-start',
-    }
+
 	}
 }
