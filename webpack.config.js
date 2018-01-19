@@ -10,7 +10,8 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/',
-    filename: 'bundle.js'
+    // filename: 'bundle.js'
+    filename: '[name].[hash].js'
   },
   devtool: 'source-map',
   module: {

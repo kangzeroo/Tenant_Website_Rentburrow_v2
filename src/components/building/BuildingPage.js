@@ -64,6 +64,8 @@ import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynam
 import { collectIntel } from '../../actions/intel/intel_actions'
 import { getTenantFavoriteForBuilding, } from '../../api/tenant/favorite_api'
 import { triggerForcedSigninFavorite, } from '../../actions/auth/auth_actions'
+import { changeHTMLTitle } from '../../actions/app/app_actions'
+
 
 class BuildingPage extends Component {
 	constructor() {
@@ -95,6 +97,7 @@ class BuildingPage extends Component {
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
 		}
+		this.props.changeHTMLTitle(`${this.convertToNameCase(building_alias.slice(1))} - RentHero`)
 		searchForSpecificBuildingByAlias(building_alias)
 			.then((data) => {
 				this.setState({
@@ -152,6 +155,10 @@ class BuildingPage extends Component {
 				  }
 				})
 			})
+	}
+
+	convertToNameCase(str) {
+		return str.replace(/\w\S*/g, (txt) => { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase() })
 	}
 
 	// componentWillReceiveProps(nextProps) {
@@ -526,6 +533,7 @@ BuildingPage.propTypes = {
   tenant_profile: PropTypes.object.isRequired,
   fingerprint: PropTypes.string.isRequired,
 	triggerForcedSigninFavorite: PropTypes.func.isRequired,
+	changeHTMLTitle: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -554,6 +562,7 @@ export default withRouter(
 		selectCorporation,
 		collectIntel,
 		triggerForcedSigninFavorite,
+		changeHTMLTitle,
 	})(RadiumHOC)
 )
 
