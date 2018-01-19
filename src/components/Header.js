@@ -450,8 +450,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      minWidth: '300px',
-      maxWidth: '300px',
+      minWidth: '350px',
+      maxWidth: '350px',
       alignItems: 'center',
     },
     close_login: {
