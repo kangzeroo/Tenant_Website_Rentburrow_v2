@@ -23,7 +23,10 @@ import { validateEmail, aliasToURL } from '../../../api/general/general_api'
 import { check_if_building_accessible } from '../../../api/label/building_label_api'
 import { collectIntel } from '../../../actions/intel/intel_actions'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
-
+import { insertScheduledTour } from '../../../api/tour/tour_api'
+import { insertTenantInquiry, } from '../../../api/inquiries/inquiry_api'
+import { sendInitialMessage, sendTenantWaitMsg, } from '../../../api/sms/sms_api'
+import { getLandlordInfo, } from '../../../api/search/search_api'
 
 class TourPopup extends Component {
 
@@ -67,12 +70,20 @@ class TourPopup extends Component {
 			this.setState({
 				phoneRequired: true,
 			})
+		} else {
+			this.setState({
+				phone: this.props.tenant_profile.phone,
+			})
 		}
 
 		if (!this.props.tenant_profile.email || this.props.tenant_profile.email.length === 0) {
 			// console.log('no email')
 			this.setState({
 				emailRequired: true,
+			})
+		} else {
+			this.setState({
+				email: this.props.tenant_profile.email,
 			})
 		}
 	}
@@ -144,6 +155,86 @@ class TourPopup extends Component {
     return ok_to_proceed
   }
 
+	saveTour(tour, building) {
+		let inquiry_id
+		if (this.validateForm()) {
+			this.setState({
+				loading: true,
+			})
+
+			const body = `GROUP TOUR REQUEST: I would like to join the tour for ${building.building_alias} that is happening on ${moment(tour.selected_date).format('MMMM Do YYYY, HH:mm a')}, which is originally booked by ${tour.first_name} ${tour.last_name}. I have a group of ${this.state.group_size}.`
+			insertScheduledTour({
+				tenant_id: this.props.tenant_profile.tenant_id,
+	      landlord_id: tour.landlord_id,
+	      building_id: tour.building_id,
+	      selected_date: tour.selected_date,
+			})
+			.then((data) => {
+				return insertTenantInquiry({
+					tenant_id: this.props.tenant_profile.tenant_id,
+					group_id: null,
+					building_id: building.building_id,
+					group_notes: body,
+					group_size: this.state.group_size,
+				})
+			})
+			.then((data) => {
+				inquiry_id = data.inquiry_id
+				return getLandlordInfo(building.building_id)
+			})
+			.then((data) => {
+				if (data.corporate_landlord) {
+					return sendTenantWaitMsg({
+            tenant: {
+              tenant_id: this.props.tenant_profile.tenant_id,
+              first_name: this.props.tenant_profile.first_name,
+              last_name: this.props.tenant_profile.last_name,
+              phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : this.state.phone,
+            },
+            building: {
+              building_id: building.building_id,
+              building_alias: building.building_alias,
+              building_address: building.building_address,
+            },
+            group_notes: body,
+            group_size: this.state.group_size,
+            corporation_email: data.email,
+            inquiry_id: inquiry_id,
+          })
+				} else {
+					return sendInitialMessage({
+            tenant_id: this.props.tenant_profile.tenant_id,
+            first_name: this.props.tenant_profile.first_name,
+            last_name: this.props.tenant_profile.last_name,
+            email: this.state.emailRequired ? this.state.email : this.props.tenant_profile.email,
+            phone: this.state.phoneRequired ? this.state.phone : this.props.tenant_profile.phone,
+            group_size: this.state.group_size,
+            building_id: building.building_id,
+            building_address: building.building_address,
+            building_alias: building.building_alias,
+            group_notes: body,
+          })
+				}
+			})
+			.then((data) => {
+				this.setState({
+					saving: false,
+					submitted: true,
+				})
+			})
+			.catch((err) => {
+				_LTracker.push({
+					'error': err,
+					'tag' : `${localStorage.getItem('tenant_id')}`
+				})
+				this.setState({
+					error_messages: ['An error as occurred, please Send us a Message'],
+					saving: false,
+				})
+			})
+		}
+	}
+
 
 	render() {
 		return (
@@ -172,12 +263,18 @@ class TourPopup extends Component {
 						}
 					</div>
 					<div>
-						<Button
-							primary
-							basic
-							content='More Property Details'
-							onClick={() => this.selectThisBuilding(this.props.tour.building)}
-						/>
+						{
+							this.props.type === 'tours'
+							?
+							<Button
+								primary
+								basic
+								content='More Property Details'
+								onClick={() => this.selectThisBuilding(this.props.tour.building)}
+							/>
+							:
+							null
+						}
 					</div>
 				</div>
 				<br />
@@ -243,7 +340,7 @@ class TourPopup extends Component {
 							<Message positive>
 								<Header>
 									<Icon name='checkmark' color='green' />
-									<Header.Content>Message Sent to Landlord</Header.Content>
+									<Header.Content>Tour Request Sent to Landlord</Header.Content>
 									<Header.Subheader>You can now chat with the landlord about the tour</Header.Subheader>
 								</Header>
 							</Message>
@@ -254,7 +351,7 @@ class TourPopup extends Component {
 								loading={this.state.saving}
 								disabled={this.state.saving}
 								content='Join Tour'
-								onClick={() => this.sendMessageToBothParties()}
+								onClick={() => this.saveTour(this.props.tour.tour, this.props.tour.building)}
 							/>
 						}
 					</Form.Field>
@@ -271,6 +368,7 @@ TourPopup.propTypes = {
   fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 	tour: PropTypes.object.isRequired,			// passed in
+	type: PropTypes.string.isRequired,			// passed in
 }
 
 // for all optional props, define a default value

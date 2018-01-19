@@ -8,13 +8,14 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
+  Card,
   Modal,
-  Tab,
+  Header,
 } from 'semantic-ui-react'
-import TourCard from '../cards/TourCard'
-import TourPopup from '../components/TourPopup'
+import BuildingTourCard from '../../tours/cards/BuildingTourCard'
+import TourPopup from '../../tours/components/TourPopup'
 
-class AllUpcomingToursTab extends Component {
+class BuildingToursContainer extends Component {
 
   constructor() {
     super()
@@ -23,12 +24,6 @@ class AllUpcomingToursTab extends Component {
       modal_name: '',
       context: null,
     }
-  }
-
-  getBuildingObj(building_id) {
-    return this.props.buildings.filter((building) => {
-      return building.building_id === building_id
-    })[0]
   }
 
   toggleModal(bool, attr, context) {
@@ -60,7 +55,7 @@ class AllUpcomingToursTab extends Component {
           tour={tour}
           refresh={() => this.refreshTours()}
           closeModal={() => this.toggleModal(false)}
-          type='tours'
+          type='building'
         />
       </Modal.Content>
     </Modal>
@@ -69,18 +64,20 @@ class AllUpcomingToursTab extends Component {
 
 	render() {
 		return (
-			<div id='AllUpcomingToursTab' style={comStyles().container}>
+			<Card className='pretty_scrollbar' raised id='BuildingToursContainer' style={comStyles().container}>
+        <Header as='h2' icon='checked calendar' content={`${this.props.tours.length} Upcoming Tours`} />
         <div style={comStyles().toursContainer} >
-          {
+  				{
             this.props.tours.map((tour) => {
-              const building = this.getBuildingObj(tour.building_id)
               return (
-                <TourCard
-                  key={tour.tour_id}
-                  tour={tour}
-                  building={building}
-                  openPopup={(e) => this.toggleModal(true, 'open_tour', e)}
-                />
+                <div key={tour.tour_id} >
+                  <BuildingTourCard
+                    key={tour.tour_id}
+                    tour={tour}
+                    building={this.props.building}
+                    openPopup={(context) => this.toggleModal(true, 'open_tour', context)}
+                  />
+                </div>
               )
             })
           }
@@ -88,25 +85,25 @@ class AllUpcomingToursTab extends Component {
         {
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
-			</div>
+			</Card>
 		)
 	}
 }
 
 // defines the types of variables in this.props
-AllUpcomingToursTab.propTypes = {
+BuildingToursContainer.propTypes = {
 	history: PropTypes.object.isRequired,
-  buildings: PropTypes.array.isRequired,  // passed in
-  tours: PropTypes.array.isRequired,      // passed in
+  tours: PropTypes.array.isRequired,          // passed in
+  building: PropTypes.object.isRequired,    // passed in
 }
 
 // for all optional props, define a default value
-AllUpcomingToursTab.defaultProps = {
+BuildingToursContainer.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(AllUpcomingToursTab)
+const RadiumHOC = Radium(BuildingToursContainer)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
@@ -130,16 +127,16 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
+      padding: '20px',
+      minWidth: '100%',
+      maxWidth: '100%',
+      overflowX: 'scroll',
 		},
     toursContainer: {
       display: 'flex',
       flexDirection: 'row',
-      flexWrap: 'wrap',
-      maxHeight: '100%',
-      width: '100%',
-      overflowY: 'scroll',
-      padding: '10px',
-      justifyContent: 'flex-start',
-    }
+      minWidth: '100%',
+      maxWidth: '100%',
+		}
 	}
 }

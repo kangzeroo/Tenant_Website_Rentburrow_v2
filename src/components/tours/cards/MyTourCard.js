@@ -10,31 +10,18 @@ import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import {
   Card,
-  Button,
   Image,
   Icon,
 } from 'semantic-ui-react'
 import { renderProcessedThumbnail, } from '../../../api/general/general_api'
 import { triggerForcedSigninFavorite, } from '../../../actions/auth/auth_actions'
 
-class TourCard extends Component {
-
-  determineIfPopup() {
-    if (this.props.authenticated) {
-      this.props.openPopup({ tour: this.props.tour, building: this.props.building })
-    } else {
-      this.props.triggerForcedSigninFavorite({
-				building_id: this.props.building.building_id,
-			})
-    }
-  }
+class MyTourCard extends Component {
 
 	render() {
     return (
 			<Card
-        id='TourCard'
-        style={comStyles().container}
-        onClick={() => this.determineIfPopup()}
+        id='MyTourCard'
         style={comStyles(this.props.building.label).hardCard}
       >
         <div style={comStyles().imageGallery} >
@@ -84,10 +71,6 @@ class TourCard extends Component {
                 'Inquire Rooms'
               }
             </a>
-            <Button
-              color='orange'
-              content='Join Tour'
-            />
           </div>
         </Card.Content>
 			</Card>
@@ -96,22 +79,21 @@ class TourCard extends Component {
 }
 
 // defines the types of variables in this.props
-TourCard.propTypes = {
+MyTourCard.propTypes = {
 	history: PropTypes.object.isRequired,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
   authenticated: PropTypes.bool.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   tour: PropTypes.object.isRequired,        // passed in
-  openPopup: PropTypes.func.isRequired,     // passed in
 }
 
 // for all optional props, define a default value
-TourCard.defaultProps = {
+MyTourCard.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(TourCard)
+const RadiumHOC = Radium(MyTourCard)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
