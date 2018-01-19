@@ -215,11 +215,11 @@ class Header extends Component {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
-              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
-                Help
-              </div>
               <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
                 Tours
+              </div>
+              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                Help
               </div>
               {
                 (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
@@ -450,8 +450,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      minWidth: '400px',
-      maxWidth: '400px',
+      minWidth: '300px',
+      maxWidth: '300px',
       alignItems: 'center',
     },
     close_login: {

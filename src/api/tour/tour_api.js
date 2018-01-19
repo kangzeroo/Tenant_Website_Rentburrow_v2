@@ -97,10 +97,61 @@ export const getTourDetailsById = (tour_id) => {
   return p
 }
 
+export const insertScheduledTour = ({ tenant_id, landlord_id, building_id, selected_date, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/insert_scheduled_tour`, { tenant_id, landlord_id, building_id, selected_date, }, authHeaders())
+      .then((data) => {
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
 
 export const getAllAvailableTours = () => {
   const p = new Promise((res, rej) => {
     axios.post(`${CONTRACTING_MICROSERVICE}/get_all_available_tours`, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const getToursForBuilding = (building_id) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/get_tours_by_building`, { building_id, }, authHeaders())
+      .then((data) => {
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const getTenantGroupTour = (tenant_ids) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${CONTRACTING_MICROSERVICE}/get_tours_by_group`, { tenant_ids, }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)

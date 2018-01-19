@@ -36,19 +36,6 @@ class MessageLandlordForm extends Component {
   constructor() {
     super()
     this.state = {
-      // tenant_profile: {
-      //   first_name: '',
-      //   last_name: '',
-      //   legal_name: '',
-      //   gender: '',
-      //   email: '',
-      //   phone: '',
-      //   date_of_birth: '',
-      //   school: '',
-      //   program: '',
-      //   current_semester: '',
-      //   group_size: 1,
-      // },
 
       phoneRequired: false,
       emailRequired: false,
@@ -94,9 +81,12 @@ class MessageLandlordForm extends Component {
 
   componentWillMount() {
     if (!this.props.tenant_profile.phone || this.props.tenant_profile.phone.length === 0) {
-      // console.log('no phone')
       this.setState({
         phoneRequired: true,
+      })
+    } else {
+      this.setState({
+        phone: this.props.tenant_profile.phone,
       })
     }
 
@@ -105,21 +95,11 @@ class MessageLandlordForm extends Component {
       this.setState({
         emailRequired: true,
       })
+    } else {
+      this.setState({
+        email: this.props.tenant_profile.email,
+      })
     }
-    // this.setState({
-    //   tenant_profile: {
-    //     first_name: this.props.tenant_profile.first_name ? this.props.tenant_profile.first_name : '',
-    //     last_name: this.props.tenant_profile.last_name ? this.props.tenant_profile.last_name : '',
-    //     legal_name: this.props.tenant_profile.legal_name ? this.props.tenant_profile.legal_name : '',
-    //     gender: this.props.tenant_profile.gender ? this.props.tenant_profile.gender : '',
-    //     email: this.props.tenant_profile.email ? this.props.tenant_profile.email : '',
-    //     phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : '',
-    //     date_of_birth: this.props.tenant_profile.date_of_birth ? this.props.tenant_profile.date_of_birth : moment().format('L'),
-    //     school: this.props.tenant_profile.school ? this.props.tenant_profile.school : '',
-    //     program: this.props.tenant_profile.program ? this.props.tenant_profile.program : '',
-    //     current_semester: this.props.tenant_profile.current_semester ? this.props.tenant_profile.current_semester : '',
-    //   }
-    // })
   }
 
   updateAttr(e, attr) {
@@ -134,68 +114,17 @@ class MessageLandlordForm extends Component {
     })
   }
 
-  // updateTenantState(e, attr) {
-  //   this.setState({
-  //     tenant_profile: {
-  //       ...this.state.tenant_profile,
-  //       [attr]: e.target.value,
-  //     }
-  //   })
-  // }
-  //
-  // updateApplicationType(e, data, attr) {
-  //   this.setState({
-  //     tenant_profile: {
-  //       ...this.state.tenant_profile,
-  //       [attr]: data.value,
-  //     }
-  //   })
-  // }
-  //
-  // updateDateType(e, data, attr) {
-  //   this.setState({
-  //     tenant_profile: {
-  //       ...this.state.tenant_profile,
-  //       [attr]: moment(data).format('L'),
-  //     }
-  //   })
-  // }
-
   validateForm() {
     let ok_to_proceed = true
     const error_messages = []
-    // if (this.state.tenant_profile.first_name.length === 0 || this.state.tenant_profile.last_name.length === 0) {
-    //   error_messages.push('Your name fields are incomplete')
-    //   ok_to_proceed = false
-    // }
-    // if (this.state.tenant_profile.gender.length === 0) {
-    //   error_messages.push('Please select a gender')
-    //   ok_to_proceed = false
-    // }
-    // if (this.state.tenant_profile.program.length === 0 || this.state.tenant_profile.current_semester.length === 0 || this.state.tenant_profile.school.length === 0) {
-    //   error_messages.push('Please enter your school, program, and term')
-    //   ok_to_proceed = false
-    // }
     if (!this.state.group_size) {
       error_messages.push('You must specify a group size')
       ok_to_proceed = false
     }
-    // if (!validateEmail(this.state.tenant_profile.email)) {
-    //   error_messages.push('The email address entered is not valid')
-    //   ok_to_proceed = false
-    // }
-    // if (this.state.tenant_profile.email.length === 0 || this.state.tenant_profile.phone.length === 0) {
-    //   error_messages.push('You must enter your email and phone number')
-    //   ok_to_proceed = false
-    // }
     if (this.state.group_notes.length === 0) {
       error_messages.push('Please enter a Message')
       ok_to_proceed = false
     }
-    // if (!this.state.acknowledge) {
-    //   error_messages.push('Please acknowledge your information')
-    //   ok_to_proceed = false
-    // }
     if (this.state.phoneRequired && this.state.phone.length === 0) {
       error_messages.push('You must enter your phone number')
       ok_to_proceed = false
@@ -223,19 +152,6 @@ class MessageLandlordForm extends Component {
     let inquiry_id
     if (this.validateForm()) {
       this.setState({ saving: true, })
-      // const tenantObj = {
-      //   tenant_id: this.props.tenant_profile.tenant_id,
-      //   first_name: this.state.tenant_profile.first_name,
-      //   last_name: this.state.tenant_profile.last_name,
-      //   legal_name: this.state.tenant_profile.legal_name,
-      //   gender: this.state.tenant_profile.gender,
-      //   email: this.state.tenant_profile.email,
-      //   phone: this.state.tenant_profile.phone,
-      //   date_of_birth: moment(this.state.tenant_profile.date_of_birth).format('L'),
-      //   school: this.state.tenant_profile.school,
-      //   program: this.state.tenant_profile.program,
-      //   year: this.state.tenant_profile.current_semester,
-      // }
       if (this.state.phoneRequired) {
         updateTenantPhone({
           tenant_id: this.props.tenant_profile.tenant_id,
@@ -341,7 +257,7 @@ class MessageLandlordForm extends Component {
               <Input
                 value={this.state.email}
                 onChange={e => this.updateAttr(e, 'email')}
-                disabled={!this.state.phoneRequired}
+                disabled={!this.state.emailRequired}
               />
             </Form.Field>
           </Form.Group>

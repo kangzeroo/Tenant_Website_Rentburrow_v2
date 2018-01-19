@@ -60,11 +60,13 @@ import AnalyticsSummary from './Components/AnalyticsSummary'
 import MessageLandlordForm from '../contracts/simple_temp_form/MessageLandlordForm'
 import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
 import BuildingViews from '../analytics/BuildingViews'
+import BuildingToursContainer from './Components/BuildingToursContainer'
 import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
 import { getTenantFavoriteForBuilding, } from '../../api/tenant/favorite_api'
 import { triggerForcedSigninFavorite, } from '../../actions/auth/auth_actions'
 import { changeHTMLTitle } from '../../actions/app/app_actions'
+import { getToursForBuilding } from '../../api/tour/tour_api'
 
 
 class BuildingPage extends Component {
@@ -89,6 +91,9 @@ class BuildingPage extends Component {
 			// favorited: [],
 			// favorites_loaded: false,
 			loading: true,
+
+
+			tours: [],
 		}
 	}
 
@@ -107,6 +112,9 @@ class BuildingPage extends Component {
 			})
 			.then(() => {
 				return this.getAmenitiesForBuilding()
+			})
+			.then(() => {
+				return this.getToursForBuilding()
 			})
 			.then(() => {
 				return getAvailableSuites({
@@ -189,6 +197,15 @@ class BuildingPage extends Component {
 		}).then((amenities) => {
 			this.setState({
 				amenities: amenities
+			})
+		})
+	}
+
+	getToursForBuilding() {
+		getToursForBuilding(this.state.building.building_id)
+		.then((data) => {
+			this.setState({
+				tours: data,
 			})
 		})
 	}
@@ -432,6 +449,19 @@ class BuildingPage extends Component {
 							:
 							null
 						}
+						{
+							this.state.tours && this.state.tours.length > 0
+							?
+							<div style={comStyles().analyticsSummary} >
+								<BuildingToursContainer
+									building={this.state.building}
+									tours={this.state.tours}
+								/>
+							</div>
+							:
+							null
+						}
+
 					</div>
 					<div style={comStyles().content_right} >
 						{
@@ -748,7 +778,7 @@ const comStyles = () => {
 			zoom: '0.5'
 		},
 		analyticsSummary: {
-			margin: '10px 0px 0px 0px'
+			margin: '10px 0px 10px 0px'
 		},
 		loadingContainer: {
 			minHeight: '270px',

@@ -11,17 +11,14 @@ import { withRouter } from 'react-router-dom'
 import {
   Card,
   Button,
-  Image,
-  Icon,
 } from 'semantic-ui-react'
-import { renderProcessedThumbnail, } from '../../../api/general/general_api'
-import { triggerForcedSigninFavorite, } from '../../../actions/auth/auth_actions'
+import { triggerForcedSigninFavorite } from '../../../actions/auth/auth_actions'
 
-class TourCard extends Component {
+class BuildingTourCard extends Component {
 
   determineIfPopup() {
     if (this.props.authenticated) {
-      this.props.openPopup({ tour: this.props.tour, building: this.props.building })
+      return this.props.openPopup({ tour: this.props.tour, building: this.props.building })
     } else {
       this.props.triggerForcedSigninFavorite({
 				building_id: this.props.building.building_id,
@@ -32,59 +29,22 @@ class TourCard extends Component {
 	render() {
     return (
 			<Card
-        id='TourCard'
+        id='BuildingTourCard'
         style={comStyles().container}
         onClick={() => this.determineIfPopup()}
         style={comStyles(this.props.building.label).hardCard}
+        raised
       >
-        <div style={comStyles().imageGallery} >
-          <Image style={{ maxHeight: '170px', minWidth: '100%' }} src={renderProcessedThumbnail(this.props.building.thumbnail)} />
-        </div>
         <Card.Content style={comStyles().info}>
-          <Card.Header>
-            <h3 style={{ fontWeight: 'bold' }}>{ this.props.building.building_alias }</h3>
-          </Card.Header>
           <Card.Description style={comStyles().more_info}>
-            {
-              this.props.building.min_price && this.props.building.max_price
-              ?
-              <h5 style={comStyles().price}>
-                {
-                  this.props.building.min_price === this.props.building.max_price
-                  ?
-                  `Rooms from $${this.props.building.min_price}`
-                  :
-                  `Rooms from $${this.props.building.min_price} to $${this.props.building.max_price}`
-                }
-              </h5>
-              :
-              'Inquire Price'
-            }
-            <h5 style={{ color: '#33A3F4', fontWeight: 'bold', padding: '2.5px' }}>Tour {moment(this.props.tour.selected_date).fromNow()}</h5>
-            <h5 style={{ padding: '2.5px' }}>{`${moment(this.props.tour.selected_date).format('MMMM Do YYYY, h:mm a')}`}</h5>
+            <h3 style={{ color: '#33A3F4', fontWeight: 'bold', padding: '2.5px' }}>Tour {moment(this.props.tour.selected_date).fromNow()}</h3>
+            <h3 style={{ padding: '2.5px' }}>{`${moment(this.props.tour.selected_date).format('MMMM Do YYYY, h:mm a')}`}</h3>
           </Card.Description>
         </Card.Content>
         <Card.Content extra>
           <div style={comStyles().bottomContainer} >
-            <a style={comStyles().bedContainer}>
-              <Icon name='bed' />
-              {
-                this.props.building.min_rooms && this.props.building.max_rooms
-                ?
-                <div>
-                  {
-                    this.props.building.min_rooms === this.props.building.max_rooms
-                    ?
-                    `${this.props.building.min_rooms} Bed${this.props.building.min_rooms === 1 ? '' : 's'}`
-                    :
-                    `${this.props.building.min_rooms} to ${this.props.building.max_rooms} Beds`
-                  }
-                </div>
-                :
-                'Inquire Rooms'
-              }
-            </a>
             <Button
+              fluid
               color='orange'
               content='Join Tour'
             />
@@ -96,27 +56,26 @@ class TourCard extends Component {
 }
 
 // defines the types of variables in this.props
-TourCard.propTypes = {
+BuildingTourCard.propTypes = {
 	history: PropTypes.object.isRequired,
-  triggerForcedSigninFavorite: PropTypes.func.isRequired,
   authenticated: PropTypes.bool.isRequired,
+  triggerForcedSigninFavorite: PropTypes.func.isRequired,
   building: PropTypes.object.isRequired,    // passed in
   tour: PropTypes.object.isRequired,        // passed in
   openPopup: PropTypes.func.isRequired,     // passed in
 }
 
 // for all optional props, define a default value
-TourCard.defaultProps = {
+BuildingTourCard.defaultProps = {
 
 }
 
 // Wrap the prop in Radium to allow JS styling
-const RadiumHOC = Radium(TourCard)
+const RadiumHOC = Radium(BuildingTourCard)
 
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-    buildings: redux.search.buildings,
     authenticated: redux.auth.authenticated,
 	}
 }
@@ -141,8 +100,8 @@ const comStyles = () => {
     hardCard: {
       minWidth: '310px',
       maxWidth: 'auto',
-      minHeight: '340px',
-      maxHeight: '340px',
+      minHeight: '150px',
+      maxHeight: '150px',
       margin: '30px',
     },
     info: {
@@ -173,7 +132,8 @@ const comStyles = () => {
     more_info: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between'
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     headerPrint: {
       fontSize: '1rem',

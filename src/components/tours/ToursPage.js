@@ -10,6 +10,10 @@ import { withRouter } from 'react-router-dom'
 import {
   Header,
   Tab,
+  Segment,
+  Dimmer,
+  Loader,
+  Message,
 } from 'semantic-ui-react'
 import { getAllAvailableTours, } from '../../api/tour/tour_api'
 import {
@@ -28,9 +32,8 @@ class ToursPage extends Component {
     this.state = {
       tours: [],
 
-      toggle_modal: false,
-      modal_name: '',
-      context: null,
+      tours_loaded: false,
+      no_tours: false,
     }
   }
 
@@ -46,16 +49,32 @@ class ToursPage extends Component {
         return getAllAvailableTours()
       })
       .then((data) => {
-        this.setState({
-          tours: data,
-        })
+        if (data && data.length > 0) {
+          this.setState({
+            tours: data,
+            tours_loaded: true,
+          })
+        } else {
+          this.setState({
+            tours_loaded: true,
+            no_tours: true,
+          })
+        }
       })
     } else {
       getAllAvailableTours()
       .then((data) => {
-        this.setState({
-          tours: data,
-        })
+        if (data && data.length > 0) {
+          this.setState({
+            tours: data,
+            tours_loaded: true,
+          })
+        } else {
+          this.setState({
+            tours_loaded: true,
+            no_tours: true,
+          })
+        }
       })
     }
   }
@@ -68,18 +87,37 @@ class ToursPage extends Component {
   }
 
   renderUpcomingTours() {
-    return (
-      <AllUpcomingToursTab
-        tours={this.state.tours}
-        buildings={this.props.buildings}
-      />
-    )
+    if (this.state.tours_loaded && !this.state.no_tours) {
+      return (
+        <AllUpcomingToursTab
+          tours={this.state.tours}
+          buildings={this.props.buildings}
+        />
+      )
+    } else if (this.state.tours_loaded && this.state.no_tours) {
+      return (
+        <div style={comStyles().loadingContainer} >
+          <Message warning>
+            <Message.Header>{`There are no upcoming tours`}</Message.Header>
+            <p>{`Message some properties and set up a tour, or join a tour`}</p>
+          </Message>
+        </div>
+      )
+    } else if (!this.state.tours_loaded) {
+      return (
+        <Segment style={comStyles().loadingContainer}>
+          <Dimmer active inverted>
+            <Loader inverted content='Loading' />
+          </Dimmer>
+        </Segment>
+      )
+    }
   }
 
   renderMyUpcomingTours() {
     return (
       <MyUpcomingToursTab
-
+        buildings={this.props.buildings}
       />
     )
   }
@@ -134,6 +172,14 @@ const comStyles = () => {
       margin: '20px',
       minHeight: '93vh'
 		},
+    loadingContainer: {
+      width: '100%',
+      minHeight: '300px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+
+    }
 
 	}
 }
