@@ -229,8 +229,9 @@ class BuildingPage extends Component {
 					size='large'
 				>
 	        <Modal.Content>
-						<ImageGallery
-							list_of_images={this.state.images}
+						<SingularImageGallery
+							list_of_images={this.state.images.map(img => img.image_url)}
+							image_size='hd'
 						/>
 	        </Modal.Content>
 	      </Modal>
@@ -333,7 +334,7 @@ class BuildingPage extends Component {
 	}
 
 	showMessagePopup(header) {
-		if (!this.props.authenticated) {
+		if (!this.props.authenticated || !this.props.tenant_profile || !this.props.tenant_profile.tenant_id) {
 			this.props.triggerForcedSigninFavorite({
 				building_id: this.state.building.building_id,
 			})
@@ -398,7 +399,7 @@ class BuildingPage extends Component {
 									{
 										this.state.building.label
 										?
-										<div onClick={() => this.toggleModal(true, 'collection')} style={comStyles().welcome_ribbon}>
+										<div onClick={() => this.showMessagePopup('Apply Now')} style={comStyles().welcome_ribbon}>
 				              <RibbonLabel label={this.state.building.label} size='massive' />
 										</div>
 										:
