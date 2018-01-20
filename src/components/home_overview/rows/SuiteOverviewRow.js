@@ -177,7 +177,7 @@ class SuiteOverviewRow extends Component {
   signAndPayOnline(suite) {
     // localStorage.removeItem('leasing_group_id')
     // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
-    this.props.toggleTemporaryCollectionFrom()
+    this.props.toggleModal('phone')
     this.props.collectIntel({
       'TableName': SUITE_INTERACTIONS,
       'Item': {
@@ -234,12 +234,12 @@ class SuiteOverviewRow extends Component {
             }
 					</div>
 					<div style={comStyles().left_bottom}>
-            <Button
+            {/*<Button
               onClick={() => this.signAndPayOnline(suite)}
               color='blue'
               content='Apply Now'
               style={comStyles().explore_button}
-            />
+            />*/}
 						<Button
               basic
 							onClick={() => this.viewVirtualTour(suite)}
