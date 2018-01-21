@@ -40,7 +40,7 @@ class LandlordResponsiveness extends Component {
             `${(this.props.avg_time/60).toFixed(0)} hours`
             :
             `${this.props.avg_time} minutes`
-          } label='Typical Response Time' size='mini' style={comStyles().stat} />
+          } label='Typical Landlord Response Time' size='mini' style={comStyles().stat} />
           :
           null
         }
