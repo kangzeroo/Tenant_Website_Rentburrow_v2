@@ -194,6 +194,7 @@ class MessageLandlordForm extends Component {
             },
             group_notes: this.state.group_notes,
             group_size: this.state.group_size,
+            corporation_id: data.corporation_id,
             corporation_email: data.email,
             inquiry_id: inquiry_id,
           })
