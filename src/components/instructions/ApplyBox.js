@@ -73,7 +73,7 @@ class ApplyBox extends Component {
     this.props.collectIntel({
       'TableName': BUILDING_INTERACTIONS,
       'Item': {
-        'ACTION': 'CALL_LANDLORD_BUTTON',
+        'ACTION': 'MESSAGE_LANDLORD_BUTTON',
         'DATE': new Date().getTime(),
         'BUILDING_ID': this.props.building.building_id,
         'ADDRESS': this.props.building.building_address,

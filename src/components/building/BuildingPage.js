@@ -16,7 +16,7 @@ import {
 	Dimmer,
 	Segment,
 } from 'semantic-ui-react'
-import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
+import { searchForSpecificBuildingByAlias, getSpecificLandlord, getLandlordInfo } from '../../api/search/search_api'
 import {
 	URLToAlias,
 	renderProcessedImage,
@@ -60,6 +60,7 @@ import AnalyticsSummary from './Components/AnalyticsSummary'
 import MessageLandlordForm from '../contracts/simple_temp_form/MessageLandlordForm'
 import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
 import BuildingViews from '../analytics/BuildingViews'
+import LandlordResponsiveness from '../analytics/LandlordResponsiveness'
 import BuildingToursContainer from './Components/BuildingToursContainer'
 import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
@@ -67,6 +68,7 @@ import { getTenantFavoriteForBuilding, } from '../../api/tenant/favorite_api'
 import { triggerForcedSigninFavorite, } from '../../actions/auth/auth_actions'
 import { changeHTMLTitle } from '../../actions/app/app_actions'
 import { getToursForBuilding } from '../../api/tour/tour_api'
+import { checkLandlordResponsiveness } from '../../api/landlord/landlord_api'
 
 
 class BuildingPage extends Component {
@@ -79,7 +81,7 @@ class BuildingPage extends Component {
 
 			suites: [],
 			promise_array_of_suite_amenities_with_id: [],
-
+			responsivenessStats: {},
 			sublets: [],
 
 			toggle_modal: false,
@@ -149,8 +151,6 @@ class BuildingPage extends Component {
 				return getSpecificLandlord({ building_id: this.state.building.building_id })
 			})
 			.then((corporation) => {
-				// console.log(corporation)
-				this.props.selectCorporation(corporation)
 				this.props.collectIntel({
 				  'TableName': BUILDING_INTERACTIONS,
 				  'Item': {
@@ -161,6 +161,16 @@ class BuildingPage extends Component {
 				    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
 				    'FINGERPRINT': this.props.fingerprint,
 				  }
+				})
+				return getLandlordInfo(this.state.building.building_id)
+			})
+			.then((actualLandlord) => {
+				this.props.selectCorporation(actualLandlord)
+				return checkLandlordResponsiveness(actualLandlord.corporation_id)
+			})
+			.then((stats) => {
+				this.setState({
+					responsivenessStats: stats
 				})
 			})
 	}
@@ -481,6 +491,17 @@ class BuildingPage extends Component {
 									<Loader inverted />
 								</Dimmer>
 							</Segment>
+						}
+						{
+							this.state.responsivenessStats && (parseInt(this.state.responsivenessStats.avg_time) || parseInt(this.state.responsivenessStats.last_active) || parseInt(this.state.responsivenessStats.percent_responded))
+							?
+							<LandlordResponsiveness
+								avg_time={parseInt(this.state.responsivenessStats.avg_time)}
+								last_active={parseInt(this.state.responsivenessStats.last_active)}
+								percent_responded={parseInt(this.state.responsivenessStats.percent_responded)}
+							/>
+							:
+							null
 						}
 						{
 							this.state.building.building_id
