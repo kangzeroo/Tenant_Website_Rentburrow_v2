@@ -248,6 +248,7 @@ class MessageLandlordForm extends Component {
             <Form.Field>
               <label>Phone Number</label>
               <Input
+                type='phone'
                 value={this.state.phone}
                 onChange={e => this.updateAttr(e, 'phone')}
                 disabled={!this.state.phoneRequired}

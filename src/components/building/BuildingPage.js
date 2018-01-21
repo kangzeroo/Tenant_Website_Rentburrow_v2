@@ -79,6 +79,7 @@ class BuildingPage extends Component {
 			images: [],
 			amenities: [],
 
+			mapped_landlord: {},
 			suites: [],
 			promise_array_of_suite_amenities_with_id: [],
 			responsivenessStats: {},
@@ -165,6 +166,9 @@ class BuildingPage extends Component {
 				return getLandlordInfo(this.state.building.building_id)
 			})
 			.then((actualLandlord) => {
+				this.setState({
+	        mapped_landlord: actualLandlord,
+	      })
 				this.props.selectCorporation(actualLandlord)
 				return checkLandlordResponsiveness(actualLandlord.corporation_id)
 			})
@@ -493,7 +497,7 @@ class BuildingPage extends Component {
 							</Segment>
 						}
 						{
-							this.state.responsivenessStats && (parseInt(this.state.responsivenessStats.avg_time) || parseInt(this.state.responsivenessStats.last_active) || parseInt(this.state.responsivenessStats.percent_responded))
+							this.state.responsivenessStats && (parseInt(this.state.responsivenessStats.avg_time) || parseInt(this.state.responsivenessStats.last_active) || parseInt(this.state.responsivenessStats.percent_responded)) && this.state.mapped_landlord && this.state.mapped_landlord.corporation_name && this.state.mapped_landlord.corporation_name.toLowerCase().indexOf('rentburrow') === -1
 							?
 							<LandlordResponsiveness
 								avg_time={parseInt(this.state.responsivenessStats.avg_time)}
