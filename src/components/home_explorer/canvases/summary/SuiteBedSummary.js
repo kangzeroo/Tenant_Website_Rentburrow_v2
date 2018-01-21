@@ -9,6 +9,7 @@ import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
 	Statistic,
+	Image,
 	Icon,
 } from 'semantic-ui-react'
 
@@ -19,27 +20,14 @@ class SuiteBedSummary extends Component {
 		return (
 			<div id='SuiteBedSummary' style={comStyles().rooms_summary}>
 				{
-					this.props.rooms_summary.total_rooms
-					?
-					<Statistic size={this.props.font}>
-			      <Statistic.Value>
-							<Icon name='bed' />
-			        {this.props.rooms_summary.total_rooms}
-			      </Statistic.Value>
-			      <Statistic.Label>Bedrooms <br /> { this.props.rooms_summary.total_ensuite_baths > 0 ? `with ${this.props.rooms_summary.total_ensuite_baths} ensuite baths` : null }</Statistic.Label>
-			    </Statistic>
-					:
-					null
-				}
-				{
 					this.props.rooms_summary.standard_price !== 0
 					?
 					<Statistic size={this.props.font}>
-			      <Statistic.Value>
-			        ${this.props.rooms_summary.standard_price}
-			      </Statistic.Value>
-			      <Statistic.Label>Per Room</Statistic.Label>
-			    </Statistic>
+						<Statistic.Value>
+							${this.props.rooms_summary.standard_price}
+						</Statistic.Value>
+						<Statistic.Label>Per Room</Statistic.Label>
+					</Statistic>
 					:
 					<div>
 						{
@@ -55,6 +43,19 @@ class SuiteBedSummary extends Component {
 							null
 						}
 					</div>
+				}
+				{
+					this.props.rooms_summary.total_rooms
+					?
+					<Statistic size={this.props.font}>
+			      <Statistic.Value>
+							<Icon name='bed' />
+			        {this.props.rooms_summary.total_rooms}
+			      </Statistic.Value>
+			      <Statistic.Label>Bedrooms <br /> { this.props.rooms_summary.total_ensuite_baths > 0 ? `with ${this.props.rooms_summary.total_ensuite_baths} ensuite baths` : null }</Statistic.Label>
+			    </Statistic>
+					:
+					null
 				}
 			</div>
 		)
@@ -106,10 +107,8 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
 			justifyContent: 'center',
-			alignItems: 'center',
       height: '100%',
 			width: '100%',
-			fontSize: '1rem',
     },
 	}
 }

@@ -198,8 +198,8 @@ class Login extends Component {
 							Login
 						</Button>
 					}
-					<Link to='/login/forgot' onClick={() => this.props.closeModal()}>Forgot Password</Link>
-					<Link to='/register' onClick={() => this.props.closeModal()}>Sign Up</Link>
+					<div tabIndex='0' role='button' onClick={() => this.props.forgotPassword()}>Forgot Password</div>
+					<div tabIndex='-1' role='button' onClick={() => this.props.signupState()}>Sign Up</div>
 
 					{ this.renderVerifiedModal() }
 					{ this.renderResetModal() }
@@ -251,11 +251,11 @@ class Login extends Component {
 						}
 						</Form.Field>
 						<Form.Field>
-							<div style={comStyles().forgot} onClick={() => this.props.history.push('/login/forgot')}>Forgot Password</div>
+							<div tabIndex='0' role='button' onClick={() => this.props.forgotPassword()} style={comStyles().forgot}>Forgot Password</div>
 						</Form.Field>
 						<Form.Field style={comStyles().row}>
 							<div>{`Don't have an account?`}</div>
-							<div style={comStyles().signup} onClick={() => this.props.history.push('/register')}>  Sign Up</div>
+							<div tabIndex='-1' role='button' onClick={() => this.props.signupState()} style={comStyles().signup}>Sign Up</div>
 						</Form.Field>
 
 						{ this.renderVerifiedModal() }
@@ -272,8 +272,8 @@ Login.propTypes = {
 	saveTenantToRedux: PropTypes.func.isRequired,
 	closeModal: PropTypes.func,					// passed in
 	facebook_only: PropTypes.bool,			// passed in
-	// signupState: PropTypes.func.isRequired,	// passed in
-	// forgotPassword: PropTypes.func.isRequired,		// passed in
+	signupState: PropTypes.func.isRequired,	// passed in
+	forgotPassword: PropTypes.func.isRequired,		// passed in
   temporary_favorite_force_signin: PropTypes.object,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
 	authenticated: PropTypes.bool,

@@ -137,7 +137,7 @@ class SuiteOverviewRow extends Component {
   }
 
   generateBathsSummary() {
-    return (<SuiteBathSummary baths_summary={this.state.baths_summary}/>)
+    return (<SuiteBathSummary baths_summary={this.state.baths_summary} />)
   }
 
   generateBedsSummary() {
@@ -226,11 +226,15 @@ class SuiteOverviewRow extends Component {
             <FavoriteIcon fav_type='suite' suite={suite} size='large' building={this.props.building} />
 					</div>
 					<div id='infobar' style={comStyles().left_middle} >
+
             {
               this.generateBedsSummary()
             }
             {
               this.generateBathsSummary()
+            }
+            {
+              // this.generateFreeUtilities()
             }
 					</div>
 					<div style={comStyles().left_bottom}>
@@ -242,6 +246,7 @@ class SuiteOverviewRow extends Component {
             />*/}
 						<Button
               basic
+              icon='slideshare'
 							onClick={() => this.viewVirtualTour(suite)}
 							color='blue'
 							content='Virtual Tour'

@@ -162,7 +162,7 @@ class TourPopup extends Component {
 				loading: true,
 			})
 
-			const body = `GROUP TOUR REQUEST: I would like to join the tour for ${building.building_alias} that is happening on ${moment(tour.selected_date).format('MMMM Do YYYY, HH:mm a')}, which is originally booked by ${tour.first_name} ${tour.last_name}. I have a group of ${this.state.group_size}.`
+			const body = `GROUP TOUR REQUEST: My group would like to join the tour for ${building.building_alias} that is happening on ${moment(tour.selected_date).format('MMMM Do YYYY, HH:mm a')}. That tour was originally booked by ${tour.first_name} ${tour.last_name}. My group is different and has ${this.state.group_size} people.`
 			insertScheduledTour({
 				tenant_id: this.props.tenant_profile.tenant_id,
 	      landlord_id: tour.landlord_id,
