@@ -21,4 +21,5 @@ export default [
   '/pricing',
   '/prizes',
   '/tours',
+  '/apology'
 ]
