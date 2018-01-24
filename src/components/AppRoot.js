@@ -67,7 +67,7 @@ import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import MyFavorites from './favorites/MyFavorites'
 import ToursPage from './tours/ToursPage'
-
+import Apology from './instructions/Apology'
 import Test from './requests/Test'
 
 import MobileHeader from './mobile/components/MobileHeader'
@@ -371,6 +371,7 @@ class AppRoot extends Component {
                 <Route exact path='/prizes' component={PrizesPage} />
                 {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
+                <Route exact path='/apology' component={Apology} />
                 <Route exact path='/contact' component={ContactUs} />
                 <Route exact path='/book-filming' component={BookAFilmingPage} />
                 <Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />
