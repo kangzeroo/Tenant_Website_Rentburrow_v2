@@ -35,8 +35,8 @@ import PrizesPage from './community/student_info/PrizesPage'
 import UberSignup from './scheduling/uber/UberSignup'
 import LandlordTourConfirmation from './scheduling/timing/LandlordTourConfirmation'
 import ContactUs from './instructions/ContactUs'
-import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
-import TermsOfServicePage from './community/student_info/TermsOfServicePage'
+// import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
+// import TermsOfServicePage from './community/student_info/TermsOfServicePage'
 import HowItWorksLandlord from './community/landlord_info/HowItWorksLandlord'
 import BookAFilmingPage from './community/landlord_info/BookAFilmingPage'
 import JoinPageLandlord from './community/landlord_info/JoinPageLandlord'
@@ -74,6 +74,9 @@ import MobileHeader from './mobile/components/MobileHeader'
 import MobilePage from './mobile/MobilePage'
 import MobileBuildingPage from './mobile/components/buildings/MobileBuildingPage'
 import MobileLandlordTourConfirmation from './mobile/scheduling/MobileLandlordTourConfirmation'
+import TermsOfUsePage from './instructions/Legal/TermsOfUsePage'
+import PrivacyPolicyPage from './instructions/Legal/PrivacyPolicyPage'
+import BothPolicies from './instructions/Legal/BothPolicies'
 
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
@@ -368,7 +371,7 @@ class AppRoot extends Component {
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}
                 <Route exact path='/uber' component={UberSignup} />
-                <Route exact path='/prizes' component={PrizesPage} />
+                {/*<Route exact path='/prizes' component={PrizesPage} />*/}
                 {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
                 <Route exact path='/apology' component={Apology} />
@@ -385,6 +388,9 @@ class AppRoot extends Component {
                 <Route exact path='/login/forgot' component={ForgotPassword} />
                 <Route exact path='/login' component={LoginPage} />
                 <Route exact path='/logout' component={Logout} />
+                <Route exact path='/termsofuse' component={TermsOfUsePage} />
+                <Route exact path='/privacypolicy' component={PrivacyPolicyPage} />
+                <Route exact path='/termsandconditions' component={BothPolicies} />
 
                 <Route exact path='/tours' component={ToursPage} />
 

@@ -19,7 +19,10 @@ export default [
   '/login',
   '/account',
   '/pricing',
-  '/prizes',
+  // '/prizes',
   '/tours',
-  '/apology'
+  '/apology',
+  '/termsofuse',
+  '/privacypolicy',
+  '/termsandconditions'
 ]
