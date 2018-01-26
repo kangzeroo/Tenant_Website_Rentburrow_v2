@@ -41,7 +41,7 @@ class Footer extends Component {
               <div style={comStyles().col}>
                 <Link to='/lease' onClick={() => this.props.changeRentType('lease')} style={comStyles().link}>Browse Leases</Link>
                 <Link to='/sublet' onClick={() => this.props.changeRentType('sublet')} style={comStyles().link}>Browse Sublets</Link>
-                <Link to='/prizes' style={comStyles().link}>Signing Prizes</Link>
+                {/*<Link to='/prizes' style={comStyles().link}>Signing Prizes</Link>*/}
               </div>
               {/*<div style={comStyles().col}>
                 <Link to='/protips' style={comStyles().link}>FAQ & Protips</Link>
@@ -66,6 +66,24 @@ class Footer extends Component {
                 <Link to='/join-landlord' style={comStyles().link}>Join The Network</Link>
                 <Link to='/book-filming' style={comStyles().link}>Book A Filming</Link>
                 <Link to='/contact' style={comStyles().link}>Contact Us</Link>
+              </div>
+            </div>
+          </div>
+          <div style={comStyles().about_section}>
+            <Header
+              as='h1'
+              inverted
+              content='About'
+            />
+            <div style={comStyles().grid}>
+              {/*<div style={comStyles().col}>
+                <Link to='/how-it-works' style={comStyles().link}>How It Works</Link>
+                <Link to='/pricing' style={comStyles().link}>Pricing</Link>
+                <Link to='/landlord-faq' style={comStyles().link}>Landlord FAQ</Link>
+              </div>*/}
+              <div style={comStyles().col}>
+                <Link to='/termsofuse' style={comStyles().link}>Terms of Use</Link>
+                <Link to='/privacypolicy' style={comStyles().link}>Policy Policy</Link>
               </div>
             </div>
           </div>
@@ -150,6 +168,13 @@ const comStyles = () => {
       width: '30%',
     },
     landlord_section: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      color: 'white',
+      width: '30%',
+    },
+    about_section: {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
