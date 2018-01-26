@@ -5,7 +5,7 @@ import {
 
 const INITIAL_STATE = {
   selected_language: 'en',
-  html_title: 'RentHero - Waterloo Student Housing',
+  html_title: 'RentHero Student Housing in Waterloo has the Best Off Campus Housing and Student Rentals for UW, WLU, and Conestoga',
 }
 
 export default (state = INITIAL_STATE, action) => {

@@ -10,10 +10,8 @@ import { withRouter } from 'react-router-dom'
 import {
   Image,
   Icon,
-  Transition,
 } from 'semantic-ui-react'
 import {
-  shortenAddress,
   renderProcessedImage,
   renderProcessedThumbnail,
 } from '../../api/general/general_api'
