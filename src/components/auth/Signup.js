@@ -129,6 +129,10 @@ class Signup extends Component {
 	agreedToTerms() {
 		this.setState({
 			agreed_to_terms: !this.state.agreed_to_terms
+		}, () => {
+			if (this.state.agreed_to_terms) {
+				// save to dynamodb
+			}
 		})
 	}
 
