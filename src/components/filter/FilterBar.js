@@ -251,7 +251,7 @@ class FilterBar extends Component {
                 ?
                 `Showing ${numberOfPropertiesShown} Facebook Sublet${numberOfPropertiesShown > 1 ? 's' : ''}`
                 :
-                `Showing ${numberOfPropertiesShown} Propert${numberOfPropertiesShown > 1 ? 'ies' : 'y'}`
+                `${numberOfPropertiesShown} Student Rental${numberOfPropertiesShown > 1 ? 's' : ''}`
               }
             </h3>
             <Dropdown

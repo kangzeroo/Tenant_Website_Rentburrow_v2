@@ -371,10 +371,6 @@ class BuildingPage extends Component {
 	render() {
 		return (
 			<div id='BuildingPage' style={comStyles().container}>
-				<MetaTags>
-					<title>{`${this.convertToNameCase(this.state.building.building_address.slice(1))} for Rent on RentHero`}</title>
-					<meta name='description' content={`Explore more about this Waterloo student housing rental located at ${this.state.building.building_address}. Check out Virtual Reality tours and hundreds of photos.`} />
-				</MetaTags>
 				<div style={loadStyles(renderProcessedImage(this.state.building.cover_photo)).cover_photo}>
 					{
 						this.state.building.istaging_url || this.state.building.iguide_url
