@@ -7,7 +7,7 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import { slideInLeft } from 'react-animations'
 import Rx from 'rxjs'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import Pagination from 'antd/lib/pagination'
 import 'antd/lib/pagination/style/css'
 import { LocaleProvider, Spin } from 'antd'
@@ -31,6 +31,7 @@ import BuildingCard from '../cards/BuildingCard'
 import BuildingRow from '../cards/BuildingRow'
 import SubletCard from '../cards/SubletCard'
 import FilterBar from '../../filter/FilterBar'
+import SocialMediaContainer from '../../share/SocialMediaContainer'
 
 class HousingPanel extends Component {
 
@@ -69,11 +70,11 @@ class HousingPanel extends Component {
 			)
 		} else if (this.props.card_style === 'grid') {
 			return (
-				<BuildingCard
-					key={building.building_id}
-					building={building}
-					style={comStyles().gridItem}
-				/>
+					<BuildingCard
+						key={building.building_id}
+						building={building}
+						style={comStyles().gridItem}
+					/>
 			)
 		} else if (this.props.card_style === 'cover') {
 			return (
@@ -229,6 +230,8 @@ class HousingPanel extends Component {
 										<LocaleProvider locale={enUS}>
 										<Pagination size='large' onChange={(e) => this.handlePaginationChange(e, 10)} defaultCurrent={1} total={this.props.building_search_results.length} />
 										</LocaleProvider>
+										<br />
+										<SocialMediaContainer />
 									</Card>
 									:
 									null
@@ -357,8 +360,8 @@ const comStyles = () => {
 			flexDirection: 'column',
 			alignItems: 'center',
 			justifyContent: 'center',
-			minHeight: '60px',
-			maxHeight: '60px',
+			minHeight: '100px',
+			maxHeight: '100px',
 			minWidth: '100%',
 			maxWidth: '100%'
 		}
