@@ -89,13 +89,13 @@ class BuildingPage extends Component {
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
 		}
-		this.props.changeHTMLTitle(`${this.convertToNameCase(building_alias.slice(1))}, Waterloo for Rent on RentHero`)
+		this.props.changeHTMLTitle(`${this.convertToNameCase(building_alias.slice(1))}, Waterloo -- Student Housing for Rent on RentHero`)
 		searchForSpecificBuildingByAlias(building_alias)
 			.then((data) => {
 				this.setState({
 					building: data,
 				})
-				this.props.changeHTMLTitle(`${this.convertToNameCase(data.building_address.slice(1))} for Rent on RentHero`)
+				this.props.changeHTMLTitle(`${this.convertToNameCase(data.building_address)} -- Student Housing for Rent on RentHero`)
 				return this.getImagesForBuilding()
 			})
 			.then(() => {

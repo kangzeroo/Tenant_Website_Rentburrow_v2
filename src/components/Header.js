@@ -215,12 +215,16 @@ class Header extends Component {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
-              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
-                Tours
-              </div>
-              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
-                Help
-              </div>
+              <Link to='/tours' >
+                <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                  Tours
+                </div>
+              </Link>
+              <Link to='/contact' >
+                <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                  Help
+                </div>
+              </Link>
               {
                 (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
                 this.props.history.location.pathname === '/leases')
@@ -269,12 +273,16 @@ class Header extends Component {
                 inverted
                 content='Login'
               />*/}
-              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
-                Tours
-              </div>
-              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
-                Help
-              </div>
+              <Link to='/tours' >
+                <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                  Tours
+                </div>
+              </Link>
+              <Link to='/contact'>
+                <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                  Help
+                </div>
+              </Link>
               <div role='button' tabIndex={0} key='signup' style={comStyles().login} onClick={() => this.toggleModal(true, 'signup')}>
                 Sign Up
               </div>
