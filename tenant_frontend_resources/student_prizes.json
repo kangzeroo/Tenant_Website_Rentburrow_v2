@@ -1,0 +1,34 @@
+{
+  "prizes": [
+    {
+      "image": "https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/gift_images/Screen+Shot+2017-11-13+at+4.50.04+PM.png",
+      "header": "All You Can Eat Sushi",
+      "quick_desc": "Eat all the sushi you want at one of Waterloo's finest japanese buffets. Bring your new roommates to celebrate a job well done finding a new place!",
+      "full_desc": ""
+    },
+    {
+      "image": "https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/gift_images/Screen+Shot+2017-11-13+at+4.53.15+PM.png",
+      "header": "All You Can Eat Korean BBQ",
+      "quick_desc": "You like meat? You hungry? Sign a lease online, and get some fresh barbequed meat",
+      "full_desc": ""
+    },
+    {
+      "image": "https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/gift_images/Screen+Shot+2017-11-13+at+4.56.08+PM.png",
+      "header": "Sephora Giftcard",
+      "quick_desc": "Stock up on your makeup for the next school year.",
+      "full_desc": ""
+    },
+    {
+      "image": "https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/gift_images/Screen+Shot+2017-11-13+at+4.55.52+PM.png",
+      "header": "The Practical Gift Pack",
+      "quick_desc": "Eat all the sushi you want at one of Waterloo's finest japanese buffets. Bring your new roommates to celebrate a job well done finding a new place!",
+      "full_desc": ""
+    },
+    {
+      "image": "https://s3.amazonaws.com/rentburrow-static-assets/app_references/student_info/gift_images/Screen+Shot+2017-11-13+at+4.56.01+PM.png",
+      "header": "Bubble Tea For All Roommates",
+      "quick_desc": "You like meat? You hungry? Sign a lease online, and get some fresh barbequed meat",
+      "full_desc": ""
+    }
+  ]
+}

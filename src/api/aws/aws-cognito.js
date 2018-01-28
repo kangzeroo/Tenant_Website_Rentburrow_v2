@@ -82,6 +82,10 @@ export const LoginStudent = ({ email, password }) => {
 				res(staffProfileObject)
 			})
 			.catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				rej({
 					message: err
 				})
@@ -353,7 +357,11 @@ export const registerFacebookLoginWithCognito = (response) => {
 					if (AWS.config.credentials.expired) {
 						localStorage.removeItem('fbToken')
 					}
-					res(AWS.config.credentials.data.IdentityId)
+					if (AWS.config.credentials.data) {
+						res(AWS.config.credentials.data.IdentityId)
+					} else {
+						res('IdentityId-NONE')
+					}
 				})
 		  } else {
 		    // console.log('There was a problem logging you in.');
@@ -391,7 +399,7 @@ export const unauthRoleStudent = () => {
 			}
 			res({
 				tenant_id: AWS.config.credentials.data.IdentityId,
-				first_name: 'Student on Rentburrow.com',
+				first_name: 'Student on RentHero.ca',
 				last_name: '(Not Signed In)',
 				thumbnail: 'https://image.flaticon.com/icons/png/128/149/149071.png',
 				unauthRoleStudent: true,

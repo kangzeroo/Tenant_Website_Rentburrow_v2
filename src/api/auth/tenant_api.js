@@ -12,6 +12,10 @@ export const saveTenantProfile = (fbProfile) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -26,11 +30,52 @@ export const updateTenantProfile = (profile) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
   return p
 }
+
+export const updateTenantPhone = ({ tenant_id, phone, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_tenant_phone`, { tenant_id, phone, }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const updateTenantEmail = ({ tenant_id, email, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_tenant_email`, { tenant_id, email, }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
 
 export const getTenantProfile = ({ tenant_id, }) => {
   const p = new Promise((res, rej) => {
@@ -40,6 +85,10 @@ export const getTenantProfile = ({ tenant_id, }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -54,6 +103,10 @@ export const getTenantDetails = (tenant_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -69,6 +122,10 @@ export const saveTenantDetails = (obj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -83,6 +140,10 @@ export const insertStudentCard = ({ tenant_id, student_card }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -97,6 +158,10 @@ export const getStudentCard = ({ tenant_id }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -111,6 +176,28 @@ export const getTenantByEmail = (email) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const updateEntireTenantProfile = (tenantObj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/update_entire_tenant_profile`, tenantObj, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

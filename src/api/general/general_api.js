@@ -46,6 +46,10 @@ export const redirectPath = (urlPath) => {
 				}
 			}
 		}).catch((err) => {
+			_LTracker.push({
+				'error': err,
+				'tag' : `${localStorage.getItem('tenant_id')}`
+			})
 			const altURL = redirectToAnotherRoute(urlPath)
 			if (altURL.success) {
 				res(altURL)
@@ -160,4 +164,12 @@ export const convertToArray = (obj) => {
     }
   }
   return array
+}
+
+export const dbTimeToCurrentTimeShort = (timestamp) => {
+	return moment(timestamp).format('MMM Do YYY')
+}
+
+export const dbTimeToCurrentTimeLong = (timestamp) => {
+	return moment(timestamp).subtract(5, 'hours').format('MMMM Do YYYY, hh:mm a')
 }

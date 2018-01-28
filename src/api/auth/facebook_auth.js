@@ -118,6 +118,10 @@ const grabFacebookProfile = (fbToken) => {
 							cognito_id: IdentityId,
 	          })
 					}).catch((err) => {
+						_LTracker.push({
+		          'error': err,
+		          'tag' : `${localStorage.getItem('tenant_id')}`
+		        })
 						localStorage.setItem('fbToken', fbToken)
 						res({
 	            ...profile,
@@ -173,6 +177,10 @@ export const convertTokenIntoLongLived = (accessToken) => {
 			})
 			.catch((err) => {
 				// console.log(err)
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				localStorage.removeItem('cognito_student_token')
 				rej(err)
 			})
@@ -188,6 +196,10 @@ export const insertUser = (fbProfile) => {
         res(data.data)
       })
       .catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

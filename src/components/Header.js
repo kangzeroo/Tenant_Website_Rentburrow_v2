@@ -20,6 +20,7 @@ import {
   Popup,
 } from 'semantic-ui-react'
 import LoginPopup from './auth/LoginPopup'
+import FavoriteForceSignin from './tenant/favorites/FavoriteForceSignin'
 import i18n from '../i18n/translator'
 import { languageOptions } from '../i18n/language_options'
 import {
@@ -39,6 +40,8 @@ class Header extends Component {
       toggle_modal: false,
       modal_name: '',
       context: null,
+
+      show_favorites_header: true,
     }
   }
 
@@ -123,21 +126,50 @@ class Header extends Component {
     }
   }
 
+  showFavorites() {
+    const favs = JSON.parse(localStorage.getItem('favorites')).map(s => s.building_id)
+    const buildings = this.props.building_search_results.filter((building) => {
+      return favs.indexOf(building.building_id) > -1
+    })
+
+    Promise.all(buildings)
+    .then((data) => {
+      this.props.saveBuildingsToRedux(data)
+      this.setState({
+        show_favorites_header: false,
+      })
+    })
+  }
+
+  showAllBuildings() {
+    this.refreshEverything()
+    this.setState({
+      show_favorites_header: true,
+    })
+  }
+
   renderProfileDropdown() {
     const trigger = (
       <span style={profileStyles().profile_div}>
-        <Image
-          src={this.props.tenant_profile.thumbnail}
-          shape='circular'
-          bordered
-          style={comStyles().tenant_thumbnail}
-        />
+        {
+          this.props.tenant_profile.thumbnail
+          ?
+          <Image
+            src={this.props.tenant_profile.thumbnail}
+            shape='circular'
+            bordered
+            style={comStyles().tenant_thumbnail}
+          />
+          :
+          <h3 style={comStyles().tenant_name}>{this.props.tenant_profile.first_name}</h3>
+        }
         <Icon name='content' inverted size='big' />
       </span>
     )
 
     const options = [
       { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
+      // { key: 'favorites', value: 'favorites', text: 'Favorites', icon: 'heart' },
       { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
       // { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
       // { key: 'pro_tips', value: 'pro_tips', text: 'Renting Pro-Tips', icon: 'star' },
@@ -151,6 +183,7 @@ class Header extends Component {
         options={options}
         pointing='top right'
         icon={null}
+        floating
         onChange={(e, value) => this.handleTenantChange(e, value)}
       />
     )
@@ -161,11 +194,14 @@ class Header extends Component {
         <div id='Header' style={comStyles().header}>
           <div style={comStyles().leftFloat}>
             <Link to='/' onClick={() => this.refreshEverything()}>
-              <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
+              {/*<img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />*/}
+              <h1 style={comStyles().font_logo}>Rent Hero</h1>
             </Link>
           </div>
           {
-            this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' || this.props.history.location.pathname === '/leases' || this.props.history.location.pathname === '/sublet' || this.props.history.location.pathname === '/sublets'
+            (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
+            this.props.history.location.pathname === '/leases' || this.props.history.location.pathname === '/sublet' ||
+            this.props.history.location.pathname === '/sublets')
             ?
             <SearchInput
               style={comStyles().searchContainer}
@@ -174,16 +210,39 @@ class Header extends Component {
             null
           }
 
-          {/*
-          <div style={comStyles().righterFloat}>
-            <h3> { i18n(WELCOME_MESSAGE) } </h3>
-            <Dropdown placeholder='Change Language' onChange={(e, data) => this.props.changeAppLanguage(data.value)} selection options={languageOptions()} />
-          </div>*/}
+
           {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
-              <Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />
+              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                Tours
+              </div>
+              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                Help
+              </div>
+              {
+                (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
+                this.props.history.location.pathname === '/leases')
+                ?
+                <div>
+                  {
+                    this.state.show_favorites_header
+                    ?
+                    <div role='button' tabIndex={0} key='favorites' style={comStyles().login} onClick={() => { this.showFavorites() }}>
+                      My Favorites
+                    </div>
+                    :
+                    <div role='button' tabIndex={0} key='show_all' style={comStyles().login} onClick={() => { this.showAllBuildings() }}>
+                      All Buildings
+                    </div>
+                  }
+                </div>
+                :
+                null
+              }
+
+
               {/*}<Button
                 basic
                 inverted
@@ -210,13 +269,16 @@ class Header extends Component {
                 inverted
                 content='Login'
               />*/}
-              <div key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                Tours
+              </div>
+              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
                 Help
               </div>
-              <div key='signup' style={comStyles().login} onClick={() => this.toggleModal(true, 'signup')}>
+              <div role='button' tabIndex={0} key='signup' style={comStyles().login} onClick={() => this.toggleModal(true, 'signup')}>
                 Sign Up
               </div>
-              <div key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
+              <div role='button' tabIndex={0} key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
                 Log In
               </div>
             </div>
@@ -229,6 +291,13 @@ class Header extends Component {
                 this.renderLoginSuite()
               }
      				</Modal>
+            :
+            null
+          }
+          {
+            this.props.temporary_favorite_force_signin && this.props.temporary_favorite_force_signin.building_id
+            ?
+            <FavoriteForceSignin />
             :
             null
           }
@@ -254,6 +323,8 @@ Header.propTypes = {
   lease_filter_params: PropTypes.object.isRequired,
   sublet_filter_params: PropTypes.object.isRequired,
   force_signin: PropTypes.bool,
+  temporary_favorite_force_signin: PropTypes.object,
+  building_search_results: PropTypes.array.isRequired,
   rent_type: PropTypes.string.isRequired,
 }
 
@@ -277,6 +348,8 @@ const mapReduxToProps = (redux) => {
     sublet_filter_params: redux.filter.sublet_filter_params,
     rent_type: redux.filter.rent_type,
     force_signin: redux.auth.force_signin,
+    temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
+    building_search_results: redux.search.building_search_results,
   }
 }
 
@@ -297,20 +370,27 @@ const comStyles = () => {
     },
     header: {
       backgroundColor: xMidBlue,
-      height: '6vh',
-      width: '100%',
+      minHeight: '7vh',
+      maxHeight: '7vh',
+      minWidth: '100vw',
+      maxWidth: '100vw',
       zIndex: '1',
       display: 'flex',
       flexDirection: 'row',
       position: 'relative',
     },
     leftFloat: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       float: 'left',
     },
     logo: {
-      height: '100%',
+      minHeight: '50px',
+      maxHeight: '50px',
       display: 'inline-block',
-      width: 'auto',
+      minWidth: '225px',
+      maxWidth: 'auto',
       float: 'left',
       padding: '5px'
     },
@@ -328,7 +408,15 @@ const comStyles = () => {
     tenant_thumbnail: {
       height: '6vh',
       width: 'auto',
-      margin: '0.5vh'
+      margin: '0.5vh',
+    },
+    tenant_name: {
+      height: '6vh',
+      width: 'auto',
+      margin: '0.5vh',
+      color: 'white',
+      lineHeight: '6vh',
+      fontWeight: 'bold',
     },
     searchContainer: {
       height: '5vh',
@@ -341,7 +429,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '200px',
+      width: '300px',
       right: '20px'
     },
     righterFloat: {
@@ -357,10 +445,12 @@ const comStyles = () => {
     user_container: {
       display: 'flex',
       flexDirection: 'row',
+      justifyContent: 'space-around',
       right: '20px',
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
+      minWidth: '350px',
       maxWidth: '350px',
       alignItems: 'center',
     },
@@ -372,6 +462,11 @@ const comStyles = () => {
     helpIcon: {
       cursor: 'pointer',
     },
+    font_logo: {
+      color: 'white',
+      fontFamily: `'Carter One', cursive`,
+      margin: '0px 0px 0px 20px',
+    }
   }
 }
 

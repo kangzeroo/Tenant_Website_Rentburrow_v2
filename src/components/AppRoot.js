@@ -11,6 +11,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Radium, { StyleRoot } from 'radium'
 import PropTypes from 'prop-types'
+import Fingerprint2 from 'fingerprintjs2'
 import {
   Switch,
   Route,
@@ -18,6 +19,9 @@ import {
 } from 'react-router-dom'
 import {
   Modal,
+  Segment,
+  Dimmer,
+  Loader,
 } from 'semantic-ui-react'
 import locale from 'browser-locale'
 import { Helmet } from 'react-helmet'
@@ -31,8 +35,8 @@ import PrizesPage from './community/student_info/PrizesPage'
 import UberSignup from './scheduling/uber/UberSignup'
 import LandlordTourConfirmation from './scheduling/timing/LandlordTourConfirmation'
 import ContactUs from './instructions/ContactUs'
-import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
-import TermsOfServicePage from './community/student_info/TermsOfServicePage'
+// import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
+// import TermsOfServicePage from './community/student_info/TermsOfServicePage'
 import HowItWorksLandlord from './community/landlord_info/HowItWorksLandlord'
 import BookAFilmingPage from './community/landlord_info/BookAFilmingPage'
 import JoinPageLandlord from './community/landlord_info/JoinPageLandlord'
@@ -61,17 +65,24 @@ import ForgotPassword from './auth/ForgotPassword'
 import AccountVerification from './auth/AccountVerification'
 import ExampleSubletPaperwork from './contracts/sublets/ExampleSubletPaperwork'
 import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
+import MyFavorites from './favorites/MyFavorites'
+import ToursPage from './tours/ToursPage'
+import Apology from './instructions/Apology'
+import Test from './requests/Test'
 
 import MobileHeader from './mobile/components/MobileHeader'
 import MobilePage from './mobile/MobilePage'
 import MobileBuildingPage from './mobile/components/buildings/MobileBuildingPage'
 import MobileLandlordTourConfirmation from './mobile/scheduling/MobileLandlordTourConfirmation'
+import TermsOfUsePage from './instructions/Legal/TermsOfUsePage'
+import PrivacyPolicyPage from './instructions/Legal/PrivacyPolicyPage'
+import BothPolicies from './instructions/Legal/BothPolicies'
 
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
 import { getInitialToastMessages } from '../api/messaging/toast_api'
 import { initiateFacebook, checkIfFacebookLoggedIn } from '../api/auth/facebook_auth'
-import { saveTenantToRedux, triggerForcedSignin, forwardUrlLocation } from '../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSignin, forwardUrlLocation, fingerprintBrowser } from '../actions/auth/auth_actions'
 import { addToastMessage, removeToastMessage } from '../actions/messaging/toast_actions'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import { scrapeFacebookSublets } from '../api/sublet/fb_sublet_scrapper'
@@ -95,29 +106,45 @@ class AppRoot extends Component {
       modal_name: '',              // name of the modal
       context: {},
 
-      mobile: false,
+      mobile: true,
     }
   }
 
 	componentWillMount() {
-    // automatically set language
-    this.autoSetLanguage()
-    // detect browser and limit to chrome
-    this.detectBrowser()
     // check if its a mobile device
-    this.checkIfMobile()
-    // begin the facebook login process
-    this.initiateFacebookProcess()
-    // execute processes depending on if we're on sublet or lease
-    this.executeOnSubletOrLease()
-    // execute on url name
-    this.executeOnURL()
-    // being Intel collection
-    this.beginCollectingIntel()
-    // set the zoom level so that CSS displays well
-    this.setZoomLevel()
-    // execute initial Toast messages
-    this.launchToasts()
+    if (/Mobi/.test(navigator.userAgent)) {
+      window.location.href = `https://m.renthero.ca${this.props.location.pathname}`
+    } else {
+      this.setState({
+        mobile: false,
+      })
+      // create a unique identifier for the browser
+      this.fingerprintBrowser()
+      // automatically set language
+      this.autoSetLanguage()
+      // detect browser and limit to chrome
+      // this.detectBrowser()
+      // begin the facebook login process
+      this.initiateFacebookProcess()
+      // execute processes depending on if we're on sublet or lease
+      this.executeOnSubletOrLease()
+      // execute on url name
+      this.executeOnURL()
+      // being Intel collection
+      this.beginCollectingIntel()
+      // set the zoom level so that CSS displays well
+      this.setZoomLevel()
+      // execute initial Toast messages
+      this.launchToasts()
+    }
+  }
+
+  fingerprintBrowser() {
+    new Fingerprint2().get((result, components) => {
+      // console.log(result) // a hash, representing your device fingerprint
+      // console.log(components) // an array of FP components
+      this.props.fingerprintBrowser(result)
+    })
   }
 
   detectBrowser() {
@@ -132,13 +159,15 @@ class AppRoot extends Component {
   }
 
   checkIfMobile() {
-    // if (screen.width <= )
-    if (/Mobi/.test(navigator.userAgent)) {
-			// window.location.href = ' http://rentburrow-static-mobile.s3-website-us-east-1.amazonaws.com/'
-      this.setState({
-        mobile: true,
-      })
-    }
+    const p = new Promise((res, rej) => {
+      if (/Mobi/.test(navigator.userAgent)) {
+  			window.location.href = 'https://m.renthero.ca'
+        rej()
+      } else {
+        res()
+      }
+    })
+    return p
   }
 
   autoSetLanguage() {
@@ -178,6 +207,10 @@ class AppRoot extends Component {
           }
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         // no facebook login, use AWS Cognito Unauth role
         unauthRoleStudent().then((unauthUser) => {
           // console.log(unauthUser)
@@ -207,6 +240,10 @@ class AppRoot extends Component {
         this.props.saveTenantToRedux(tenant)
       })
 			.catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
 				// if not, then we do nothing
         unauthRoleStudent().then((unauthUser) => {
           // console.log(unauthUser)
@@ -329,14 +366,15 @@ class AppRoot extends Component {
 
               <Switch>
                 <Route exact path='/' component={HousingPage} />
-                <Route exact path='/sandbox' component={HousingPage} />
+                <Route exact path='/sandbox' component={Test} />
                 <Route exact path='/invalid' component={InvalidPage} />
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}
                 <Route exact path='/uber' component={UberSignup} />
-                <Route exact path='/prizes' component={PrizesPage} />
+                {/*<Route exact path='/prizes' component={PrizesPage} />*/}
                 {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
+                <Route exact path='/apology' component={Apology} />
                 <Route exact path='/contact' component={ContactUs} />
                 <Route exact path='/book-filming' component={BookAFilmingPage} />
                 <Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />
@@ -350,6 +388,11 @@ class AppRoot extends Component {
                 <Route exact path='/login/forgot' component={ForgotPassword} />
                 <Route exact path='/login' component={LoginPage} />
                 <Route exact path='/logout' component={Logout} />
+                <Route exact path='/termsofuse' component={TermsOfUsePage} />
+                <Route exact path='/privacypolicy' component={PrivacyPolicyPage} />
+                <Route exact path='/termsandconditions' component={BothPolicies} />
+
+                <Route exact path='/tours' component={ToursPage} />
 
                 <Route exact path='/lease' component={HousingPage} />
                 <Route exact path='/leases' component={HousingPage} />
@@ -365,6 +408,7 @@ class AppRoot extends Component {
                 <Route exact path='/account' component={TenantAccount} />
                 <Route exact path='/sublet_applications' component={SubletApplications} />
                 <Route exact path='/lease_applications' component={TenantLeaseApplications} />
+                <Route exact path='/favorites' component={MyFavorites} />
                 <Route exact path='/applications/lease/:group_id' component={LeaseApplicationPage} />
                 <Route exact path='/applications/subletee/:subletee_id' component={SentApplicationPage} />
                 <Route exact path='/applications/subletor/:subletor_id' component={ReceivedApplicationPage} />
@@ -450,11 +494,16 @@ class AppRoot extends Component {
       <div id='AppRoot' style={this.state.mobile ? comStyles().mobile_main : comStyles().main}>
         <Helmet>
           <html lang={this.props.language}></html>
+          <title>{ this.props.html_title }</title>
         </Helmet>
         {
           this.state.mobile
           ?
-          this.renderMobileSite()
+          <Segment style={comStyles().loadingContainer}>
+            <Dimmer active inverted>
+              <Loader size='massive' inverted>Loading</Loader>
+            </Dimmer>
+          </Segment>
           :
           this.renderMainSite()
         }
@@ -488,6 +537,8 @@ AppRoot.propTypes = {
   addToastMessage: PropTypes.func.isRequired,
   removeToastMessage: PropTypes.func.isRequired,
   selected_building_to_apply_for: PropTypes.object,
+  fingerprintBrowser: PropTypes.func.isRequired,
+  html_title: PropTypes.string.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -510,6 +561,7 @@ const mapReduxToProps = (redux) => {
     location_forwarding: redux.auth.location_forwarding,
     tenant_profile: redux.auth.tenant_profile,
     selected_building_to_apply_for: redux.contract.selected_building_to_apply_for,
+    html_title: redux.app.html_title,
 	}
 }
 
@@ -525,6 +577,7 @@ export default withRouter(connect(mapReduxToProps, {
   saveIntelToCloud,
   addToastMessage,
   removeToastMessage,
+  fingerprintBrowser,
 })(RadiumHOC))
 
 // =============================
@@ -563,6 +616,23 @@ const comStyles = () => {
     },
     chat: {
 
+    },
+    loadingContainer: {
+      fontFamily: 'Helvetica Neue',
+      backgroundColor: 'white',
+      minHeight: '100vh',
+      maxHeight: '100vh',
+      minWidth: '100vw',
+      maxWidth: '100vw',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    font_logo: {
+      fontSize: '5em',
+      color: 'rgba(81, 151, 214, 1)',
+      fontWeight: 'bold',
+      fontFamily: `'Carter One', cursive`,
     }
 	}
 }

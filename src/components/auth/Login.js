@@ -17,11 +17,11 @@ import {
 	Dimmer,
 } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
-import { STUDENT_USERPOOL_ID, generate_TENANT_IDENTITY_POOL_ID } from '../../api/aws/aws-profile'
 
 import { LoginStudent, buildUserObject } from '../../api/aws/aws-cognito'
+import { insertBuildingFavorite, insertSuiteFavorite } from '../../api/tenant/favorite_api'
 import { getTenantProfile, } from '../../api/auth/tenant_api'
-import { saveTenantToRedux } from '../../actions/auth/auth_actions'
+import { saveTenantToRedux, triggerForcedSigninFavorite } from '../../actions/auth/auth_actions'
 
 class Login extends Component {
 
@@ -97,19 +97,40 @@ class Login extends Component {
 				login_loading: false,
 			})
 			this.props.closeModal()
-				// get the full staff details using the staff_id from AWS Cognito
-				getTenantProfile({ tenant_id: data.sub })
-					.then((data) => {
-						// save the authenticated staff to Redux state
-		        this.props.saveTenantToRedux(data)
-						this.props.history.push('/')
+			if (this.props.temporary_favorite_force_signin.fav_type === 'building') {
+				insertBuildingFavorite(data.sub, this.props.temporary_favorite_force_signin.building_id)
+				// const favs = JSON.parse(localStorage.getItem('favorites'))
+				// localStorage.setItem('favorites', JSON.stringify([{ building_id: this.props.temporary_favorite_force_signin.building_id }]))
+				this.props.triggerForcedSigninFavorite({})
+			} else if (this.props.temporary_favorite_force_signin.fav_type === 'suite') {
+				insertSuiteFavorite(data.sub, this.props.temporary_favorite_force_signin.building_id, this.props.temporary_favorite_force_signin.suite_id)
+				// const favs = JSON.parse(localStorage.getItem('favorites'))
+				// localStorage.setItem('favorites', JSON.stringify([{ building_id: this.props.temporary_favorite_force_signin.building_id, suite_id: this.props.temporary_favorite_force_signin.suite_id, }]))
+				this.props.triggerForcedSigninFavorite({})
+			}
+			// get the full staff details using the staff_id from AWS Cognito
+			getTenantProfile({ tenant_id: data.sub })
+				.then((tenantData) => {
+
+
+					// save the authenticated staff to Redux state
+	        this.props.saveTenantToRedux(tenantData)
+					// this.props.history.push('/')
+				})
+				.catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
+					this.setState({
+						errorMessage: 'Error logging in.'
 					})
-					.catch((err) => {
-						this.setState({
-							errorMessage: 'Error logging in.'
-						})
-					})
+				})
 		}).catch((err) => {
+			_LTracker.push({
+				'error': err,
+				'tag' : `${localStorage.getItem('tenant_id')}`
+			})
 			// this.props.toggleAuthLoading(false)
 			this.setState({
 				errorMessage: err.message,
@@ -177,8 +198,8 @@ class Login extends Component {
 							Login
 						</Button>
 					}
-					<Link to='/login/forgot' onClick={() => this.props.closeModal()}>Forgot Password</Link>
-					<Link to='/register' onClick={() => this.props.closeModal()}>Sign Up</Link>
+					<div tabIndex='0' role='button' onClick={() => this.props.forgotPassword()}>Forgot Password</div>
+					<div tabIndex='-1' role='button' onClick={() => this.props.signupState()}>Sign Up</div>
 
 					{ this.renderVerifiedModal() }
 					{ this.renderResetModal() }
@@ -188,53 +209,61 @@ class Login extends Component {
 	}
 
 	render() {
-		return (
-			<div id='Login' style={comStyles().container} >
-				<Form style={comStyles().emailContainer} size='medium' >
-					<Form.Field>
-						<label>Email Address</label>
-						<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
-					</Form.Field>
-					<Form.Field>
-						<label>Password</label>
-						<Input id='password_input' value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
-					</Form.Field>
-					{/*<div style={comStyles().registerContainer} >
-						<p> New to Rentburrow? </p>
-						<Link to='/register' > Register Here </Link>
-					</div>*/}
+		if (this.props.authenticated) {
+			return (
+				<Button primary onClick={() => this.props.history.push('/')}>
+					BEGIN EXPLORING
+				</Button>
+			)
+		} else {
+			return (
+				<div id='Login' style={comStyles().container} >
+					<Form style={comStyles().emailContainer} size='small' >
+						<Form.Field>
+							<label>Email Address</label>
+							<Input id='email_input' value={this.state.email} onChange={(e) => this.updateAttr(e, 'email')} type='email' placeholder='E-mail Address' />
+						</Form.Field>
+						<Form.Field>
+							<label>Password</label>
+							<Input id='password_input' value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
+						</Form.Field>
+						{/*<div style={comStyles().registerContainer} >
+							<p> New to Rentburrow? </p>
+							<Link to='/register' > Register Here </Link>
+						</div>*/}
 
-					<Form.Field>
-					{
-						this.state.errorMessage
-						?
-						<strong>{ this.state.errorMessage.message }</strong>
-						:
-						null
-					}
-					{
-						this.state.submitted_staff
-						?
-						null
-						:
-						<Button color='twitter' fluid size='medium' loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
-							Login
-						</Button>
-					}
-					</Form.Field>
-					<Form.Field>
-						<div style={comStyles().forgot} onClick={() => this.props.forgotPassword()}>Forgot Password</div>
-					</Form.Field>
-					<Form.Field style={comStyles().row}>
-						<div>{`Don't have an account?`}</div>
-						<div style={comStyles().signup} onClick={() => this.props.signupState()}>  Sign Up</div>
-					</Form.Field>
+						<Form.Field>
+						{
+							this.state.errorMessage
+							?
+							<strong>{ this.state.errorMessage.message }</strong>
+							:
+							null
+						}
+						{
+							this.state.submitted_staff
+							?
+							null
+							:
+							<Button color='twitter' fluid size='small' loading={this.state.login_loading} onClick={() => this.submitLogin(this.state)}>
+								Login
+							</Button>
+						}
+						</Form.Field>
+						<Form.Field>
+							<div tabIndex='0' role='button' onClick={() => this.props.forgotPassword()} style={comStyles().forgot}>Forgot Password</div>
+						</Form.Field>
+						<Form.Field style={comStyles().row}>
+							<div>{`Don't have an account?`}</div>
+							<div tabIndex='-1' role='button' onClick={() => this.props.signupState()} style={comStyles().signup}>Sign Up</div>
+						</Form.Field>
 
-					{ this.renderVerifiedModal() }
-					{ this.renderResetModal() }
-				</Form>
-			</div>
-		)
+						{ this.renderVerifiedModal() }
+						{ this.renderResetModal() }
+					</Form>
+				</div>
+			)
+		}
 	}
 }
 
@@ -245,24 +274,32 @@ Login.propTypes = {
 	facebook_only: PropTypes.bool,			// passed in
 	signupState: PropTypes.func.isRequired,	// passed in
 	forgotPassword: PropTypes.func.isRequired,		// passed in
+  temporary_favorite_force_signin: PropTypes.object,
+  triggerForcedSigninFavorite: PropTypes.func.isRequired,
+	authenticated: PropTypes.bool,
 }
 
 // for all optional props, define a default value
 Login.defaultProps = {
   closeModal: () => {},
+	temporary_favorite_force_signin: null,
+	authenticated: false,
 }
 
 const RadiumHOC = Radium(Login)
 
 // if there is an error, it will appear on the state tree
-const mapStateToProps = (state) => {
+const mapStateToProps = (redux) => {
 	return {
+		temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
+		authenticated: redux.auth.authenticated,
 	}
 }
 
 export default withRouter(
 	connect(mapStateToProps, {
 		saveTenantToRedux,
+    triggerForcedSigninFavorite,
 	})(RadiumHOC)
 )
 

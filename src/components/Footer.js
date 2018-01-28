@@ -12,22 +12,23 @@ import {
 } from 'semantic-ui-react'
 import { xMidBlue } from '../styles/base_colors'
 import { changeRentType } from '../actions/search/search_actions'
-
+import SocialMediaContainer from './share/SocialMediaContainer'
 
 class Footer extends Component {
 
 	render() {
 		return (
 			<div id='Footer' style={comStyles().container}>
+        <div>
         <div style={comStyles().leftFloat}>
           <Link to='/' onClick={() => this.refreshEverything()}>
-            <img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />
+            <h1 style={comStyles().font_logo}>Rent Hero</h1>
           </Link>
           <div style={comStyles().desc}>
-            Rentburrow.com is the marketplace for student housing.<br/>Tour & apply for your rent online.
+            RentHero.ca is the marketplace for student housing.<br/>Tour & apply for your rent online.
           </div>
           <div style={comStyles().copyright}>
-            &nbsp; &nbsp; &copy; 2017 Bytenectar Inc
+            &nbsp; &nbsp; &copy; 2018 Bytenectar Inc
           </div>
         </div>
         <div style={comStyles().table_of_contents}>
@@ -41,7 +42,7 @@ class Footer extends Component {
               <div style={comStyles().col}>
                 <Link to='/lease' onClick={() => this.props.changeRentType('lease')} style={comStyles().link}>Browse Leases</Link>
                 <Link to='/sublet' onClick={() => this.props.changeRentType('sublet')} style={comStyles().link}>Browse Sublets</Link>
-                <Link to='/prizes' style={comStyles().link}>Signing Prizes</Link>
+                {/*<Link to='/prizes' style={comStyles().link}>Signing Prizes</Link>*/}
               </div>
               {/*<div style={comStyles().col}>
                 <Link to='/protips' style={comStyles().link}>FAQ & Protips</Link>
@@ -69,6 +70,28 @@ class Footer extends Component {
               </div>
             </div>
           </div>
+          <div style={comStyles().about_section}>
+            <Header
+              as='h1'
+              inverted
+              content='About'
+            />
+            <div style={comStyles().grid}>
+              {/*<div style={comStyles().col}>
+                <Link to='/how-it-works' style={comStyles().link}>How It Works</Link>
+                <Link to='/pricing' style={comStyles().link}>Pricing</Link>
+                <Link to='/landlord-faq' style={comStyles().link}>Landlord FAQ</Link>
+              </div>*/}
+              <div style={comStyles().col}>
+                <Link to='/termsofuse' style={comStyles().link}>Terms of Use</Link>
+                <Link to='/privacypolicy' style={comStyles().link}>Policy Policy</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} >
+          <SocialMediaContainer />
         </div>
 			</div>
 		)
@@ -109,12 +132,15 @@ export default withRouter(
 const comStyles = () => {
 	return {
     container: {
-      backgroundColor: xMidBlue,
+      // backgroundColor: xMidBlue,
+      backgroundColor: '#222',
       padding: '20px',
-      minHeight: '20vh',
-      maxHeight: '20vh',
+      minHeight: '25vh',
+      maxHeight: '25vh',
       width: '100%',
       color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
     },
     leftFloat: {
       display: 'flex',
@@ -156,6 +182,13 @@ const comStyles = () => {
       color: 'white',
       width: '30%',
     },
+    about_section: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      color: 'white',
+      width: '30%',
+    },
     link: {
       fontSize: '1.1rem',
       color: 'white',
@@ -170,6 +203,11 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
+    },
+    font_logo: {
+      color: 'white',
+      fontFamily: `'Carter One', cursive`,
+      margin: '0px 0px 0px 20px',
     }
 	}
 }

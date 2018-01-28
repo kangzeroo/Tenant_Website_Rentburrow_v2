@@ -7,26 +7,20 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import uuid from 'uuid'
-import { withRouter, Route } from 'react-router-dom'
+import MetaTags from 'react-meta-tags'
+import { withRouter } from 'react-router-dom'
 import {
 	Image,
 	Modal,
-	Item,
-	Icon,
-	Header,
-	Container,
-	Label,
-	Button,
-	Form,
 	Card,
-	Input,
+	Loader,
+	Dimmer,
+	Segment,
 } from 'semantic-ui-react'
-import { searchForSpecificBuildingByAlias, getSpecificLandlord } from '../../api/search/search_api'
+import { searchForSpecificBuildingByAlias, getSpecificLandlord, getLandlordInfo } from '../../api/search/search_api'
 import {
 	URLToAlias,
 	renderProcessedImage,
-	shortenAddress,
-	renderProcessedThumbnail,
 } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
@@ -38,35 +32,28 @@ import {
 } from '../../api/building/building_api'
 import {
 	matchSubletsByPlaceId,
-	calculateCheapestSublet,
 } from '../../api/search/sublet_api'
-import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
-import {
-  xMidBlue,
-  xLightBlue,
-  xDeepBlue,
-} from '../../styles/base_colors'
-import PrizeBlowup from '../instructions/PrizeBlowup'
 import AmenityBrowser from '../amenities/AmenityBrowser'
-import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import HomeOverview from '../home_overview/HomeOverview'
 import BuildingQuickAmenitiesBar from '../amenities/BuildingQuickAmenitiesBar'
-import StepByStepCard from '../instructions/StepByStepCard'
 import ApplyBox from '../instructions/ApplyBox'
-import AllLandlords from '../landlord/AllLandlords'
-import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 import SingularImageGallery from '../image/SingularImageGallery'
-import SubletsList from '../sublets/SubletsList'
 import DescriptionBox from './DescriptionBox'
 import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
-import Old_PhoneCallForm from '../contracts/simple_temp_form/Old_PhoneCallForm'
-import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
+import MessageLandlordForm from '../contracts/simple_temp_form/MessageLandlordForm'
 import BuildingViews from '../analytics/BuildingViews'
-import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
+import LandlordResponsiveness from '../analytics/LandlordResponsiveness'
+import BuildingToursContainer from './Components/BuildingToursContainer'
+import { BUILDING_INTERACTIONS, } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
+import { triggerForcedSigninFavorite, } from '../../actions/auth/auth_actions'
+import { changeHTMLTitle } from '../../actions/app/app_actions'
+import { getToursForBuilding } from '../../api/tour/tour_api'
+import { checkLandlordResponsiveness } from '../../api/landlord/landlord_api'
+
 
 class BuildingPage extends Component {
 	constructor() {
@@ -76,9 +63,10 @@ class BuildingPage extends Component {
 			images: [],
 			amenities: [],
 
+			mapped_landlord: {},
 			suites: [],
 			promise_array_of_suite_amenities_with_id: [],
-
+			responsivenessStats: {},
 			sublets: [],
 
 			toggle_modal: false,
@@ -86,6 +74,13 @@ class BuildingPage extends Component {
       context: {},
 
 			expand_amenities: true,
+
+			// favorited: [],
+			// favorites_loaded: false,
+			loading: true,
+
+
+			tours: [],
 		}
 	}
 
@@ -94,15 +89,20 @@ class BuildingPage extends Component {
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
 		}
+		this.props.changeHTMLTitle(`${this.convertToNameCase(building_alias.slice(1))}, Waterloo for Rent on RentHero`)
 		searchForSpecificBuildingByAlias(building_alias)
 			.then((data) => {
 				this.setState({
-					building: data
+					building: data,
 				})
+				this.props.changeHTMLTitle(`${this.convertToNameCase(data.building_address.slice(1))} for Rent on RentHero`)
 				return this.getImagesForBuilding()
 			})
 			.then(() => {
 				return this.getAmenitiesForBuilding()
+			})
+			.then(() => {
+				return this.getToursForBuilding()
 			})
 			.then(() => {
 				return getAvailableSuites({
@@ -111,6 +111,7 @@ class BuildingPage extends Component {
 			})
 			.then((data) => {
 				const suites = data
+
 				this.setState({
 					suites: suites,
 					promise_array_of_suite_amenities_with_id: suites.map((suite) => {
@@ -130,13 +131,12 @@ class BuildingPage extends Component {
 			.then((sublets) => {
 				this.setState({
 					sublets: sublets,
+					loading: false,
 				})
 				// console.log('getSpecificLandlord', this.state.building.building_id)
 				return getSpecificLandlord({ building_id: this.state.building.building_id })
 			})
 			.then((corporation) => {
-				// console.log(corporation)
-				this.props.selectCorporation(corporation)
 				this.props.collectIntel({
 				  'TableName': BUILDING_INTERACTIONS,
 				  'Item': {
@@ -145,10 +145,40 @@ class BuildingPage extends Component {
 				    'BUILDING_ID': this.state.building.building_id,
 				    'ADDRESS': this.state.building.building_address,
 				    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				    'FINGERPRINT': this.props.fingerprint,
 				  }
+				})
+				return getLandlordInfo(this.state.building.building_id)
+			})
+			.then((actualLandlord) => {
+				this.setState({
+	        mapped_landlord: actualLandlord,
+	      })
+				this.props.selectCorporation(actualLandlord)
+				return checkLandlordResponsiveness(actualLandlord.corporation_id)
+			})
+			.then((stats) => {
+				this.setState({
+					responsivenessStats: stats
 				})
 			})
 	}
+
+	convertToNameCase(str) {
+		return str.replace(/\w\S*/g, (txt) => { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase() })
+	}
+
+	// componentWillReceiveProps(nextProps) {
+	// 	if (this.props.tenant_profile !== nextProps.tenant_profile) {
+	// 		getTenantFavoriteForBuilding(nextProps.tenant_profile.tenant_id, this.state.building.building_id)
+	// 		.then((data) => {
+	// 			this.setState({
+	// 				favorited: data,
+	// 				favorites_loaded: true,
+	// 			})
+	// 		})
+	// 	}
+	// }
 
 	getImagesForBuilding() {
 		getImagesForSpecificBuilding({
@@ -166,6 +196,15 @@ class BuildingPage extends Component {
 		}).then((amenities) => {
 			this.setState({
 				amenities: amenities
+			})
+		})
+	}
+
+	getToursForBuilding() {
+		getToursForBuilding(this.state.building.building_id)
+		.then((data) => {
+			this.setState({
+				tours: data,
 			})
 		})
 	}
@@ -189,8 +228,9 @@ class BuildingPage extends Component {
 					size='large'
 				>
 	        <Modal.Content>
-						<ImageGallery
-							list_of_images={this.state.images}
+						<SingularImageGallery
+							list_of_images={this.state.images.map(img => img.image_url)}
+							image_size='hd'
 						/>
 	        </Modal.Content>
 	      </Modal>
@@ -216,30 +256,31 @@ class BuildingPage extends Component {
 	      </Modal>
 	    )
 		} else if (modal_name === 'phone') {
-			return (
-	      <Modal
-					dimmer
-					open={this.state.toggle_modal}
-					onClose={() => this.toggleModal(false)}
-					closeIcon
-					size='large'
-				>
-	        <Modal.Content>
-						<Old_PhoneCallForm
-							building={this.state.building}
-							landlord={this.props.selected_landlord}
-							title={this.state.building.label}
-							closeModal={() => this.toggleModal(false)}
-						/>
-						{/*<PhoneTestForm
-							building={this.state.building}
-							landlord={this.props.selected_landlord}
-							title={this.state.building.label}
-							closeModal={() => this.toggleModal(false)}
-						/>*/}
-	        </Modal.Content>
-	      </Modal>
-	    )
+				return (
+		      <Modal
+						dimmer
+						open={this.state.toggle_modal}
+						onClose={() => this.toggleModal(false)}
+						closeIcon
+						size='large'
+					>
+		        <Modal.Content>
+							<MessageLandlordForm
+								building={this.state.building}
+								landlord={this.props.selected_landlord}
+								title={this.state.building.label}
+								header={context}
+								closeModal={() => this.toggleModal(false)}
+							/>
+							{/*<PhoneTestForm
+								building={this.state.building}
+								landlord={this.props.selected_landlord}
+								title={this.state.building.label}
+								closeModal={() => this.toggleModal(false)}
+							/>*/}
+		        </Modal.Content>
+		      </Modal>
+		    )
 		}
   }
 
@@ -291,6 +332,16 @@ class BuildingPage extends Component {
 		}
 	}
 
+	showMessagePopup(header) {
+		if (!this.props.authenticated || !this.props.tenant_profile || !this.props.tenant_profile.tenant_id) {
+			this.props.triggerForcedSigninFavorite({
+				building_id: this.state.building.building_id,
+			})
+		} else {
+			this.toggleModal(true, 'phone', header)
+		}
+	}
+
 	expandAmenities() {
 		this.setState({
 			expand_amenities: true,
@@ -312,6 +363,7 @@ class BuildingPage extends Component {
 	      'ADDRESS': this.state.building.building_address,
 	      'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
 				'SUBLET_COUNT': this.state.sublets.length,
+		    'FINGERPRINT': this.props.fingerprint,
 	    }
 	  })
 	}
@@ -337,29 +389,39 @@ class BuildingPage extends Component {
 				</div>
 				<div style={comStyles().content_top}>
 					<div style={comStyles().content_left}>
-						<Card fluid raised style={comStyles().building_header}>
-							<div style={comStyles().welcome_banner}>
-								<div style={comStyles().welcome_message}>Welcome to {this.state.building.building_alias}</div>
-								{
-									this.state.building.label
-									?
-									<div onClick={() => this.toggleModal(true, 'collection')} style={comStyles().welcome_ribbon}>
-			              <RibbonLabel label={this.state.building.label} size='massive' />
-									</div>
-									:
-									null
-								}
-							</div>
-							<div style={comStyles().description} >
-								{
-									this.state.building.building_desc
-									?
-									<DescriptionBox description={this.state.building.building_desc} />
-									:
-									null
-								}
-							</div>
-						</Card>
+						{
+							this.state.building && !this.state.loading
+							?
+							<Card fluid raised style={comStyles().building_header}>
+								<div style={comStyles().welcome_banner}>
+									<h1 style={comStyles().welcome_message}>{this.state.building.building_alias}, Waterloo</h1>
+									{
+										this.state.building.label
+										?
+										<div onClick={() => this.showMessagePopup('Apply Now')} style={comStyles().welcome_ribbon}>
+				              <RibbonLabel label={this.state.building.label} size='massive' />
+										</div>
+										:
+										null
+									}
+								</div>
+								<div style={comStyles().description} >
+									{
+										this.state.building.building_desc
+										?
+										<DescriptionBox description={this.state.building.building_desc} />
+										:
+										null
+									}
+								</div>
+							</Card>
+							:
+							<Segment style={comStyles().loadingContainer}>
+								<Dimmer active inverted>
+									<Loader inverted />
+								</Dimmer>
+							</Segment>
+						}
 						{
 							this.state.amenities && this.state.amenities.length > 0 && this.state.building && this.state.building.building_id && this.state.promise_array_of_suite_amenities_with_id.length > 0
 							?
@@ -376,30 +438,6 @@ class BuildingPage extends Component {
 							:
 							null
 						}
-						{/*
-							this.state.expand_amenities
-							?
-							<div style={comStyles().expanded_amenities} >
-								<Icon
-									name='close'
-									size='large'
-									style={comStyles().close_amenities}
-									onClick={() => this.setState({ expand_amenities: false, })}
-								/>
-								<AmenityBrowser
-									building={this.state.building}
-									amenities={this.state.amenities}
-								/>
-							</div>
-							:
-							null
-						*/}
-						{/*<div style={comStyles().images_container}>
-							<SingularImageGallery
-								list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
-								image_size='hd'
-							/>
-						</div>*/}
 						{
 							this.state.building.building_id
 							?
@@ -411,20 +449,49 @@ class BuildingPage extends Component {
 							:
 							null
 						}
+						{
+							this.state.tours && this.state.tours.length > 0
+							?
+							<div style={comStyles().analyticsSummary} >
+								<BuildingToursContainer
+									building={this.state.building}
+									tours={this.state.tours}
+								/>
+							</div>
+							:
+							null
+						}
+
 					</div>
 					<div style={comStyles().content_right} >
-						{/*}<StepByStepCard
-							building={this.state.building}
-							all_suites={this.state.suites}
-							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
-						/>*/}
-						<ApplyBox
-							building={this.state.building}
-							all_suites={this.state.suites}
-							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
-							togglePhoneCallForm={() => this.toggleModal(true, 'phone')}
-							sublets={this.state.sublets}
-						/>
+						{
+							this.state.building && !this.state.loading
+							?
+							<ApplyBox
+								building={this.state.building}
+								all_suites={this.state.suites}
+								toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
+								togglePhoneCallForm={(e) => this.showMessagePopup(e)}
+								sublets={this.state.sublets}
+							/>
+							:
+							<Segment style={comStyles().loadingContainer}>
+								<Dimmer active inverted>
+									<Loader inverted />
+								</Dimmer>
+							</Segment>
+						}
+						{
+							this.state.responsivenessStats && (parseInt(this.state.responsivenessStats.avg_time) || parseInt(this.state.responsivenessStats.last_active) || parseInt(this.state.responsivenessStats.percent_responded)) && this.state.mapped_landlord && this.state.mapped_landlord.corporation_name && this.state.mapped_landlord.corporation_name.toLowerCase().indexOf('rentburrow') === -1
+							?
+							<LandlordResponsiveness
+								avg_time={parseInt(this.state.responsivenessStats.avg_time)}
+								last_active={parseInt(this.state.responsivenessStats.last_active)}
+								percent_responded={parseInt(this.state.responsivenessStats.percent_responded)}
+							/>
+							:
+							null
+						}
 						{
 							this.state.building.building_id
 							?
@@ -453,30 +520,8 @@ class BuildingPage extends Component {
 							:
 							null
 						}
-						{/*
-							this.state.sublets.length > 0
-							?
-							<div style={comStyles().four_month_sublet}>
-								<h3>Prefer a 4 month lease?</h3>
-								<Button onClick={() => this.checkOutSublet()} basic fluid primary style={comStyles().facebook_sublets}>
-									View {this.state.sublets.length} sublets from Facebook <br />
-									{
-										calculateCheapestSublet(this.state.sublets)
-										?
-										`Prices starting from $${calculateCheapestSublet(this.state.sublets)}`
-										:
-										null
-									}
-								</Button>
-							</div>
-							:
-							<div style={comStyles().four_month_sublet}>
-								<h3>No 4 month sublets available</h3>
-							</div>
-						*/}
 					</div>
 				</div>
-
 				<div style={comStyles().suites_table}>
 					{
 						this.state.amenities && this.state.amenities.length > 0
@@ -491,7 +536,7 @@ class BuildingPage extends Component {
 						null
 					}
 					{
-						this.state.building
+						this.state.building && !this.state.loading
 						?
 						<HomeOverview
 							building={this.state.building}
@@ -500,20 +545,13 @@ class BuildingPage extends Component {
 							toggleTemporaryCollectionFrom={() => this.toggleModal(true, 'collection')}
 						/>
 						:
-						null
+						<Segment style={comStyles().loadingContainer}>
+							<Dimmer active inverted>
+								<Loader inverted />
+							</Dimmer>
+						</Segment>
 					}
 				</div>
-
-				{/*<div style={comStyles().images_container}>
-					<SingularImageGallery
-						list_of_images={[this.state.building.cover_photo].concat(this.state.building.imgs)}
-						image_size='hd'
-					/>
-				</div>*/}
-				{/*<div style={prizeStyles().popup_icon}>
-					<PrizeBlowup />
-				</div>*/}
-
 				{
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
@@ -526,6 +564,7 @@ class BuildingPage extends Component {
 BuildingPage.propTypes = {
 	history: PropTypes.object.isRequired,
 	// building: PropTypes.object.isRequired,
+	authenticated: PropTypes.bool.isRequired,
 	selectBuilding: PropTypes.func.isRequired,
 	selectCorporation: PropTypes.func.isRequired,
 	selectChatThread: PropTypes.func.isRequired,
@@ -533,6 +572,9 @@ BuildingPage.propTypes = {
 	selected_landlord: PropTypes.object.isRequired,
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  fingerprint: PropTypes.string.isRequired,
+	triggerForcedSigninFavorite: PropTypes.func.isRequired,
+	changeHTMLTitle: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -546,8 +588,10 @@ const RadiumHOC = Radium(BuildingPage)
 const mapReduxToProps = (redux) => {
 	return {
 		// building: redux.selection.selected_building,
+		authenticated: redux.auth.authenticated,
 		tenant_profile: redux.auth.tenant_profile,
 		selected_landlord: redux.selection.selected_landlord,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 
@@ -558,6 +602,8 @@ export default withRouter(
 		selectChatThread,
 		selectCorporation,
 		collectIntel,
+		triggerForcedSigninFavorite,
+		changeHTMLTitle,
 	})(RadiumHOC)
 )
 
@@ -568,7 +614,7 @@ const loadStyles = (img) => {
 	return {
 		cover_photo: {
 			minHeight: '70vh',
-			maxHeight: '70vh',
+			maxHeight: 'auto',
 			minWidth: '100vw',
 			maxWidth: '100vw',
 			overflow: 'hidden',
@@ -743,7 +789,14 @@ const comStyles = () => {
 			zoom: '0.5'
 		},
 		analyticsSummary: {
-			margin: '10px 0px 0px 0px'
+			margin: '10px 0px 10px 0px'
+		},
+		loadingContainer: {
+			minHeight: '270px',
+      maxHeight: '270px',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
 		}
 	}
 }

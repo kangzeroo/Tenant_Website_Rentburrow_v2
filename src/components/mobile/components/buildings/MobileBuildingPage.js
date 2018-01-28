@@ -562,7 +562,8 @@ const comStyles = () => {
     mapContainer: {
 			display: 'flex',
 			flexDirection: 'column',
-			height: '400px',
+      width: '100%',
+			height: '200px',
 		},
 		addressFont: {
 			display: 'flex',

@@ -10,10 +10,8 @@ import { withRouter } from 'react-router-dom'
 import {
   Image,
   Icon,
-  Transition,
 } from 'semantic-ui-react'
 import {
-  shortenAddress,
   renderProcessedImage,
   renderProcessedThumbnail,
 } from '../../api/general/general_api'
@@ -61,17 +59,6 @@ class SingularImageGallery extends Component {
     if (event) {
       event.stopPropagation()
     }
-    this.props.collectIntel({
-      // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
-      'TableName': IMAGE_INTERACTIONS,
-      'Item': {
-        'ACTION': this.props.intel_action,
-        'REFERENCE_ID': this.props.intel_id,
-        'DATE': new Date().getTime(),
-        'USER_ID': this.props.tenant_profile.tenant_id,
-        'IMAGE_URL': this.state.all_images[this.state.current_image_position],
-      }
-    })
     if (this.props.image_size === 'hd') {
       this.setState({
         visible: false,
@@ -82,7 +69,7 @@ class SingularImageGallery extends Component {
       this.setState({
         current_image_position: this.state.all_images.length - 1
       })
-    } else if (this.state.current_image_position + itr > this.state.all_images.length -1) {
+    } else if (this.state.current_image_position + itr > this.state.all_images.length - 1) {
     // if we are at the last image and trying to go into more
       this.setState({
         current_image_position: 0,
@@ -93,6 +80,30 @@ class SingularImageGallery extends Component {
         current_image_position: this.state.current_image_position + itr,
       }, () => this.transitionImageFade())
     }
+    // console.log({
+    //   // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
+    //   'TableName': IMAGE_INTERACTIONS,
+    //   'Item': {
+    //     'ACTION': this.props.intel_action,
+    //     'REFERENCE_ID': this.props.intel_id,
+    //     'DATE': new Date().getTime(),
+    //     'USER_ID': this.props.tenant_profile.tenant_id ? this.props.tenant_profile.tenant_id : 'NONE',
+    //     'IMAGE_URL': this.state.all_images[this.state.current_image_position],
+    //     'FINGERPRINT': this.props.fingerprint,
+    //   }
+    // })
+    // this.props.collectIntel({
+    //   // When a user hovers over <BuildingCard> in <HousingPanel> of <HousingPage> in Tenant_Website
+    //   'TableName': IMAGE_INTERACTIONS,
+    //   'Item': {
+    //     'ACTION': this.props.intel_action,
+    //     'REFERENCE_ID': this.props.intel_id,
+    //     'DATE': new Date().getTime(),
+    //     'USER_ID': this.props.tenant_profile.tenant_id ? this.props.tenant_profile.tenant_id : 'NONE',
+    //     'IMAGE_URL': this.state.all_images[this.state.current_image_position],
+    //     'FINGERPRINT': this.props.fingerprint,
+    //   }
+    // })
   }
 
   transitionImageFade() {
@@ -126,6 +137,7 @@ class SingularImageGallery extends Component {
         <div style={comStyles().imageContainer}>
           {/*<Transition visible={this.state.visible} animation='scale' duration='300'>*/}
             <Image
+              alt='Property Image'
               src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
               width='100%'
               height='auto'
@@ -142,7 +154,7 @@ class SingularImageGallery extends Component {
             this.props.image_size === 'hd'
             ?
             <div style={comStyles().indicator}>
-              {`${this.state.current_image_position+1}/${this.state.all_images.length}`}
+              {`${this.state.current_image_position + 1}/${this.state.all_images.length}`}
             </div>
             :
             null
@@ -174,9 +186,10 @@ class SingularImageGallery extends Component {
 
 // defines the types of variables in this.props
 SingularImageGallery.propTypes = {
-  list_of_images: PropTypes.array,
+  list_of_images: PropTypes.array.isRequired,   // passed in
   image_size: PropTypes.string,       // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   intel_action: PropTypes.string.isRequired,  // passed in
   intel_id: PropTypes.string.isRequired,      // passed in
@@ -184,7 +197,6 @@ SingularImageGallery.propTypes = {
 
 // for all optional props, define a default value
 SingularImageGallery.defaultProps = {
-  list_of_images: [],
   image_size: 'thumbnail',            // 'thumbnail', 'hd', 'none'
   intel_action: 'OTHER_IMAGE',
   intel_id: 'other',
@@ -197,6 +209,7 @@ const RadiumHOC = Radium(SingularImageGallery)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 
@@ -215,22 +228,27 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'column',
-      width: '100%',
+      minWidth: '100%',
+      maxWidth: '100%',
       // minHeight: '500px',
       // maxHeight: '500px',
-      minHeight: '100%',
+      minHeight: '170px',
       maxHeight: '100%',
       overflow: 'hidden',
       position: 'relative',
       WebkitTapHighlightColor: 'rgba(0,0,0,0)'
 		},
     image: {
-      height: 'auto',
-      // zIndex: 5,
+      minHeight: '170px',
+      maxHeight: '100%',
+      minWidth: '310px',
+      maxWidth: '100%',
     },
     imageContainer: {
-      width: '100%',
-      height: '100%',
+      minWidth: '310px',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      minHeight: '170px',
       backgroundColor: 'rgba(0,0,0,0.3)',
     },
     left: {

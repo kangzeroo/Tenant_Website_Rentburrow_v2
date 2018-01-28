@@ -8,6 +8,7 @@ import Rx from 'rxjs'
 import {
 	Input,
 	Button,
+	Checkbox,
 } from 'semantic-ui-react'
 import { Link, withRouter } from 'react-router-dom'
 import { validateEmail } from '../../api/general/general_api'
@@ -26,6 +27,7 @@ class Register extends Component {
 			phone_number: '',								// staff phone number typed in
 			password: '',										// password typed in
 			password_confirmation: '',						// password confirmation typed in
+			agreed_to_terms: false,
 			error_messages: [],							// error message to display
 			loading: false,									// loading flag
 			success: false,									// success flag
@@ -84,6 +86,10 @@ class Register extends Component {
 						this.props.history.push('/register/verify')
 					})
 				}).catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					this.setState({
 						loading: false,
 						error_messages: [err.message],
@@ -104,11 +110,24 @@ class Register extends Component {
 		if (!this.state.password || !this.state.password_confirmation || (this.state.password !== this.state.password_confirmation)) {
 			error_messages.push('You must provide a password and repeat it to verify')
 		}
+		if (!this.state.agreed_to_terms) {
+			error_messages.push('You must agree to the terms and conditions in order to use RentHero')
+		}
 		this.setState({
 			error_messages: error_messages,
 			loading: false,
 		})
 		return error_messages.length === 0
+	}
+
+	agreedToTerms() {
+		this.setState({
+			agreed_to_terms: !this.state.agreed_to_terms
+		}, () => {
+			if (this.state.agreed_to_terms) {
+				// save to dynamodb
+			}
+		})
 	}
 
 	render() {
@@ -121,6 +140,10 @@ class Register extends Component {
 				<Input value={this.state.phone_number} onChange={(e) => this.updateAttr(e, 'phone_number')} type='number' placeholder='Phone Number' />
 				<Input value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' />
 				<Input id='password_confirmation' value={this.state.password_confirmation} onChange={(e) => this.updateAttr(e, 'password_confirmation')} type='password' placeholder='Confirm Password' />
+				<div style={{ display: 'flex', flexDirection: 'row' }}>
+					<Checkbox checked={this.state.agreed_to_terms} onClick={() => this.agreedToTerms()} />
+					<div> &nbsp; &nbsp; I agree to the <a href={`${window.location.origin}/termsandconditions`} target='_blank'>terms and conditions</a></div>
+				</div>
 				{
 					this.state.error_messages.map((err, index) => {
 						return (

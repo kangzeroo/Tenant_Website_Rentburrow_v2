@@ -11,6 +11,7 @@ this.props.collectIntel({
     'BUILDING_ID': building.building_id,
     'ADDRESS': building.building_address,
     'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+    'FINGERPRINT': this.props.fingerprint,
   }
 })
 
@@ -18,12 +19,14 @@ this.props.collectIntel({
 BuildingCard.propTypes = {
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // Get access to state from the Redux store
-function mapStateToProps(state) {
+function mapStateToProps(redux) {
 	return {
-    tenant_profile: state.auth.tenant_profile,
+    tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

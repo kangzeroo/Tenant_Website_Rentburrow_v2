@@ -12,6 +12,10 @@ export const sendRegisterInfo = ({ tenant_id, email, first_name, last_name, phon
         res(data.data.message)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

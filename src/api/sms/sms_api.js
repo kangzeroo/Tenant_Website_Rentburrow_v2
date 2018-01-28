@@ -10,12 +10,15 @@ export const sendSMSToBothParties = (contents) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
   return p
 }
-
 
 export const insertTenantLandlordSMS = (obj) => {
   const p = new Promise((res, rej) => {
@@ -25,6 +28,10 @@ export const insertTenantLandlordSMS = (obj) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -39,6 +46,46 @@ export const getLandlordInfo = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const sendInitialMessage = (obj) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SMS_MICROSERVICE}/initial_inquiry`, obj)
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const sendTenantWaitMsg = ({ tenant, building, group_notes, group_size, corporation_email, corporation_id, inquiry_id, }) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SMS_MICROSERVICE}/send_tenant_wait_msg`, { tenant, building, group_notes, group_size, corporation_email, corporation_id, inquiry_id, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

@@ -12,6 +12,7 @@ import {
   Button,
 } from 'semantic-ui-react'
 import SingularImageGallery from '../../image/SingularImageGallery'
+import FavoriteIcon from '../../tenant/favorites/FavoriteIcon'
 import { xGreyText, xBootstrapRed } from '../../../styles/base_colors'
 import { BUILDING_INTERACTIONS } from '../../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../../actions/intel/intel_actions'
@@ -29,6 +30,7 @@ class BuildingOverviewRow extends Component {
         'BUILDING_ID': building.building_id,
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -42,6 +44,7 @@ class BuildingOverviewRow extends Component {
         raised
         style={comStyles().hardCard}
       >
+        <FavoriteIcon fav_type='building' size='big' building={this.props.building} />
         <div style={comStyles().left} >
           <div id='infobar' style={comStyles().left_top} >
             <div>{building.building_alias}</div>
@@ -81,6 +84,7 @@ BuildingOverviewRow.propTypes = {
   toggleModal: PropTypes.func.isRequired,   // passed in
   collectIntel: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -94,6 +98,7 @@ const RadiumHOC = Radium(BuildingOverviewRow)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

@@ -15,10 +15,8 @@
 // export const CONTRACTING_MICROSERVICE = 'https://localhost:3005'
 // export const ANALYTICS_MICROSERVICE = 'https://localhost:3007'
 // export const SMS_MICROSERVICE = 'https://localhost:3106'
-// export const FIREBASE_VERSION = 'development'
-// export const AWS_FEDERATED_IDENTITY_ENV = 'production'
-
-// PROD
+// export const SMS_MICROSERVICE = 'https://localhost:3006'
+// export const LANDLORD_RESPONSIVENESS_MICROSERVICE = 'https://localhost:3009'
 // export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
 // export const FB_APP_ID = '1492022030811505'
 // //
@@ -35,21 +33,20 @@
 // export const FIREBASE_VERSION = 'production'
 // export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
 
-
 // PRIVATE SUBNET
-// export const MESSAGING_MICROSERVICE = 'https://rentburrow.com:3001'
+// export const MESSAGING_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3001'
 // export const FB_APP_ID = '1492022030811505'
 //
 // export const SEARCH_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3002'
-// export const CORP_MICROSERVICE = 'https://rentburrow.com:3001'
-// export const REGISTER_MICROSERVICE = 'https://rentburrow.com:3002'
-// export const GENERIC_MICROSERVICE = 'https://rentburrow.com:3001'
+// export const CORP_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3001'
+// export const REGISTER_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3002'
+// export const GENERIC_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3001'
 // export const FB_PARSER_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3002'
-// export const INTEL_MICROSERVICE = 'https://rentburrow.com:3004'
-// export const SUBLETTING_MICROSERVICE = 'https://rentburrow.com:3005'
-// export const CONTRACTING_MICROSERVICE = 'https://rentburrow.com:3005'
-// export const ANALYTICS_MICROSERVICE = 'https://rentburrow.com:3007'
-// export const SMS_MICROSERVICE = 'http://rentburrow.com:3006'
+// export const INTEL_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3004'
+// export const SUBLETTING_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3005'
+// export const CONTRACTING_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3005'
+// export const ANALYTICS_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3007'
+// export const SMS_MICROSERVICE = 'https://ec2-34-195-43-175.compute-1.amazonaws.com:3006'
 // export const FIREBASE_VERSION = 'production'
 // export const AWS_FEDERATED_IDENTITY_ENV = 'production'    // LEAVE THIS ON PROD BECAUSE DEV DOES NOT WORK :(
 //
@@ -72,8 +69,9 @@ export const FIREBASE_VERSION = 'development'
 export const AWS_FEDERATED_IDENTITY_ENV = 'production'
 
 
+
 // Prod
 // export const EC2_CONTAINER_IP_ADDRESS = '34.195.86.132'
 
 // Staging
-// export const EC2_CONTAINER_IP_ADDRESS = '34.227.117.38'
+// export const EC2_CONTAINER_IP_ADDRESS = '52.205.187.142'

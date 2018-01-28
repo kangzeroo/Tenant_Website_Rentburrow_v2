@@ -58,7 +58,7 @@ function createInquiryParamsConfig(corporationEmail, corporationInfo, lease){
 	      // }
 	    },
 	    Subject: { /* required */
-	      Data: 'RentBurrow Inquiry for ' + lease.core.formatted_address, /* required */
+	      Data: 'RentHero Inquiry for ' + lease.core.formatted_address, /* required */
 	      Charset: 'UTF-8'
 	    }
 	  },

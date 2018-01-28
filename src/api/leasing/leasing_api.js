@@ -13,6 +13,10 @@ export const checkWhatLandlordWantsFromTenant = (building_id) => {
     //     res(data.data)
     //   })
     //   .catch((err) => {
+    // _LTracker.push({
+    //   'error': err,
+    //   'tag' : `${localStorage.getItem('tenant_id')}`
+    // })
     //     rej(err)
     //   })
     res({
@@ -117,6 +121,10 @@ export const saveSimpleForm = (group_id, group_members, building, landlord, grou
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })

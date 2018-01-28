@@ -7,16 +7,17 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
-import { queryBuildingsInArea } from '../../api/search/search_api'
-import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRedux, toggleHideSoldOuts } from '../../actions/search/search_actions'
+import InputRange from 'react-input-range'
 import {
 	Checkbox,
 	Button,
 	Card,
 } from 'semantic-ui-react'
-import InputRange from 'react-input-range'
+import { STUDENT_PREFERENCES } from '../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../actions/intel/intel_actions'
+import { queryBuildingsInArea } from '../../api/search/search_api'
+import { saveBuildingsToRedux, saveLeaseFilterParams, saveFilteredBuildingsToRedux, toggleHideSoldOuts } from '../../actions/search/search_actions'
 require('../../styles/react-input-range.css')
-
 
 class LeaseFilterCard extends Component {
 
@@ -27,7 +28,7 @@ class LeaseFilterCard extends Component {
 				min: 500,
 				max: 900,
 			},
-			room_count: 1,
+			room_count: 0,
 			ensuite_bath: false,
 			utils_incl: false,
 			parking_avail: false,
@@ -48,14 +49,6 @@ class LeaseFilterCard extends Component {
 	}
 
 	applyFilters() {
-		// this.props.saveLeaseFilterParams(this.state)
-		// queryBuildingsInArea({
-		// 	...this.props.current_gps_center,
-		// 	filterParams: this.state,
-		// }).then((buildings) => {
-		// 	this.props.saveBuildingsToRedux(buildings)
-		// 	this.props.closeFilterCard()
-		// })
 		let filtered = this.props.buildings
 
 		// If pricing filters have changed...
@@ -66,7 +59,7 @@ class LeaseFilterCard extends Component {
 		}
 
 		// if the number of rooms filter has changed...
-		if (this.state.room_count > 1) {
+		if (this.state.room_count !== 0) {
 			filtered = filtered.filter((building) => {
 				return parseInt(building.max_rooms, 10) >= this.state.room_count && parseInt(building.min_rooms, 10) <= this.state.room_count
 			})
@@ -89,22 +82,17 @@ class LeaseFilterCard extends Component {
 		this.props.saveFilteredBuildingsToRedux(filtered)
 		this.props.saveLeaseFilterParams(this.state)
 		this.props.closeFilterCard()
+		this.props.collectIntel({
+		  'TableName': STUDENT_PREFERENCES,
+		  'Item': {
+		    'ACTION': 'LEASE_FILTER_PARAMS',
+		    'DATE': new Date().getTime(),
+		    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				'PARAMS': JSON.stringify(this.state),
+		    'FINGERPRINT': this.props.fingerprint,
+		  }
+		})
 	}
-
-/*
-	renderRoomFilter() {
-		return (
-			<InputRange
-				step={1}
-				maxValue={10}
-				minValue={1}
-				formatLabel={(value) => `${value} bed${value > 1 ? 's' : ''}`}
-				value={this.state.bedrooms}
-				onChange={(value) => this.updateAttr('bedrooms', value)}
-				onChangeComplete={value => console.log(value)}
-			/>
-		)
-	}*/
 
 	render() {
 		return (
@@ -116,12 +104,12 @@ class LeaseFilterCard extends Component {
 					<div style={comStyles().slider}>
 						<InputRange
 							step={5}
-		          maxValue={1200}
-		          minValue={300}
-		          formatLabel={(value) => `$${value >= 1200 ? '1200+' : value}`}
-		          value={this.state.price}
-		          onChange={(value) => this.updateAttr('price', value)}
-		          onChangeComplete={value => console.log()}
+							maxValue={1200}
+							minValue={300}
+							formatLabel={(value) => `$${value >= 1200 ? '1200+' : value}`}
+							value={this.state.price}
+							onChange={(value) => this.updateAttr('price', value)}
+							onChangeComplete={value => console.log()}
 						/>
 					</div>
 				</div>
@@ -136,10 +124,10 @@ class LeaseFilterCard extends Component {
 							basic
 							icon='minus'
 							onClick={() => this.updateAttr('room_count', this.state.room_count - 1)}
-							disabled={this.state.room_count <= 1}
+							disabled={this.state.room_count === 0}
 						/>
 						<div style={comStyles().room_text} >
-							{this.state.room_count} Rooms
+							{ this.state.room_count === 0 ? 'All Bedrooms' : `${this.state.room_count} Bedroom${this.state.room_count === 1 ? '' : 's'}`}
 						</div>
 						<Button
 							circular
@@ -151,60 +139,17 @@ class LeaseFilterCard extends Component {
 						/>
 					</div>
 				</div>
-				{/*<div style={comStyles().sliderBox}>
-					<div style={comStyles().label}>
-						<h2>Bedrooms</h2>
-					</div>
-					<div style={comStyles().slider}>
-						<InputRange
-							step={1}
-		          maxValue={6}
-		          minValue={1}
-		          formatLabel={(value) => `${value >= 6 ? '5+' : value}`}
-		          value={this.state.room_count}
-		          onChange={(value) => this.updateAttr('room_count', value)}
-		          onChangeComplete={value => console.log()}
-						/>
-					</div>
-				</div>*/}
-				{/*<div style={comStyles().sliderBox}>
-					<div style={comStyles().label}>
-						<h2>Lease Length</h2>
-					</div>
-					<div style={comStyles().slider}>
-						<InputRange
-							step={4}
-		          maxValue={16}
-		          minValue={0}
-		          formatLabel={(value) => `${value} months`}
-		          value={this.state.lease_length}
-		          onChange={(value) => this.updateAttr('lease_length', value)}
-		          onChangeComplete={value => console.log(value)}
-						/>
-					</div>
-				</div>*/}
 				<div style={comStyles().main_amenities}>
 					<Checkbox
 						label='Ensuite Bath'
 						checked={this.state.ensuite_bath}
 						onChange={(e, x) => this.updateAttr('ensuite_bath', x.checked)}
 						toggle />
-					{/*}<Checkbox
-						label='Utilities Included'
-						checked={this.state.utils_incl}
-						onChange={(e, x) => this.updateAttr('utils_incl', x.checked)}
-						toggle />*/}
 					<Checkbox
 						label='Hide Sold Outs'
 						checked={this.props.hide_sold_outs}
 						onChange={() => this.props.toggleHideSoldOuts(!this.props.hide_sold_outs)}
 						toggle />
-					{/*
-					<Checkbox
-						label='Parking Available'
-						checked={this.state.parking_avail}
-						onChange={(e, x) => this.updateAttr('parking_avail', x.checked)}
-						toggle />*/}
 				</div>
 				<div style={comStyles().buttons_container}>
 					<Button
@@ -238,6 +183,9 @@ LeaseFilterCard.propTypes = {
 	saveFilteredBuildingsToRedux: PropTypes.func.isRequired,
 	toggleHideSoldOuts: PropTypes.func.isRequired,
 	hide_sold_outs: PropTypes.bool,
+  collectIntel: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -256,6 +204,8 @@ const mapReduxToProps = (redux) => {
 		building_search_results: redux.search.building_search_results,
 		buildings: redux.search.buildings,
 		hide_sold_outs: redux.search.hide_sold_outs,
+    tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 
@@ -266,6 +216,7 @@ export default withRouter(
 		saveLeaseFilterParams,
 		saveFilteredBuildingsToRedux,
 		toggleHideSoldOuts,
+    collectIntel,
 	})(RadiumHOC)
 )
 
@@ -316,18 +267,20 @@ const comStyles = () => {
 		},
 		roomCountBox: {
 			padding: '20px 10px 20px 10px',
-			width: '100%',
+			minWidth: '250px',
+			maxWidth: '100%',
 			height: '75px',
 			display: 'flex',
-			flexDirection: 'row',
+			flexDirection: 'center',
 		},
 		room_count: {
 			display: 'flex',
 			flexDirection: 'row',
-			width: '100%',
-			justifyContent: 'space-around',
+			minWidth: '300px',
+			maxWidth: '100%',
+			justifyContent: 'center',
 			alignItems: 'center',
-			margin: '0px 200px 0px 200px',
+			margin: '0px 100px 0px 100px',
 		},
 		room_text: {
 			fontSize: 'x-large'

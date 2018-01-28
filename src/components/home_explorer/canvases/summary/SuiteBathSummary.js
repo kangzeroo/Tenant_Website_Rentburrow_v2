@@ -23,7 +23,7 @@ class SuiteBathSummary extends Component {
 					?
 					<Statistic size='small'>
 			      <Statistic.Value>
-							<Image src='https://d30y9cdsu7xlg0.cloudfront.net/png/693-200.png' inline />
+							{/*<Image src='https://d30y9cdsu7xlg0.cloudfront.net/png/693-200.png' inline />*/}
 							{`${this.props.baths_summary.full_baths}`}
 						</Statistic.Value>
 			      <Statistic.Label>{`Full Bathroom${this.props.baths_summary.full_baths > 0 ? 's' : ''}`}</Statistic.Label>
@@ -92,7 +92,6 @@ const comStyles = () => {
       flexDirection: 'row',
 			justifyContent: 'center',
       height: '100%',
-			padding: '30px',
     },
 	}
 }

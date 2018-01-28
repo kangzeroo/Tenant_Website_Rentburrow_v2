@@ -94,6 +94,10 @@ export const uploadBatchImagesRx = (images, s3_corporation, prefix) => {
 				Promise.all(promiseArray).then(() => {
 					observer.complete()
 				}).catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					observer.error()
 				})
 			})

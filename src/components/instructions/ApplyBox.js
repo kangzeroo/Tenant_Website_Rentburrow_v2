@@ -15,6 +15,7 @@ import {
   Icon,
   Popup,
 } from 'semantic-ui-react'
+import FavoriteIcon from '../tenant/favorites/FavoriteIcon'
 import HomeExplorer from '../home_explorer/HomeExplorer'
 import { BUILDING_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
@@ -52,7 +53,8 @@ class ApplyBox extends Component {
   signAndPayOnline() {
     // localStorage.removeItem('leasing_group_id')
     // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
-    this.props.toggleTemporaryCollectionFrom()
+    // this.props.toggleTemporaryCollectionFrom()
+    this.props.togglePhoneCallForm('Apply Now')
     this.props.collectIntel({
       'TableName': BUILDING_INTERACTIONS,
       'Item': {
@@ -61,20 +63,22 @@ class ApplyBox extends Component {
         'BUILDING_ID': this.props.building.building_id,
         'ADDRESS': this.props.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
 
   callPhoneForm() {
-    this.props.togglePhoneCallForm()
+    this.props.togglePhoneCallForm('Message Landlord')
     this.props.collectIntel({
       'TableName': BUILDING_INTERACTIONS,
       'Item': {
-        'ACTION': 'CALL_LANDLORD_BUTTON',
+        'ACTION': 'MESSAGE_LANDLORD_BUTTON',
         'DATE': new Date().getTime(),
         'BUILDING_ID': this.props.building.building_id,
         'ADDRESS': this.props.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -94,6 +98,7 @@ class ApplyBox extends Component {
         'ADDRESS': this.state.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'SUBLET_COUNT': this.props.sublets.length,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -201,8 +206,6 @@ class ApplyBox extends Component {
                 basic
                 content='Open Home Explorer'
               />
-            </div>
-            <div>
               {
                 this.props.sublets.length > 0
                 ?
@@ -215,6 +218,9 @@ class ApplyBox extends Component {
                 null
               }
             </div>
+            <div>
+              <FavoriteIcon fav_type='building' size='big' building={this.props.building} />
+            </div>
           </div>
           <div style={comStyles().priceContainer}>
             <div>Rooms Starting from</div>
@@ -225,7 +231,7 @@ class ApplyBox extends Component {
             <Button
               primary
               fluid
-              icon={this.generateText(this.props.building.label) === 'Apply Now' ? 'lightning' : 'wait'}
+              icon={this.generateText(this.props.building.label) === 'Apply Now' ? 'suitcase' : 'wait'}
               content={this.generateText(this.props.building.label)}
               onClick={() => this.signAndPayOnline()}
               size='huge'
@@ -236,7 +242,7 @@ class ApplyBox extends Component {
               fluid
               basic
               icon='phone'
-              content='Text Property Manager'
+              content='Message Landlord'
               onClick={() => this.callPhoneForm()}
               size='large'
               style={comStyles().button}
@@ -283,6 +289,7 @@ ApplyBox.propTypes = {
   togglePhoneCallForm: PropTypes.func.isRequired,           // passed in
   sublets: PropTypes.array.isRequired,                      // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
 }
 
@@ -298,6 +305,7 @@ const RadiumHOC = Radium(ApplyBox)
 const mapReduxToProps = (state) => {
 	return {
     tenant_profile: state.auth.tenant_profile,
+    fingerprint: state.auth.browser_fingerprint,
 	}
 }
 

@@ -3,6 +3,8 @@ import {
   FORCE_SIGNIN,
   LOGOUT_TENANT,
   LOCATION_FORWARDING,
+  FINGERPRINT_BROWSER,
+  FORCE_SIGNIN_FAVORITE,
   // LISTEN_TO_FIREBASE_DB,
 } from '../action_types'
 
@@ -14,6 +16,7 @@ export const saveTenantToRedux = (tenantProfile) => {
       type: AUTHENTICATE_TENANT,
       payload: tenantProfile,
     })
+    localStorage.setItem('tenant_id', tenantProfile.tenant_id)
 		// dispatch({
 		// 	type: LISTEN_TO_FIREBASE_DB,
 		// 	payload: tenantProfile.tenant_id,
@@ -47,6 +50,27 @@ export const forwardUrlLocation = (url) => {
     dispatch({
       type: LOCATION_FORWARDING,
       payload: url,
+    })
+  }
+}
+
+// fingerprint browser
+export const fingerprintBrowser = (fingerprint_string) => {
+  return (dispatch) => {
+    dispatch({
+      type: FINGERPRINT_BROWSER,
+      payload: fingerprint_string,
+    })
+  }
+}
+
+// control if the forced signin popup should show
+export const triggerForcedSigninFavorite = (obj) => {
+  // dispatch lets you send actions to Redux
+  return (dispatch) => {
+    dispatch({
+      type: FORCE_SIGNIN_FAVORITE,
+      payload: obj,
     })
   }
 }

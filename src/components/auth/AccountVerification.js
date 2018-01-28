@@ -36,7 +36,7 @@ class AccountVerification extends Component {
 		if (savedEmail) {
 			this.setState({
 				email: savedEmail,
-				errorMessage: `Check your email at ${savedEmail} for the confirmation link`
+				errorMessage: `Check your phone text messages for the confirmation link`
 			})
 		}
 		// get the pin in the url
@@ -90,9 +90,14 @@ class AccountVerification extends Component {
 						verified: true,
 						errorMessage: 'Successfully verified account',
 					})
-					this.toggleModal(true, 'login')
+					// this.toggleModal(true, 'login')
+					this.props.history.push('/login?verified')
 					res()
 				}).catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					this.setState({
 						loading: false,
 						errorMessage: err.message,
@@ -114,10 +119,15 @@ class AccountVerification extends Component {
 				.then(() => {
 					this.setState({
 						loading: false,
-						errorMessage: `Your PIN has been verified to ${this.state.email}. Be sure to check the spam folder just in case.`
+						// errorMessage: `Your PIN has been verified to ${this.state.email}. Be sure to check the spam folder just in case.`
+						errorMessage: `Your PIN has been sent to your phone.`
 					})
 				})
 				.catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					// console.log(err.message)
 					this.setState({
 						errorMessage: err.message,

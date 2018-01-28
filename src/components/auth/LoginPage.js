@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import { withRouter } from 'react-router-dom'
 import {
-
+	Header,
 } from 'semantic-ui-react'
 import Login from './Login'
 
@@ -18,6 +18,7 @@ class LoginPage extends Component {
 	render() {
 		return (
 			<div id='LoginPage' style={comStyles().container}>
+				<Header as='h2' content='Login to RentHero' />
 				<Login />
 			</div>
 		)
@@ -62,6 +63,7 @@ const comStyles = () => {
       height: '80vh',
       justifyContent: 'center',
       alignItems: 'center',
+			padding: '50px',
 		}
 	}
 }

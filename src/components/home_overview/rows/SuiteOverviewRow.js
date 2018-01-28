@@ -18,6 +18,7 @@ import {
   getRoomsForSuite,
   getRoomAmenities,
 } from '../../../api/building/building_api'
+import FavoriteIcon from '../../tenant/favorites/FavoriteIcon'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { xGreyText, xBootstrapRed } from '../../../styles/base_colors'
 import { calculateComplexSuiteBaths, calculateRoomsSummary, calculateSuiteCommonAreasSummary, calculateFreeUtilitiesForSuite, } from '../../../api/amenities/amenity_calculations'
@@ -136,7 +137,7 @@ class SuiteOverviewRow extends Component {
   }
 
   generateBathsSummary() {
-    return (<SuiteBathSummary baths_summary={this.state.baths_summary}/>)
+    return (<SuiteBathSummary baths_summary={this.state.baths_summary} />)
   }
 
   generateBedsSummary() {
@@ -168,6 +169,7 @@ class SuiteOverviewRow extends Component {
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'BUILDING_ID': this.props.building.building_id,
         'BUILDING_NAME': this.props.building.building_address,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -175,7 +177,7 @@ class SuiteOverviewRow extends Component {
   signAndPayOnline(suite) {
     // localStorage.removeItem('leasing_group_id')
     // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
-    this.props.toggleTemporaryCollectionFrom()
+    this.props.toggleModal('phone')
     this.props.collectIntel({
       'TableName': SUITE_INTERACTIONS,
       'Item': {
@@ -186,6 +188,7 @@ class SuiteOverviewRow extends Component {
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'BUILDING_ID': this.props.building.building_id,
         'BUILDING_NAME': this.props.building.building_address,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -202,6 +205,7 @@ class SuiteOverviewRow extends Component {
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'BUILDING_ID': this.props.building.building_id,
         'BUILDING_NAME': this.props.building.building_address,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -219,24 +223,30 @@ class SuiteOverviewRow extends Component {
 				<div style={comStyles().left}>
 					<div id='infobar' style={comStyles().left_top} >
 						{ renameSuite(suite.suite_alias) }
+            <FavoriteIcon fav_type='suite' suite={suite} size='large' building={this.props.building} />
 					</div>
 					<div id='infobar' style={comStyles().left_middle} >
+
             {
               this.generateBedsSummary()
             }
             {
               this.generateBathsSummary()
             }
+            {
+              // this.generateFreeUtilities()
+            }
 					</div>
 					<div style={comStyles().left_bottom}>
-            <Button
+            {/*<Button
               onClick={() => this.signAndPayOnline(suite)}
               color='blue'
               content='Apply Now'
               style={comStyles().explore_button}
-            />
+            />*/}
 						<Button
               basic
+              icon='slideshare'
 							onClick={() => this.viewVirtualTour(suite)}
 							color='blue'
 							content='Virtual Tour'
@@ -267,6 +277,7 @@ SuiteOverviewRow.propTypes = {
   suite: PropTypes.object.isRequired,    // passed in
   toggleModal: PropTypes.func.isRequired,   // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   toggleTemporaryCollectionFrom: PropTypes.func.isRequired,     // passed in
 }
@@ -283,6 +294,7 @@ const RadiumHOC = Radium(SuiteOverviewRow)
 const mapReduxToProps = (redux) => {
 	return {
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

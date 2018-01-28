@@ -157,17 +157,31 @@ class PhoneCallForm extends Component {
         error_messages: [],
 			})
       const id = uuid.v4()
-
-      // getLandlordInfo(this.props.building.building_id)
-      // .then((data) => {
-      //   console.log(data)
-      //   insertTenantLandlordSMS({
-      //     tenant_phone: this.state.application_template.phone,
-      //     landlord_phone: data.phone,
-      //     notes: this.state.group_notes,
       //
+      // sendSMSToBothParties({
+      //     id: id,
+      //     tenant_id: this.props.tenant_profile.tenant_id,
+      //     first_name: this.state.application_template.first_name,
+      //     last_name: this.state.application_template.last_name,
+      //     gender: this.state.application_template.gender,
+      //     school: this.state.application_template.school,
+      //     program_and_term: this.state.application_template.program_and_term,
+      //     email: this.state.application_template.email,
+      //     phone: this.state.application_template.phone,
+      //     group_size: this.state.application_template.group_size,
+      //     building_id: this.props.building.building_id,
+      //     building_address: this.props.building.building_address,
+      //     group_notes: this.state.group_notes,
       //   })
-      // })
+      getLandlordInfo(this.props.building.building_id)
+      .then((data) => {
+        insertTenantLandlordSMS({
+          tenant_phone: this.state.application_template.phone,
+          landlord_phone: data.phone,
+          notes: this.state.group_notes,
+
+        })
+      })
       insertInquiry({
         id: id,
         tenant_id: this.props.tenant_profile.tenant_id,
@@ -250,7 +264,8 @@ class PhoneCallForm extends Component {
         'BUILDING_ID': this.props.building.building_id,
         'ADDRESS': this.props.building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
-        'DATA': JSON.stringify(this.state.application_template)
+        'DATA': JSON.stringify(this.state.application_template),
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -498,6 +513,7 @@ PhoneCallForm.propTypes = {
 	closeModal: PropTypes.func.isRequired,		// passed in
   landlord: PropTypes.object.isRequired,    // passed in
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -511,8 +527,8 @@ const RadiumHOC = Radium(PhoneCallForm)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-    collectIntel: PropTypes.func.isRequired,
     tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 

@@ -71,7 +71,7 @@ class UberSignup extends Component {
       return loginFacebook()
     })
     .then((fbProfile) => {
-      insertUser(fbProfile)
+      // insertUser(fbProfile)
       return saveTenantProfile(fbProfile)
     })
     .then((data) => {

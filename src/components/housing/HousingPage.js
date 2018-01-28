@@ -24,6 +24,7 @@ import {
 	querySubletsInArea,
 } from '../../api/search/sublet_api'
 import { selectHelpThread } from '../../actions/messaging/messaging_actions'
+import { getAllFavoritesForTenant } from '../../api/tenant/favorite_api'
 
 class HousingPage extends Component {
 
@@ -31,12 +32,26 @@ class HousingPage extends Component {
 		super()
 		this.state = {
 			buildings: [],
+
+			leases_loaded: false,
+			sublets_loaded: false,
 		}
 	}
 
 	componentWillMount() {
 		this.refreshBuildings()
 		this.props.selectHelpThread()
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.props.tenant_profile !== nextProps.tenant_profile) {
+			getAllFavoritesForTenant(nextProps.tenant_profile.tenant_id)
+			.then((data) => {
+				// favorites is stored in localStorage as [building_id, building_id, ....] for better performance
+				localStorage.removeItem('favorites')
+				localStorage.setItem('favorites', JSON.stringify(data.map((s) => { return { building_id: s.building_id, suite_id: s.suites.f1, } })))
+			})
+		}
 	}
 
 	/* {
@@ -52,7 +67,13 @@ class HousingPage extends Component {
 			this.props.saveBuildingsToRedux(buildings.sort((a, b) => { return 0.5 - Math.random() }))
 			this.setState({
 				buildings,
+				leases_loaded: true,
 			})
+		})
+		// .then((data) => {
+		// 	return getAllFavoritesForTenant(this.props.tenant_profile.tenant_id)
+		// })
+		.then((data) => {
 			return querySubletsInArea({
 				...this.props.current_gps_center,
 				filterParams: this.props.sublet_filter_params,
@@ -60,8 +81,12 @@ class HousingPage extends Component {
 		})
 		.then((data) => {
 			this.props.saveSubletsToRedux(data)
+			this.setState({
+				sublets_loaded: true,
+			})
 		})
 	}
+
 
 	render() {
 		return (
@@ -79,6 +104,8 @@ class HousingPage extends Component {
 				<HousingPanel
 					refresh={() => this.refreshBuildings()}
 					buildings={this.state.buildings}
+					leases_loaded={this.state.leases_loaded}
+					sublets_loaded={this.state.sublets_loaded}
 				/>
 				<MapComponent
 					listOfResults={
@@ -105,6 +132,7 @@ HousingPage.propTypes = {
 	saveBuildingsToRedux: PropTypes.func.isRequired,
 	building_search_results: PropTypes.array,
 	sublet_search_results: PropTypes.array,
+	tenant_profile: PropTypes.object,
 	selected_pin: PropTypes.string,
 	popup_buildings: PropTypes.array,
 	rent_type: PropTypes.string.isRequired,
@@ -119,6 +147,7 @@ HousingPage.propTypes = {
 HousingPage.defaultProps = {
 	building_search_results: [],
 	sublet_search_results: [],
+	tenant_profile: {},
 	selected_pin: null,
 	popup_buildings: [],
   search_radius: 1000,
@@ -132,6 +161,7 @@ const mapReduxToProps = (redux) => {
 	return {
 		building_search_results: redux.search.building_search_results,
 		sublet_search_results: redux.search.sublet_search_results,
+		tenant_profile: redux.auth.tenant_profile,
 		selected_pin: redux.search.selected_pin,
 		popup_buildings: redux.search.popup_buildings,
 		rent_type: redux.filter.rent_type,
@@ -158,7 +188,7 @@ const comStyles = () => {
 		container: {
       display: 'flex',
       flexDirection: 'row',
-			height: '94vh',
+			height: '93vh',
 			width: '100%',
 			position: 'relative',
 		},

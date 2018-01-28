@@ -12,6 +12,7 @@ import {
 	Button,
   Form,
   Divider,
+	Checkbox,
 } from 'semantic-ui-react'
 import { validateEmail } from '../../api/general/general_api'
 import { RegisterStudent } from '../../api/aws/aws-cognito'
@@ -28,6 +29,7 @@ class Signup extends Component {
 			phone_number: '',								// staff phone number typed in
 			password: '',										// password typed in
 			password_confirmation: '',						// password confirmation typed in
+			agreed_to_terms: false,
 			error_messages: [],							// error message to display
 			loading: false,									// loading flag
 			success: false,									// success flag
@@ -87,6 +89,10 @@ class Signup extends Component {
             this.props.closeModal()
 					})
 				}).catch((err) => {
+					_LTracker.push({
+	          'error': err,
+	          'tag' : `${localStorage.getItem('tenant_id')}`
+	        })
 					this.setState({
 						loading: false,
 						error_messages: [err.message],
@@ -110,6 +116,9 @@ class Signup extends Component {
 		if (!this.state.password || !this.state.password_confirmation || (this.state.password !== this.state.password_confirmation)) {
 			error_messages.push('You must provide a password and confirm the password')
 		}
+		if (!this.state.agreed_to_terms) {
+			error_messages.push('You must agree to the terms and conditions in order to use RentHero')
+		}
 		this.setState({
 			error_messages: error_messages,
 			loading: false,
@@ -117,10 +126,20 @@ class Signup extends Component {
 		return error_messages.length === 0
 	}
 
+	agreedToTerms() {
+		this.setState({
+			agreed_to_terms: !this.state.agreed_to_terms
+		}, () => {
+			if (this.state.agreed_to_terms) {
+				// save to dynamodb
+			}
+		})
+	}
+
 	render() {
 		return (
 			<div id='Signup' style={comStyles().container}>
-				<Form style={comStyles().form} size='medium'>
+				<Form style={comStyles().form} size='small'>
           <Form.Group widths='equal' >
             <Form.Field>
               <label>First Name</label>
@@ -147,6 +166,10 @@ class Signup extends Component {
             <label>Confirm Password</label>
             <Input id='password_confirmation' value={this.state.password_confirmation} onChange={(e) => this.updateAttr(e, 'password_confirmation')} type='password' placeholder='Confirm Password' />
           </Form.Field>
+          <Form.Field style={{ display: 'flex', flexDirection: 'row' }}>
+            <Checkbox checked={this.state.agreed_to_terms} onClick={() => this.agreedToTerms()} />
+						<div> &nbsp; &nbsp; I agree to the <a href={`${window.location.origin}/termsandconditions`} target='_blank'>terms and conditions</a></div>
+          </Form.Field>
 
           <Form.Field style={comStyles().col}>
           {
@@ -158,7 +181,7 @@ class Signup extends Component {
           }
           </Form.Field>
           <Form.Field>
-            <Button color='twitter' fluid size='medium' loading={this.state.loading} onClick={() => this.submitRegistration(this.state)}>
+            <Button color='twitter' fluid size='small' loading={this.state.loading} onClick={() => this.submitRegistration(this.state)}>
               Sign up
             </Button>
           </Form.Field>

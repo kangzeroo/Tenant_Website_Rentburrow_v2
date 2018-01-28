@@ -79,6 +79,10 @@ class ForgotPassword extends Component {
 						localStorage.setItem('RentBurrow_Email', this.state.email)
 					})
 					.catch((err) => {
+						_LTracker.push({
+		          'error': err,
+		          'tag' : `${localStorage.getItem('tenant_id')}`
+		        })
 						this.setState({
 							errorMessage: err.message,
 							loading: false

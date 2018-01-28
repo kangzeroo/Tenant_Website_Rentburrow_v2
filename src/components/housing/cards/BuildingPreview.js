@@ -20,6 +20,7 @@ import {
   aliasToURL,
   shortenAddress,
 } from '../../../api/general/general_api'
+import FavoriteIcon from '../../tenant/favorites/FavoriteIcon'
 import SingularImageGallery from '../../image/SingularImageGallery'
 import { selectPinToRedux } from '../../../actions/search/search_actions'
 import { getAllImagesSizeForSpecificBuilding, getNumVirtualTours, getAllSummaryImages, } from '../../../api/search/search_api'
@@ -79,6 +80,7 @@ class BuildingPreview extends Component {
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'CORP_ID': building.corporation_id,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -94,6 +96,7 @@ class BuildingPreview extends Component {
         'ADDRESS': building.building_address,
         'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
         'CORP_ID': building.corporation_id,
+        'FINGERPRINT': this.props.fingerprint,
       }
     })
   }
@@ -108,6 +111,7 @@ class BuildingPreview extends Component {
           style={comStyles().hardCard}
         >
           <div style={comStyles().imageGallery}>
+            <FavoriteIcon fav_type='building' building={this.props.building} favorited={this.props.building.favorited} />
             {
               this.state.summary_images.length === 0
               ?
@@ -204,6 +208,7 @@ BuildingPreview.propTypes = {
   selectPinToRedux: PropTypes.func.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -218,6 +223,7 @@ const RadiumHOC = Radium(BuildingPreview)
 function mapStateToProps(state) {
 	return {
     tenant_profile: state.auth.tenant_profile,
+    fingerprint: state.auth.browser_fingerprint,
 	}
 }
 

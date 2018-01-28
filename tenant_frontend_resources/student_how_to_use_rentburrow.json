@@ -1,0 +1,14 @@
+{
+  "topics": [
+    { "key": "general", "title": "General Tips", "tips": [
+      { "index": 0, "icon": "mail", "title": "Example title", "explanation": "Cool Dawg" },
+      { "index": 1, "icon": "calendar outline", "title": "Great Stuff", "explanation": "OH LAWDY" },
+      { "index": 2, "icon": "alarm", "title": "Yum", "explanation": "MHMM YES" }
+    ] },
+    { "key": "protips", "title": "The Pro Tips", "tips": [
+      { "index": 0, "icon": "mail", "title": "When to do this", "explanation": "YEA BOI" },
+      { "index": 1, "icon": "calendar outline", "title": "Why to do this", "explanation": "OH LAWDY" },
+      { "index": 2, "icon": "alarm", "title": "When to check", "explanation": "MHMM YES" }
+    ] }
+  ]
+}

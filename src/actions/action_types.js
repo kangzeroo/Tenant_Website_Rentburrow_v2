@@ -1,5 +1,6 @@
 // actions related to the app
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE'
+export const CHANGE_HTML_TITLE = 'CHANGE_HTML_TITLE'
 
 // actions related to community
 export const SELECT_LOCAL = 'SELECT_LOCAL'
@@ -27,6 +28,8 @@ export const AUTHENTICATE_TENANT = 'AUTHENTICATE_TENANT'
 export const LOGOUT_TENANT = 'LOGOUT_TENANT'
 export const FORCE_SIGNIN = 'FORCE_SIGNIN'
 export const LOCATION_FORWARDING = 'LOCATION_FORWARDING'
+export const FINGERPRINT_BROWSER = 'FINGERPRINT_BROWSER'
+export const FORCE_SIGNIN_FAVORITE = 'FORCE_SIGNIN_FAVORITE'
 
 // actions related to selections
 export const SELECT_BUILDING = 'SELECT_BUILDING'
@@ -63,3 +66,7 @@ export const APPLY_FOR_THIS_BUILDING = 'APPLY_FOR_THIS_BUILDING'
 export const GROUP_MEMBERS = 'GROUP_MEMBERS'
 export const MY_LEASE_APPLICATION = 'MY_LEASE_APPLICATION'
 export const MY_APPLIED_BUILDING = 'MY_APPLIED_BUILDING'
+
+// actions related to favorites
+export const SAVE_FAVORITES = 'SAVE_FAVORITES'
+export const SAVE_BUILDING_FAVORITES = 'SAVE_BUILDING_FAVORITES'

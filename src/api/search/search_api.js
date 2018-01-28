@@ -7,15 +7,19 @@ const agent = new https.Agent({
   rejectUnauthorized: false
 })
 
-export const queryBuildingsInArea = () => { //{ lat, lng, filterParams }) => {
+export const queryBuildingsInArea = (tenant_id) => { //{ lat, lng, filterParams }) => {
   const p = new Promise((res, rej) => {
     // axios.post(`${SEARCH_MICROSERVICE}/search_buildings`, { lat, long })
-    axios.post(`${SEARCH_MICROSERVICE}/get_all_active_buildings`, {}, authHeaders()) // { httpsAgent: agent })
+    axios.post(`${SEARCH_MICROSERVICE}/get_all_active_buildings`, { tenant_id, }, authHeaders()) // { httpsAgent: agent })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -35,6 +39,10 @@ export const searchForSpecificBuilding = (urlPath) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -50,6 +58,10 @@ export const getBuildingById = (id) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -59,16 +71,20 @@ export const getBuildingById = (id) => {
 // this should search for a specific building
 // and if not found, throw an error
 // currently just mocks a return
-export const searchForSpecificBuildingByAlias = (urlPath) => {
+export const searchForSpecificBuildingByAlias = (urlPath, tenant_id) => {
   const p = new Promise((res, rej) => {
     const alias = urlPath.slice(1)
     // search for a specific building from backend
-    axios.post(`${SEARCH_MICROSERVICE}/get_specific_building_by_alias`, { building_alias: alias }, authHeaders()) // { httpsAgent: agent })
+    axios.post(`${SEARCH_MICROSERVICE}/get_specific_building_by_alias`, { building_alias: alias, tenant_id, }, authHeaders()) // { httpsAgent: agent })
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -86,6 +102,10 @@ export const searchBuildingByPlaceID = ({ place_id }) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -101,6 +121,10 @@ export const searchBuildingByAddress = (addr) => {
         res(data.data[0])
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -116,6 +140,10 @@ export const getAllImagesSizeForSpecificBuilding = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -131,6 +159,10 @@ export const getAllSummaryImages = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -146,6 +178,10 @@ export const getNumVirtualTours = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -161,6 +197,10 @@ export const getSpecificLandlord = ({ building_id }) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
@@ -175,6 +215,10 @@ export const getLandlordInfo = (building_id) => {
         res(data.data)
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
         rej(err)
       })
   })
