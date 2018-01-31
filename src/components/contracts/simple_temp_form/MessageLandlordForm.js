@@ -28,7 +28,7 @@ import moment from 'moment'
 import { validateEmail, } from '../../../api/general/general_api'
 import { insertTenantInquiry } from '../../../api/inquiries/inquiry_api'
 import { updateTenantPhone, updateTenantEmail, } from '../../../api/auth/tenant_api'
-import { sendInitialMessage, sendTenantWaitMsg, } from '../../../api/sms/sms_api'
+import { sendInitialMessage, sendInitialCorporateInquiry, } from '../../../api/sms/sms_api'
 import { getLandlordInfo, } from '../../../api/search/search_api'
 
 class MessageLandlordForm extends Component {
@@ -165,15 +165,6 @@ class MessageLandlordForm extends Component {
         })
       }
 
-      console.log({
-        tenant_id: this.props.tenant_profile.tenant_id,
-        group_id: null,
-        building_id: this.props.building.building_id,
-        suite_id: this.props.suite ? this.props.suite.suite_id : null,
-        group_notes: this.state.group_notes,
-        group_size: this.state.group_size,
-      })
-
       insertTenantInquiry({
         tenant_id: this.props.tenant_profile.tenant_id,
         group_id: null,
@@ -187,16 +178,17 @@ class MessageLandlordForm extends Component {
         return getLandlordInfo(this.props.building.building_id)
       })
       .then((data) => {
-        console.log(data)
         if (data.corporate_landlord) {
           // send email to landlord to select time slot,
           // send email + sms to tenant, an agent will contact him/her shortly
-          return sendTenantWaitMsg({
+
+          return sendInitialCorporateInquiry({
             tenant: {
               tenant_id: this.props.tenant_profile.tenant_id,
               first_name: this.props.tenant_profile.first_name,
               last_name: this.props.tenant_profile.last_name,
               phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : this.state.phone,
+              email: this.props.tenant_profile.email ? this.props.tenant_profile.email : this.state.email,
             },
             building: {
               building_id: this.props.building.building_id,
@@ -207,10 +199,15 @@ class MessageLandlordForm extends Component {
               suite_id: this.props.suite.suite_id,
               suite_alias: this.props.suite.suite_alias,
             } : null,
-            group_notes: this.state.group_notes,
-            group_size: this.state.group_size,
-            corporation_id: data.corporation_id,
-            corporation_email: data.email,
+            corporation: {
+              corporation_id: data.corporation_id,
+              corporation_email: data.email,
+              corporation_name: data.corporation_name,
+            },
+            group: {
+              group_notes: this.state.group_notes,
+              group_size: this.state.group_size,
+            },
             inquiry_id: inquiry_id,
           })
         } else {
