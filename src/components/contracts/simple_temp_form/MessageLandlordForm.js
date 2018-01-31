@@ -27,8 +27,8 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment'
 import { validateEmail, } from '../../../api/general/general_api'
 import { insertTenantInquiry } from '../../../api/inquiries/inquiry_api'
-import { updateEntireTenantProfile, updateTenantPhone, updateTenantEmail, } from '../../../api/auth/tenant_api'
-import { sendInitialMessage, sendTenantWaitMsg, } from '../../../api/sms/sms_api'
+import { updateTenantPhone, updateTenantEmail, } from '../../../api/auth/tenant_api'
+import { sendInitialMessage, sendInitialCorporateInquiry, } from '../../../api/sms/sms_api'
 import { getLandlordInfo, } from '../../../api/search/search_api'
 
 class MessageLandlordForm extends Component {
@@ -169,6 +169,7 @@ class MessageLandlordForm extends Component {
         tenant_id: this.props.tenant_profile.tenant_id,
         group_id: null,
         building_id: this.props.building.building_id,
+        suite_id: this.props.suite ? this.props.suite.suite_id : null,
         group_notes: this.state.group_notes,
         group_size: this.state.group_size,
       })
@@ -180,22 +181,33 @@ class MessageLandlordForm extends Component {
         if (data.corporate_landlord) {
           // send email to landlord to select time slot,
           // send email + sms to tenant, an agent will contact him/her shortly
-          return sendTenantWaitMsg({
+
+          return sendInitialCorporateInquiry({
             tenant: {
               tenant_id: this.props.tenant_profile.tenant_id,
               first_name: this.props.tenant_profile.first_name,
               last_name: this.props.tenant_profile.last_name,
               phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : this.state.phone,
+              email: this.props.tenant_profile.email ? this.props.tenant_profile.email : this.state.email,
             },
             building: {
               building_id: this.props.building.building_id,
               building_alias: this.props.building.building_alias,
               building_address: this.props.building.building_address,
             },
-            group_notes: this.state.group_notes,
-            group_size: this.state.group_size,
-            corporation_id: data.corporation_id,
-            corporation_email: data.email,
+            suite: this.props.suite && this.props.suite.suite_id ? {
+              suite_id: this.props.suite.suite_id,
+              suite_alias: this.props.suite.suite_alias,
+            } : null,
+            corporation: {
+              corporation_id: data.corporation_id,
+              corporation_email: data.email,
+              corporation_name: data.corporation_name,
+            },
+            group: {
+              group_notes: this.state.group_notes,
+              group_size: this.state.group_size,
+            },
             inquiry_id: inquiry_id,
           })
         } else {
@@ -209,6 +221,10 @@ class MessageLandlordForm extends Component {
             building_id: this.props.building.building_id,
             building_address: this.props.building.building_address,
             building_alias: this.props.building.building_alias,
+            suite: this.props.suite && this.props.suite.suite_id ? {
+              suite_id: this.props.suite.suite_id,
+              suite_alias: this.props.suite.suite_alias,
+            } : null,
             group_notes: this.state.group_notes,
           })
         }
@@ -238,9 +254,9 @@ class MessageLandlordForm extends Component {
         {
           this.props.header === 'Apply Now'
           ?
-          <Header as='h2' icon='suitcase' content='Apply Now' subheader='Send an Inquiry and chat with the landlord' />
+          <Header as='h2' icon='suitcase' content={`Applying to ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='Send an Inquiry and chat with the landlord' />
           :
-          <Header as='h2' icon='phone' content='Message Landlord' subheader='A chat thread will be opened between you and the landlord' />
+          <Header as='h2' icon='phone' content={`Message Landlord about ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='A chat thread will be opened between you and the landlord' />
         }
         <br />
         <Form>
@@ -348,6 +364,7 @@ MessageLandlordForm.propTypes = {
 	history: PropTypes.object.isRequired,
   tenant_profile: PropTypes.object.isRequired,
   building: PropTypes.object.isRequired,    // passed in
+  suite: PropTypes.object,                  // passed in
 	closeModal: PropTypes.func.isRequired,		// passed in
   landlord: PropTypes.object.isRequired,    // passed in
   header: PropTypes.string.isRequired,      // passed in
@@ -355,7 +372,7 @@ MessageLandlordForm.propTypes = {
 
 // for all optional props, define a default value
 MessageLandlordForm.defaultProps = {
-
+  suite: {},
 }
 
 // Wrap the prop in Radium to allow JS styling

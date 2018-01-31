@@ -19,7 +19,8 @@ import HomeExplorer from '../home_explorer/HomeExplorer'
 import { xGreyText, xBootstrapRed } from '../../styles/base_colors'
 import BuildingOverviewRow from './rows/BuildingOverviewRow'
 import SuiteOverviewRow from './rows/SuiteOverviewRow'
-
+import MessageLandlordForm from '../contracts/simple_temp_form/MessageLandlordForm'
+import { triggerForcedSigninFavorite } from '../../actions/auth/auth_actions'
 
 class HomeOverview extends Component {
 	constructor() {
@@ -49,6 +50,16 @@ class HomeOverview extends Component {
 				})
 			})
 		})
+	}
+
+	showMessagePopup(header) {
+		if (!this.props.authenticated || !this.props.tenant_profile || !this.props.tenant_profile.tenant_id) {
+			this.props.triggerForcedSigninFavorite({
+				building_id: this.props.building.building_id,
+			})
+		} else {
+			this.toggleModal(true, 'phone', header)
+		}
 	}
 
 	toggleModal(bool, attr, context) {
@@ -97,6 +108,26 @@ class HomeOverview extends Component {
 	        </Modal.Content>
 	      </Modal>
 			)
+		} else if (modal_name === 'phone') {
+				return (
+		      <Modal
+						dimmer
+						open={this.state.toggle_modal}
+						onClose={() => this.toggleModal(false)}
+						closeIcon
+						size='large'
+					>
+		        <Modal.Content>
+							<MessageLandlordForm
+								building={this.props.building}
+								suite={context}
+								landlord={this.props.selected_landlord}
+								header={context}
+								closeModal={() => this.toggleModal(false)}
+							/>
+		        </Modal.Content>
+		      </Modal>
+		    )
 		}
   }
 
@@ -117,7 +148,7 @@ class HomeOverview extends Component {
 								key={suite.suite_id}
 								building={this.props.building}
 								suite={suite}
-								toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
+								openMessageForm={() => this.showMessagePopup(suite)}
 								toggleTemporaryCollectionFrom={() => this.props.toggleTemporaryCollectionFrom()}
 							/>
 						)
@@ -136,6 +167,10 @@ class HomeOverview extends Component {
 // defines the types of variables in this.props
 HomeOverview.propTypes = {
   history: PropTypes.object.isRequired,
+	triggerForcedSigninFavorite: PropTypes.func.isRequired,
+	selected_landlord: PropTypes.object.isRequired,
+	authenticated: PropTypes.bool.isRequired,
+	tenant_profile: PropTypes.object.isRequired,
   suites: PropTypes.array.isRequired,			// passed in
 	building: PropTypes.object.isRequired,	// passed in
 	promise_array_of_suite_amenities_with_id: PropTypes.array,		// passed in
@@ -153,13 +188,16 @@ const RadiumHOC = Radium(HomeOverview)
 // Get access to state from the Redux store
 const mapReduxToProps = (redux) => {
 	return {
-
+		selected_landlord: redux.selection.selected_landlord,
+		authenticated: redux.auth.authenticated,
+		tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
+		triggerForcedSigninFavorite,
 	})(RadiumHOC)
 )
 
