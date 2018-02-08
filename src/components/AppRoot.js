@@ -69,6 +69,7 @@ import MyFavorites from './favorites/MyFavorites'
 import ToursPage from './tours/ToursPage'
 import Apology from './instructions/Apology'
 import PostSubletPage from './sublets/PostSubletPage'
+import MySubletAds from './sublets/MySubletAds'
 import Test from './requests/Test'
 
 import MobileHeader from './mobile/components/MobileHeader'
@@ -381,6 +382,7 @@ class AppRoot extends Component {
                 {/*<Route exact path='/redeem' component={RedeemGift} />*/}
                 <Route exact path='/book-filming' component={BookAFilmingPage} />
                 <Route exact path='/postsublet' component={PostSubletPage} />
+                <Route exact path='/my-ads' component={MySubletAds} />
                 {/*<Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />*/}
                 {/*<Route exact path='/how-it-works' component={HowItWorksLandlord} />*/}
                 {/*<Route exact path='/pricing' component={PricingLandlord} />*/}

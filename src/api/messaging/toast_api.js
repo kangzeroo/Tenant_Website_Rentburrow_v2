@@ -19,13 +19,13 @@ export const getInitialToastMessages = (location) => {
         icon: 'home',
         link: 'https://renthero.ca/contact'
       },
-      {
-        id: 'new-building',
-        title: 'New Buildings Filmed Every Week',
-        text: 'Be sure to check back often',
-        color: 'blue',
-        icon: 'home'
-      }
+      // {
+      //   id: 'new-building',
+      //   title: 'New Buildings Filmed Every Week',
+      //   text: 'Be sure to check back often',
+      //   color: 'blue',
+      //   icon: 'home'
+      // }
     ]
   } else if (location.pathname.indexOf('sublet') > -1) {
     return [

@@ -155,6 +155,8 @@ class Header extends Component {
       this.props.history.push('/account')
     } else if (value.value === 'sublet_apps') {
       this.props.history.push('/sublet_applications')
+    } else if (value.value === 'my_ads') {
+      this.props.history.push('/my-ads')
     } else if (value.value === 'lease_apps') {
       this.props.history.push('/lease_applications')
     } else if (value.value === 'pro_tips') {
@@ -210,7 +212,8 @@ class Header extends Component {
     const options = [
       { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
       // { key: 'favorites', value: 'favorites', text: 'Favorites', icon: 'heart' },
-      { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
+      // { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
+      { key: 'my_ads', value: 'my_ads', text: 'My Ads', icon: 'file text' },
       // { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
       // { key: 'pro_tips', value: 'pro_tips', text: 'Renting Pro-Tips', icon: 'star' },
       // { key: 'privacy_policy', value: 'privacy_policy', text: 'Privacy Policy', icon: 'privacy' },

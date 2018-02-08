@@ -86,7 +86,9 @@ class SubletsList extends Component {
 	generateAllImages(sublets) {
 		let all_images = []
 		sublets.forEach((sublet) => {
-			all_images = all_images.concat(JSON.parse(sublet.images))
+			if (sublet && sublet.images) {
+				all_images = all_images.concat(JSON.parse(sublet.images))
+			}
 		})
 		return all_images
 	}
