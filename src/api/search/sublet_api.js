@@ -7,11 +7,13 @@ export const querySubletsInArea = ({ lat, lng, filterParams }) => {
     axios.post(`${SEARCH_MICROSERVICE}/get_sublets`, { lat, lng, filterParams }, authHeaders())
       .then((data) => {
         // once we have the response, only then do we dispatch an action to Redux
-        res(data.data.map((sublet) => {
+        const x = data.data.map((sublet) => {
           return convertToRegularSubletObj(sublet)
         }).sort((a, b) => {
           return b.posted_date - a.posted_date
-        }))
+        })
+        console.log(x)
+        res(x)
       })
       .catch((err) => {
         _LTracker.push({
@@ -56,6 +58,26 @@ export const matchSubletsByAddress = ({ address }) => {
         }))
       })
       .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
+
+export const postSubletToDynamoDB = (sublet) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SEARCH_MICROSERVICE}/post_sublet`, { sublet }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        console.log(data)
+        res(data)
+      })
+      .catch((err) => {
+        console.log(err)
         _LTracker.push({
           'error': err,
           'tag' : `${localStorage.getItem('tenant_id')}`

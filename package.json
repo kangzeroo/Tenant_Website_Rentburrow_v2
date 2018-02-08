@@ -56,6 +56,7 @@
     "lodash": "4.17.4",
     "moment": "2.18.1",
     "nodemon": "1.12.0",
+    "prerender-node": "^2.7.4",
     "prop-types": "15.5.10",
     "radium": "0.19.1",
     "rc-time-picker": "3.1.0",

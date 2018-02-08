@@ -90,7 +90,7 @@ const comStyles = (link) => {
     container: {
 			display: 'flex',
 			flexDirection: 'column',
-			justifyContent: 'center',
+			justifyContent: 'flex-end',
 			alignItems: 'center',
 			position: 'absolute',
 			bottom: '50px',

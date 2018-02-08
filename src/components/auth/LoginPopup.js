@@ -84,7 +84,7 @@ class LoginPopup extends Component {
         {
           this.props.rent_type === 'sublet' && this.props.force_signin
           ?
-          <h4>Rentburrow pulls sublets from Facebook. By signing in, you help make this service possible. Thank you.</h4>
+          <h4>RentHero pulls sublets from Facebook. By signing in, you help make this service possible. You the real hero, thank you.</h4>
           :
           null
         }

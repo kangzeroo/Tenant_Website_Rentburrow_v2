@@ -28,6 +28,7 @@ import {
 } from '../i18n/phrases/Header_i18n'
 import { changeAppLanguage } from '../actions/app/app_actions'
 import SearchInput from './filter/SearchInput'
+import ContactUsForm from './community/student_info/forms/ContactUsForm'
 import { queryBuildingsInArea } from '../api/search/search_api'
 import { saveBuildingsToRedux } from '../actions/search/search_actions'
 import PropertyRequest from './requests/PropertyRequest'
@@ -56,12 +57,51 @@ class Header extends Component {
   renderAppropriateModal(modal_name, context) {
     if (modal_name === 'login') {
       return this.renderLoginSuite('login')
-    } else if (modal_name === 'signup') {
-      return this.renderLoginSuite('signup')
+      // return this.renderLoginSuite('signup')
+    } else if (modal_name === 'post_ad') {
+      return this.renderPostAd()
+    } else if (modal_name === 'contact') {
+      return this.renderContact()
     } else if (modal_name === 'request') {
       return this.renderRequest()
+    } else if (modal_name === 'sublet') {
+      return this.renderSubletForm()
     }
     return null
+  }
+
+  renderPostAd() {
+    return (
+      <Modal.Content inverted>
+        <div style={comStyles().post_ad}>
+          <div onClick={() => this.clickedPostStudentSublet()} style={comStyles().post_ad_option}>
+            <b>Students</b>
+            <br/>
+            Post a 4 Month Sublet
+            <br/>
+            <h5 style={{ color: 'white' }}>* Facebook login required</h5>
+          </div>
+          <div onClick={() => this.toggleModal(true, 'contact')} style={comStyles().post_ad_option}>
+            <b>Landlords</b>
+            <br/>
+            Contact us
+          </div>
+        </div>
+      </Modal.Content>
+    )
+  }
+
+  clickedPostStudentSublet() {
+    this.toggleModal(false)
+    this.props.history.push('/postsublet')
+  }
+
+  renderContact() {
+    return (
+      <Modal.Content inverted>
+        <ContactUsForm />
+      </Modal.Content>
+    )
   }
 
   renderRequest() {
@@ -215,16 +255,9 @@ class Header extends Component {
             this.props.authenticated
             ?
             <div style={comStyles().user_container} >
-              <Link to='/tours' >
-                <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
-                  Tours
-                </div>
-              </Link>
-              <Link to='/contact' >
-                <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
-                  Help
-                </div>
-              </Link>
+              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                Local Tours
+              </div>
               {
                 (this.props.history.location.pathname === '/' || this.props.history.location.pathname === '/lease' ||
                 this.props.history.location.pathname === '/leases')
@@ -245,7 +278,12 @@ class Header extends Component {
                 :
                 null
               }
-
+              <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
+                Post Ad
+              </div>
+              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                Help
+              </div>
 
               {/*}<Button
                 basic
@@ -273,18 +311,14 @@ class Header extends Component {
                 inverted
                 content='Login'
               />*/}
-              <Link to='/tours' >
-                <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
-                  Tours
-                </div>
-              </Link>
-              <Link to='/contact'>
-                <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
-                  Help
-                </div>
-              </Link>
-              <div role='button' tabIndex={0} key='signup' style={comStyles().login} onClick={() => this.toggleModal(true, 'signup')}>
-                Sign Up
+              <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
+                Local Tours
+              </div>
+              <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
+                Post Ad
+              </div>
+              <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
+                Help
               </div>
               <div role='button' tabIndex={0} key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
                 Log In
@@ -458,8 +492,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      minWidth: '350px',
-      maxWidth: '350px',
+      minWidth: '500px',
+      maxWidth: '500px',
       alignItems: 'center',
     },
     close_login: {
@@ -474,6 +508,26 @@ const comStyles = () => {
       color: 'white',
       fontFamily: `'Carter One', cursive`,
       margin: '0px 0px 0px 20px',
+    },
+    post_ad: {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    post_ad_option: {
+      padding: '30px',
+      fontSize: '2rem',
+      fontWeight: 'bold',
+      width: '48%',
+      margin: '5px auto',
+      color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+      backgroundColor: xMidBlue,
+      cursor: 'pointer',
+      borderRadius: '10px',
     }
   }
 }

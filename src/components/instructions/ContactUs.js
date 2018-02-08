@@ -105,7 +105,7 @@ class ContactUs extends Component {
 			    <Card.Content extra>
 						<a>
 							<Icon name='mail' />
-							support@rentburrow.com
+							support@renthero.ca
 						</a>
 						&nbsp; &nbsp;
 						<a>
@@ -168,14 +168,14 @@ class ContactUs extends Component {
 			        </span>
 			      </Card.Meta>
 			      <Card.Description>
-							Email us to let us know which gift you want. We will verify your lease with the landlord your gift will be available for pickup at SLC or Laurier Concourse. <Link to='/prizes'>Click here to see full list of gifts.</Link>
+							Email us to let us know which gift you want. We will verify your lease with the landlord your gift will be available for pickup at SLC or Laurier Concourse.
 			      </Card.Description>
 			    </Card.Content>
 					<br/>
 			    <Card.Content extra>
 			      <a>
 			        <Icon name='mail' />
-			        support@rentburrow.com
+			        support@renthero.ca
 			      </a>
 			    </Card.Content>
 				</div>
