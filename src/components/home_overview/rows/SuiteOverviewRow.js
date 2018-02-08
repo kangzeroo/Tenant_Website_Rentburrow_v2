@@ -177,7 +177,7 @@ class SuiteOverviewRow extends Component {
   signAndPayOnline(suite) {
     // localStorage.removeItem('leasing_group_id')
     // window.open(`${window.location.origin}/signing/lease/${this.props.building.building_id}`, '_blank')
-    this.props.toggleModal('phone')
+    this.props.openMessageForm(suite)
     this.props.collectIntel({
       'TableName': SUITE_INTERACTIONS,
       'Item': {
@@ -238,12 +238,12 @@ class SuiteOverviewRow extends Component {
             }
 					</div>
 					<div style={comStyles().left_bottom}>
-            {/*<Button
-              onClick={() => this.signAndPayOnline(suite)}
+            <Button
+              onClick={() => this.signAndPayOnline(this.props.suite)}
               color='blue'
-              content='Apply Now'
+              content='Inquire'
               style={comStyles().explore_button}
-            />*/}
+            />
 						<Button
               basic
               icon='slideshare'
@@ -276,6 +276,7 @@ SuiteOverviewRow.propTypes = {
   building: PropTypes.object.isRequired,  // passed in
   suite: PropTypes.object.isRequired,    // passed in
   toggleModal: PropTypes.func.isRequired,   // passed in
+  openMessageForm: PropTypes.func.isRequired,   // passed in
   collectIntel: PropTypes.func.isRequired,
   fingerprint: PropTypes.string.isRequired,
   tenant_profile: PropTypes.object.isRequired,
@@ -477,11 +478,13 @@ const comStyles = () => {
 			height: 'auto',
       display: 'flex',
       flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
 		},
 		explore_button: {
-			height: '100%',
-			width: '100%',
-			fontSize: '1.8rem',
+		// 	height: '100%',
+		// 	width: '100%',
+			fontSize: '1.5rem',
 		},
     center: {
       width: '60%',

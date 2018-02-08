@@ -7,7 +7,8 @@ import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import uuid from 'uuid'
-import { withRouter, Route } from 'react-router-dom'
+import MetaTags from 'react-meta-tags'
+import { withRouter } from 'react-router-dom'
 import {
 	Image,
 	Modal,
@@ -20,8 +21,6 @@ import { searchForSpecificBuildingByAlias, getSpecificLandlord, getLandlordInfo 
 import {
 	URLToAlias,
 	renderProcessedImage,
-	shortenAddress,
-	renderProcessedThumbnail,
 } from '../../api/general/general_api'
 import { selectBuilding, selectCorporation } from '../../actions/selection/selection_actions'
 import { selectChatThread } from '../../actions/messaging/messaging_actions'
@@ -33,38 +32,23 @@ import {
 } from '../../api/building/building_api'
 import {
 	matchSubletsByPlaceId,
-	calculateCheapestSublet,
 } from '../../api/search/sublet_api'
-import ImageGallery from '../image/ImageGallery'
 import MapComponent from '../map/MapComponent'
-import {
-  xMidBlue,
-  xLightBlue,
-  xDeepBlue,
-} from '../../styles/base_colors'
-import PrizeBlowup from '../instructions/PrizeBlowup'
 import AmenityBrowser from '../amenities/AmenityBrowser'
-import BuildingPageFixedMenu from './BuildingPageFixedMenu'
 import HomeOverview from '../home_overview/HomeOverview'
 import BuildingQuickAmenitiesBar from '../amenities/BuildingQuickAmenitiesBar'
-import StepByStepCard from '../instructions/StepByStepCard'
 import ApplyBox from '../instructions/ApplyBox'
-import AllLandlords from '../landlord/AllLandlords'
-import VirtualTourCanvas from '../home_explorer/canvases/VirtualTourCanvas'
 import SingularImageGallery from '../image/SingularImageGallery'
-import SubletsList from '../sublets/SubletsList'
 import DescriptionBox from './DescriptionBox'
 import SimpleTempForm from '../contracts/simple_temp_form/SimpleTempForm'
 import RibbonLabel from '../instructions/RibbonLabel'
 import AnalyticsSummary from './Components/AnalyticsSummary'
 import MessageLandlordForm from '../contracts/simple_temp_form/MessageLandlordForm'
-import PhoneTestForm from '../contracts/simple_temp_form/PhoneTestForm'
 import BuildingViews from '../analytics/BuildingViews'
 import LandlordResponsiveness from '../analytics/LandlordResponsiveness'
 import BuildingToursContainer from './Components/BuildingToursContainer'
-import { BUILDING_INTERACTIONS, IMAGE_INTERACTIONS } from '../../api/intel/dynamodb_tablenames'
+import { BUILDING_INTERACTIONS, } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
-import { getTenantFavoriteForBuilding, } from '../../api/tenant/favorite_api'
 import { triggerForcedSigninFavorite, } from '../../actions/auth/auth_actions'
 import { changeHTMLTitle } from '../../actions/app/app_actions'
 import { getToursForBuilding } from '../../api/tour/tour_api'
@@ -105,12 +89,13 @@ class BuildingPage extends Component {
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
 		}
-		this.props.changeHTMLTitle(`${this.convertToNameCase(building_alias.slice(1))} - RentHero`)
+		this.props.changeHTMLTitle(`${this.convertToNameCase(building_alias.slice(1))}, Waterloo -- Student Housing for Rent on RentHero`)
 		searchForSpecificBuildingByAlias(building_alias)
 			.then((data) => {
 				this.setState({
 					building: data,
 				})
+				this.props.changeHTMLTitle(`${this.convertToNameCase(data.building_address)} -- Student Housing for Rent on RentHero`)
 				return this.getImagesForBuilding()
 			})
 			.then(() => {

@@ -101,11 +101,16 @@ class ContactUs extends Component {
 			        Email us any questions you may have or use our in-app chat. We will get back to you as soon as possible.
 			      </Card.Description>
 			    </Card.Content>
-					<br/>
+					<br />
 			    <Card.Content extra>
 						<a>
 							<Icon name='mail' />
 							support@renthero.ca
+						</a>
+						&nbsp; &nbsp;
+						<a>
+							<Icon name='wechat' />
+							RentHeroOfficial
 						</a>
 			    </Card.Content>
 				</div>

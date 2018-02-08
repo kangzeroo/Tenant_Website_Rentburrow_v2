@@ -10,10 +10,8 @@ import { withRouter } from 'react-router-dom'
 import {
   Image,
   Icon,
-  Transition,
 } from 'semantic-ui-react'
 import {
-  shortenAddress,
   renderProcessedImage,
   renderProcessedThumbnail,
 } from '../../api/general/general_api'
@@ -139,6 +137,7 @@ class SingularImageGallery extends Component {
         <div style={comStyles().imageContainer}>
           {/*<Transition visible={this.state.visible} animation='scale' duration='300'>*/}
             <Image
+              alt='Property Image'
               src={this.getCurrentImage(this.state.current_image_position, this.state.all_images)}
               width='100%'
               height='auto'

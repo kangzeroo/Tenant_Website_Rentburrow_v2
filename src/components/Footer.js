@@ -12,13 +12,14 @@ import {
 } from 'semantic-ui-react'
 import { xMidBlue } from '../styles/base_colors'
 import { changeRentType } from '../actions/search/search_actions'
-
+import SocialMediaContainer from './share/SocialMediaContainer'
 
 class Footer extends Component {
 
 	render() {
 		return (
 			<div id='Footer' style={comStyles().container}>
+        <div>
         <div style={comStyles().leftFloat}>
           <Link to='/' onClick={() => this.refreshEverything()}>
             <h1 style={comStyles().font_logo}>Rent Hero</h1>
@@ -89,6 +90,10 @@ class Footer extends Component {
             </div>
           </div>
         </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} >
+          <SocialMediaContainer />
+        </div>
 			</div>
 		)
 	}
@@ -128,12 +133,15 @@ export default withRouter(
 const comStyles = () => {
 	return {
     container: {
-      backgroundColor: xMidBlue,
+      // backgroundColor: xMidBlue,
+      backgroundColor: '#222',
       padding: '20px',
-      minHeight: '20vh',
-      maxHeight: '20vh',
+      minHeight: '25vh',
+      maxHeight: '25vh',
       width: '100%',
       color: 'white',
+      display: 'flex',
+      flexDirection: 'column',
     },
     leftFloat: {
       display: 'flex',
