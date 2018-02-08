@@ -12,6 +12,14 @@ export const getInitialToastMessages = (location) => {
   if (location.pathname === '/') {
     return [
       {
+        id: 'signed-already',
+        title: 'Successfully Signed A Lease?',
+        text: 'Let us know so we can send you your house warming gift!',
+        color: 'blue',
+        icon: 'home',
+        link: 'https://renthero.ca/contact'
+      },
+      {
         id: 'new-building',
         title: 'New Buildings Filmed Every Week',
         text: 'Be sure to check back often',

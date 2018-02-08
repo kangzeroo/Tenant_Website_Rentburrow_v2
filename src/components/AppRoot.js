@@ -68,6 +68,7 @@ import ExampleEncryptionS3 from './examples/ExampleEncryptionS3'
 import MyFavorites from './favorites/MyFavorites'
 import ToursPage from './tours/ToursPage'
 import Apology from './instructions/Apology'
+import PostSubletPage from './sublets/PostSubletPage'
 import Test from './requests/Test'
 
 import MobileHeader from './mobile/components/MobileHeader'
@@ -77,6 +78,7 @@ import MobileLandlordTourConfirmation from './mobile/scheduling/MobileLandlordTo
 import TermsOfUsePage from './instructions/Legal/TermsOfUsePage'
 import PrivacyPolicyPage from './instructions/Legal/PrivacyPolicyPage'
 import BothPolicies from './instructions/Legal/BothPolicies'
+import RedeemGift from './instructions/RedeemGift'
 
 import { dispatchActionsToRedux } from '../actions/system/system_actions'
 import { redirectPath, setLanguageFromLocale, checkIfPartOfRoutes } from '../api/general/general_api'
@@ -370,19 +372,22 @@ class AppRoot extends Component {
                 <Route exact path='/invalid' component={InvalidPage} />
                 {/*<Route exact path='/welcome' component={LandingPage} />*/}
                 {/*<Route exact path='/protips' component={ProTipsPage} />*/}
-                <Route exact path='/uber' component={UberSignup} />
+                {/*<Route exact path='/uber' component={UberSignup} />*/}
                 {/*<Route exact path='/prizes' component={PrizesPage} />*/}
                 {/*<Route exact path='/terms' component={TermsOfServicePage} />*/}
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
                 <Route exact path='/apology' component={Apology} />
                 <Route exact path='/contact' component={ContactUs} />
+                {/*<Route exact path='/redeem' component={RedeemGift} />*/}
                 <Route exact path='/book-filming' component={BookAFilmingPage} />
-                <Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />
+                <Route exact path='/postsublet' component={PostSubletPage} />
+                {/*<Route exact path='/landlord-confirm-tour/:tour_id' component={LandlordTourConfirmation} />*/}
                 {/*<Route exact path='/how-it-works' component={HowItWorksLandlord} />*/}
                 {/*<Route exact path='/pricing' component={PricingLandlord} />*/}
                 {/*<Route exact path='/landlord-faq' component={FAQLandlord} />*/}
                 <Route exact path='/join-landlord' component={JoinPageLandlord} />
                 {/*<Route exact path='/community' component={CommunityPage} />*/}
+
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/register/verify' component={AccountVerification} />
                 <Route exact path='/login/forgot' component={ForgotPassword} />

@@ -258,7 +258,7 @@ class SuiteOverviewRow extends Component {
 				<div style={comStyles().center} >
 					<div style={comStyles().ImageGallery} >
 						<SingularImageGallery
-							list_of_images={[suite.cover_photo].concat(suite.imgs)}
+							list_of_images={suite.imgs}
 							image_size='hd'
               intel_action='SUITE_PHOTO_VIEWED'
               intel_id={suite.suite_id}

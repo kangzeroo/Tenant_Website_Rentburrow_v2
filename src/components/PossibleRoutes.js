@@ -24,5 +24,6 @@ export default [
   '/apology',
   '/termsofuse',
   '/privacypolicy',
-  '/termsandconditions'
+  '/termsandconditions',
+  '/postsublet'
 ]

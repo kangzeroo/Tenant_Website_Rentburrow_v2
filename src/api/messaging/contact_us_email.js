@@ -43,7 +43,7 @@ const createInquiryParamsConfig = (name, HTML_Email) => {
 	      /* more items */
 	    ],
 	    ToAddresses: [
-	      'support@rentburrow.com'
+	      'support@renthero.ca'
 	      /* more items */
 	    ]
 	  },
@@ -96,23 +96,12 @@ const generateHTMLInquiryEmail = (contact_form) => {
 		    <tr>
 		        <td align='center' valign='top'>
 		            <table border='0' cellpadding='20' cellspacing='0' width='600' id='emailContainer'>
-		                <tr style='background-color:#74a9d8'>
-		                    <td align='center' valign='top'>
-		                        <table border='0' cellpadding='20' cellspacing='0' width='100%' id='emailHeader'>
-		                            <tr>
-		                                <td align='center' valign='top'>
-		                                    <img src='https://s3.amazonaws.com/${BUCKET_NAME}/rentburrow_logo.png' style='width:150px; height: auto; margin: auto;' />
-		                                </td>
-		                            </tr>
-		                        </table>
-		                    </td>
-		                </tr>
 		                <tr style='background-color:#99ccff;'>
 		                    <td align='center' valign='top'>
 		                        <table border='0' cellpadding='20' cellspacing='0' width='100%' id='emailBody'>
 		                            <tr>
 		                                <td align='center' valign='top' style='color:#337ab7;'>
-		                                    <h2>${contact_form.name} reached out to contact Rentburrow:</h2>
+		                                    <h2>${contact_form.name} reached out to contact RentHero:</h2>
 		                                </td>
 		                            </tr>
 		                            <tr style='border: 1px solid red; font-size: 1.2rem'>

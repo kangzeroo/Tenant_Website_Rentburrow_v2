@@ -40,7 +40,7 @@ const createInquiryParamsConfig = (landlord_name, num_of_buildings, HTML_Email) 
 	      /* more items */
 	    ],
 	    ToAddresses: [
-	      'support@rentburrow.com'
+	      'support@renthero.ca'
 	      /* more items */
 	    ]
 	  },

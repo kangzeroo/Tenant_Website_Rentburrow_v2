@@ -41,6 +41,7 @@ class Footer extends Component {
               <div style={comStyles().col}>
                 <Link to='/lease' onClick={() => this.props.changeRentType('lease')} style={comStyles().link}>Browse Leases</Link>
                 <Link to='/sublet' onClick={() => this.props.changeRentType('sublet')} style={comStyles().link}>Browse Sublets</Link>
+                <Link to='/postsublet' onClick={() => this.props.changeRentType('sublet')} style={comStyles().link}>Post Sublet</Link>
                 {/*<Link to='/prizes' style={comStyles().link}>Signing Prizes</Link>*/}
               </div>
               {/*<div style={comStyles().col}>

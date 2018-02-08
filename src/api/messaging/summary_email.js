@@ -65,7 +65,7 @@ const createInquiryParamsConfig = (landlord_email = 'huang.khan74@gmail.com', bu
 	      // }
 	    },
 	    Subject: { /* required */
-	      Data: 'RentBurrow Tenants for ' + building_address, /* required */
+	      Data: 'RentHero Tenants for ' + building_address, /* required */
 	      Charset: 'UTF-8'
 	    }
 	  },
@@ -97,7 +97,7 @@ const generateHTMLInquiryEmail = (
                                   guarantor,
                                   building,
                                 ) => {
-  const building_url = `https://rentburrow.com/${aliasToURL(building.building_id)}`
+  const building_url = `https://renthero.ca/${aliasToURL(building.building_id)}`
   return `
 		<!DOCTYPE html>
 		<html>
@@ -110,17 +110,6 @@ const generateHTMLInquiryEmail = (
 		    <tr>
 		        <td align='center' valign='top'>
 		            <table border='0' cellpadding='20' cellspacing='0' width='600' id='emailContainer'>
-		                <tr style='background-color:#74a9d8'>
-		                    <td align='center' valign='top'>
-		                        <table border='0' cellpadding='20' cellspacing='0' width='100%' id='emailHeader'>
-		                            <tr>
-		                                <td align='center' valign='top'>
-		                                    <img src='https://s3.amazonaws.com/${BUCKET_NAME}/rentburrow_logo.png' style='width:150px; height: auto; margin: auto;' />
-		                                </td>
-		                            </tr>
-		                        </table>
-		                    </td>
-		                </tr>
 		                <tr style='background-color:#99ccff;'>
 		                    <td align='center' valign='top'>
 		                        <table border='0' cellpadding='20' cellspacing='0' width='100%' id='emailBody'>
@@ -202,7 +191,7 @@ const generateHTMLInquiryEmail = (
                     }
 		                <tr style='background-color:#74a9d8; font-size: 1rem; border: 1px solid red'>
 		                    <td align='center' valign='top'>
-		                        View your property on Rentburrow.com at <a href=${building_url}> ${building_url}</a>
+		                        View your property on RentHero.ca at <a href=${building_url}> ${building_url}</a>
 		                    </td>
 		                </tr>
 		            </table>

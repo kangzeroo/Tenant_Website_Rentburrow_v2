@@ -127,20 +127,22 @@ export const uploadImageToS3 = (image, s3_corporation, prefix) => {
 
 		// S3 Folder-File syntax: corp_id/building_id/asset_type/file_name.png
 		const imageKey = s3_corporation + prefix + fileName
-		S3.upload({
-				Bucket: BUCKET_NAME,
-		    Key: imageKey,
-		    Body: image,
-		    ACL: 'public-read'
-		}, (err, S3Object) => {
-		    if (err) {
-		      	const msg = `There was an error uploading your photo: ${err.message}`
-		      	// console.log(msg)
-		      	rej(msg)
-		      	return
-		    }
-				const msg = `Successfully uploaded original photo ${fileName}`
-				res(S3Object)
+		AWS.config.credentials.refresh(() => {
+			S3.upload({
+					Bucket: BUCKET_NAME,
+			    Key: imageKey,
+			    Body: image,
+			    ACL: 'public-read'
+			}, (err, S3Object) => {
+			    if (err) {
+			      	const msg = `There was an error uploading your photo: ${err.message}`
+			      	// console.log(msg)
+			      	rej(msg)
+			      	return
+			    }
+					const msg = `Successfully uploaded original photo ${fileName}`
+					res(S3Object)
+			})
 		})
 	})
 	return p
