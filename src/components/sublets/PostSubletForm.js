@@ -106,9 +106,7 @@ class PostSubletForm extends Component {
         gps_y: place.geometry.location.lng().toFixed(7),
   			place_id: place.place_id,
       }
-		}, () => {
-      console.log(this.state)
-    })
+		})
 	}
 
 	updateApplicationAttr(e, attr) {
@@ -145,11 +143,11 @@ class PostSubletForm extends Component {
         const post_id = uuid.v4()
         this.uploadImages(post_id)
           .then((data) => {
-            console.log(data)
+            // console.log(data)
             this.setState({
               application_template: {
                 ...this.state.application_template,
-                images: data.map((img) => img.Location),
+                images: JSON.stringify(data.map((img) => img.Location)),
                 fb_group_id: 'RENTHERO',
                 fb_user_id: this.props.tenant_profile.fb_user_id,
                 fb_user_pic: this.props.tenant_profile.thumbnail,
@@ -158,7 +156,7 @@ class PostSubletForm extends Component {
               }
             }, () => {
               postSubletToDynamoDB(this.state.application_template).then((data) => {
-                console.log(data)
+                // console.log(data)
                 this.setState({
                   loading: false,
                   submitted: true,
@@ -187,7 +185,6 @@ class PostSubletForm extends Component {
         .then((results) => {
           res(results)
     		}).catch((err) => {
-          console.log(err)
     			this.setState({
             error_messages: ['An occurred while uploading images']
           })
@@ -233,9 +230,6 @@ class PostSubletForm extends Component {
     }
     if (!this.state.application_template.price) {
       error_messages.push('You must provide a monthly rent price')
-    }
-    if (!this.state.application_template.phone) {
-      error_messages.push('You must provide a contact phone number')
     }
     this.setState({
       error_messages: error_messages,
@@ -333,7 +327,7 @@ class PostSubletForm extends Component {
                 value={this.state.application_template.rooms_left}
                 selection
                 options={this.room_options}
-                onChange={(e, d) => console.log(e, d)}
+                onChange={(e, d) => this.updateApplicationAttr({ target: { value: d.value } }, 'rooms_left')}
               />
             </div>
             &nbsp; &nbsp;
@@ -396,7 +390,9 @@ class PostSubletForm extends Component {
             {
               this.state.submitted
               ?
-              <Button primary onClick={() => this.props.history.push('/sublet')} style={{ width: '100%' }}>Success! Back to Homepage</Button>
+              <div>
+                <Button primary onClick={() => this.props.history.push('/my-ads')} style={{ width: '100%' }}>Success! View My Ads</Button>
+              </div>
               :
               <Button primary loading={this.state.loading} onClick={() => this.submitSublet()} style={{ width: '100%' }}>SUBMIT</Button>
             }
