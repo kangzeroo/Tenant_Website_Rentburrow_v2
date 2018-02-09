@@ -13,6 +13,8 @@ import {
 	saveSubletFilterParams,
 	saveFilteredSubletsToRedux,
 } from '../../actions/search/search_actions'
+import { STUDENT_PREFERENCES } from '../../api/intel/dynamodb_tablenames'
+import { collectIntel } from '../../actions/intel/intel_actions'
 import {
 	Checkbox,
 	Button,
@@ -99,6 +101,16 @@ class SubletFilterCard extends Component {
 
 		this.props.saveFilteredSubletsToRedux(filtered)
 		this.props.closeFilterCard()
+		this.props.collectIntel({
+		  'TableName': STUDENT_PREFERENCES,
+		  'Item': {
+		    'ACTION': 'LEASE_FILTER_PARAMS',
+		    'DATE': new Date().getTime(),
+		    'USER_ID': this.props.tenant_profile.tenant_id || 'NONE',
+				'PARAMS': JSON.stringify(this.state),
+		    'FINGERPRINT': this.props.fingerprint,
+		  }
+		})
 	}
 
 	render() {
@@ -192,6 +204,9 @@ SubletFilterCard.propTypes = {
 	sublet_search_results: PropTypes.array.isRequired,
 	sublets: PropTypes.array.isRequired,
 	saveFilteredSubletsToRedux: PropTypes.func.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+  collectIntel: PropTypes.func.isRequired,
+  fingerprint: PropTypes.string.isRequired,
 }
 
 // for all optional props, define a default value
@@ -208,6 +223,8 @@ const mapReduxToProps = (redux) => {
 		sublet_filter_params: redux.filter.sublet_filter_params,
 		sublet_search_results: redux.search.sublet_search_results,
 		sublets: redux.search.sublets,
+    tenant_profile: redux.auth.tenant_profile,
+    fingerprint: redux.auth.browser_fingerprint,
 	}
 }
 
@@ -217,6 +234,7 @@ export default withRouter(
 		saveSubletsToRedux,
 		saveSubletFilterParams,
 		saveFilteredSubletsToRedux,
+    collectIntel,
 	})(RadiumHOC)
 )
 

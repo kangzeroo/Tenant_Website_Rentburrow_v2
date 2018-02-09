@@ -19,6 +19,8 @@ class RibbonLabel extends Component {
       return 'violet'
     } else if (label === 'Apply Now') {
       return 'blue'
+    } else if (label.toLowerCase().indexOf('%') > -1) {
+      return 'violet'
     } else if (label === 'Sold Out') {
       return 'red'
     } else if (label.toLowerCase().indexOf('not yet') > -1) {
