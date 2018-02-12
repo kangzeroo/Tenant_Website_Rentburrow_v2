@@ -166,7 +166,7 @@ class ForgotPassword extends Component {
 				<Header
 					as='h2'
 					content='Reset Password'
-					subheader={`We'll send you an email to reset your password`}
+					subheader={`We'll send you a text message to reset your password`}
 				/>
 				<Form style={comStyles().sendResetEmail}>
 					<Form.Field>
@@ -225,7 +225,12 @@ class ForgotPassword extends Component {
 
 ForgotPassword.propTypes = {
 	history: PropTypes.object.isRequired,
-	backToLogin: PropTypes.func.isRequired,			// passed in
+	backToLogin: PropTypes.func,			// passed in
+}
+
+// for all optional props, define a default value
+ForgotPassword.defaultProps = {
+	backToLogin: () => { () => this.props.history.goBack() }
 }
 
 const RadiumHOC = Radium(ForgotPassword);
@@ -248,6 +253,7 @@ const comStyles = () => {
 		container: {
 			display: 'flex',
 			flexDirection: 'column',
+			width: '100%',
 		},
 		sendResetEmail: {
 			display: 'flex',

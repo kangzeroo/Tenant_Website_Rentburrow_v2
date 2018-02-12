@@ -126,9 +126,12 @@ class BuildingPage extends Component {
 						})
 					})
 				})
+				// console.log('matchSubletsByPlaceId')
 				return matchSubletsByPlaceId({ place_id: this.state.building.place_id })
 			})
 			.then((sublets) => {
+				// console.log('matchSubletsByPlaceId DONE')
+				// console.log(sublets)
 				this.setState({
 					sublets: sublets,
 					loading: false,
@@ -334,9 +337,10 @@ class BuildingPage extends Component {
 
 	showMessagePopup(header) {
 		if (!this.props.authenticated || !this.props.tenant_profile || !this.props.tenant_profile.tenant_id) {
-			this.props.triggerForcedSigninFavorite({
-				building_id: this.state.building.building_id,
-			})
+			// this.props.triggerForcedSigninFavorite({
+			// 	building_id: this.state.building.building_id,
+			// })
+			this.toggleModal(true, 'phone', header)
 		} else {
 			this.toggleModal(true, 'phone', header)
 		}

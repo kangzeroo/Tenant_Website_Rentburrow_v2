@@ -35,6 +35,7 @@ import PrizesPage from './community/student_info/PrizesPage'
 import UberSignup from './scheduling/uber/UberSignup'
 import LandlordTourConfirmation from './scheduling/timing/LandlordTourConfirmation'
 import ContactUs from './instructions/ContactUs'
+import ForgotPasswordPage from './auth/ForgotPasswordPage'
 // import PrivacyPolicyPage from './community/student_info/PrivacyPolicyPage'
 // import TermsOfServicePage from './community/student_info/TermsOfServicePage'
 import HowItWorksLandlord from './community/landlord_info/HowItWorksLandlord'
@@ -392,7 +393,7 @@ class AppRoot extends Component {
 
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/register/verify' component={AccountVerification} />
-                <Route exact path='/login/forgot' component={ForgotPassword} />
+                <Route exact path='/login/forgot' component={ForgotPasswordPage} />
                 <Route exact path='/login' component={LoginPage} />
                 <Route exact path='/logout' component={Logout} />
                 <Route exact path='/termsofuse' component={TermsOfUsePage} />

@@ -258,7 +258,7 @@ class SuiteOverviewRow extends Component {
 				<div style={comStyles().center} >
 					<div style={comStyles().ImageGallery} >
 						<SingularImageGallery
-							list_of_images={suite.imgs}
+							list_of_images={suite.imgs ? suite.imgs : ['http://www.pbs.org/bluegrass-underground/lunchbox_plugins/s/photogallery/img/no-image-available.jpg']}
 							image_size='hd'
               intel_action='SUITE_PHOTO_VIEWED'
               intel_id={suite.suite_id}

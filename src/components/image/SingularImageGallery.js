@@ -30,12 +30,14 @@ class SingularImageGallery extends Component {
   }
 
   componentWillMount() {
+    // console.log(this.props.all_images)
     this.setState({
       all_images: this.props.list_of_images,
     })
   }
 
   componentWillUpdate(prevProps, prevState) {
+    // console.log(this.props.all_images)
     if (prevProps.list_of_images !== this.props.list_of_images) {
       this.setState({
         all_images: prevProps.list_of_images,
@@ -117,6 +119,7 @@ class SingularImageGallery extends Component {
   }
 
   getCurrentImage(current_image_position, all_images) {
+    // console.log(all_images[current_image_position])
     /* return all_images.filter((imgObj) => {
       return imgObj.position === current_image_position
     })[0].image_url || this.state.all_photos[0].image_url */
@@ -186,7 +189,7 @@ class SingularImageGallery extends Component {
 
 // defines the types of variables in this.props
 SingularImageGallery.propTypes = {
-  list_of_images: PropTypes.array.isRequired,   // passed in
+  list_of_images: PropTypes.array,   // passed in
   image_size: PropTypes.string,       // passed in
   collectIntel: PropTypes.func.isRequired,
   fingerprint: PropTypes.string.isRequired,
@@ -197,6 +200,7 @@ SingularImageGallery.propTypes = {
 
 // for all optional props, define a default value
 SingularImageGallery.defaultProps = {
+  list_of_images: ['http://www.pbs.org/bluegrass-underground/lunchbox_plugins/s/photogallery/img/no-image-available.jpg'],
   image_size: 'thumbnail',            // 'thumbnail', 'hd', 'none'
   intel_action: 'OTHER_IMAGE',
   intel_id: 'other',
