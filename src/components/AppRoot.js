@@ -380,7 +380,7 @@ class AppRoot extends Component {
                 {/*<Route exact path='/privacy' component={PrivacyPolicyPage} />*/}
                 <Route exact path='/apology' component={Apology} />
                 <Route exact path='/contact' component={ContactUs} />
-                {/*<Route exact path='/redeem' component={RedeemGift} />*/}
+                <Route exact path='/claimprize' component={RedeemGift} />
                 <Route exact path='/book-filming' component={BookAFilmingPage} />
                 <Route exact path='/postsublet' component={PostSubletPage} />
                 <Route exact path='/my-ads' component={MySubletAds} />

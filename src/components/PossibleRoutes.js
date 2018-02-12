@@ -26,5 +26,6 @@ export default [
   '/privacypolicy',
   '/termsandconditions',
   '/postsublet',
-  '/my-ads'
+  '/my-ads',
+  '/claimprize'
 ]

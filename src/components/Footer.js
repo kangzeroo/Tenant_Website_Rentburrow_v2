@@ -22,7 +22,7 @@ class Footer extends Component {
         <div>
         <div style={comStyles().leftFloat}>
           <Link to='/' onClick={() => this.refreshEverything()}>
-            <h1 style={comStyles().font_logo}>Rent Hero</h1>
+            <h1 style={comStyles().font_logo}>RentHero</h1>
           </Link>
           <div style={comStyles().desc}>
             RentHero.ca is the marketplace for student housing.<br/>Tour & apply for your rent online.

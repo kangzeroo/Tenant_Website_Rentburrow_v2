@@ -155,7 +155,7 @@ class ContactUs extends Component {
 
 	renderGiftSupport() {
 		return (
-			<Card onClick={() => this.toggleModal(true, 'gift')} raised style={comStyles().card}>
+			<Card onClick={() => this.props.history.push('/claimprize')} raised style={comStyles().card}>
 		    <Image src={giftIcon} width='25%' height='100%' />
 				<div style={comStyles().content}>
 			    <Card.Content>
