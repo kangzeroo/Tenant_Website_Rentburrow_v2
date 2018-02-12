@@ -15,6 +15,9 @@ import {
   Button,
   TextArea,
   Message,
+  Segment,
+  Loader,
+  Dimmer,
   Icon,
   Checkbox,
 } from 'semantic-ui-react'
@@ -27,15 +30,23 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment'
 import { validateEmail, } from '../../../api/general/general_api'
 import { insertTenantInquiry } from '../../../api/inquiries/inquiry_api'
-import { updateTenantPhone, updateTenantEmail, } from '../../../api/auth/tenant_api'
+import { VerifyAccount, resetVerificationPIN, LoginStudent } from '../../../api/aws/aws-cognito'
+import { updateTenantPhone, updateTenantEmail, checkIfAccountWithPhoneAndEmailExistsAlready, getTenantProfile } from '../../../api/auth/tenant_api'
 import { sendInitialMessage, sendInitialCorporateInquiry, } from '../../../api/sms/sms_api'
 import { getLandlordInfo, } from '../../../api/search/search_api'
+import { RegisterStudent } from '../../../api/aws/aws-cognito'
+import { sendRegisterInfo } from '../../../api/auth/register_api'
+import { saveTenantToRedux } from '../../../actions/auth/auth_actions'
 
 class MessageLandlordForm extends Component {
 
   constructor() {
     super()
     this.state = {
+      first_name: '',
+      last_name: '',
+      password: '',										// password typed in
+			password_confirmation: '',						// password confirmation typed in
 
       phoneRequired: false,
       emailRequired: false,
@@ -47,8 +58,13 @@ class MessageLandlordForm extends Component {
       group_notes: '',
       acknowledge: false,
 
-      saving: false,
-      submitted: false,
+      tenant_loaded: false,           // to indicate if a user is signed in
+      application_step: '',           // to mark which step we are on ['ask_for_password', 'ask_for_verification_pin', '']
+      registration_loading: false,    // for loading status of account registration
+      verification_pin_loading: false,  // for the loading status of account pin verification
+      verification_pin: '',           // for the account registration verification pin
+      saving: false,                  // for loading status of submitting inquiry
+      submitted: false,               // for submitted inquiry
 
       error_messages: [],
     }
@@ -80,7 +96,18 @@ class MessageLandlordForm extends Component {
   }
 
   componentWillMount() {
+    if (this.props.tenant_profile && !this.props.tenant_profile.unauthRoleStudent) {
+      this.setState({
+        tenant_loaded: true,
+      })
+    } else {
+      this.setState({
+        tenant_loaded: false,
+      })
+    }
+
     if (!this.props.tenant_profile.phone || this.props.tenant_profile.phone.length === 0) {
+      // console.log('no email')
       this.setState({
         phoneRequired: true,
       })
@@ -117,6 +144,10 @@ class MessageLandlordForm extends Component {
   validateForm() {
     let ok_to_proceed = true
     const error_messages = []
+    if (!this.state.tenant_loaded) {
+      error_messages.push('You must create an account first')
+      ok_to_proceed = false
+    }
     if (!this.state.group_size) {
       error_messages.push('You must specify a group size')
       ok_to_proceed = false
@@ -149,175 +180,266 @@ class MessageLandlordForm extends Component {
   }
 
   sendMessageToBothParties() {
-    let inquiry_id
-    if (this.validateForm()) {
-      this.setState({ saving: true, })
-      if (this.state.phoneRequired) {
-        updateTenantPhone({
+    const p = new Promise((res, rej) => {
+      let inquiry_id
+      if (this.validateForm()) {
+        this.setState({ saving: true, })
+        if (this.state.phoneRequired) {
+          updateTenantPhone({
+            tenant_id: this.props.tenant_profile.tenant_id,
+            phone: this.state.phone,
+          })
+        }
+        if (this.state.emailRequired) {
+          updateTenantEmail({
+            tenant_id: this.props.tenant_profile.tenant_id,
+            email: this.state.email,
+          })
+        }
+        insertTenantInquiry({
           tenant_id: this.props.tenant_profile.tenant_id,
-          phone: this.state.phone,
+          group_id: null,
+          building_id: this.props.building.building_id,
+          suite_id: this.props.suite ? this.props.suite.suite_id : null,
+          group_notes: this.state.group_notes,
+          group_size: this.state.group_size,
         })
-      }
-      if (this.state.emailRequired) {
-        updateTenantEmail({
-          tenant_id: this.props.tenant_profile.tenant_id,
-          email: this.state.email,
+        .then((data) => {
+          inquiry_id = data.inquiry_id
+          return getLandlordInfo(this.props.building.building_id)
         })
-      }
+        .then((data) => {
+          if (data.corporate_landlord) {
+            // send email to landlord to select time slot,
+            // send email + sms to tenant, an agent will contact him/her shortly
 
-      insertTenantInquiry({
-        tenant_id: this.props.tenant_profile.tenant_id,
-        group_id: null,
-        building_id: this.props.building.building_id,
-        suite_id: this.props.suite ? this.props.suite.suite_id : null,
-        group_notes: this.state.group_notes,
-        group_size: this.state.group_size,
-      })
-      .then((data) => {
-        inquiry_id = data.inquiry_id
-        return getLandlordInfo(this.props.building.building_id)
-      })
-      .then((data) => {
-        if (data.corporate_landlord) {
-          // send email to landlord to select time slot,
-          // send email + sms to tenant, an agent will contact him/her shortly
-
-          return sendInitialCorporateInquiry({
-            tenant: {
+            return sendInitialCorporateInquiry({
+              tenant: {
+                tenant_id: this.props.tenant_profile.tenant_id,
+                first_name: this.props.tenant_profile.first_name,
+                last_name: this.props.tenant_profile.last_name,
+                phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : this.state.phone,
+                email: this.props.tenant_profile.email ? this.props.tenant_profile.email : this.state.email,
+              },
+              building: {
+                building_id: this.props.building.building_id,
+                building_alias: this.props.building.building_alias,
+                building_address: this.props.building.building_address,
+              },
+              suite: this.props.suite && this.props.suite.suite_id ? {
+                suite_id: this.props.suite.suite_id,
+                suite_alias: this.props.suite.suite_alias,
+              } : null,
+              corporation: {
+                corporation_id: data.corporation_id,
+                corporation_email: data.email,
+                corporation_name: data.corporation_name,
+              },
+              group: {
+                group_notes: this.state.group_notes,
+                group_size: this.state.group_size,
+              },
+              inquiry_id: inquiry_id,
+            })
+          } else {
+            return sendInitialMessage({
               tenant_id: this.props.tenant_profile.tenant_id,
               first_name: this.props.tenant_profile.first_name,
               last_name: this.props.tenant_profile.last_name,
-              phone: this.props.tenant_profile.phone ? this.props.tenant_profile.phone : this.state.phone,
-              email: this.props.tenant_profile.email ? this.props.tenant_profile.email : this.state.email,
-            },
-            building: {
-              building_id: this.props.building.building_id,
-              building_alias: this.props.building.building_alias,
-              building_address: this.props.building.building_address,
-            },
-            suite: this.props.suite && this.props.suite.suite_id ? {
-              suite_id: this.props.suite.suite_id,
-              suite_alias: this.props.suite.suite_alias,
-            } : null,
-            corporation: {
-              corporation_id: data.corporation_id,
-              corporation_email: data.email,
-              corporation_name: data.corporation_name,
-            },
-            group: {
-              group_notes: this.state.group_notes,
+              email: this.state.emailRequired ? this.state.email : this.props.tenant_profile.email,
+              phone: this.state.phoneRequired ? this.state.phone : this.props.tenant_profile.phone,
               group_size: this.state.group_size,
-            },
-            inquiry_id: inquiry_id,
-          })
-        } else {
-          return sendInitialMessage({
-            tenant_id: this.props.tenant_profile.tenant_id,
-            first_name: this.props.tenant_profile.first_name,
-            last_name: this.props.tenant_profile.last_name,
-            email: this.state.emailRequired ? this.state.email : this.props.tenant_profile.email,
-            phone: this.state.phoneRequired ? this.state.phone : this.props.tenant_profile.phone,
-            group_size: this.state.group_size,
-            building_id: this.props.building.building_id,
-            building_address: this.props.building.building_address,
-            building_alias: this.props.building.building_alias,
-            suite: this.props.suite && this.props.suite.suite_id ? {
-              suite_id: this.props.suite.suite_id,
-              suite_alias: this.props.suite.suite_alias,
-            } : null,
-            group_notes: this.state.group_notes,
-          })
-        }
-      })
-      .then((data) => {
-        this.setState({
-          saving: false,
-          submitted: true,
+              building_id: this.props.building.building_id,
+              building_address: this.props.building.building_address,
+              building_alias: this.props.building.building_alias,
+              suite: this.props.suite && this.props.suite.suite_id ? {
+                suite_id: this.props.suite.suite_id,
+                suite_alias: this.props.suite.suite_alias,
+              } : null,
+              group_notes: this.state.group_notes,
+            })
+          }
         })
+        .then((data) => {
+          this.setState({
+            saving: false,
+            submitted: true,
+          })
+          res()
+        })
+        .catch((err) => {
+          _LTracker.push({
+            'error': err,
+            'tag' : `${localStorage.getItem('tenant_id')}`
+          })
+          this.setState({
+            error_messages: ['An error as occurred, please Send us a Message'],
+            saving: false,
+          })
+          rej('An error as occurred, please Send us a Message')
+        })
+      } else {
+        rej()
+      }
+    })
+    return p
+  }
+
+  sendInquiryBasedOnAuthenticationStatus() {
+    if (this.state.tenant_loaded) {
+      this.sendMessageToBothParties()
+    } else if (this.state.first_name && this.state.last_name && this.state.phone && this.state.email) {
+      checkIfAccountWithPhoneAndEmailExistsAlready(this.state.phone, this.state.email).then((data) => {
+        if (data.exists) {
+    			this.setState({
+    				error_messages: [],
+            application_step: 'account_exists',
+    			})
+        } else {
+    			this.setState({
+    				error_messages: [],
+            application_step: 'ask_for_password',
+    			})
+        }
+      }).catch((err) => {
+        // console.log(err)
       })
+    } else {
+      this.setState({
+        error_messages: ['Missing name, phone or email necessary for creating a new account']
+      })
+    }
+  }
+
+  // submit registration to AWS Cognito
+	submitAccountRegistration({ first_name, last_name, password, phone, email }) {
+    if (this.state.password && this.state.password.length > 7 && this.state.password === this.state.password_confirmation) {
+      this.setState({
+        registration_loading: true,
+      })
+  		// submit registration to AWS Cognito
+  		RegisterStudent({ first_name, last_name, password, phone_number: phone, email }).then(({ cognito_id }) => {
+  			// save the email to localStorage for future reference
+  			localStorage.setItem('RentHero_Tenant_Email', email)
+  			// send registration info object to node server
+  			const registerJSON = {
+  				tenant_id: cognito_id,
+  				email,
+  				first_name,
+  				last_name,
+  				phone,
+  			}
+  			return sendRegisterInfo(registerJSON)
+  		}).then((data) => {
+  			this.setState({
+          error_messages: [],
+          application_step: 'ask_for_verification_pin',
+  			})
+  		})
       .catch((err) => {
+  			_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+  			this.setState({
+  				loading: false,
+  				error_messages: [err.message],
+  			})
+  		})
+    } else {
+      this.setState({
+        error_messages: ['Password not long enough or do not match']
+      })
+    }
+	}
+
+  verifyAccountRegistrationPIN() {
+    if (this.state.verification_pin && this.state.verification_pin.length > 0) {
+      this.setState({
+        verification_pin_loading: true,
+        error_messages: [],
+      })
+      VerifyAccount({ email: this.state.email, pin: this.state.verification_pin }).then(() => {
+        return LoginStudent({
+          email: this.state.email,
+          password: this.state.password,
+        })
+        // this.toggleModal(true, 'login')
+      }).then((data) => {
+        // reflect successful login in UI
+        this.setState({
+          application_step: 'pin_verified',
+        })
+        // get the full staff details using the staff_id from AWS Cognito
+        return getTenantProfile({ tenant_id: data.sub })
+      }).then((tenantData) => {
+        // save the authenticated staff to Redux state
+        this.props.saveTenantToRedux(tenantData)
+        this.setState({
+          tenant_loaded: true
+        })
+        return Promise.resolve()
+      }).then(() => {
+        setTimeout(() => {
+          this.sendMessageToBothParties()
+        }, 500)
+      }).catch((err) => {
         _LTracker.push({
           'error': err,
           'tag' : `${localStorage.getItem('tenant_id')}`
         })
         this.setState({
-          error_messages: ['An error as occurred, please Send us a Message'],
-          saving: false,
+          verification_pin_loading: false,
+          error_messages: [err.message],
         })
+      })
+    } else {
+      this.setState({
+        error_messages: ['Please enter a pin'],
       })
     }
   }
 
-	render() {
-		return (
-			<div id='MessageLandlordForm' style={comStyles().container}>
-        {
-          this.props.header === 'Apply Now'
-          ?
-          <Header as='h2' icon='suitcase' content={`Applying to ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='Send an Inquiry and chat with the landlord' />
-          :
-          <Header as='h2' icon='phone' content={`Message Landlord about ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='A chat thread will be opened between you and the landlord' />
-        }
-        <br />
-        <Form>
-          <Form.Group widths='equal'>
-            <Form.Field>
-              <label>Phone Number</label>
-              <Input
-                type='phone'
-                value={this.state.phone}
-                onChange={e => this.updateAttr(e, 'phone')}
-                disabled={!this.state.phoneRequired}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Email Address</label>
-              <Input
-                value={this.state.email}
-                onChange={e => this.updateAttr(e, 'email')}
-                disabled={!this.state.emailRequired}
-              />
-            </Form.Field>
-          </Form.Group>
+  resendPIN(state) {
+    this.setState({
+      verification_pin_loading: true,
+    })
+		// send account verification PIN for AWS Cognito
+		resetVerificationPIN(state)
+			.then(() => {
+				this.setState({
+					// errorMessage: `Your PIN has been verified to ${this.state.email}. Be sure to check the spam folder just in case.`
+					error_messages: [`Your PIN has been re-sent to your phone.`],
+          verification_pin_loading: false,
+				})
+			})
+			.catch((err) => {
+				_LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+				// console.log(err.message)
+				this.setState({
+					error_messages: [err.message],
+          verification_pin_loading: false,
+				})
+			})
+	}
 
-
-          <Form.Field>
-            <label>Group Size</label>
-            <Dropdown
-              id='Group Size'
-              placeholder='Select your Group Size'
-              value={this.state.group_size}
-              selection
-              options={this.group_size_options}
-              onChange={(e, d) => { this.updateGroupSize(e, d, 'group_size') }}
-            />
+  renderAskForPassword() {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <Header as='h2' icon='user' content='Almost there!' subheader='Set a password for your account' />
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '80%' }}>
+          <Form.Field style={{ width: '100%' }}>
+            <Input value={this.state.password} onChange={(e) => this.updateAttr(e, 'password')} type='password' placeholder='Password' style={{ width: '100%' }} />
           </Form.Field>
-          <Form.Field>
-            <label>Message</label>
-            <TextArea
-              rows={3}
-              value={this.state.group_notes}
-              placeholder='When are you available for a tour?'
-              onChange={e => this.setState({ group_notes: e.target.value })}
-              style={comStyles().textArea}
-            />
+          <br/>
+          <Form.Field style={{ width: '100%' }}>
+            <Input value={this.state.password_confirmation} onChange={(e) => this.updateAttr(e, 'password_confirmation')} type='password' placeholder='Confirm Password' style={{ width: '100%' }} />
           </Form.Field>
-
-          {
-            this.state.emailRequired || this.state.phoneRequired
-            ?
-            <Form.Field style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox
-                checked={this.state.acknowledge}
-                onChange={() => this.setState({ acknowledge: !this.state.acknowledge })}
-              />
-              <label style={{ marginLeft: '10px'}} >I acknowledge that my information is accurate, send my message to the landlord</label>
-            </Form.Field>
-            :
-            null
-          }
-
-          <Form.Field>
+          <br/>
+          <Form.Field style={{ width: '100%' }}>
             {
               this.state.error_messages.map((err, index) => {
                 return (
@@ -331,31 +453,251 @@ class MessageLandlordForm extends Component {
               })
             }
           </Form.Field>
-          <Form.Field>
+          <br/>
+          <Form.Field style={{ width: '100%' }}>
+            <Button primary loading={this.state.registration_loading} onClick={() => this.submitAccountRegistration(this.state)} style={{ width: '100%' }}>SAVE PASSWORD</Button>
+          </Form.Field>
+        </div>
+      </div>
+    )
+  }
+
+  askForVerificationPIN() {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <Header as='h2' icon='user' content='Almost there!' subheader='Set a password for your account' />
+        <Form style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '80%' }}>
+          <Form.Field style={{ width: '80%' }}>
+            <Input id='pin_input' value={this.state.verification_pin} onChange={(e) => this.updateAttr(e, 'verification_pin')} type='text' placeholder='Verification PIN' style={{ width: '100%' }} />
+          </Form.Field>
+          <Form.Field style={{ width: '80%' }}>
             {
-              this.state.submitted
-              ?
-              <Message positive>
-                <Header>
-                  <Icon name='checkmark' color='green' />
-                  <Header.Content>Message Sent to Landlord</Header.Content>
-                  <Header.Subheader>You can now communicate with the landlord via SMS or Email</Header.Subheader>
-                </Header>
-              </Message>
-              :
-              <Button
-                fluid
-                primary
-                loading={this.state.saving}
-                disabled={this.state.saving}
-                content='Send Message'
-                onClick={() => this.sendMessageToBothParties()}
-              />
+              this.state.error_messages.map((err, index) => {
+                return (
+                  <Message
+                    visible
+                    key={index}
+                    error
+                    content={err}
+                  />
+                )
+              })
             }
           </Form.Field>
+          <Form.Field style={{ width: '80%' }}>
+            <Button primary loading={this.state.verification_pin_loading} onClick={() => this.verifyAccountRegistrationPIN(this.state.verification_pin)} style={{ width: '100%' }}>VERIFY ACCOUNT</Button>
+            <br/>
+            <span onClick={() => this.resendPIN(this.state)}>Resend PIN</span>
+          </Form.Field>
         </Form>
-			</div>
-		)
+      </div>
+    )
+  }
+
+  successfulPinVerificationAndInquiriesSent() {
+    return (
+      <Form>
+        <Form.Field>
+          {
+            this.state.error_messages.map((err, index) => {
+              return (
+                <Message
+                  visible
+                  key={index}
+                  error
+                  content={err}
+                />
+              )
+            })
+          }
+        </Form.Field>
+        <Form.Field>
+          {
+            this.state.submitted
+            ?
+            <Message positive>
+              <Header>
+                <Icon name='checkmark' color='green' />
+                <Header.Content>Message Sent to Landlord</Header.Content>
+                <Header.Subheader>You can now communicate with the landlord via SMS or Email</Header.Subheader>
+              </Header>
+            </Message>
+            :
+            <Segment>
+              <Dimmer active inverted>
+                <Loader inverted>Loading</Loader>
+              </Dimmer>
+            </Segment>
+          }
+        </Form.Field>
+      </Form>
+    )
+  }
+
+  accountAlreadyExistsOptions() {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <Header as='h2' icon='user' content='An account with this email or phone already exists' subheader='If you forgot your password, it only takes 30 seconds to reset it with your phone' />
+        <div style={{ width: '80%' }}>
+          <br/><br/>
+          <Button primary onClick={() => this.props.history.push('/login')} style={{ width: '100%' }}>LOG IN</Button>
+          <br/><br/>
+          <Button primary onClick={() => this.props.history.push('/login/forgot')} style={{ width: '100%' }}>FORGOT PASSWORD</Button>
+        </div>
+      </div>
+    )
+  }
+
+	render() {
+    // for when an unsigned user submits an application
+    // we do not send the inquiry out yet, in this.sendInquiryBasedOnAuthenticationStatus() we first check if an account with that email or phone exists already
+    // if it already exists, we set this.state.application_step === 'pin_verified' || 'account_exists'
+    // if not, then ask for a password by setting this.state.application_step === 'ask_for_password'
+    if (this.state.application_step === 'ask_for_password') {
+      return this.renderAskForPassword()
+    } else if (this.state.application_step === 'ask_for_verification_pin') {
+      // when this.askForVerificationPIN() successfully verifies a pin, we also run this.sendMessageToBothParties()
+      return this.askForVerificationPIN()
+    } else if (this.state.application_step === 'pin_verified') {
+      // success message
+      return this.successfulPinVerificationAndInquiriesSent()
+    } else if (this.state.application_step === 'account_exists') {
+      // give option to log in or reset password
+      // log in --> redirect to /login
+      // forgot password --> redirect to /forgot password
+      return this.accountAlreadyExistsOptions()
+    } else {
+  		return (
+  			<div id='MessageLandlordForm' style={comStyles().container}>
+          {
+            this.props.header === 'Apply Now'
+            ?
+            <Header as='h2' icon='suitcase' content={`Applying to ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='Send an Inquiry and chat with the landlord' />
+            :
+            <Header as='h2' icon='phone' content={`Message Landlord about ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='A chat thread will be opened between you and the landlord' />
+          }
+          <br />
+          <Form>
+            {
+              this.state.tenant_loaded
+              ?
+              null
+              :
+              <Form.Group widths='equal'>
+                <Form.Field>
+                  <label>First Name</label>
+                  <Input
+                    value={this.state.first_name}
+                    onChange={e => this.updateAttr(e, 'first_name')}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <label>Last Name</label>
+                  <Input
+                    value={this.state.last_name}
+                    onChange={e => this.updateAttr(e, 'last_name')}
+                  />
+                </Form.Field>
+              </Form.Group>
+            }
+
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <label>Phone Number</label>
+                <Input
+                  type='phone'
+                  value={this.state.phone}
+                  onChange={e => this.updateAttr(e, 'phone')}
+                  disabled={!this.state.phoneRequired}
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Email Address</label>
+                <Input
+                  value={this.state.email}
+                  onChange={e => this.updateAttr(e, 'email')}
+                  disabled={!this.state.emailRequired}
+                />
+              </Form.Field>
+            </Form.Group>
+
+
+            <Form.Field>
+              <label>Group Size</label>
+              <Dropdown
+                id='Group Size'
+                placeholder='Select your Group Size'
+                value={this.state.group_size}
+                selection
+                options={this.group_size_options}
+                onChange={(e, d) => { this.updateGroupSize(e, d, 'group_size') }}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Message</label>
+              <TextArea
+                rows={3}
+                value={this.state.group_notes}
+                placeholder='When are you available for a tour?'
+                onChange={e => this.setState({ group_notes: e.target.value })}
+                style={comStyles().textArea}
+              />
+            </Form.Field>
+
+            {
+              this.state.emailRequired || this.state.phoneRequired
+              ?
+              <Form.Field style={{ display: 'flex', flexDirection: 'row' }}>
+                <Checkbox
+                  checked={this.state.acknowledge}
+                  onChange={() => this.setState({ acknowledge: !this.state.acknowledge })}
+                />
+                <label style={{ marginLeft: '10px' }}>I acknowledge that my information is accurate & agree to the <a href={`${window.location.origin}/termsandconditions`} target='_blank'>terms and conditions</a></label>
+              </Form.Field>
+              :
+              null
+            }
+
+            <Form.Field>
+              {
+                this.state.error_messages.map((err, index) => {
+                  return (
+                    <Message
+                      visible
+                      key={index}
+                      error
+                      content={err}
+                    />
+                  )
+                })
+              }
+            </Form.Field>
+            <Form.Field>
+              {
+                this.state.submitted
+                ?
+                <Message positive>
+                  <Header>
+                    <Icon name='checkmark' color='green' />
+                    <Header.Content>Message Sent to Landlord</Header.Content>
+                    <Header.Subheader>You can now communicate with the landlord via SMS or Email</Header.Subheader>
+                  </Header>
+                </Message>
+                :
+                <Button
+                  fluid
+                  primary
+                  loading={this.state.saving}
+                  disabled={this.state.saving}
+                  content='Send Message'
+                  onClick={() => this.sendInquiryBasedOnAuthenticationStatus()}
+                />
+              }
+            </Form.Field>
+          </Form>
+  			</div>
+  		)
+    }
 	}
 }
 
@@ -368,6 +710,7 @@ MessageLandlordForm.propTypes = {
 	closeModal: PropTypes.func.isRequired,		// passed in
   landlord: PropTypes.object.isRequired,    // passed in
   header: PropTypes.string.isRequired,      // passed in
+  saveTenantToRedux: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -388,7 +731,7 @@ const mapReduxToProps = (redux) => {
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    saveTenantToRedux,
 	})(RadiumHOC)
 )
 

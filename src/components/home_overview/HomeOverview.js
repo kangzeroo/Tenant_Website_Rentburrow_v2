@@ -150,6 +150,7 @@ class HomeOverview extends Component {
 								suite={suite}
 								openMessageForm={() => this.showMessagePopup(suite)}
 								toggleTemporaryCollectionFrom={() => this.props.toggleTemporaryCollectionFrom()}
+								toggleModal={(bool, title, context) => this.toggleModal(bool, title, context)}
 							/>
 						)
 					})

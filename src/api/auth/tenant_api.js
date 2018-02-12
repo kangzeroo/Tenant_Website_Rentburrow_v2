@@ -203,3 +203,21 @@ export const updateEntireTenantProfile = (tenantObj) => {
   })
   return p
 }
+
+export const checkIfAccountWithPhoneAndEmailExistsAlready = (phone, email) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SUBLETTING_MICROSERVICE}/check_if_account_exists`, { phone, email }, authHeaders())
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        _LTracker.push({
+          'error': err,
+          'tag' : `${localStorage.getItem('tenant_id')}`
+        })
+        rej(err)
+      })
+  })
+  return p
+}
