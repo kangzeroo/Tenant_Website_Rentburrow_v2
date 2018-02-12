@@ -30,11 +30,10 @@ import enUS from 'antd/lib/locale-provider/en_US';
 import moment from 'moment'
 import { validateEmail, } from '../../../api/general/general_api'
 import { insertTenantInquiry } from '../../../api/inquiries/inquiry_api'
-import { VerifyAccount, resetVerificationPIN, LoginStudent } from '../../../api/aws/aws-cognito'
+import { VerifyAccount, resetVerificationPIN, LoginStudent, RegisterStudent } from '../../../api/aws/aws-cognito'
 import { updateTenantPhone, updateTenantEmail, checkIfAccountWithPhoneAndEmailExistsAlready, getTenantProfile } from '../../../api/auth/tenant_api'
 import { sendInitialMessage, sendInitialCorporateInquiry, } from '../../../api/sms/sms_api'
 import { getLandlordInfo, } from '../../../api/search/search_api'
-import { RegisterStudent } from '../../../api/aws/aws-cognito'
 import { sendRegisterInfo } from '../../../api/auth/register_api'
 import { saveTenantToRedux } from '../../../actions/auth/auth_actions'
 
@@ -342,7 +341,7 @@ class MessageLandlordForm extends Component {
           'tag' : `${localStorage.getItem('tenant_id')}`
         })
   			this.setState({
-  				loading: false,
+  				registration_loading: false,
   				error_messages: [err.message],
   			})
   		})
@@ -456,6 +455,13 @@ class MessageLandlordForm extends Component {
           <br/>
           <Form.Field style={{ width: '100%' }}>
             <Button primary loading={this.state.registration_loading} onClick={() => this.submitAccountRegistration(this.state)} style={{ width: '100%' }}>SAVE PASSWORD</Button>
+            {
+              this.state.error_messages.length > 0
+              ?
+              <Button loading={this.state.registration_loading} onClick={() => this.setState({ application_step: '' })} style={{ width: '100%' }}>BACK</Button>
+              :
+              null
+            }
           </Form.Field>
         </div>
       </div>
@@ -465,7 +471,7 @@ class MessageLandlordForm extends Component {
   askForVerificationPIN() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <Header as='h2' icon='user' content='Almost there!' subheader='Set a password for your account' />
+        <Header as='h2' icon='user' content='Verify Account' subheader='Check your phones text messages' />
         <Form style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '80%' }}>
           <Form.Field style={{ width: '80%' }}>
             <Input id='pin_input' value={this.state.verification_pin} onChange={(e) => this.updateAttr(e, 'verification_pin')} type='text' placeholder='Verification PIN' style={{ width: '100%' }} />
