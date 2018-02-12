@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import Rx from 'rxjs'
 import uuid from 'uuid'
 import MetaTags from 'react-meta-tags'
+import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import {
 	Image,
@@ -15,7 +16,10 @@ import {
 	Card,
 	Loader,
 	Dimmer,
+	Icon,
 	Segment,
+	Header,
+	Button,
 } from 'semantic-ui-react'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord, getLandlordInfo } from '../../api/search/search_api'
 import {
@@ -85,6 +89,8 @@ class BuildingPage extends Component {
 	}
 
 	componentWillMount() {
+		this.checkIfGiftModalShouldAppear()
+
     let building_alias = URLToAlias(this.props.location.pathname)
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
@@ -171,6 +177,12 @@ class BuildingPage extends Component {
 		return str.replace(/\w\S*/g, (txt) => { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase() })
 	}
 
+	checkIfGiftModalShouldAppear() {
+		const redeem_prize_popup_date = localStorage.getItem('redeem_prize_popup_date', moment().valueOf())
+		if ((parseInt(redeem_prize_popup_date) + (1000 * 60 * 60 * 24)) < moment().valueOf()) {
+    	this.toggleModal(true, 'redeem_prize')
+		}
+	}
 	// componentWillReceiveProps(nextProps) {
 	// 	if (this.props.tenant_profile !== nextProps.tenant_profile) {
 	// 		getTenantFavoriteForBuilding(nextProps.tenant_profile.tenant_id, this.state.building.building_id)
@@ -284,6 +296,31 @@ class BuildingPage extends Component {
 		        </Modal.Content>
 		      </Modal>
 		    )
+		} else if (modal_name === 'redeem_prize') {
+			localStorage.setItem('redeem_prize_popup_date', moment().valueOf())
+			return (
+				<Modal
+					dimmer
+					open={this.state.toggle_modal}
+					onClose={() => this.toggleModal(false)}
+					closeIcon
+					size='large'
+				>
+					<Modal.Content>
+						<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+							<Header as='h2' content='Get Your House Warming Gift!' subheader='Every roommate gets a gift after signing a lease. Remember to claim yours!' />
+						</div>
+						<br /><br />
+						<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+							<Icon name='gift' size='huge' />
+							<br /><br />
+							<Button primary onClick={() => this.props.history.push('/claimprize')} style={{ width: '100%' }}>Redeem Gift</Button>
+							<div style={{ width: '100%', height: '10px' }} />
+							<Button onClick={() => this.toggleModal(false)} style={{ width: '100%' }}>Close</Button>
+						</div>
+					</Modal.Content>
+				</Modal>
+			)
 		}
   }
 

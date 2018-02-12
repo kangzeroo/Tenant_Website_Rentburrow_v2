@@ -238,7 +238,7 @@ class Header extends Component {
           <div style={comStyles().leftFloat}>
             <Link to='/' onClick={() => this.refreshEverything()}>
               {/*<img style={comStyles().logo} src='https://s3.amazonaws.com/rentburrow-static-assets/Logos/rbdesktop.png' alt='logo' />*/}
-              <h1 style={comStyles().font_logo}>Rent Hero</h1>
+              <h1 style={comStyles().font_logo}>RentHero</h1>
             </Link>
           </div>
           {
@@ -281,6 +281,9 @@ class Header extends Component {
                 :
                 null
               }
+              <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
+                Redeem Gift
+              </div>
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
               </div>
@@ -316,6 +319,9 @@ class Header extends Component {
               />*/}
               <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
                 Local Tours
+              </div>
+              <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
+                Redeem Gift
               </div>
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
@@ -474,15 +480,8 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '300px',
+      width: '400px',
       right: '20px'
-    },
-    righterFloat: {
-      color: 'white',
-      display: 'flex',
-      flexDirection: 'row',
-      width: '500px',
-      margin: '20px auto'
     },
     link: {
       margin: '10px',
@@ -495,8 +494,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      minWidth: '500px',
-      maxWidth: '500px',
+      minWidth: '600px',
+      maxWidth: '600px',
       alignItems: 'center',
     },
     close_login: {
