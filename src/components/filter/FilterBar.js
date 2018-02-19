@@ -30,6 +30,7 @@ import {
 import {
 	querySubletsInArea,
 } from '../../api/search/sublet_api'
+import BetterLeaseFilter from './BetterLeaseFilter'
 import LeaseFilterCard from './LeaseFilterCard'
 import SubletFilterCard from './SubletFilterCard'
 import { collectIntel } from '../../actions/intel/intel_actions'
@@ -41,7 +42,6 @@ class FilterBar extends Component {
   constructor() {
     super()
     this.state = {
-      show_search_panel: false,
       toggle_modal: false,
       modal_name: '',
       context: {},
@@ -59,26 +59,27 @@ class FilterBar extends Component {
     })
   }
 
-  closePanel() {
-    this.setState({
-      show_search_panel: false,
-    })
-  }
-
 	renderAppropriateModal(modal_name, context) {
-		if (modal_name === 'advanced') {
-	    return (
-	      <Modal
-					dimmer
-					open={this.state.toggle_modal}
-					onClose={() => this.toggleModal(false)}
-					closeIcon
-          inverted
-					size='fullscreen'
-				>
-	      </Modal>
-	    )
-		}
+		if (modal_name === 'lease_filter') {
+      return (
+        <BetterLeaseFilter
+          closeFilterCard={() => this.toggleModal(false)}
+          buildings={this.props.buildings}
+        />
+      )
+      // return (
+      //   <LeaseFilterCard
+      //     closeFilterCard={() => this.toggleModal(false)}
+      //     buildings={this.props.buildings}
+      //   />
+      // )
+		} else if (modal_name === 'sublet_filter') {
+      return (
+        <SubletFilterCard
+          closeFilterCard={() => this.toggleModal(false)}
+        />
+      )
+    }
   }
 
   handleSortChange(e, value) {
@@ -201,20 +202,11 @@ class FilterBar extends Component {
     })
   }
 
-  renderFilterCard(rent_type) {
+  clickedFilter(rent_type) {
     if (rent_type === 'sublet') {
-      return (
-        <SubletFilterCard
-          closeFilterCard={() => this.closePanel()}
-        />
-      )
+      this.toggleModal(true, 'sublet_filter')
     } else {
-      return (
-        <LeaseFilterCard
-          closeFilterCard={() => this.closePanel()}
-          buildings={this.props.buildings}
-        />
-      )
+      this.toggleModal(true, 'lease_filter')
     }
   }
 
@@ -222,55 +214,54 @@ class FilterBar extends Component {
     const numberOfPropertiesShown = this.props.rent_type === 'sublet' ? this.props.sublet_search_results.length : this.props.building_search_results.length
 		return (
 			<div style={comStyles().container}>
-        {
-          this.state.show_search_panel
-          ?
-          this.renderFilterCard(this.props.rent_type)
-          :
-          <div style={comStyles().searchbar}>
-            <div style={comStyles().filterAndTypeContainer}>
-              <Button
-                primary
-                onClick={() => this.setState({ show_search_panel: !this.state.show_search_panel })}
-                content='FILTER'
-              />
-              <Dropdown
-                selection
-                placeholder='Leases or Sublets'
-                floating
-                options={[
-                  { key: 'lease', value: 'lease', text: 'Leases' },
-                  { key: 'sublet', value: 'sublet', text: 'Sublets' },
-                ]}
-                onChange={(e, value) => this.handleRentalLengthChange(e, value)}
-              />
-            </div>
-            <h3 style={comStyles().sortMargin}>
-              {
-                this.props.rent_type === 'sublet'
-                ?
-                `Showing ${numberOfPropertiesShown} Facebook Sublet${numberOfPropertiesShown > 1 ? 's' : ''}`
-                :
-                `${numberOfPropertiesShown} Student Rental${numberOfPropertiesShown > 1 ? 's' : ''}`
-              }
-            </h3>
+        <div style={comStyles().searchbar}>
+          <div style={comStyles().filterAndTypeContainer}>
+            <Button
+              primary
+              onClick={() => this.clickedFilter(this.props.rent_type)}
+              content='FILTER'
+            />
             <Dropdown
-              placeholder='Sort By'
               selection
+              placeholder='Leases or Sublets'
+              floating
               options={[
-                        { key: 'pricelow', value: 'pricelow', text: 'Price: Low to High' },
-                        { key: 'pricehigh', value: 'pricehigh', text: 'Price: High to Low' },
-                        { key: 'datenew', value: 'datenew', text: 'Date: Newest to Oldest' },
-                        { key: 'dateold', value: 'dateold', text: 'Date: Oldest to Newest' },
-                      ]}
-
-              onChange={(e, value) => this.handleSortChange(e, value)}
+                { key: 'lease', value: 'lease', text: 'Leases' },
+                { key: 'sublet', value: 'sublet', text: 'Sublets' },
+              ]}
+              onChange={(e, value) => this.handleRentalLengthChange(e, value)}
             />
           </div>
-        }
-        {
-          this.renderAppropriateModal(this.state.modal_name, this.state.context)
-        }
+          <h3 style={comStyles().sortMargin}>
+            {
+              this.props.rent_type === 'sublet'
+              ?
+              `Showing ${numberOfPropertiesShown} Facebook Sublet${numberOfPropertiesShown > 1 ? 's' : ''}`
+              :
+              `${numberOfPropertiesShown} Student Rental${numberOfPropertiesShown > 1 ? 's' : ''}`
+            }
+          </h3>
+          <Dropdown
+            placeholder='Sort By'
+            selection
+            options={[
+                      { key: 'pricelow', value: 'pricelow', text: 'Price: Low to High' },
+                      { key: 'pricehigh', value: 'pricehigh', text: 'Price: High to Low' },
+                      { key: 'datenew', value: 'datenew', text: 'Date: Newest to Oldest' },
+                      { key: 'dateold', value: 'dateold', text: 'Date: Oldest to Newest' },
+                    ]}
+
+            onChange={(e, value) => this.handleSortChange(e, value)}
+          />
+        </div>
+        <Modal
+          open={this.state.toggle_modal}
+          onClose={() => this.toggleModal(false)}
+        >
+          {
+            this.renderAppropriateModal(this.state.modal_name, this.state.context)
+          }
+        </Modal>
 			</div>
 		)
 	}

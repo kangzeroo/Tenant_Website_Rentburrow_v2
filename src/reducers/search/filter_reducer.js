@@ -8,14 +8,18 @@ import {
 
 const INITIAL_STATE = {
   lease_filter_params: {
-    price: {
-      min: 500,
-      max: 900,
-    },
-    room_count: 0,
+    exact_rooms: false,
+    room_count: 1,
+    ok_to_fill_other_rooms_with_randoms: true,
     ensuite_bath: false,
-    utils_incl: false,
-    parking_avail: false,
+    room_range: {
+      min: 1,
+      max: 5,
+    },
+    price_range: {
+      min: 300,
+      max: 850,
+    },
     search_radius: 1000,
   },
   sublet_filter_params: {

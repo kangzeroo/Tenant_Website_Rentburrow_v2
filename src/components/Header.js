@@ -281,9 +281,9 @@ class Header extends Component {
                 :
                 null
               }
-              <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
+              {/*<div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
                 Redeem Gift
-              </div>
+              </div>*/}
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
               </div>
@@ -320,9 +320,9 @@ class Header extends Component {
               <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
                 Local Tours
               </div>
-              <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
+              {/*<div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
                 Redeem Gift
-              </div>
+              </div>*/}
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
               </div>
