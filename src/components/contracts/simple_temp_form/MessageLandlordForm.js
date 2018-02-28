@@ -36,6 +36,7 @@ import { sendInitialMessage, sendInitialCorporateInquiry, } from '../../../api/s
 import { getLandlordInfo, } from '../../../api/search/search_api'
 import { sendRegisterInfo } from '../../../api/auth/register_api'
 import { saveTenantToRedux } from '../../../actions/auth/auth_actions'
+import { getLandlordOfficeHours } from '../../../api/building/building_api'
 
 class MessageLandlordForm extends Component {
 
@@ -66,6 +67,8 @@ class MessageLandlordForm extends Component {
       submitted: false,               // for submitted inquiry
 
       error_messages: [],
+
+      office_hours: {},
     }
     this.school_options = [
       { key: 'uw', text: 'University of Waterloo', value: 'University of Waterloo' },
@@ -95,6 +98,13 @@ class MessageLandlordForm extends Component {
   }
 
   componentWillMount() {
+    getLandlordOfficeHours(this.props.landlord.corporation_id)
+    .then((data) => {
+      this.setState({
+        office_hours: data,
+      })
+    })
+
     if (this.props.tenant_profile && !this.props.tenant_profile.unauthRoleStudent) {
       this.setState({
         tenant_loaded: true,
@@ -582,6 +592,13 @@ class MessageLandlordForm extends Component {
             :
             <Header as='h2' icon='phone' content={`Message Landlord about ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='A chat thread will be opened between you and the landlord' />
           }
+          {
+            this.state.office_hours
+            ?
+            <Header as='h3' icon='wait' content={`Office Hours for this landlord are from ${moment(this.state.office_hours.office_hours_start, 'HHmm').format('h:mm a')} to ${moment(this.state.office_hours.office_hours_end, 'HHmm').format('h:mm a')}`} />
+            :
+            null
+          }
           <br />
           <Form>
             {
@@ -649,7 +666,7 @@ class MessageLandlordForm extends Component {
                 style={comStyles().textArea}
               />
             </Form.Field>
-
+            <br />
             {
               this.state.emailRequired || this.state.phoneRequired
               ?

@@ -95,6 +95,7 @@ class BuildingPage extends Component {
     if (building_alias[building_alias.length - 1] === '/') {
       building_alias = building_alias.slice(0, -1)
 		}
+
 		this.props.changeHTMLTitle(`${this.convertToNameCase(building_alias.slice(1))}, Waterloo -- Student Housing for Rent on RentHero`)
 		searchForSpecificBuildingByAlias(building_alias)
 			.then((data) => {
@@ -143,7 +144,7 @@ class BuildingPage extends Component {
 					loading: false,
 				})
 				// console.log('getSpecificLandlord', this.state.building.building_id)
-				return getSpecificLandlord({ building_id: this.state.building.building_id })
+				return getSpecificLandlord(this.state.building.building_id)
 			})
 			.then((corporation) => {
 				this.props.collectIntel({
