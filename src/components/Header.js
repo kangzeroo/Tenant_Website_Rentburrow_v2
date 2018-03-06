@@ -232,6 +232,11 @@ class Header extends Component {
     )
   }
 
+  openLinkInNewTab(url) {
+    const win = window.open(url, '_blank')
+    win.focus()
+  }
+
   render() {
     return (
         <div id='Header' style={comStyles().header}>
@@ -281,9 +286,9 @@ class Header extends Component {
                 :
                 null
               }
-              {/*<div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
-                Redeem Gift
-              </div>*/}
+              <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')}>
+                Redeem Prize
+              </div>
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
               </div>
@@ -320,9 +325,9 @@ class Header extends Component {
               <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
                 Local Tours
               </div>
-              {/*<div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.props.history.push('/claimprize')}>
-                Redeem Gift
-              </div>*/}
+              <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')}>
+                Redeem Prize
+              </div>
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
               </div>
