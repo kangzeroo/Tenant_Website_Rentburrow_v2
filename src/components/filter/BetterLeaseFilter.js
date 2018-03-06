@@ -63,14 +63,21 @@ class BetterLeaseFilter extends Component {
 			})
 		}
 
-    if (this.state.exact_rooms) {
-			filtered = filtered.filter((building) => {
-				return parseInt(building.max_rooms, 10) >= this.state.room_count && parseInt(building.min_rooms, 10) <= this.state.room_count
-			})
-    } else {
+    if (this.state.ok_to_fill_other_rooms_with_randoms) {
       filtered = filtered.filter((building) => {
-				return parseInt(building.max_rooms, 10) <= this.state.room_range.max || parseInt(building.min_rooms, 10) >= this.state.room_count.min
-			})
+        return parseInt(building.min_rooms, 10) >= this.state.room_count
+      })
+    } else {
+      if (this.state.exact_rooms) {
+        filtered = filtered.filter((building) => {
+          return parseInt(building.max_rooms, 10) >= this.state.room_count && parseInt(building.min_rooms, 10) <= this.state.room_count
+        })
+      } else {
+        filtered = filtered.filter((building) => {
+          return parseInt(building.max_rooms, 10) <= this.state.room_range.max || parseInt(building.min_rooms, 10) >= this.state.room_count.min
+        })
+      }
+
     }
 
 		// if ensuite_bath is true
