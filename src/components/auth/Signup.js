@@ -17,6 +17,7 @@ import {
 import { validateEmail } from '../../api/general/general_api'
 import { RegisterStudent } from '../../api/aws/aws-cognito'
 import { sendRegisterInfo } from '../../api/auth/register_api'
+import { verifyPhone } from '../../api/sms/sms_api'
 
 class Signup extends Component {
 
@@ -33,6 +34,8 @@ class Signup extends Component {
 			error_messages: [],							// error message to display
 			loading: false,									// loading flag
 			success: false,									// success flag
+
+			phoneError: false,
 		}
 		this.enterKeyPressedStream = null
 	}
@@ -57,46 +60,49 @@ class Signup extends Component {
 	}
 
 	// submit registration to AWS Cognito
-	submitRegistration(state) {
+	submitRegistration() {
 		// validation of passwords
 		if (this.validateForm()) {
 			this.setState({
 				loading: true,
-				error_messages: [],
-			}, () => {
+			})
+			verifyPhone(this.state.phone_number)
+			.then((data) => {
+				this.setState({
+					phoneError: false,
+					phone_number: data.formattedNumber,
+					error_messages: [],
+				})
 				// submit registration to AWS Cognito
-				RegisterStudent(state).then(({ email, cognito_id }) => {
-					// save the email to localStorage for future reference
-					localStorage.setItem('RentHero_Tenant_Email', email)
-					// send registration info object to node server
-					const registerJSON = {
-						tenant_id: cognito_id,
-						email,
-						first_name: this.state.first_name,
-						last_name: this.state.last_name,
-						phone: this.state.phone_number,
-					}
+				return RegisterStudent(this.state)
+			})
+			.then(({ email, cognito_id }) => {
+				// save the email to localStorage for future reference
+				localStorage.setItem('RentHero_Tenant_Email', email)
+				// send registration info object to node server
+				const registerJSON = {
+					tenant_id: cognito_id,
+					email,
+					first_name: this.state.first_name,
+					last_name: this.state.last_name,
+					phone: this.state.phone_number,
+				}
+				this.props.history.push('/register/verify')
+				return sendRegisterInfo(registerJSON)
+			}).then((data) => {
+				this.setState({
+					loading: false,
+					error_messages: [data],
+					success: true
+				}, () => {
+					// redirect to account verification page
 					this.props.history.push('/register/verify')
-					return sendRegisterInfo(registerJSON)
-				}).then((data) => {
-					this.setState({
-						loading: false,
-						error_messages: [data],
-						success: true
-					}, () => {
-						// redirect to account verification page
-						this.props.history.push('/register/verify')
-            this.props.closeModal()
-					})
-				}).catch((err) => {
-					_LTracker.push({
-	          'error': err,
-	          'tag' : `${localStorage.getItem('tenant_id')}`
-	        })
-					this.setState({
-						loading: false,
-						error_messages: [err.message],
-					})
+					this.props.closeModal()
+				})
+			}).catch((err) => {
+				this.setState({
+					loading: false,
+					error_messages: [err.response ? err.response.data : err.message ],
 				})
 			})
 		}
@@ -119,6 +125,7 @@ class Signup extends Component {
 		if (!this.state.agreed_to_terms) {
 			error_messages.push('You must agree to the terms and conditions in order to use RentHero')
 		}
+
 		this.setState({
 			error_messages: error_messages,
 			loading: false,
@@ -156,7 +163,7 @@ class Signup extends Component {
           </Form.Field>
           <Form.Field>
             <label>Phone Number</label>
-            <Input value={this.state.phone_number} onChange={(e) => this.updateAttr(e, 'phone_number')} type='number' placeholder='Phone Number' />
+            <Input value={this.state.phone_number} onChange={(e) => this.updateAttr(e, 'phone_number')} type='number' placeholder='Phone Number' error={this.state.phoneError}/>
           </Form.Field>
           <Form.Field>
             <label>Create a Password</label>
@@ -181,7 +188,7 @@ class Signup extends Component {
           }
           </Form.Field>
           <Form.Field>
-            <Button color='twitter' fluid size='small' loading={this.state.loading} onClick={() => this.submitRegistration(this.state)}>
+            <Button color='twitter' fluid size='small' loading={this.state.loading} onClick={() => this.submitRegistration()}>
               Sign up
             </Button>
           </Form.Field>

@@ -253,10 +253,17 @@ class Login extends Component {
 						<Form.Field>
 							<div tabIndex='0' role='button' onClick={() => this.props.forgotPassword()} style={comStyles().forgot}>Forgot Password</div>
 						</Form.Field>
-						<Form.Field style={comStyles().row}>
-							<div>{`Don't have an account?`}</div>
-							<div tabIndex='-1' role='button' onClick={() => this.props.signupState()} style={comStyles().signup}>Sign Up</div>
-						</Form.Field>
+						{
+							this.props.ignore_signup
+							?
+							null
+							:
+							<Form.Field style={comStyles().row}>
+								<div>{`Don't have an account?`}</div>
+								<div tabIndex='-1' role='button' onClick={() => this.props.signupState()} style={comStyles().signup}>Sign Up</div>
+							</Form.Field>
+						}
+
 
 						{ this.renderVerifiedModal() }
 						{ this.renderResetModal() }
@@ -274,6 +281,7 @@ Login.propTypes = {
 	facebook_only: PropTypes.bool,			// passed in
 	signupState: PropTypes.func.isRequired,	// passed in
 	forgotPassword: PropTypes.func.isRequired,		// passed in
+	ignore_signup: PropTypes.bool,								// passed in
   temporary_favorite_force_signin: PropTypes.object,
   triggerForcedSigninFavorite: PropTypes.func.isRequired,
 	authenticated: PropTypes.bool,
@@ -284,6 +292,7 @@ Login.defaultProps = {
   closeModal: () => {},
 	temporary_favorite_force_signin: null,
 	authenticated: false,
+	ignore_signup: false,
 }
 
 const RadiumHOC = Radium(Login)

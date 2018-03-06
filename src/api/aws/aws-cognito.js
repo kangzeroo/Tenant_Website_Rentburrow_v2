@@ -32,7 +32,7 @@ export const RegisterStudent = ({ email, phone_number, password, first_name, las
 		if (phone_number) {
 			const dataPhone = {
 			    Name: 'phone_number',
-			    Value: `+1${phone_number}`,
+			    Value: `${phone_number}`,
 			}
 			const attributePhone = new CognitoUserAttribute(dataPhone)
 			attributeList.push(attributePhone)

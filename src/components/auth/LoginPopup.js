@@ -91,7 +91,7 @@ class LoginPopup extends Component {
         {
           this.state.signup
           ?
-          <Header as='h2' content='Sign Up' />
+          null
           :
           <Header as='h2' content='Log In' />
         }

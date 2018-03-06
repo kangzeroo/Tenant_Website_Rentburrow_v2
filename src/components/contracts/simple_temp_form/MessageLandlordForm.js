@@ -32,11 +32,13 @@ import { validateEmail, } from '../../../api/general/general_api'
 import { insertTenantInquiry } from '../../../api/inquiries/inquiry_api'
 import { VerifyAccount, resetVerificationPIN, LoginStudent, RegisterStudent } from '../../../api/aws/aws-cognito'
 import { updateTenantPhone, updateTenantEmail, checkIfAccountWithPhoneAndEmailExistsAlready, getTenantProfile } from '../../../api/auth/tenant_api'
-import { sendInitialMessage, sendInitialCorporateInquiry, } from '../../../api/sms/sms_api'
+import { sendInitialMessage, sendInitialCorporateInquiry, verifyPhone, } from '../../../api/sms/sms_api'
 import { getLandlordInfo, } from '../../../api/search/search_api'
 import { sendRegisterInfo } from '../../../api/auth/register_api'
 import { saveTenantToRedux } from '../../../actions/auth/auth_actions'
 import { getLandlordOfficeHours } from '../../../api/building/building_api'
+import Login from '../../auth/Login'
+import ForgotPassword from '../../auth/ForgotPassword'
 
 class MessageLandlordForm extends Component {
 
@@ -69,6 +71,7 @@ class MessageLandlordForm extends Component {
       error_messages: [],
 
       office_hours: {},
+      office_hours_ended: false,
     }
     this.school_options = [
       { key: 'uw', text: 'University of Waterloo', value: 'University of Waterloo' },
@@ -77,7 +80,7 @@ class MessageLandlordForm extends Component {
       { key: 'other', text: 'Other', value: 'Other' },
     ]
     this.group_size_options = [
-      { key: 'unknown', text: 'Unknown', value: 0 },
+      // { key: 'unknown', text: 'Unknown', value: 0 },
       { key: 'one', text: '1', value: 1 },
       { key: 'two', text: '2', value: 2 },
       { key: 'three', text: '3', value: 3 },
@@ -102,6 +105,7 @@ class MessageLandlordForm extends Component {
     .then((data) => {
       this.setState({
         office_hours: data,
+        office_hours_ended: !(moment().isAfter(moment(data.office_hours_start, 'HHmm')) && moment().isBefore(moment(data.office_hours_end, 'HHmm'))),
       })
     })
 
@@ -150,13 +154,25 @@ class MessageLandlordForm extends Component {
     })
   }
 
-  validateForm() {
+  validateAccountSignedIn() {
     let ok_to_proceed = true
     const error_messages = []
     if (!this.state.tenant_loaded) {
       error_messages.push('You must create an account first')
       ok_to_proceed = false
     }
+    this.setState({
+      error_messages: this.state.error_messages.concat(error_messages),
+      submitted: false,
+      saving: false,
+    })
+    return ok_to_proceed
+  }
+
+  validateForm() {
+    let ok_to_proceed = true
+    const error_messages = []
+
     if (!this.state.group_size) {
       error_messages.push('You must specify a group size')
       ok_to_proceed = false
@@ -181,9 +197,14 @@ class MessageLandlordForm extends Component {
       error_messages.push('Please check the checkbox')
       ok_to_proceed = false
     }
+    if (this.state.group_notes.length > 300) {
+      error_messages.push('Too many characters in message')
+      ok_to_proceed = false
+    }
     this.setState({
       error_messages: error_messages,
       submitted: false,
+      saving: false,
     })
     return ok_to_proceed
   }
@@ -191,7 +212,7 @@ class MessageLandlordForm extends Component {
   sendMessageToBothParties() {
     const p = new Promise((res, rej) => {
       let inquiry_id
-      if (this.validateForm()) {
+      if (this.validateForm() && this.validateAccountSignedIn()) {
         this.setState({ saving: true, })
         if (this.state.phoneRequired) {
           updateTenantPhone({
@@ -295,28 +316,51 @@ class MessageLandlordForm extends Component {
   }
 
   sendInquiryBasedOnAuthenticationStatus() {
+    this.setState({
+      error_messages: [],
+      saving: true,
+    })
     if (this.state.tenant_loaded) {
       this.sendMessageToBothParties()
-    } else if (this.state.first_name && this.state.last_name && this.state.phone && this.state.email) {
-      checkIfAccountWithPhoneAndEmailExistsAlready(this.state.phone, this.state.email).then((data) => {
-        if (data.exists) {
-    			this.setState({
-    				error_messages: [],
-            application_step: 'account_exists',
-    			})
-        } else {
-    			this.setState({
-    				error_messages: [],
-            application_step: 'ask_for_password',
-    			})
-        }
-      }).catch((err) => {
-        // console.log(err)
-      })
+    } else if (this.validateForm()) {
+      verifyPhone(this.state.phone)
+      .then((data) => {
+        this.setState({
+          phoneError: false,
+          phone: data.formattedNumber,
+        }, () => {
+            checkIfAccountWithPhoneAndEmailExistsAlready(this.state.phone, this.state.email)
+            .then((data) => {
+              if (data.exists) {
+          			this.setState({
+          				error_messages: [],
+                  saving: false,
+                  application_step: 'account_exists',
+          			})
+              } else {
+          			this.setState({
+          				error_messages: [],
+                  saving: false,
+                  application_step: 'ask_for_password',
+          			})
+              }
+            }).catch((err) => {
+              // console.log(err)
+            })
+          })
+        })
+        .catch((err) => {
+          this.setState({
+            phoneError: true,
+            saving: false,
+            error_messages: [err.response.data],
+          })
+        })
     } else {
-      this.setState({
-        error_messages: ['Missing name, phone or email necessary for creating a new account']
-      })
+      // this.setState({
+      //   error_messages: ['Missing name, phone or email necessary for creating a new account'],
+      //   saving: false,
+      // })
     }
   }
 
@@ -346,6 +390,7 @@ class MessageLandlordForm extends Component {
   			})
   		})
       .catch((err) => {
+        // console.log(err)
   			_LTracker.push({
           'error': err,
           'tag' : `${localStorage.getItem('tenant_id')}`
@@ -407,6 +452,17 @@ class MessageLandlordForm extends Component {
         error_messages: ['Please enter a pin'],
       })
     }
+  }
+
+  sendInquiryAfterLogin() {
+    this.setState({
+      application_step: 'pin_verified',
+    })
+    setTimeout(() => {
+      this.setState({
+        tenant_loaded: true,
+      }, () => this.sendMessageToBothParties())
+    }, 300)
   }
 
   resendPIN(state) {
@@ -539,9 +595,9 @@ class MessageLandlordForm extends Component {
               </Header>
             </Message>
             :
-            <Segment>
+            <Segment style={{ minHeight: '300px', }}>
               <Dimmer active inverted>
-                <Loader inverted>Loading</Loader>
+                <Loader inverted>Sending Message to Landlord...</Loader>
               </Dimmer>
             </Segment>
           }
@@ -556,9 +612,22 @@ class MessageLandlordForm extends Component {
         <Header as='h2' icon='user' content='An account with this email or phone already exists' subheader='If you forgot your password, it only takes 30 seconds to reset it with your phone' />
         <div style={{ width: '80%' }}>
           <br/><br/>
-          <Button primary onClick={() => this.props.history.push('/login')} style={{ width: '100%' }}>LOG IN</Button>
+          {/*          <Button primary onClick={() => this.props.history.push('/login')} style={{ width: '100%' }}>LOG IN</Button>
           <br/><br/>
-          <Button primary onClick={() => this.props.history.push('/login/forgot')} style={{ width: '100%' }}>FORGOT PASSWORD</Button>
+          <Button primary onClick={() => this.props.history.push('/login/forgot')} style={{ width: '100%' }}>FORGOT PASSWORD</Button>*/}
+          {
+            this.state.forgot_password
+            ?
+            <ForgotPassword
+              backToLogin={() => this.setState({ forgot_password: false, })}
+            />
+            :
+            <Login
+              forgotPassword={() => this.setState({ forgot_password: true, })}
+              closeModal={() => this.sendInquiryAfterLogin()}
+              ignore_signup
+            />
+          }
         </div>
       </div>
     )
@@ -593,9 +662,14 @@ class MessageLandlordForm extends Component {
             <Header as='h2' icon='phone' content={`Message Landlord about ${this.props.building.building_alias} ${this.props.suite && this.props.suite.suite_alias ? this.props.suite.suite_alias : ''}`} subheader='A chat thread will be opened between you and the landlord' />
           }
           {
-            this.state.office_hours
+            this.state.office_hours && this.state.office_hours_ended
             ?
-            <Header as='h3' icon='wait' content={`Office Hours for this landlord are from ${moment(this.state.office_hours.office_hours_start, 'HHmm').format('h:mm a')} to ${moment(this.state.office_hours.office_hours_end, 'HHmm').format('h:mm a')}`} />
+            <Header
+              as='h3'
+              icon='wait'
+              content={`Office Hours for this landlord are from ${moment(this.state.office_hours.office_hours_start, 'HHmm').format('h:mm a')} to ${moment(this.state.office_hours.office_hours_end, 'HHmm').format('h:mm a')}`}
+              subheader='You can still send a message, the landlord will respond during office hours'
+            />
             :
             null
           }
@@ -632,6 +706,7 @@ class MessageLandlordForm extends Component {
                   value={this.state.phone}
                   onChange={e => this.updateAttr(e, 'phone')}
                   disabled={!this.state.phoneRequired}
+                  error={this.state.phoneError}
                 />
               </Form.Field>
               <Form.Field>

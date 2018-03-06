@@ -104,3 +104,17 @@ export const sendTenantWaitMsg = ({ tenant, building, suite, group_notes, group_
   })
   return p
 }
+
+export const verifyPhone = (phone) => {
+  const p = new Promise((res, rej) => {
+    axios.post(`${SMS_MICROSERVICE}/phone_lookup`, { phone, })
+      .then((data) => {
+        // once we have the response, only then do we dispatch an action to Redux
+        res(data.data)
+      })
+      .catch((err) => {
+        rej(err)
+      })
+  })
+  return p
+}
