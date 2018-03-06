@@ -116,12 +116,12 @@ class BuildingPreview extends Component {
               this.state.summary_images.length === 0
               ?
               <SingularImageGallery
-                list_of_images={[this.props.building.thumbnail].concat(this.props.building.imgs)}
+                list_of_images={[this.props.building.cover_photo].concat(this.props.building.imgs)}
                 image_size='hd'
               />
               :
               <SingularImageGallery
-                list_of_images={this.state.summary_images.map(s => s.image_url)}
+                list_of_images={[this.props.building.cover_photo].concat(this.state.summary_images.map(s => s.image_url))}
                 image_size='hd'
               />
             }
