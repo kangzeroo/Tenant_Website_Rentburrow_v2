@@ -101,6 +101,8 @@ const latestPostInServerPerGroup = ({ groups, profile }) => {
 		const promises = groups.map((group) => {
 			return axios.post(`${FB_PARSER_MICROSERVICE}/check_latest_sublet`, group, authHeaders())
 				.then((data) => {
+					console.log('check_latest_sublet')
+					console.log(data)
 					if (data.data) {
 						const lastPostTime = convertToRegularSubletObj(data.data).scrapped_at * 1000 || 0
 						return Promise.resolve({

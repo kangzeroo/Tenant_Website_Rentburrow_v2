@@ -101,11 +101,13 @@ const grabFacebookProfile = (fbToken) => {
 	    { access_token: fbToken },
       (profile) => {
 				if (profile.id) {
+					localStorage.setItem('fbToken', fbToken)
 					let longToken = ''
 					convertTokenIntoLongLived(fbToken).then((lngToken) => {
 						longToken = lngToken
 						// console.log(fbToken)
 						// console.log(lngToken)
+						localStorage.setItem('fbToken', fbToken)
 						return registerFacebookLoginWithCognito({
 							authResponse: {
 								accessToken: fbToken
