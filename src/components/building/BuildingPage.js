@@ -181,6 +181,8 @@ class BuildingPage extends Component {
 		const redeem_prize_popup_date = localStorage.getItem('redeem_prize_popup_date', moment().valueOf())
 		if ((parseInt(redeem_prize_popup_date) + (1000 * 60 * 60 * 24)) < moment().valueOf()) {
     	this.toggleModal(true, 'redeem_prize')
+		} else if (!redeem_prize_popup_date) {
+			this.toggleModal(true, 'redeem_prize')
 		}
 	}
 	// componentWillReceiveProps(nextProps) {
@@ -230,6 +232,11 @@ class BuildingPage extends Component {
       modal_name: attr,
       context,
     })
+  }
+
+	openLinkInNewTab(url) {
+    const win = window.open(url, '_blank')
+    win.focus()
   }
 
 	renderAppropriateModal(modal_name, context) {
@@ -314,7 +321,7 @@ class BuildingPage extends Component {
 						<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
 							<Icon name='gift' size='huge' />
 							<br /><br />
-							<Button primary onClick={() => this.props.history.push('/claimprize')} style={{ width: '100%' }}>Redeem Gift</Button>
+							<Button primary onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')} style={{ width: '100%' }}>Redeem Gift</Button>
 							<div style={{ width: '100%', height: '10px' }} />
 							<Button onClick={() => this.toggleModal(false)} style={{ width: '100%' }}>Close</Button>
 						</div>
