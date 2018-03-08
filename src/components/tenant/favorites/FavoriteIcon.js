@@ -219,7 +219,7 @@ const comStyles = () => {
 	return {
 		container: {
       position: 'absolute',
-      zIndex: 1,
+      zIndex: 99999,
       right: '5px',
       top: '5px',
 		}
