@@ -21,6 +21,10 @@ import {
 	Header,
 	Button,
 } from 'semantic-ui-react'
+import {
+	notification,
+} from 'antd'
+import 'antd/lib/notification/style/css'
 import { searchForSpecificBuildingByAlias, getSpecificLandlord, getLandlordInfo } from '../../api/search/search_api'
 import {
 	URLToAlias,
@@ -179,12 +183,36 @@ class BuildingPage extends Component {
 	}
 
 	checkIfGiftModalShouldAppear() {
-		const redeem_prize_popup_date = localStorage.getItem('redeem_prize_popup_date', moment().valueOf())
-		if ((parseInt(redeem_prize_popup_date) + (1000 * 60 * 60 * 24)) < moment().valueOf()) {
-    	this.toggleModal(true, 'redeem_prize')
-		} else if (!redeem_prize_popup_date) {
-			this.toggleModal(true, 'redeem_prize')
-		}
+		// const redeem_prize_popup_date = localStorage.getItem('redeem_prize_popup_date', moment().valueOf())
+		// if ((parseInt(redeem_prize_popup_date) + (1000 * 60 * 60 * 24)) < moment().valueOf()) {
+
+    	// this.toggleModal(true, 'redeem_prize')
+
+			const header = (
+				<Header as='h3' content='Get Your House Warming Gift!' />
+			)
+			const msg = (
+				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+					<Icon name='gift' size='huge' style={{ color: '#108ee9' }} />
+					<p style={{ fontFamily: 'Helvetica Neue' }}>{'Every roommate gets a gift after signing a lease. Remember to claim yours!'}</p>
+					<br />
+					<Button primary onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')} style={{ width: '50%' }} >Redeem Gift</Button>
+				</div>
+			)
+
+			notification.open({
+				message: header,
+		    description: msg,
+				duration: 0,
+				placement: 'bottomLeft',
+				style: {
+					width: 500,
+					border: 'black solid thin',
+				}
+			})
+		// } else if (!redeem_prize_popup_date) {
+		// 	this.toggleModal(true, 'redeem_prize')
+		// }
 	}
 	// componentWillReceiveProps(nextProps) {
 	// 	if (this.props.tenant_profile !== nextProps.tenant_profile) {
