@@ -58,7 +58,7 @@ import BuildingToursContainer from './Components/BuildingToursContainer'
 import { BUILDING_INTERACTIONS, } from '../../api/intel/dynamodb_tablenames'
 import { collectIntel } from '../../actions/intel/intel_actions'
 import { triggerForcedSigninFavorite, } from '../../actions/auth/auth_actions'
-import { changeHTMLTitle } from '../../actions/app/app_actions'
+import { changeHTMLTitle, changeMetaThumbnail, } from '../../actions/app/app_actions'
 import { getToursForBuilding } from '../../api/tour/tour_api'
 import { checkLandlordResponsiveness } from '../../api/landlord/landlord_api'
 
@@ -106,7 +106,13 @@ class BuildingPage extends Component {
 				this.setState({
 					building: data,
 				})
-				this.props.changeHTMLTitle(`${this.convertToNameCase(data.building_address)} -- Student Housing for Rent on RentHero`)
+				const address = this.convertToNameCase(data.building_address)
+				let title = address
+				if (!address.includes(data.building_alias)) {
+					title = data.building_alias.concat(', ', address)
+				}
+				this.props.changeHTMLTitle(`${title} -- Student Housing for Rent on RentHero`)
+				this.props.changeMetaThumbnail(data.thumbnail)
 				return this.getImagesForBuilding()
 			})
 			.then(() => {
@@ -652,6 +658,7 @@ BuildingPage.propTypes = {
   fingerprint: PropTypes.string.isRequired,
 	triggerForcedSigninFavorite: PropTypes.func.isRequired,
 	changeHTMLTitle: PropTypes.func.isRequired,
+	changeMetaThumbnail: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -681,6 +688,7 @@ export default withRouter(
 		collectIntel,
 		triggerForcedSigninFavorite,
 		changeHTMLTitle,
+		changeMetaThumbnail,
 	})(RadiumHOC)
 )
 

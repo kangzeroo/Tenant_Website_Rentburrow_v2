@@ -1,6 +1,7 @@
 // actions related to the app
 export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE'
 export const CHANGE_HTML_TITLE = 'CHANGE_HTML_TITLE'
+export const CHANGE_META_THUMBNAIL = 'CHANGE_META_THUMBNAIL'
 
 // actions related to community
 export const SELECT_LOCAL = 'SELECT_LOCAL'

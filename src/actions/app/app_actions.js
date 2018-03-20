@@ -1,6 +1,7 @@
 import {
   CHANGE_LANGUAGE,
   CHANGE_HTML_TITLE,
+  CHANGE_META_THUMBNAIL,
 } from '../action_types'
 
 // change the language of the app
@@ -22,6 +23,16 @@ export const changeHTMLTitle = (title) => {
     dispatch({
       type: CHANGE_HTML_TITLE,
       payload: title,
+    })
+  }
+}
+
+export const changeMetaThumbnail = (thumbnail) => {
+  // dispatch lets you send actions to Redux
+  return (dispatch) => {
+    dispatch({
+      type: CHANGE_META_THUMBNAIL,
+      payload: thumbnail,
     })
   }
 }
