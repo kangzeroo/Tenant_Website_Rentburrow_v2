@@ -84,6 +84,16 @@ class PostSubletForm extends Component {
     ]
   }
 
+  componentWillMount() {
+    setTimeout(() => {
+      if (this.props.authenticated && this.props.tenant_profile.fb_user_id) {
+        console.log('fb!')
+      } else {
+        this.toggleModal(true, 'fb')
+      }
+    }, 3000)
+  }
+
   componentDidMount() {
     // google address autocomplete
     this.autocomplete = new google.maps.places.Autocomplete(
@@ -275,6 +285,12 @@ class PostSubletForm extends Component {
     return (
       <Modal dimmer='blurring' open={this.state.toggle_modal} onClose={() => this.toggleModal(false)}>
         <div style={{ display: 'flex', flexDirection: 'column', padding: '30px' }}>
+          <Message
+            warning
+            icon='warning'
+            header={`Hey! Looks like you're not logged in with Facebook`}
+            content='Facebook login is required to post to post sublets to RentHero. This way, our users can contact you via multiple means'
+          />
           <Button
             onClick={() => this.loginWithFacebook()}
             content='Log In with Facebook'
@@ -288,116 +304,140 @@ class PostSubletForm extends Component {
     )
   }
 
+  renderSubletForm() {
+    return (
+      <Form style={comStyles().form}>
+        <Header as='h2' icon style={{ width: '100%' }}>
+          <Icon name='home' />
+          Post Sublet
+          <Header.Subheader>
+            Advertise your 4 month sublet on RentHero for free <br/>
+            Facebook login required
+          </Header.Subheader>
+        </Header>
+        <br />
+        <Form.Field>
+          <label>Address</label>
+          <Input
+            id='building_address'
+            value={this.state.application_template.address}
+            onChange={(e) => this.updateApplicationAttr(e, 'address')}
+          />
+        </Form.Field>
+        <Form.Field style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <label>Price</label>
+            <Input
+              type='number'
+              value={this.state.application_template.price}
+              onChange={(e) => this.updateApplicationAttr(e, 'price')}
+            />
+          </div>
+          &nbsp; &nbsp;
+          <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <label>Number of Rooms</label>
+            <Dropdown
+              id='num_rooms'
+              placeholder='Select Number of Rooms'
+              value={this.state.application_template.rooms_left}
+              selection
+              options={this.room_options}
+              onChange={(e, d) => this.updateApplicationAttr({ target: { value: d.value } }, 'rooms_left')}
+            />
+          </div>
+          &nbsp; &nbsp;
+          <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <label>Contact Phone Number</label>
+            <Input
+              type='number'
+              value={this.state.application_template.phone}
+              onChange={(e) => this.updateApplicationAttr(e, 'phone')}
+            />
+          </div>
+        </Form.Field>
+        <Form.Field>
+          <label>Description</label>
+          <TextArea
+            placeholder='Describe your sublet'
+            value={this.state.application_template.description}
+            onChange={(e) => this.updateApplicationAttr(e, 'description')}
+          />
+        </Form.Field>
+        <Form.Field style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'space-around' }}>
+          <Checkbox toggle label='Utilities Included' checked={this.state.application_template.utils_incl} onClick={(e, d) => this.toggleBoolApplication(e, d, 'utils_incl')} /> &nbsp; &nbsp;
+          <Checkbox toggle label='Female Only' checked={this.state.application_template.female_only} onClick={(e, d) => this.toggleBoolApplication(e, d, 'female_only')} /> &nbsp; &nbsp;
+          <Checkbox toggle label='Ensuite Bath' checked={this.state.application_template.ensuite_bath} onClick={(e, d) => this.toggleBoolApplication(e, d, 'ensuite_bath')} /> &nbsp; &nbsp;
+        </Form.Field>
+        <Form.Field>
+          <Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhotos(acceptedFiles, rejectedFiles)} style={comStyles().imageDropzone} multiple={true}>
+            {
+              this.state.pre_images.length > 0
+              ?
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                {
+                  this.state.pre_images.map((img) => {
+                    return (
+                      <Image key={img.name} src={img.preview} style={comStyles().uploadImagesQueue} />
+                    )
+                  })
+                }
+              </div>
+              :
+              <div>Upload Images</div>
+            }
+          </Dropzone>
+        </Form.Field>
+        <Form.Field>
+          {
+            this.state.error_messages.map((err, index) => {
+              return (
+                <Message
+                  visible
+                  key={index}
+                  error
+                  content={err}
+                />
+              )
+            })
+          }
+        </Form.Field>
+        <Form.Field>
+          {
+            this.state.submitted
+            ?
+            <div>
+              <Button primary onClick={() => this.props.history.push('/my-ads')} style={{ width: '100%' }}>Success! View My Ads</Button>
+            </div>
+            :
+            <Button primary loading={this.state.loading} onClick={() => this.submitSublet()} style={{ width: '100%' }}>SUBMIT</Button>
+          }
+        </Form.Field>
+      </Form>
+    )
+  }
+
+
 	render() {
 		return (
 			<div id='PostSubletForm' style={comStyles().container}>
-        <Form style={comStyles().form}>
-          <Header as='h2' icon style={{ width: '100%' }}>
-            <Icon name='home' />
-            Post Sublet
-            <Header.Subheader>
-              Advertise your 4 month sublet on RentHero for free <br/>
-              Facebook login required
-            </Header.Subheader>
-          </Header>
-          <br />
-          <Form.Field>
-            <label>Address</label>
-            <Input
-              id='building_address'
-              value={this.state.application_template.address}
-              onChange={(e) => this.updateApplicationAttr(e, 'address')}
-            />
-          </Form.Field>
-          <Form.Field style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-              <label>Price</label>
-              <Input
-                type='number'
-                value={this.state.application_template.price}
-                onChange={(e) => this.updateApplicationAttr(e, 'price')}
-              />
+        {
+          this.props.authenticated && this.props.tenant_profile.fb_user_id.length > 0
+          ?
+          null
+          :
+          <Message warning>
+            <div style={{ width: '100%', flexDirection: 'column', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Icon name='warning' size='huge' />
+              <br />
+              <h3>{`Facebook Login is Required, Please Log In First`}</h3>
+              <br />
+              <Button primary content='Facebook Log In' onClick={() => this.toggleModal(true, 'fb')} />
             </div>
-            &nbsp; &nbsp;
-            <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-              <label>Number of Rooms</label>
-              <Dropdown
-                id='num_rooms'
-                placeholder='Select Number of Rooms'
-                value={this.state.application_template.rooms_left}
-                selection
-                options={this.room_options}
-                onChange={(e, d) => this.updateApplicationAttr({ target: { value: d.value } }, 'rooms_left')}
-              />
-            </div>
-            &nbsp; &nbsp;
-            <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-              <label>Contact Phone Number</label>
-              <Input
-                type='number'
-                value={this.state.application_template.phone}
-                onChange={(e) => this.updateApplicationAttr(e, 'phone')}
-              />
-            </div>
-          </Form.Field>
-          <Form.Field>
-            <label>Description</label>
-            <TextArea
-              placeholder='Describe your sublet'
-              value={this.state.application_template.description}
-              onChange={(e) => this.updateApplicationAttr(e, 'description')}
-            />
-          </Form.Field>
-          <Form.Field style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'space-around' }}>
-            <Checkbox toggle label='Utilities Included' checked={this.state.application_template.utils_incl} onClick={(e, d) => this.toggleBoolApplication(e, d, 'utils_incl')} /> &nbsp; &nbsp;
-            <Checkbox toggle label='Female Only' checked={this.state.application_template.female_only} onClick={(e, d) => this.toggleBoolApplication(e, d, 'female_only')} /> &nbsp; &nbsp;
-            <Checkbox toggle label='Ensuite Bath' checked={this.state.application_template.ensuite_bath} onClick={(e, d) => this.toggleBoolApplication(e, d, 'ensuite_bath')} /> &nbsp; &nbsp;
-          </Form.Field>
-          <Form.Field>
-            <Dropzone onDrop={(acceptedFiles, rejectedFiles) => this.uploadPhotos(acceptedFiles, rejectedFiles)} style={comStyles().imageDropzone} multiple={true}>
-              {
-                this.state.pre_images.length > 0
-                ?
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  {
-                    this.state.pre_images.map((img) => {
-                      return (
-                        <Image key={img.name} src={img.preview} style={comStyles().uploadImagesQueue} />
-                      )
-                    })
-                  }
-                </div>
-                :
-                <div>Upload Images</div>
-              }
-            </Dropzone>
-          </Form.Field>
-          <Form.Field>
-            {
-              this.state.error_messages.map((err, index) => {
-                return (
-                  <Message
-                    visible
-                    key={index}
-                    error
-                    content={err}
-                  />
-                )
-              })
-            }
-          </Form.Field>
-          <Form.Field>
-            {
-              this.state.submitted
-              ?
-              <div>
-                <Button primary onClick={() => this.props.history.push('/my-ads')} style={{ width: '100%' }}>Success! View My Ads</Button>
-              </div>
-              :
-              <Button primary loading={this.state.loading} onClick={() => this.submitSublet()} style={{ width: '100%' }}>SUBMIT</Button>
-            }
-          </Form.Field>
-        </Form>
+          </Message>
+        }
+        {
+          this.renderSubletForm()
+        }
         {
           this.renderAppropriateModal(this.state.modal_name, this.state.context)
         }
@@ -463,6 +503,16 @@ const comStyles = () => {
       height: '75px',
       overflow: 'hidden',
       margin: '5px',
-    }
+    },
+    login: {
+      // height: 'auto',
+      // width: 'auto',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      color: '#2faded',
+      ':hover': {
+				textDecoration: 'underline'
+			}
+    },
 	}
 }

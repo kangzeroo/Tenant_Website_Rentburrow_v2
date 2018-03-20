@@ -144,6 +144,7 @@ const comStyles = () => {
       color: 'white',
       display: 'flex',
       flexDirection: 'column',
+      fontFamily: 'Helvetica Neue',
     },
     leftFloat: {
       display: 'flex',

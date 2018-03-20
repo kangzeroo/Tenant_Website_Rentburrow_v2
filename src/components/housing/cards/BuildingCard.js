@@ -240,6 +240,7 @@ const comStyles = (label) => {
       maxHeight: '270px',
       margin: '10px auto',
       ...opacityStyles,
+      fontFamily: 'Helvetica Neue',
     },
     info: {
       backgroundColor: 'rgba(0,0,0,0)',
