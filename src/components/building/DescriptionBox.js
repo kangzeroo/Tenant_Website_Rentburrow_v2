@@ -37,17 +37,15 @@ class DescriptionBox extends Component {
           />
         </div>
         {
-          this.props.description.length > 1000
+          this.props.description.length > 500
           ?
-          <Button primary basic onClick={() => this.setState({ expanded: !this.state.expanded })} style={comStyles().expand}>
-            {
-              this.state.expanded
-              ?
-              'Minimize'
-              :
-              'See More'
-            }
-          </Button>
+          <Button
+            primary
+            basic
+            onClick={() => this.setState({ expanded: !this.state.expanded })}
+            style={comStyles().expand}
+            content={this.state.expanded ? 'Minimize' : 'See More'}
+          />
           :
           null
         }
@@ -113,8 +111,8 @@ const comStyles = (expanded) => {
 		},
     expand: {
       width: '100%',
-      height: '30px',
-      padding: '10px 0px 0px 0px',
+      // height: '30px',
+      // padding: '10px 0px 0px 0px',
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',
