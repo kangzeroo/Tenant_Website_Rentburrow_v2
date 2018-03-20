@@ -26,7 +26,7 @@ import { languageOptions } from '../i18n/language_options'
 import {
   WELCOME_MESSAGE,
 } from '../i18n/phrases/Header_i18n'
-import { changeAppLanguage } from '../actions/app/app_actions'
+import { changeAppLanguage, changeHTMLTitle, changeMetaThumbnail, } from '../actions/app/app_actions'
 import SearchInput from './filter/SearchInput'
 import ContactUsForm from './community/student_info/forms/ContactUsForm'
 import { queryBuildingsInArea } from '../api/search/search_api'
@@ -141,6 +141,8 @@ class Header extends Component {
   }
 
   refreshEverything() {
+    this.props.changeHTMLTitle('RentHero Student Housing in Waterloo has the Most Off Campus Housing and Student Rentals for UW, WLU, and Conestoga')
+    this.props.changeMetaThumbnail('https://s3.amazonaws.com/rentburrow-static-assets/Logos/rentheroLogo.png')
     if (this.props.location.pathname === '/') {
       queryBuildingsInArea({
         ...this.props.current_gps_center,
@@ -192,8 +194,8 @@ class Header extends Component {
   }
 
   renderProfileDropdown() {
-    const trigger = (
-      <span style={profileStyles().profile_div}>
+    return (
+      <span style={profileStyles().profile_div} onClick={() => this.toggleMenu()}>
         {
           this.props.tenant_profile.thumbnail
           ?
@@ -209,28 +211,45 @@ class Header extends Component {
         <Icon name='content' inverted size='big' />
       </span>
     )
-
-    const options = [
-      { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
-      // { key: 'favorites', value: 'favorites', text: 'Favorites', icon: 'heart' },
-      // { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
-      { key: 'my_ads', value: 'my_ads', text: 'My Ads', icon: 'file text' },
-      // { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
-      // { key: 'pro_tips', value: 'pro_tips', text: 'Renting Pro-Tips', icon: 'star' },
-      // { key: 'privacy_policy', value: 'privacy_policy', text: 'Privacy Policy', icon: 'privacy' },
-      { key: 'sign-out', value: 'logout', text: 'Sign Out', icon: 'sign out' }
-    ]
-
-    return (
-      <Dropdown
-        trigger={trigger}
-        options={options}
-        pointing='top right'
-        icon={null}
-        floating
-        onChange={(e, value) => this.handleTenantChange(e, value)}
-      />
-    )
+    // const trigger = (
+    //   <span style={profileStyles().profile_div}>
+    //     {
+    //       this.props.tenant_profile.thumbnail
+    //       ?
+    //       <Image
+    //         src={this.props.tenant_profile.thumbnail}
+    //         shape='circular'
+    //         bordered
+    //         style={comStyles().tenant_thumbnail}
+    //       />
+    //       :
+    //       <h3 style={comStyles().tenant_name}>{this.props.tenant_profile.first_name}</h3>
+    //     }
+    //     <Icon name='content' inverted size='big' />
+    //   </span>
+    // )
+    //
+    // const options = [
+    //   { key: 'user', value: 'account', text: 'Edit Profile', icon: 'user' },
+    //   // { key: 'favorites', value: 'favorites', text: 'Favorites', icon: 'heart' },
+    //   // { key: 'sublet_apps', value: 'sublet_apps', text: 'Sublet Applications', icon: 'file text' },
+    //   { key: 'my_ads', value: 'my_ads', text: 'My Ads', icon: 'file text' },
+    //   // { key: 'lease_apps', value: 'lease_apps', text: 'Lease Applications', icon: 'file text outline' },
+    //   // { key: 'pro_tips', value: 'pro_tips', text: 'Renting Pro-Tips', icon: 'star' },
+    //   // { key: 'privacy_policy', value: 'privacy_policy', text: 'Privacy Policy', icon: 'privacy' },
+    //   { key: 'sign-out', value: 'logout', text: 'Sign Out', icon: 'sign out' }
+    // ]
+    //
+    // return (
+    //   <Dropdown
+    //     trigger={trigger}
+    //     options={options}
+    //     pointing='top right'
+    //     icon={null}
+    //     floating
+    //     onChange={(e, value) => this.handleTenantChange(e, value)}
+    //   />
+    // )
   }
 
   openLinkInNewTab(url) {
@@ -295,16 +314,19 @@ class Header extends Component {
                 :
                 null
               }
+              {/*
               <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')}>
                 Redeem Prize
               </div>
+              */}
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
               </div>
+              {/*
               <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
                 Help
               </div>
-
+              */}
               {/*}<Button
                 basic
                 inverted
@@ -319,19 +341,23 @@ class Header extends Component {
               <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
                 Local Tours
               </div>
+              {/*
               <div role='button' tabIndex={0} key='gift' style={comStyles().login} onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')}>
                 Redeem Prize
               </div>
+              */}
               <div role='button' tabIndex={0} key='post_add' style={comStyles().login} onClick={() => this.toggleModal(true, 'post_ad')}>
                 Post Ad
               </div>
+              {/*
               <div role='button' tabIndex={0} key='help' style={comStyles().login} onClick={() => this.props.history.push('/contact')}>
                 Help
               </div>
+              */}
               <div role='button' tabIndex={0} key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
                 Log In
               </div>
-              <div role='button' tabIndex={0} key='menu' style={comStyles().login} onClick={() => this.toggleMenu()} >
+              <div role='button' tabIndex={0} key='menu' style={comStyles().menu} onClick={() => this.toggleMenu()} >
                 <Icon name='content' size='large' color='white' />
               </div>
             </div>
@@ -382,6 +408,8 @@ Header.propTypes = {
   menu: PropTypes.bool.isRequired,
   toggleMenuOn: PropTypes.func.isRequired,
   toggleMenuOff: PropTypes.func.isRequired,
+  changeHTMLTitle: PropTypes.func.isRequired,
+  changeMetaThumbnail: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -416,6 +444,8 @@ export default withRouter(
     saveBuildingsToRedux,
     toggleMenuOn,
     toggleMenuOff,
+    changeHTMLTitle,
+    changeMetaThumbnail,
   })(RadiumHOC)
 )
 
@@ -456,6 +486,7 @@ const comStyles = () => {
     login: {
       // height: 'auto',
       // width: 'auto',
+      fontFamily: 'Helvetica Neue',
       cursor: 'pointer',
       fontWeight: 'bold',
       color: 'white',
@@ -463,6 +494,14 @@ const comStyles = () => {
       ':hover': {
 				textDecoration: 'underline'
 			}
+    },
+    menu: {
+      // height: 'auto',
+      // width: 'auto',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      color: 'white',
+      fontSize: '1.2rem',
     },
     tenant_thumbnail: {
       height: '6vh',
@@ -488,7 +527,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '400px',
+      width: '300px',
       right: '20px'
     },
     link: {
@@ -502,8 +541,8 @@ const comStyles = () => {
       top: '0px',
       position: 'absolute',
       maxHeight: '7vh',
-      minWidth: '600px',
-      maxWidth: '600px',
+      minWidth: '400px',
+      maxWidth: '400px',
       alignItems: 'center',
     },
     close_login: {
@@ -594,6 +633,7 @@ const profileStyles = () => {
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
+      cursor: 'pointer',
     },
     menu_icon: {
       display: '10px auto',

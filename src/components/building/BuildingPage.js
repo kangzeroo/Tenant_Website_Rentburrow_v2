@@ -716,6 +716,7 @@ const comStyles = () => {
       display: 'flex',
       flexDirection: 'column',
 			backgroundColor: 'rgba(153,204,255,0.1)',
+			fontFamily: 'Helvetica Neue',
 		},
     hidden_loading: {
       position: 'absolute',

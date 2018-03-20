@@ -18,12 +18,12 @@ import {
 import {
   Icon,
   Transition,
+  Button,
 } from 'semantic-ui-react'
 import 'antd/lib/menu/style/css'
+import { toggleMenuOff } from '../../actions/menu/menu_actions'
 
-const SubMenu = Menu.SubMenu
-import SocialMediaContainer from '../share/SocialMediaContainer'
-
+const { SubMenu } = Menu
 
 class MenuPopup extends Component {
 
@@ -32,9 +32,40 @@ class MenuPopup extends Component {
     win.focus()
   }
 
+  logout() {
+    this.props.toggleMenuOff()
+    this.props.history.push('/logout')
+  }
+
+  renderTenant() {
+    return (
+      <SubMenu
+        key='tenant'
+        title={
+          <div style={comStyles().rowContainer}>
+            <Icon name='user' />
+            <div style={comStyles().textStyle}>{`${this.props.tenant_profile.first_name}'s Account`}</div>
+          </div>
+        }
+      >
+        <Menu.Item key='tenant1' onClick={() => this.props.history.push('/account')}>
+          <div style={comStyles().rowContainer} onClick={() => this.props.history.push('/account')}>
+            <Icon name='settings' />
+            <div style={comStyles().textStyle}>Account Settings</div>
+          </div>
+        </Menu.Item>
+        <Menu.Item key='tenant2' onClick={() => this.props.history.push('/my-ads')}>
+          <div style={comStyles().rowContainer} onClick={() => this.props.history.push('/my-ads')}>
+            <Icon name='file text' />
+            <div style={comStyles().textStyle}>My Ads</div>
+          </div>
+        </Menu.Item>
+      </SubMenu>
+    )
+  }
+
 	render() {
 		return (
-      <Transition visible={this.props.menu} animation='scale' duration={500} >
       <Menu
         id='MenuPopup'
         style={comStyles().menuContainer}
@@ -43,36 +74,55 @@ class MenuPopup extends Component {
         mode='vertical-right'
         theme='light'
       >
-        <Menu.Item>
-          <Icon name='user' />
-          LOGIN
-        </Menu.Item>
-        <Menu.Item key="1" onClick={() => this.props.history.push('/tours')}>
-          <div style={comStyles().rowContainer} >
+        <Menu.Item key="1" onClick={() => this.openLinkInNewTab('https://renthero.ca/tours')}>
+          <div style={comStyles().rowContainer} onClick={() => this.openLinkInNewTab('https://renthero.ca/tours')}>
             <Icon name='suitcase' />
-            <div>Local Tours</div>
+            <div style={comStyles().textStyle}>Local Tours</div>
           </div>
         </Menu.Item>
         <Menu.Item key="2" onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')}>
-          <div style={comStyles().rowContainer} >
+          <div style={comStyles().rowContainer} onClick={() => this.openLinkInNewTab('https://prizes.renthero.ca')}>
             <Icon name='gift' />
-            <div>Redeem Prize</div>
+            <div style={comStyles().textStyle}>Redeem Prize</div>
           </div>
         </Menu.Item>
-        <Menu.Item key="3">
-          <div style={comStyles().rowContainer} >
+        <SubMenu
+          key='sub1'
+          title={<div style={comStyles().rowContainer}>
             <Icon name='newspaper' />
-            <div>Post Ad</div>
-          </div>
-        </Menu.Item>
-        <Menu.Item key="4" onClick={() => this.props.history.push('/contact')}>
-          <div style={comStyles().rowContainer} >
+            <div style={comStyles().textStyle}>Post Ad</div>
+            </div>}
+          >
+          <Menu.Item key='sub11'>
+            <div style={comStyles().textStyle} onClick={() => this.openLinkInNewTab('https://renthero.ca/postsublet')}>Post Sublet</div>
+          </Menu.Item>
+          <Menu.Item key='sub12'>
+            <div style={comStyles().textStyle} onClick={() => this.openLinkInNewTab('https://contact.renthero.ca')}>Post Lease</div>
+          </Menu.Item>
+        </SubMenu>
+        <Menu.Item key="4" onClick={() => this.openLinkInNewTab('https://help.renthero.ca')}>
+          <div style={comStyles().rowContainer} onClick={() => this.openLinkInNewTab('https://help.renthero.ca')}>
             <Icon name='help circle' />
-            <div>Help Center</div>
+            <div style={comStyles().textStyle}>Help Center</div>
           </div>
         </Menu.Item>
+        {
+          this.props.authenticated && this.props.tenant_profile && this.props.tenant_profile.tenant_id
+          ?
+          this.renderTenant()
+          :
+          null
+        }
+        {
+          this.props.authenticated && this.props.tenant_profile && this.props.tenant_profile.tenant_id
+          ?
+          <Menu.Item key='logout' onClick={() => this.logout()} style={{ position: 'absolute', bottom: '10px', width: '100%' }}>
+            <Button negative fluid content='Logout' onClick={() => this.logout()} icon='sign out' />
+          </Menu.Item>
+          :
+          null
+        }
       </Menu>
-      </Transition>
 		)
 	}
 }
@@ -81,6 +131,9 @@ class MenuPopup extends Component {
 MenuPopup.propTypes = {
 	history: PropTypes.object.isRequired,
   menu: PropTypes.bool.isRequired,
+  authenticated: PropTypes.bool.isRequired,
+  tenant_profile: PropTypes.object.isRequired,
+  toggleMenuOff: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -95,13 +148,15 @@ const RadiumHOC = Radium(MenuPopup)
 const mapReduxToProps = (redux) => {
 	return {
     menu: redux.menu.menu,
+    authenticated: redux.auth.authenticated,
+    tenant_profile: redux.auth.tenant_profile,
 	}
 }
 
 // Connect together the Redux store with this React component
 export default withRouter(
 	connect(mapReduxToProps, {
-
+    toggleMenuOff,
 	})(RadiumHOC)
 )
 
@@ -139,6 +194,9 @@ const comStyles = () => {
       alignItems: 'center',
       background: 'white',
       margin: '5px'
+    },
+    textStyle: {
+      fontFamily: 'Helvetica Neue',
     }
 	}
 }
