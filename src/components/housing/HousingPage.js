@@ -10,6 +10,9 @@ import { withRouter } from 'react-router-dom'
 import {
 
 } from 'semantic-ui-react'
+import {
+	Menu,
+} from 'antd'
 import HousingPanel from './panel/HousingPanel'
 import MapComponent from '../map/MapComponent'
 import {
@@ -25,6 +28,9 @@ import {
 } from '../../api/search/sublet_api'
 import { selectHelpThread } from '../../actions/messaging/messaging_actions'
 import { getAllFavoritesForTenant } from '../../api/tenant/favorite_api'
+const SubMenu = Menu.SubmMenu
+import 'antd/lib/menu/style/css'
+
 
 class HousingPage extends Component {
 

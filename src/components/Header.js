@@ -32,6 +32,7 @@ import ContactUsForm from './community/student_info/forms/ContactUsForm'
 import { queryBuildingsInArea } from '../api/search/search_api'
 import { saveBuildingsToRedux } from '../actions/search/search_actions'
 import PropertyRequest from './requests/PropertyRequest'
+import { toggleMenuOn, toggleMenuOff } from '../actions/menu/menu_actions'
 
 class Header extends Component {
 
@@ -237,6 +238,14 @@ class Header extends Component {
     win.focus()
   }
 
+  toggleMenu() {
+    if (this.props.menu) {
+      this.props.toggleMenuOff()
+    } else {
+      this.props.toggleMenuOn()
+    }
+  }
+
   render() {
     return (
         <div id='Header' style={comStyles().header}>
@@ -307,21 +316,6 @@ class Header extends Component {
             </div>
             :
             <div style={comStyles().rightFloat}>
-              {/*}<Icon onClick={() => this.props.history.push('/contact')} name='help circle' inverted size='big' style={comStyles().helpIcon} />*/}
-              {/*}<Button
-                basic
-                inverted
-                content='Request a Photoshoot'
-                style={comStyles().login}
-                onClick={() => this.toggleModal(true, 'request')}
-              />*/}
-            {/*  <Button
-                onClick={() => this.toggleModal(true, 'login')}
-                style={comStyles().login}
-                basic
-                inverted
-                content='Login'
-              />*/}
               <div role='button' tabIndex={0} key='tours' style={comStyles().login} onClick={() => this.props.history.push('/tours')}>
                 Local Tours
               </div>
@@ -336,6 +330,9 @@ class Header extends Component {
               </div>
               <div role='button' tabIndex={0} key='login' style={comStyles().login} onClick={() => this.toggleModal(true, 'login')}>
                 Log In
+              </div>
+              <div role='button' tabIndex={0} key='menu' style={comStyles().login} onClick={() => this.toggleMenu()} >
+                <Icon name='content' size='large' color='white' />
               </div>
             </div>
           }
@@ -382,6 +379,9 @@ Header.propTypes = {
   temporary_favorite_force_signin: PropTypes.object,
   building_search_results: PropTypes.array.isRequired,
   rent_type: PropTypes.string.isRequired,
+  menu: PropTypes.bool.isRequired,
+  toggleMenuOn: PropTypes.func.isRequired,
+  toggleMenuOff: PropTypes.func.isRequired,
 }
 
 // for all optional props, define a default value
@@ -406,6 +406,7 @@ const mapReduxToProps = (redux) => {
     force_signin: redux.auth.force_signin,
     temporary_favorite_force_signin: redux.auth.temporary_favorite_force_signin,
     building_search_results: redux.search.building_search_results,
+    menu: redux.menu.menu,
   }
 }
 
@@ -413,6 +414,8 @@ export default withRouter(
   connect(mapReduxToProps, {
     changeAppLanguage,
     saveBuildingsToRedux,
+    toggleMenuOn,
+    toggleMenuOff,
   })(RadiumHOC)
 )
 

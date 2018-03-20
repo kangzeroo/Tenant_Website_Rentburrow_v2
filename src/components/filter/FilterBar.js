@@ -252,6 +252,7 @@ class FilterBar extends Component {
                     ]}
 
             onChange={(e, value) => this.handleSortChange(e, value)}
+            style={{ zIndex: 99 }}
           />
         </div>
         <Modal
