@@ -512,6 +512,7 @@ class AppRoot extends Component {
         <Helmet>
           <html lang={this.props.language}></html>
           <title>{ this.props.html_title }</title>
+          <meta name='thumbnail' content={this.props.meta_thumbnail} />
         </Helmet>
         {
           this.state.mobile
@@ -556,6 +557,7 @@ AppRoot.propTypes = {
   selected_building_to_apply_for: PropTypes.object,
   fingerprintBrowser: PropTypes.func.isRequired,
   html_title: PropTypes.string.isRequired,
+  meta_thumbnail: PropTypes.string.isRequired,
   menu: PropTypes.bool.isRequired,
 }
 
@@ -580,6 +582,7 @@ const mapReduxToProps = (redux) => {
     tenant_profile: redux.auth.tenant_profile,
     selected_building_to_apply_for: redux.contract.selected_building_to_apply_for,
     html_title: redux.app.html_title,
+    meta_thumbnail: redux.app.meta_thumbnail,
     menu: redux.menu.menu,
 	}
 }
