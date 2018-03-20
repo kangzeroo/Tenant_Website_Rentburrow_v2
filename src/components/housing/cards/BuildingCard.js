@@ -6,10 +6,12 @@ import { connect } from 'react-redux'
 import Radium from 'radium'
 import PropTypes from 'prop-types'
 import Rx from 'rxjs'
+import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import {
   Card,
   Icon,
+  Label,
 } from 'semantic-ui-react'
 import {
   aliasToURL,
@@ -29,6 +31,8 @@ class BuildingCard extends Component {
     super()
     this.state = {
       favorited: false,
+
+      new_property: false,
     }
   }
 
@@ -40,6 +44,11 @@ class BuildingCard extends Component {
     } else if (this.props.favorites && this.props.favorites.favorites_loaded) {
       this.setState({
         favorited: true,
+      })
+    }
+    if (moment(this.props.building.created_at).diff(moment(), 'days') >= -30) {
+      this.setState({
+        new_property: true,
       })
     }
   }
@@ -145,7 +154,7 @@ class BuildingCard extends Component {
             null
           }
         </Card.Content>
-        <Card.Content extra>
+        <Card.Content extra style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           <a style={comStyles().bedContainer}>
             <Icon name='bed' />
             {
@@ -164,6 +173,15 @@ class BuildingCard extends Component {
               'Inquire Rooms'
             }
           </a>
+          {
+            this.state.new_property
+            ?
+            <Label color='orange' style={{ position: 'absolute', right: '5px' }}>
+              NEW
+            </Label>
+            :
+            null
+          }
         </Card.Content>
       </Card>
 		)

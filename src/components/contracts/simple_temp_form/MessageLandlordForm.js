@@ -140,6 +140,9 @@ class MessageLandlordForm extends Component {
         email: this.props.tenant_profile.email,
       })
     }
+    this.setState({
+      group_notes: `Hello, I'm interested in ${this.props.building.building_alias}`
+    })
   }
 
   updateAttr(e, attr) {
@@ -197,7 +200,7 @@ class MessageLandlordForm extends Component {
       error_messages.push('Please check the checkbox')
       ok_to_proceed = false
     }
-    if (this.state.group_notes.length > 300) {
+    if (this.state.group_notes.length > 1500) {
       error_messages.push('Too many characters in message')
       ok_to_proceed = false
     }

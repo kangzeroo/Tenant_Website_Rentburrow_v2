@@ -85,14 +85,16 @@ class Footer extends Component {
               </div>*/}
               <div style={comStyles().col}>
                 <Link to='/termsofuse' style={comStyles().link}>Terms of Use</Link>
-                <Link to='/privacypolicy' style={comStyles().link}>Policy Policy</Link>
+                <Link to='/privacypolicy' style={comStyles().link}>Privacy Policy</Link>
               </div>
             </div>
           </div>
         </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} >
+        <br />
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: '0px 20px' }} >
           <SocialMediaContainer />
+          <div />
         </div>
 			</div>
 		)
@@ -136,8 +138,8 @@ const comStyles = () => {
       // backgroundColor: xMidBlue,
       backgroundColor: '#222',
       padding: '20px',
-      minHeight: '25vh',
-      maxHeight: '25vh',
+      minHeight: '30vh',
+      maxHeight: '30vh',
       width: '100%',
       color: 'white',
       display: 'flex',

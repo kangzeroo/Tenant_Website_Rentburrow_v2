@@ -100,6 +100,8 @@ import { updateDocumentStatus, } from '../api/pandadoc/pandadoc_api'
 import '../styles/pretty_scrollbar.css'
 import '../styles/custom_font.css'
 
+import MenuPopup from './menu/MenuPopup'
+
 
 class AppRoot extends Component {
 
@@ -472,6 +474,13 @@ class AppRoot extends Component {
           }
 
           <ToastLauncher style={comStyles().toast_launcher} />
+          {
+            this.props.menu
+            ?
+            <MenuPopup />
+            :
+            null
+          }
 
         </div>
       </StyleRoot>
@@ -547,6 +556,7 @@ AppRoot.propTypes = {
   selected_building_to_apply_for: PropTypes.object,
   fingerprintBrowser: PropTypes.func.isRequired,
   html_title: PropTypes.string.isRequired,
+  menu: PropTypes.bool.isRequired,
 }
 
 AppRoot.defaultProps = {
@@ -570,6 +580,7 @@ const mapReduxToProps = (redux) => {
     tenant_profile: redux.auth.tenant_profile,
     selected_building_to_apply_for: redux.contract.selected_building_to_apply_for,
     html_title: redux.app.html_title,
+    menu: redux.menu.menu,
 	}
 }
 
