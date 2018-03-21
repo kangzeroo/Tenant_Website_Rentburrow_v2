@@ -74,8 +74,8 @@ class MenuPopup extends Component {
         mode='vertical-right'
         theme='light'
       >
-        <Menu.Item key="1" onClick={() => this.openLinkInNewTab('https://renthero.ca/tours')}>
-          <div style={comStyles().rowContainer} onClick={() => this.openLinkInNewTab('https://renthero.ca/tours')}>
+        <Menu.Item key="1" onClick={() => this.openLinkInNewTab('https://search.renthero.ca/tours')}>
+          <div style={comStyles().rowContainer} onClick={() => this.openLinkInNewTab('https://search.renthero.ca/tours')}>
             <Icon name='suitcase' />
             <div style={comStyles().textStyle}>Local Tours</div>
           </div>
@@ -94,7 +94,7 @@ class MenuPopup extends Component {
             </div>}
           >
           <Menu.Item key='sub11'>
-            <div style={comStyles().textStyle} onClick={() => this.openLinkInNewTab('https://renthero.ca/postsublet')}>Post Sublet</div>
+            <div style={comStyles().textStyle} onClick={() => this.openLinkInNewTab('https://search.renthero.ca/postsublet')}>Post Sublet</div>
           </Menu.Item>
           <Menu.Item key='sub12'>
             <div style={comStyles().textStyle} onClick={() => this.openLinkInNewTab('https://contact.renthero.ca')}>Post Lease</div>
